@@ -1,0 +1,119 @@
+#!/usr/bin/env python3
+"""Refuse to publish sensitive material. Defence in depth, run before deploy.
+
+bin/wb-build already excludes nodes marked `sensitive` and the citations that
+point at them. This asserts the exclusion actually happened rather than trusting
+that it did, because the cost of the two failing differs enormously: a bug in
+the builder that drops the exclusion is a bug, and a bug that publishes 498
+people's private material to a public site is not recoverable. Git history and
+the open web are both permanent.
+
+Checks, all of them against the built output rather than the source:
+
+  1. No node marked sensitive appears anywhere in site/.
+  2. No corpus file was copied into site/.
+  3. No phone number or email address appears in any published artifact.
+  4. graph.json contains no citation pointing at a withheld node.
+
+Usage:  bin/wb-check-publish [--site DIR] [--kb DIR]
+
+Exit 0 when the output is safe to publish, 1 when it is not.
+Standard library only.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import re
+import sys
+import tomllib
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+FRONTMATTER = re.compile(r"\A\+\+\+\s*\n(.*?)\n\+\+\+", re.S)
+
+PHONE = re.compile(r"\+1[0-9]{10}|\b[0-9]{3}-[0-9]{3}-[0-9]{4}\b")
+EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+EMAIL_ALLOWED = re.compile(r"noreply@|@example\.|@schema\.|json-schema\.org")
+
+TEXTY = {".html", ".json", ".txt", ".css", ".md", ".xml", ".js"}
+
+
+def sensitive_ids(kb: pathlib.Path) -> list[str]:
+    out = []
+    for path in kb.rglob("*.md"):
+        match = FRONTMATTER.match(path.read_text(encoding="utf-8"))
+        if not match:
+            continue
+        try:
+            meta = tomllib.loads(match.group(1))
+        except tomllib.TOMLDecodeError:
+            continue
+        if meta.get("sensitive") and meta.get("id"):
+            out.append(meta["id"])
+    return sorted(out)
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--site", type=pathlib.Path, default=ROOT / "site")
+    ap.add_argument("--kb", type=pathlib.Path, default=ROOT / "kb")
+    args = ap.parse_args()
+
+    if not args.site.exists():
+        print(f"nothing built at {args.site}; run bin/wb-build first", file=sys.stderr)
+        return 1
+
+    failures: list[str] = []
+    files = [p for p in args.site.rglob("*") if p.is_file()]
+    texts = {p: p.read_text(encoding="utf-8", errors="replace")
+             for p in files if p.suffix.lower() in TEXTY}
+
+    # 1. no sensitive node id anywhere in the output
+    withheld = sensitive_ids(args.kb)
+    for node_id in withheld:
+        for path, text in texts.items():
+            if node_id in text:
+                failures.append(f"sensitive node {node_id} appears in {path.relative_to(args.site)}")
+
+    # 2. no corpus material copied in
+    for path in files:
+        rel = path.relative_to(args.site)
+        if rel.parts and rel.parts[0] in {"corpus", "shelf"} or path.name == "messages.csv":
+            failures.append(f"corpus material in build output: {rel}")
+
+    # 3. no contact details
+    for path, text in texts.items():
+        rel = path.relative_to(args.site)
+        for hit in PHONE.findall(text):
+            failures.append(f"phone number {hit!r} in {rel}")
+        for hit in EMAIL.findall(text):
+            if not EMAIL_ALLOWED.search(hit):
+                failures.append(f"email address {hit!r} in {rel}")
+
+    # 4. the published graph must not cite what it withheld
+    graph_path = args.site / "graph.json"
+    if graph_path.exists():
+        graph = json.loads(graph_path.read_text())
+        published = {n["id"] for n in graph.get("nodes", [])}
+        for node in graph.get("nodes", []):
+            for cited in node.get("cites", []):
+                if cited not in published:
+                    failures.append(f"graph.json: {node['id']} cites unpublished {cited}")
+
+    if failures:
+        print("REFUSING TO PUBLISH", file=sys.stderr)
+        for failure in failures:
+            print(f"  {failure}", file=sys.stderr)
+        print(f"\n{len(failures)} problem(s)", file=sys.stderr)
+        return 1
+
+    print(f"safe to publish: {len(files)} files, "
+          f"{len(withheld)} sensitive node(s) correctly withheld")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

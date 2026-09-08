@@ -34,6 +34,13 @@ corpus/private/
 
 # Shelved fragment exports — superseded, retained locally as error evidence.
 # See CORPUS_POLICY.md. Same personal data as the corpus, same reasoning.
+#
+# Note what these lines do NOT do: the source Google Sheet is deliberately
+# shared "anyone with the link" (see corpus/README.md), so the corpus is
+# already reachable by URL. Ignoring it here keeps it out of git history,
+# which is permanent and searchable. That is worth doing on its own terms —
+# but it is not what is protecting this data, and it should not be mistaken
+# for that.
 shelf/**
 !shelf/README.md
 !shelf/MANIFEST.md

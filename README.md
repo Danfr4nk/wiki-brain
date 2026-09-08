@@ -1,114 +1,137 @@
 # wiki-brain
 
-Personal wiki (v2) — second brain. A lifelong biographical, psychological and
-ideological record kept as plain Markdown: no apps, no databases, no APIs, just
-text files, a few small scripts, and git for history.
+A source-grounded, longitudinal knowledge graph and cognitive modeling system.
+It archives raw evidence about a person and the world that produced them, turns
+that evidence into atomic facts, events, entities, relationships, patterns and
+higher-order syntheses, and gives an LLM persistent context for reasoning over
+it — **without collapsing evidence, interpretation and inference into the same
+layer.**
 
-This repository is the new home. It is **mid-migration** — read the next
-section before assuming anything is here.
-
----
-
-## Migration status
-
-| Piece | State |
-| :---- | :---- |
-| Authoritative message corpus | **Landed.** 192,140 messages, tooling and policy in place |
-| Corpus policy / shelving rules | **Landed.** [`CORPUS_POLICY.md`](CORPUS_POLICY.md) |
-| Wiki body — `wiki/`, `raw/`, `bin/`, governing docs | **Not migrated.** Blocked, see below |
-
-### What is blocking the wiki body
-
-The staged copy in Google Drive (`My Drive/wiki-brain-main-1`) is **not a
-faithful copy of the repository.** Every `.md` file in it was converted to a
-Google Doc on upload, and that conversion is lossy in both directions.
-Exporting `README.md` back out of Drive returns, among other damage:
-
-- literal backslash escapes in the prose — `\+`, `\-`, `\#`
-- fenced code blocks flattened into ordinary paragraphs, fences gone
-- relative links rewritten into invalid absolute ones —
-  `[AGENT_ACCESS.md](AGENT_ACCESS.md)` came back as
-  `[AGENT\_ACCESS.md](http://AGENT_ACCESS.md)`
-
-Migrating from that source would silently corrupt every governing document and
-every wiki page — and silently is the operative word, because the damage is
-plausible-looking Markdown, not an obvious break. The tree is also 1,000+ files
-deep across 40+ folders, so the corruption would arrive faster than anyone
-could review it.
-
-**The fix is to migrate from the original folder on the Mac**, which is real
-Markdown on a real filesystem, rather than from the Drive round-trip. The Drive
-copy remains useful as a backup and as proof of what the tree contained.
+Published to GitHub Pages: **<https://danfr4nk.github.io/wiki-brain>**
 
 ---
 
-## What is here now
+## The constitutional law
 
 ```
-corpus/          the authoritative message record + derived statistics
-shelf/           superseded per-contact extracts (inventory only; contents gitignored)
-bin/             corpus-verify, corpus-stats, corpus-query
-CORPUS_POLICY.md what counts as message evidence, and what no longer does
+RAW DATA → STRUCTURED FACT → INTERPRETATION → SYNTHESIS.  NEVER THE REVERSE.
 ```
 
-### The corpus
+Its mechanical form, checked on every build:
 
-192,140 messages spanning 2011-03-19 → 2026-09-07, across 577 threads and 498
-counterparties. It replaces the earlier per-contact extracts, which were
-accurate but silently partial — see [`CORPUS_POLICY.md`](CORPUS_POLICY.md) for
-why that distinction retired them and what they may still be used for.
+> **A node may cite only nodes at a strictly lower layer.**
+
+That single rule is what stops a conclusion from becoming a premise. Without it
+someone writes "the relationship was abusive" on a synthesis page, and months
+later an event page quotes it as though it were observed at the time — the
+interpretation has silently become a fact and the evidence that would let anyone
+check it is gone. The failure always runs downward, so the rule is directional,
+and `bin/wb-validate` fails the build rather than trusting anyone to be careful.
+
+It also makes the citation graph a DAG with layers as topological levels, so
+tracing any conclusion to its evidence terminates, and a citation cycle cannot
+be written at all.
+
+## The six layers
+
+| L | Layer | What it is | Mutable? |
+| :-- | :---- | :---- | :---- |
+| **0** | `source` | Raw material as acquired | **Never.** Append-only |
+| **1** | `datum` | One claim, one thing, one time, known provenance | Corrigible |
+| **2** | `entity` `event` `relationship` | Structured objects assembled from data | Corrigible |
+| **3** | `interpretation` `contradiction` | What it might mean. Someone's reading | Freely revised |
+| **4** | `pattern` | Recurrence across layer ≤3 | Freely revised |
+| **5** | `synthesis` | Cross-domain model | Freely revised |
+
+Mutability runs opposite to altitude, deliberately. The higher a node sits, the
+more disposable it is: an LLM's synthesis is the most disposable thing in the
+system, and the source it rests on is the least.
+
+Full design: **[`ARCHITECTURE.md`](ARCHITECTURE.md)**.
+
+## Tools
 
 ```sh
-bin/corpus-verify                                   # integrity check
-bin/corpus-stats                                    # rebuild derived stats
-bin/corpus-query --who "Name" --context 3           # read it in situ
-bin/corpus-query --text "topic" --stats             # who and when, no transcript
+bin/wb-validate                    # schema + the layer invariant
+bin/wb-build                       # compile to site/ + graph.json + llms.txt
+bin/wb-check-publish               # refuse to publish sensitive material
+bin/wb-query "why did X happen"    # layered retrieval, not a dump
+tests/test-invariant               # 15 regression tests on the invariant
 ```
 
-The corpus file itself is gitignored. [`corpus/README.md`](corpus/README.md)
-covers the layout, what is published versus withheld, and how to restore it on
-a fresh clone.
+Standard library only — no dependencies, no build step, no database. Nodes are
+Markdown with TOML frontmatter: machine-readable head, human-readable body,
+neither destroying the other.
 
----
+```markdown
++++
+id         = "evt:2026-09-08-rebuild-begins"
+layer      = 2
+type       = "event"
+title      = "Rebuild on the six-layer architecture begins"
+cites      = ["dat:0006-drive-copy-lossy"]
+confidence = "high"
 
-## Two open privacy items
+[when]
+date = "2026-09-08"
++++
 
-Neither is a crisis and neither is mine to decide — both are recorded here so
-they are decisions rather than defaults.
+Prose for humans. The frontmatter is for machines.
+```
 
-**1. This repository is public and the corpus is other people's data.**
-`.gitignore` currently keeps `corpus/messages.csv`, `corpus/private/` and the
-shelf contents out of git. That default differs from the earlier call to track
-`intake/events.jsonl` in the open, and deliberately: that was Dan publishing
-Dan. The message corpus is 498 other people's phone numbers, addresses and
-private words, and they did not make that choice. Un-ignoring those lines
-publishes them permanently. If the intent is to publish, make the repository
-private first and verify it — in that order.
+## What the system refuses to do
 
-**2. The backing Google Sheet is world-readable.** As of 2026-09-08 the
-`messages` sheet is shared "anyone with the link" — it downloads in full with
-no credentials, which is how the corpus was fetched for this migration. Every
-other file in the Drive folder is correctly private; this one is not, and it is
-the most sensitive of them. Restricting it costs nothing if the exposure was
-not deliberate.
+- **Resolve contradictions automatically.** Both claims are preserved, dated and
+  attributed. "The historical record is ambiguous" beats invented certainty.
+- **Let synthesis mutate sources.** Concluding something adds an L3 node; it does
+  not rewrite the events underneath.
+- **Flatten hindsight onto the past.** If the subject believed "everything is
+  fine" during a period later remembered as disastrous, both are kept.
+- **Treat absence as evidence of absence.** Negative data is typed:
+  `never_observed`, `explicitly_rejected` and `known_not_to_occur` are three
+  different claims.
+- **Confuse whose reading a claim is.** Every interpretation declares a
+  `perspective` — `self`, `external`, `llm` or `other` — so "Dan believes X about
+  himself, but the longitudinal record suggests Y" is expressible rather than a
+  distinction that quietly disappears.
 
----
+## Privacy
 
-## The governing documents
+**This repository is public**, and the message corpus is not the subject's data
+alone — it holds the phone numbers, addresses and private words of 498 other
+people who did not choose to be published.
 
-Six files govern the work, in the order a new reader should meet them. **They
-are still in Drive and land here with the wiki body**, listed now so the shape
-of the finished repository is visible.
+So the split is deliberate and enforced in three places:
 
-| File | Governs |
-| :---- | :---- |
-| `STRATEGY.md` | what this repo is for and the core loop — **read first** |
-| `CLAUDE.md` | the operations: ingest, query, climb, rewrite, lint |
-| `EXTRACTION_SPEC.md` | how deep to mine a source before writing |
-| `STYLE_GUIDE.md` | page format and the substance standard |
-| `CONNECTIONS_SPEC.md` | typed edges and the claims they carry |
-| `SYNTHESIS_SPEC.md` | altitude — how conclusions stack on conclusions |
+- `.gitignore` keeps `corpus/messages.csv`, `corpus/private/` and the shelf
+  contents out of git, whose history is permanent and searchable.
+- `bin/wb-build` excludes any node marked `sensitive = true`, and the citations
+  pointing at it — but *declares* the exclusion rather than hiding it, so a
+  partial evidence trail never looks complete.
+- `bin/wb-check-publish` runs before deploy and asserts the exclusion actually
+  happened, against the built output rather than the source.
 
-`CORPUS_POLICY.md` joins that set and outranks all of them on message evidence
-specifically: where a conclusion already in the wiki disagrees with the corpus,
-the conclusion is what changes.
+One thing worth stating plainly, because it is easy to conflate: **the gitignore
+is not what protects this data.** The Google Sheet backing the corpus is
+deliberately shared "anyone with the link" — a decision on the record, not an
+oversight, documented in [`corpus/README.md`](corpus/README.md). Keeping the
+corpus out of git history matters on its own terms. It does not narrow who can
+reach the sheet. Two separate exposures; one of them is closed.
+
+## Message evidence
+
+[`CORPUS_POLICY.md`](CORPUS_POLICY.md) governs what counts as message evidence.
+The complete export — 192,140 messages, 2011-03-19 → 2026-09-07, 577 threads,
+498 counterparties — is authoritative. Every earlier per-counterparty extract is
+shelved: retained as evidence of what was believed and why it was wrong, never
+as evidence of what happened.
+
+```sh
+bin/corpus-verify                            # integrity against the manifest
+bin/corpus-query --who "Name" --context 3    # read it in situ
+```
+
+## Migration
+
+[`MIGRATION.md`](MIGRATION.md) tracks what is still to come across, and why the
+Google Drive staging copy is not the source it is coming from.
