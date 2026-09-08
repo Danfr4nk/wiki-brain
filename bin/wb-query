@@ -1,0 +1,263 @@
+#!/usr/bin/env python3
+"""Assemble layered context for a question, instead of dumping the whole wiki.
+
+An LLM should not ingest everything on every question. This retrieves a bounded
+context in five layers, so an answer arrives with its evidence and its caveats
+attached rather than as free-floating assertion:
+
+  1 Immediate   nodes matching the question
+  2 Local       what those rest on, and what rests on them
+  3 Historical  what came before them in time
+  4 Pattern     recurrences that touch them
+  5 Meta        syntheses standing over the whole area
+
+Relevance is graph-based, not merely lexical. Lexical similarity opens the walk;
+citation distance, importance, confidence and recurrence decide what comes with
+it. The most useful context is frequently not the text most similar to the
+question — it is the contradiction two hops away that stops a confident wrong
+answer.
+
+Examples:
+  bin/wb-query "why were the old extracts retired"
+  bin/wb-query corpus --format json
+  bin/wb-query privacy --depth 2 --max 30
+
+Standard library only. Reads the knowledge base; writes nothing.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import re
+import sys
+from importlib.machinery import SourceFileLoader
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+_validate = SourceFileLoader("wb_validate", str(ROOT / "bin" / "wb-validate")).load_module()
+load_nodes = _validate.load_nodes
+
+STOP = {
+    "the", "a", "an", "and", "or", "but", "of", "to", "in", "on", "at", "for",
+    "with", "is", "are", "was", "were", "be", "been", "it", "this", "that",
+    "these", "those", "as", "by", "from", "why", "what", "when", "how", "did",
+    "does", "do", "has", "have", "had", "not", "no", "so", "if", "then",
+}
+
+
+def tokens(text: str) -> list[str]:
+    return [w for w in re.findall(r"[a-z0-9]+", (text or "").lower())
+            if w not in STOP and len(w) > 2]
+
+
+def score(node: dict, terms: list[str]) -> float:
+    """Lexical relevance, weighted by where the match lands."""
+    if not terms:
+        return 0.0
+    fields = (
+        (node.get("title", ""), 3.0),
+        (node.get("claim", ""), 2.5),
+        (" ".join(node.get("tags", []) or []), 2.0),
+        (" ".join(node.get("domains", []) or []), 1.5),
+        (node.get("_body", ""), 1.0),
+    )
+    total = 0.0
+    for text, weight in fields:
+        bag = tokens(text)
+        if not bag:
+            continue
+        counts = {}
+        for word in bag:
+            counts[word] = counts.get(word, 0) + 1
+        for term in terms:
+            if term in counts:
+                total += weight * (1 + min(counts[term], 4) * 0.25)
+            else:
+                # prefix match catches corpus/corpora, fragment/fragments
+                total += weight * 0.4 * any(w.startswith(term) or term.startswith(w)
+                                            for w in counts)
+    total *= 1 + 0.12 * (node.get("importance", 2) - 2)
+    total *= {"high": 1.15, "moderate": 1.0, "low": 0.9,
+              "speculative": 0.8, "unknown": 0.95}.get(node.get("confidence", "unknown"), 1.0)
+    return total
+
+
+def year_of(node: dict) -> str | None:
+    when = node.get("when") or {}
+    for key in ("date", "start", "end"):
+        value = when.get(key)
+        if value:
+            return str(value)[:4]
+    return None
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("question", nargs="+")
+    ap.add_argument("--depth", type=int, default=1, help="graph hops from the seed set")
+    ap.add_argument("--max", type=int, default=20, help="cap on nodes returned")
+    ap.add_argument("--format", choices=["md", "json"], default="md")
+    ap.add_argument("--include-sensitive", action="store_true",
+                    help="include nodes withheld from publication (local use only)")
+    ap.add_argument("--kb", type=pathlib.Path, default=ROOT / "kb")
+    args = ap.parse_args()
+
+    nodes, errors = load_nodes(args.kb)
+    if errors:
+        for error in errors:
+            print(f"  {error}", file=sys.stderr)
+        return 1
+    if not args.include_sensitive:
+        nodes = {i: n for i, n in nodes.items() if not n.get("sensitive")}
+
+    question = " ".join(args.question)
+    terms = tokens(question)
+
+    ranked = sorted(((score(n, terms), i) for i, n in nodes.items()),
+                    key=lambda p: -p[0])
+    seeds = [i for s, i in ranked if s > 0][:max(3, args.max // 4)]
+    if not seeds:
+        print("no matching nodes", file=sys.stderr)
+        return 1
+
+    incoming: dict[str, list[str]] = {}
+    for node_id, node in nodes.items():
+        for target in node.get("cites", []):
+            incoming.setdefault(target, []).append(node_id)
+
+    def neighbours(node_id: str) -> set[str]:
+        node = nodes.get(node_id, {})
+        out = set(node.get("cites", [])) | set(incoming.get(node_id, []))
+        out |= {e["target"] for e in node.get("edges", []) if e.get("target") in nodes}
+        return out & set(nodes)
+
+    # 2 — local: outward from the seeds
+    local: set[str] = set()
+    frontier = set(seeds)
+    for _ in range(max(0, args.depth)):
+        step: set[str] = set()
+        for node_id in frontier:
+            step |= neighbours(node_id)
+        step -= set(seeds) | local
+        local |= step
+        frontier = step
+
+    # A "why" question is answered by an interpretation, and an interpretation
+    # typically cites the *evidence* rather than the event a lexical search
+    # lands on — so it sits two hops out and a one-hop walk misses exactly the
+    # node the question was asking for. Pull readings that rest on anything
+    # already gathered, regardless of hop count.
+    readings = {
+        i for i, n in nodes.items()
+        if n.get("layer") == 3 and i not in set(seeds) | local
+        and set(n.get("cites", [])) & (set(seeds) | local)
+    }
+    local |= readings
+
+    covered = set(seeds) | local
+
+    # 3 — historical: earlier nodes sharing tags with the seed set
+    seed_tags = {t for i in seeds for t in (nodes[i].get("tags") or [])}
+    seed_years = sorted(y for y in (year_of(nodes[i]) for i in seeds) if y)
+    earliest = seed_years[0] if seed_years else None
+    historical = {
+        i for i, n in nodes.items()
+        if i not in covered and seed_tags & set(n.get("tags") or [])
+        and (year := year_of(n)) and earliest and year < earliest
+    }
+    covered |= historical
+
+    # 4 — patterns touching anything already gathered
+    patterns = {
+        i for i, n in nodes.items()
+        if n.get("layer") == 4 and i not in covered
+        and (set(n.get("cites", [])) & covered or seed_tags & set(n.get("tags") or []))
+    }
+    covered |= patterns
+
+    # 5 — meta: syntheses over the area
+    meta = {
+        i for i, n in nodes.items()
+        if n.get("layer") == 5 and i not in covered
+        and (set(n.get("cites", [])) & covered or seed_tags & set(n.get("tags") or []))
+    }
+    covered |= meta
+
+    bands = [
+        ("1 Immediate", "nodes matching the question", seeds),
+        ("2 Local", "what these rest on, and what rests on them", sorted(local)),
+        ("3 Historical", "what came before, in the same area", sorted(historical)),
+        ("4 Pattern", "recurrences touching this material", sorted(patterns)),
+        ("5 Meta", "syntheses standing over the area", sorted(meta)),
+    ]
+
+    budget = args.max
+    trimmed: list[tuple[str, str, list[str]]] = []
+    for name, blurb, ids in bands:
+        keep = ids[:max(0, budget)]
+        budget -= len(keep)
+        trimmed.append((name, blurb, keep))
+
+    if args.format == "json":
+        print(json.dumps({
+            "question": question,
+            "terms": terms,
+            "bands": [
+                {"band": name, "description": blurb,
+                 "nodes": [{k: v for k, v in nodes[i].items() if k != "_path"}
+                           | {"id": i} for i in ids]}
+                for name, blurb, ids in trimmed if ids
+            ],
+        }, indent=2, default=str))
+        return 0
+
+    total = sum(len(ids) for _, _, ids in trimmed)
+    print(f"# {question}\n")
+    print(f"{total} node(s) across {sum(1 for _,_,i in trimmed if i)} band(s). "
+          f"Layer says how to read each one: L0-L2 is evidence, L3-L5 is someone's reading.\n")
+
+    for name, blurb, ids in trimmed:
+        if not ids:
+            continue
+        print(f"## {name} — {blurb}\n")
+        for node_id in ids:
+            node = nodes[node_id]
+            layer = node.get("layer", "?")
+            bits = [f"L{layer}", node.get("type", "?")]
+            if node.get("perspective"):
+                bits.append(f"perspective:{node['perspective']}")
+            if node.get("confidence"):
+                bits.append(node["confidence"])
+            when = year_of(node)
+            if when:
+                bits.append(when)
+            print(f"### {node.get('title', node_id)}")
+            print(f"`{node_id}` · {' · '.join(bits)}\n")
+            if node.get("claim"):
+                print(f"> {node['claim']}\n")
+            body = (node.get("_body") or "").strip()
+            if body:
+                para = [p for p in body.split("\n\n") if p.strip() and not p.startswith("#")]
+                if para:
+                    print(f"{para[0].strip()}\n")
+            if node.get("alternatives"):
+                print("Competing explanations, unresolved:")
+                for alt in node["alternatives"]:
+                    print(f"- {alt}")
+                print()
+            cited = [c for c in node.get("cites", []) if c in nodes]
+            if cited:
+                print(f"Rests on: {', '.join(cited)}\n")
+
+    if any(n.get("type") == "contradiction" for i in covered for n in [nodes[i]]):
+        print("---\n")
+        print("**A contradiction is present in this context.** It is preserved unresolved "
+              "on purpose. \"The record is ambiguous\" is a valid answer and is often the "
+              "correct one.\n")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
