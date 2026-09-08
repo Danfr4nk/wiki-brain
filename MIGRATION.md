@@ -11,6 +11,9 @@ the last row of the table is done.
 | Shelving of prior extracts | **Done** — [`shelf/`](shelf/) |
 | Wiki body — `wiki/`, `raw/`, `bin/`, `app.py`, governing docs | **Waiting on a push from the Mac** |
 
+PR #1 merged on 2026-09-08, so the corpus work is on `main`. That changes how
+the Mac push has to be done — see the warning below.
+
 ## Why the wiki body is not coming from Google Drive
 
 `My Drive/wiki-brain-main-1` is a staging copy, not a faithful one. Every `.md`
@@ -33,10 +36,15 @@ has the git history. That is the source.
 
 ## Pushing from the Mac
 
-`main` here currently holds a single placeholder commit (`53bbfe8`, a one-line
-README) created when the repository was made. Your local history does not share
-it, so an ordinary push is rejected as unrelated. Replacing the placeholder is
-the correct move — there is nothing in it worth keeping.
+> **Do not force-push `main`.** An earlier draft of this file said to, which was
+> correct only while `main` held a one-line placeholder. PR #1 merged on
+> 2026-09-08 and `main` now carries the corpus, the tooling and
+> `CORPUS_POLICY.md`. A force-push would delete all of it. `--force-with-lease`
+> does **not** save you here: once you have fetched, the lease is satisfied and
+> the overwrite goes through.
+
+Your local history and `main` have no commit in common, so they get joined
+once, explicitly, with `--allow-unrelated-histories`. Both sides survive.
 
 ```sh
 cd ~/path/to/wiki-brain-main1
@@ -48,34 +56,40 @@ git remote add origin https://github.com/Danfr4nk/wiki-brain
 # already have an origin? point it here instead:
 #   git remote set-url origin https://github.com/Danfr4nk/wiki-brain
 
-git push -u origin main --force-with-lease
+git fetch origin
+git merge origin/main --allow-unrelated-histories
 ```
 
-`--force-with-lease` rather than `--force`: it refuses if `main` has moved since
-you last fetched, so it cannot quietly destroy work that arrived in the
-meantime. Here it should replace one placeholder commit and nothing else.
+That merge stops on two conflicts. Both are expected, and the branch was
+shaped to keep them small:
+
+- **`.gitignore`** — take the **union**. Your rules (`exports/`, `site/`,
+  `corpus_*.md`, the intake-ledger note) *plus* the corpus rules
+  (`corpus/messages.csv`, `corpus/private/`, `shelf/**`). Drop nothing from
+  either side; the corpus rules are what keep 498 people's messages out of a
+  public git history.
+- **`README.md`** — **yours wins outright.** The version on `main` is a
+  placeholder written to be replaced. Keep yours, then add one line under
+  "The governing documents" pointing at `CORPUS_POLICY.md`.
+
+```sh
+git add .gitignore README.md
+git commit                      # completes the merge
+git push -u origin main         # ordinary push, no force
+```
+
+Then confirm nothing was lost:
+
+```sh
+ls corpus/ bin/corpus-*         # corpus tooling still present
+bin/corpus-verify               # corpus intact (needs corpus/messages.csv locally)
+git log --oneline | head        # both histories present
+```
 
 **No git history on the Mac?** If `git log` errors, the folder was never a
-repository — say so and take the zip route instead (zip the folder, upload it,
-share it "anyone with the link"), and it gets committed here as a first import.
-
-### After the push
-
-`claude/wiki-brain-repo-migration-m79ey5` (PR #1) is based on the placeholder
-commit, so once real history lands it needs rebasing onto it. Two files will
-conflict, both expected, both already minimised so the resolution is small:
-
-- **`.gitignore`** — resolve as the **union**. Your existing rules (`exports/`,
-  `site/`, `corpus_*.md`, the intake-ledger note) plus the corpus rules added
-  here (`corpus/messages.csv`, `corpus/private/`, `shelf/**`). Nothing is
-  dropped from either side.
-- **`README.md`** — **your real README wins outright.** The version on this
-  branch is a placeholder standing in until yours arrives; it carries no
-  content that needs preserving. Add a line pointing at `CORPUS_POLICY.md`
-  under "The governing documents" and that is the whole merge.
-
-Everything else on the branch is new files that your tree does not contain, so
-they rebase without conflict.
+repository. Say so and take the zip route instead — zip the folder, upload it,
+share it "anyone with the link" — and it gets committed here as a first import
+on top of `main`, with no merge needed.
 
 ## Then: reconcile the wiki with the corpus
 
