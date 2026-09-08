@@ -61,5 +61,14 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      # Turn Pages on from here rather than requiring someone to find the
+      # setting. Without this the first deploy fails with a bare 404 from the
+      # deployment API, which reads like a broken workflow rather than an
+      # unset switch. `enablement: true` is idempotent — once Pages is on it
+      # just reports the existing configuration.
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
       - id: deployment
         uses: actions/deploy-pages@v4
