@@ -1,0 +1,367 @@
+#!/usr/bin/env python3
+"""Validate the knowledge base against the schema and the constitutional law.
+
+Two classes of check run here, and the second is the one that matters.
+
+**Schema checks** confirm each node has the right shape for its layer — a datum
+cites a source, an interpretation declares whose reading it is, a `caused` edge
+states its causal basis.
+
+**Graph checks** enforce what JSON Schema structurally cannot:
+
+    RAW DATA -> STRUCTURED FACT -> INTERPRETATION -> SYNTHESIS. NEVER THE REVERSE.
+
+expressed as: *a node may cite only nodes at a strictly lower layer.* That single
+rule is what stops a conclusion from becoming a premise. Without it, someone
+writes "the relationship was abusive" at L5 and six months later an L2 event page
+cites it as though it were something observed at the time — the interpretation has
+silently become a fact and the evidence that would let anyone check it is gone.
+The failure always runs downward, so the rule is directional.
+
+It also makes the citation graph a DAG with layers as topological levels, so
+tracing any conclusion to its evidence terminates, and a citation cycle cannot be
+written at all.
+
+Usage:
+  bin/wb-validate            validate kb/
+  bin/wb-validate --strict   treat warnings as errors too
+  bin/wb-validate --json     machine-readable report
+
+Exit status is 0 when clean and 1 when not, so it can gate CI and the site build.
+Standard library only.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import re
+import sys
+import tomllib
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+KB = ROOT / "kb"
+SCHEMA = ROOT / "schema" / "node.schema.json"
+
+FRONTMATTER = re.compile(r"\A\+\+\+\s*\n(.*?)\n\+\+\+\s*\n?(.*)\Z", re.S)
+
+# id prefix -> (type, layer). The prefix is not decoration: it makes a node's
+# altitude readable at a glance in any citation list.
+PREFIX = {
+    "src": ("source", 0),
+    "dat": ("datum", 1),
+    "ent": ("entity", 2),
+    "evt": ("event", 2),
+    "rel": ("relationship", 2),
+    "int": ("interpretation", 3),
+    "con": ("contradiction", 3),
+    "pat": ("pattern", 4),
+    "syn": ("synthesis", 5),
+}
+
+REF_FIELDS = ("subject", "supersedes")
+
+
+# --------------------------------------------------------------------------
+# A minimal JSON Schema validator covering exactly the keywords node.schema.json
+# uses. Written out rather than pulled in so the project keeps its no-dependency
+# property, matching bin/corpus-*.
+# --------------------------------------------------------------------------
+
+class SchemaError(Exception):
+    pass
+
+
+def resolve(schema: dict, root: dict) -> dict:
+    seen = 0
+    while "$ref" in schema:
+        ref = schema["$ref"]
+        if not ref.startswith("#/"):
+            raise SchemaError(f"unsupported $ref: {ref}")
+        node = root
+        for part in ref[2:].split("/"):
+            node = node[part]
+        schema = node
+        seen += 1
+        if seen > 16:
+            raise SchemaError("$ref cycle")
+    return schema
+
+
+def validate_value(value, schema: dict, root: dict, path: str, errors: list[str]) -> None:
+    schema = resolve(schema, root)
+
+    if "const" in schema and value != schema["const"]:
+        errors.append(f"{path}: must be {schema['const']!r}, got {value!r}")
+    if "enum" in schema and value not in schema["enum"]:
+        errors.append(f"{path}: {value!r} not one of {schema['enum']}")
+
+    expected = schema.get("type")
+    if expected:
+        types = {
+            "string": str, "integer": int, "boolean": bool,
+            "array": list, "object": dict, "number": (int, float),
+        }[expected]
+        # bool is a subclass of int in Python; keep them distinct here.
+        ok = isinstance(value, types) and not (expected == "integer" and isinstance(value, bool))
+        if not ok:
+            errors.append(f"{path}: expected {expected}, got {type(value).__name__}")
+            return
+
+    if isinstance(value, str):
+        if "pattern" in schema and not re.search(schema["pattern"], value):
+            errors.append(f"{path}: {value!r} does not match {schema['pattern']}")
+        if "minLength" in schema and len(value) < schema["minLength"]:
+            errors.append(f"{path}: shorter than {schema['minLength']}")
+
+    if isinstance(value, int) and not isinstance(value, bool):
+        if "minimum" in schema and value < schema["minimum"]:
+            errors.append(f"{path}: {value} below minimum {schema['minimum']}")
+        if "maximum" in schema and value > schema["maximum"]:
+            errors.append(f"{path}: {value} above maximum {schema['maximum']}")
+
+    if isinstance(value, list):
+        if "minItems" in schema and len(value) < schema["minItems"]:
+            errors.append(f"{path}: needs at least {schema['minItems']} item(s), has {len(value)}")
+        if schema.get("uniqueItems"):
+            seen = [json.dumps(v, sort_keys=True) for v in value]
+            if len(set(seen)) != len(seen):
+                errors.append(f"{path}: contains duplicates")
+        if "items" in schema:
+            for i, item in enumerate(value):
+                validate_value(item, schema["items"], root, f"{path}[{i}]", errors)
+
+    if isinstance(value, dict):
+        props = schema.get("properties", {})
+        for key in schema.get("required", []):
+            if key not in value:
+                errors.append(f"{path}: missing required field {key!r}")
+        if schema.get("additionalProperties") is False:
+            for key in value:
+                if key not in props:
+                    errors.append(f"{path}: unknown field {key!r}")
+        for key, item in value.items():
+            if key in props:
+                validate_value(item, props[key], root, f"{path}.{key}" if path else key, errors)
+
+    for sub in schema.get("allOf", []):
+        sub = resolve(sub, root)
+        if "if" in sub:
+            probe: list[str] = []
+            validate_value(value, sub["if"], root, path, probe)
+            if not probe and "then" in sub:
+                validate_value(value, sub["then"], root, path, errors)
+            elif probe and "else" in sub:
+                validate_value(value, sub["else"], root, path, errors)
+        else:
+            validate_value(value, sub, root, path, errors)
+
+
+# --------------------------------------------------------------------------
+# Loading
+# --------------------------------------------------------------------------
+
+def display_path(path: pathlib.Path) -> str:
+    """Repo-relative where possible; --kb may legitimately point elsewhere."""
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
+def load_nodes(kb: pathlib.Path) -> tuple[dict[str, dict], list[str]]:
+    nodes: dict[str, dict] = {}
+    errors: list[str] = []
+    for path in sorted(kb.rglob("*.md")):
+        if path.name.upper() == "README.MD":
+            continue
+        rel = display_path(path)
+        text = path.read_text(encoding="utf-8")
+        match = FRONTMATTER.match(text)
+        if not match:
+            errors.append(f"{rel}: no +++ TOML frontmatter block")
+            continue
+        try:
+            meta = tomllib.loads(match.group(1))
+        except tomllib.TOMLDecodeError as exc:
+            errors.append(f"{rel}: invalid TOML — {exc}")
+            continue
+        node_id = meta.get("id")
+        if not node_id:
+            errors.append(f"{rel}: frontmatter has no id")
+            continue
+        if node_id in nodes:
+            errors.append(f"{rel}: duplicate id {node_id!r} (also {nodes[node_id]['_path']})")
+            continue
+        meta["_path"] = str(rel)
+        meta["_body"] = match.group(2).strip()
+        nodes[node_id] = meta
+    return nodes, errors
+
+
+def outgoing(node: dict) -> list[tuple[str, str]]:
+    """Every reference this node makes, as (field, target)."""
+    refs = [("cites", t) for t in node.get("cites", [])]
+    refs += [(f"edges.{e.get('rel', '?')}", e["target"])
+             for e in node.get("edges", []) if isinstance(e, dict) and "target" in e]
+    refs += [("counterexamples", t) for t in node.get("counterexamples", [])]
+    refs += [(f, node[f]) for f in REF_FIELDS if node.get(f)]
+    return refs
+
+
+# --------------------------------------------------------------------------
+# Graph checks
+# --------------------------------------------------------------------------
+
+def check_graph(nodes: dict[str, dict]) -> tuple[list[str], list[str]]:
+    errors: list[str] = []
+    warnings: list[str] = []
+
+    for node_id, node in sorted(nodes.items()):
+        where = node["_path"]
+        prefix = node_id.split(":", 1)[0]
+        expected = PREFIX.get(prefix)
+
+        # id prefix, declared type and declared layer must agree
+        if expected:
+            want_type, want_layer = expected
+            if node.get("type") != want_type:
+                errors.append(f"{where}: id prefix {prefix!r} implies type {want_type!r}, "
+                              f"declared {node.get('type')!r}")
+            if node.get("layer") != want_layer:
+                errors.append(f"{where}: type {want_type!r} belongs to layer {want_layer}, "
+                              f"declared {node.get('layer')!r}")
+
+        # referential integrity
+        for field, target in outgoing(node):
+            if target not in nodes:
+                errors.append(f"{where}: {field} -> {target!r} does not exist")
+            elif target == node_id:
+                errors.append(f"{where}: {field} -> itself")
+
+        # THE INVARIANT: cites may only point strictly downward.
+        layer = node.get("layer")
+        if isinstance(layer, int):
+            for target in node.get("cites", []):
+                other = nodes.get(target)
+                if not other or not isinstance(other.get("layer"), int):
+                    continue
+                if other["layer"] >= layer:
+                    errors.append(
+                        f"{where}: LAYER VIOLATION — L{layer} {node_id} cites "
+                        f"L{other['layer']} {target}. Evidence must sit strictly below "
+                        f"the claim it supports; this is a conclusion being cited as a premise."
+                    )
+
+        # a synthesis is a leaf: reasoning ends there, it never starts there
+        if node.get("type") == "synthesis":
+            for other_id, other in nodes.items():
+                if node_id in other.get("cites", []):
+                    errors.append(f"{other['_path']}: cites synthesis {node_id!r} — "
+                                  f"a synthesis is a leaf, never evidence")
+
+        # publishing safety: a public node resting on withheld material
+        if not node.get("sensitive"):
+            for target in node.get("cites", []):
+                if nodes.get(target, {}).get("sensitive"):
+                    warnings.append(f"{where}: publishes but cites sensitive {target!r} — "
+                                    f"confirm the body reveals nothing identifying")
+
+        if node.get("type") == "pattern" and not node.get("counterexamples"):
+            warnings.append(f"{where}: pattern has no counterexamples recorded — "
+                            f"a pattern that never looked for its own counterexamples "
+                            f"is an anecdote")
+
+        if node.get("type") == "contradiction" and node.get("resolved") is True:
+            warnings.append(f"{where}: contradiction marked resolved — confirm this is a "
+                            f"genuine resolution and not a forced one")
+
+    return errors, warnings
+
+
+def check_cycles(nodes: dict[str, dict]) -> list[str]:
+    """Cycles are impossible if the invariant holds; verified rather than assumed."""
+    found: list[str] = []
+    colour: dict[str, int] = {}
+
+    def walk(node_id: str, trail: list[str]) -> None:
+        colour[node_id] = 1
+        for target in nodes.get(node_id, {}).get("cites", []):
+            if target not in nodes:
+                continue
+            if colour.get(target) == 1:
+                cut = trail[trail.index(target):] if target in trail else [target]
+                found.append(" -> ".join(cut + [target]))
+            elif colour.get(target, 0) == 0:
+                walk(target, trail + [target])
+        colour[node_id] = 2
+
+    for node_id in sorted(nodes):
+        if colour.get(node_id, 0) == 0:
+            walk(node_id, [node_id])
+    return found
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--strict", action="store_true", help="treat warnings as errors")
+    ap.add_argument("--json", action="store_true", help="machine-readable report")
+    ap.add_argument("--kb", type=pathlib.Path, default=KB)
+    args = ap.parse_args()
+
+    if not SCHEMA.exists():
+        print(f"schema not found: {SCHEMA}", file=sys.stderr)
+        return 1
+    schema = json.loads(SCHEMA.read_text())
+
+    if not args.kb.exists():
+        print(f"knowledge base not found: {args.kb}", file=sys.stderr)
+        return 1
+
+    nodes, errors = load_nodes(args.kb)
+
+    for node_id, node in sorted(nodes.items()):
+        payload = {k: v for k, v in node.items() if not k.startswith("_")}
+        found: list[str] = []
+        validate_value(payload, schema, schema, "", found)
+        errors += [f"{node['_path']}: {e.lstrip('.')}" for e in found]
+
+    graph_errors, warnings = check_graph(nodes)
+    errors += graph_errors
+    errors += [f"citation cycle: {c}" for c in check_cycles(nodes)]
+
+    by_layer: dict[int, int] = {}
+    for node in nodes.values():
+        layer = node.get("layer")
+        if isinstance(layer, int):
+            by_layer[layer] = by_layer.get(layer, 0) + 1
+
+    if args.json:
+        print(json.dumps({
+            "nodes": len(nodes),
+            "by_layer": {str(k): by_layer[k] for k in sorted(by_layer)},
+            "errors": errors,
+            "warnings": warnings,
+            "ok": not errors and not (args.strict and warnings),
+        }, indent=2))
+    else:
+        shape = "  ".join(f"L{layer}:{by_layer[layer]}" for layer in sorted(by_layer)) or "empty"
+        print(f"{len(nodes)} nodes   {shape}")
+        for warning in warnings:
+            print(f"  warn   {warning}")
+        for error in errors:
+            print(f"  ERROR  {error}")
+        if errors:
+            print(f"\n{len(errors)} error(s)")
+        elif warnings and args.strict:
+            print(f"\n{len(warnings)} warning(s), --strict")
+        else:
+            print("\nclean" + (f", {len(warnings)} warning(s)" if warnings else ""))
+
+    return 1 if errors or (args.strict and warnings) else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
