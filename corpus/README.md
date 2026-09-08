@@ -74,9 +74,19 @@ bin/corpus-query --help        # search the corpus, print readable transcripts
 All three are standard-library Python, matching the rest of the project.
 Nothing here makes a network call.
 
-## Source-of-record caveat
+## The source sheet is public, deliberately
 
-As of 2026-09-08 the backing Google Sheet is shared **"anyone with the link"** —
-it downloads with no credentials at all. Anyone holding that URL has the whole
-corpus. If that is not intended, restrict the sheet's sharing; the migration
-notes in the root `README.md` cover it.
+The backing Google Sheet is shared **"anyone with the link"**. It downloads in
+full, with no credentials — that is how this corpus was fetched, and it is how
+anyone else holding the URL would fetch it: all 192,140 messages, 498 people's
+numbers and email addresses, 2011 through 2026.
+
+That is a decision, not an oversight. It was raised on 2026-09-08, with the
+no-credentials download demonstrated rather than assumed, and the operator
+chose to leave the sheet as it is.
+
+Recorded here so it is not silently "fixed" later by someone who assumes it was
+a mistake, and so the consequence stays visible: **the repository's gitignore
+is not what is protecting this data.** Nothing about the closed default in
+`.gitignore` narrows who can reach the sheet. If the exposure ever stops being
+wanted, the sheet's own sharing setting is the only thing that changes it.
