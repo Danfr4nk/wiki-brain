@@ -1,0 +1,289 @@
+#!/usr/bin/env python3
+"""Derive publishable statistics from the authoritative message corpus.
+
+Reads the corpus in the clear and writes two classes of output:
+
+  corpus/derived/   publishable — shape of the data, never its content.
+                    Counterparties appear only as salted hashes.
+  corpus/private/   identity material — gitignored, never leaves the machine.
+
+The salt matters. There are only ~10^10 possible US phone numbers, so an
+unsalted SHA of one is recoverable by brute force in seconds; a hash is not
+anonymisation unless it is keyed. corpus/private/salt is that key.
+
+Usage:  bin/corpus-stats [--corpus PATH]
+
+Standard library only, matching the rest of the project.
+"""
+
+from __future__ import annotations
+
+import argparse
+import collections
+import csv
+import datetime as dt
+import hashlib
+import json
+import pathlib
+import re
+import secrets
+import sys
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+CORPUS = ROOT / "corpus" / "messages.csv"
+PRIVATE = ROOT / "corpus" / "private"
+DERIVED = ROOT / "corpus" / "derived"
+
+# A single group thread can carry a very long attachment-filename column.
+csv.field_size_limit(10**9)
+
+# Rendered attachment placeholder (U+FFFC OBJECT REPLACEMENT CHARACTER). A
+# message whose text is only this carries no words, just an image or a file.
+OBJ = "￼"
+
+
+def load_salt() -> bytes:
+    """Return the keying salt, creating it on first run."""
+    path = PRIVATE / "salt"
+    if not path.exists():
+        PRIVATE.mkdir(parents=True, exist_ok=True)
+        path.write_text(secrets.token_hex(32) + "\n")
+        path.chmod(0o600)
+        print(f"generated new salt at {path}", file=sys.stderr)
+    return path.read_text().strip().encode()
+
+
+def pseudonym(value: str, salt: bytes) -> str:
+    """Stable, non-reversible id for a counterparty."""
+    if not value:
+        return ""
+    return hashlib.blake2b(salt + value.strip().lower().encode(), digest_size=8).hexdigest()
+
+
+def norm_phone(raw: str) -> str:
+    """Reduce a phone number to comparable form: last 10 digits for NANP."""
+    digits = re.sub(r"\D", "", raw or "")
+    if len(digits) > 10 and digits.startswith("1"):
+        digits = digits[1:]
+    return digits[-10:] if len(digits) >= 10 else digits
+
+
+def load_contacts() -> dict[str, str]:
+    """Map normalised phone / lowercased email -> display name."""
+    path = PRIVATE / "contacts.csv"
+    if not path.exists():
+        return {}
+    out: dict[str, str] = {}
+    with path.open(newline="", encoding="utf-8", errors="replace") as fh:
+        for row in csv.DictReader(fh):
+            parts = [
+                (row.get("First Name") or "").strip(),
+                (row.get("Middle Name") or "").strip(),
+                (row.get("Last Name") or "").strip(),
+            ]
+            name = " ".join(p for p in parts if p).strip()
+            if not name:
+                name = (row.get("Organization Name") or row.get("Nickname") or "").strip()
+            if not name:
+                continue
+            for key, norm in (("Phone", norm_phone), ("E-mail", str.lower)):
+                for i in range(1, 5):
+                    value = (row.get(f"{key} {i} - Value") or "").strip()
+                    for one in filter(None, (v.strip() for v in value.split(":::"))):
+                        ident = norm(one)
+                        # First contact to claim an identifier wins; later
+                        # duplicates in the export are usually stale cards.
+                        if ident and ident not in out:
+                            out[ident] = name
+    return out
+
+
+def resolve(handle: str, contacts: dict[str, str]) -> str:
+    """Best-effort display name for a raw sender/chat handle."""
+    if not handle:
+        return ""
+    if "@" in handle:
+        return contacts.get(handle.strip().lower(), "")
+    return contacts.get(norm_phone(handle), "")
+
+
+def thread_key(row: dict) -> str | None:
+    """Which conversation a message belongs to, or None if unknowable.
+
+    5.3% of the export carries no `chat_identifier`. Most of those are still
+    placeable: a received message names its `sender`, and some sent messages
+    carry `destination_caller_id`. What is left is ~1.6% of the corpus — sent
+    messages with no counterparty field at all. Those could be guessed at by
+    interleaving them with the surrounding received messages, but a guess is
+    not an attribution, and this corpus exists because guessing from partial
+    data is what produced the conclusions it is meant to replace. They are
+    counted and excluded, never assigned.
+    """
+    chat = (row.get("chat_identifier") or "").strip()
+    if chat:
+        return chat
+    if row.get("is_from_me") == "1":
+        return (row.get("destination_caller_id") or "").strip() or None
+    sender = (row.get("sender") or "").strip()
+    return sender if sender and sender != "Me" else None
+
+
+def parse_date(raw: str) -> dt.datetime | None:
+    raw = (raw or "").strip()
+    for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M", "%Y-%m-%d"):
+        try:
+            return dt.datetime.strptime(raw, fmt)
+        except ValueError:
+            continue
+    return None
+
+
+class Thread:
+    __slots__ = ("identifier", "is_group", "n", "from_me", "with_text",
+                 "attachments", "first", "last", "handles")
+
+    def __init__(self, identifier: str) -> None:
+        self.identifier = identifier
+        self.is_group = False
+        self.n = 0
+        self.from_me = 0
+        self.with_text = 0
+        self.attachments = 0
+        self.first: dt.datetime | None = None
+        self.last: dt.datetime | None = None
+        self.handles: set[str] = set()
+
+    def add(self, row: dict, when: dt.datetime | None) -> None:
+        self.n += 1
+        if row.get("is_from_me") == "1":
+            self.from_me += 1
+        else:
+            handle = (row.get("sender") or "").strip()
+            if handle and handle != "Me":
+                self.handles.add(handle)
+        text = (row.get("text") or "").strip()
+        if text and text.replace(OBJ, "").strip():
+            self.with_text += 1
+        if row.get("has_attachments") == "1":
+            self.attachments += 1
+        if row.get("is_group_chat") == "1" or (row.get("chat_type") or "") == "Group":
+            self.is_group = True
+        if when:
+            if self.first is None or when < self.first:
+                self.first = when
+            if self.last is None or when > self.last:
+                self.last = when
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--corpus", type=pathlib.Path, default=CORPUS)
+    args = ap.parse_args()
+
+    if not args.corpus.exists():
+        print(f"corpus not found: {args.corpus}", file=sys.stderr)
+        print("The corpus is gitignored; see corpus/README.md to rebuild it.", file=sys.stderr)
+        return 1
+
+    salt = load_salt()
+    contacts = load_contacts()
+    DERIVED.mkdir(parents=True, exist_ok=True)
+
+    threads: dict[str, Thread] = {}
+    per_year: collections.Counter[str] = collections.Counter()
+    per_handle: collections.Counter[str] = collections.Counter()
+    total = from_me = with_text = attachments = undated = 0
+    unattributed = 0
+    columns: list[str] = []
+
+    with args.corpus.open(newline="", encoding="utf-8", errors="replace") as fh:
+        reader = csv.DictReader(fh)
+        columns = list(reader.fieldnames or [])
+        for row in reader:
+            total += 1
+            when = parse_date(row.get("date_sent", ""))
+            if when:
+                per_year[str(when.year)] += 1
+            else:
+                undated += 1
+            if row.get("is_from_me") == "1":
+                from_me += 1
+            else:
+                handle = (row.get("sender") or "").strip()
+                if handle and handle != "Me":
+                    per_handle[handle] += 1
+            text = (row.get("text") or "").strip()
+            if text and text.replace(OBJ, "").strip():
+                with_text += 1
+            if row.get("has_attachments") == "1":
+                attachments += 1
+
+            key = thread_key(row)
+            if key is None:
+                unattributed += 1
+                continue
+            threads.setdefault(key, Thread(key)).add(row, when)
+
+    # ---- publishable: thread shape, counterparties hashed --------------
+    rows = sorted(threads.values(), key=lambda t: t.n, reverse=True)
+    with (DERIVED / "threads.csv").open("w", newline="", encoding="utf-8") as fh:
+        w = csv.writer(fh)
+        w.writerow(["thread_id", "kind", "participants", "messages", "sent_by_me",
+                    "received", "with_text", "with_attachments", "first_message",
+                    "last_message", "span_days"])
+        for t in rows:
+            span = (t.last - t.first).days if (t.first and t.last) else ""
+            w.writerow([
+                pseudonym(t.identifier, salt),
+                "group" if t.is_group else "individual",
+                len(t.handles),
+                t.n, t.from_me, t.n - t.from_me, t.with_text, t.attachments,
+                t.first.date().isoformat() if t.first else "",
+                t.last.date().isoformat() if t.last else "",
+                span,
+            ])
+
+    named = sum(1 for h in per_handle if resolve(h, contacts))
+    dated = [t for t in rows if t.first and t.last]
+    summary = {
+        "generated": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
+        "messages": total,
+        "sent_by_me": from_me,
+        "received": total - from_me,
+        "carrying_text": with_text,
+        "attachment_only_or_with_attachment": attachments,
+        "undated_rows": undated,
+        "unattributable_to_a_thread": unattributed,
+        "threads": len(threads),
+        "threads_group": sum(1 for t in rows if t.is_group),
+        "threads_individual": sum(1 for t in rows if not t.is_group),
+        "distinct_counterparty_handles": len(per_handle),
+        "counterparty_handles_resolved_to_a_name": named,
+        "columns": len(columns),
+        "first_message": min(t.first for t in dated).date().isoformat() if dated else None,
+        "last_message": max(t.last for t in dated).date().isoformat() if dated else None,
+        "messages_per_year": dict(sorted(per_year.items())),
+    }
+    (DERIVED / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
+
+    # ---- private: the actual identities -------------------------------
+    with (PRIVATE / "counterparties.csv").open("w", newline="", encoding="utf-8") as fh:
+        w = csv.writer(fh)
+        w.writerow(["handle", "name", "thread_id", "messages_received_from"])
+        for handle, count in per_handle.most_common():
+            w.writerow([handle, resolve(handle, contacts), pseudonym(handle, salt), count])
+    (PRIVATE / "counterparties.csv").chmod(0o600)
+
+    print(f"{total:,} messages across {len(threads):,} threads")
+    print(f"  {unattributed:,} messages could not be placed in a thread "
+          f"({unattributed/total:.1%}) — counted, not guessed at")
+    print(f"  {named:,}/{len(per_handle):,} counterparties resolved to a name")
+    print(f"  wrote {DERIVED/'threads.csv'}")
+    print(f"  wrote {DERIVED/'summary.json'}")
+    print(f"  wrote {PRIVATE/'counterparties.csv'} (private)")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

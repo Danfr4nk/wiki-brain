@@ -1,0 +1,249 @@
+#!/usr/bin/env python3
+"""Search the authoritative corpus and print it as a readable transcript.
+
+This is the tool for the job the corpus exists to do: when a wiki page rests
+on a conclusion drawn from one of the old per-contact extracts, you check the
+claim against the complete record before you keep it, correct it, or retract
+it. Partial data is what produced the conclusions this corpus supersedes, so
+the useful question is usually not "does this quote exist" but "what else was
+happening in that thread that the fragment did not contain" — which is what
+--context is for.
+
+Examples:
+  bin/corpus-query --who "Annie"                    everything with one person
+  bin/corpus-query --text "rehab" --context 3       a phrase, in situ
+  bin/corpus-query --who 724XXXXXXX --from 2018-01-01 --to 2018-06-30
+  bin/corpus-query --text "\\bsober\\b" --regex --stats
+
+Output goes to stdout as plain text. Nothing is written; nothing leaves the
+machine. Standard library only.
+"""
+
+from __future__ import annotations
+
+import argparse
+import collections
+import csv
+import datetime as dt
+import pathlib
+import re
+import sys
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+CORPUS = ROOT / "corpus" / "messages.csv"
+PRIVATE = ROOT / "corpus" / "private"
+
+csv.field_size_limit(10**9)
+OBJ = "￼"
+
+sys.path.insert(0, str(ROOT / "bin"))
+
+
+def norm_phone(raw: str) -> str:
+    digits = re.sub(r"\D", "", raw or "")
+    if len(digits) > 10 and digits.startswith("1"):
+        digits = digits[1:]
+    return digits[-10:] if len(digits) >= 10 else digits
+
+
+def load_contacts() -> dict[str, str]:
+    path = PRIVATE / "contacts.csv"
+    if not path.exists():
+        return {}
+    out: dict[str, str] = {}
+    with path.open(newline="", encoding="utf-8", errors="replace") as fh:
+        for row in csv.DictReader(fh):
+            name = " ".join(p for p in (
+                (row.get("First Name") or "").strip(),
+                (row.get("Middle Name") or "").strip(),
+                (row.get("Last Name") or "").strip()) if p).strip()
+            if not name:
+                name = (row.get("Organization Name") or row.get("Nickname") or "").strip()
+            if not name:
+                continue
+            for key, norm in (("Phone", norm_phone), ("E-mail", str.lower)):
+                for i in range(1, 5):
+                    for one in filter(None, (v.strip() for v in
+                                             (row.get(f"{key} {i} - Value") or "").split(":::"))):
+                        ident = norm(one)
+                        if ident and ident not in out:
+                            out[ident] = name
+    return out
+
+
+def display(handle: str, contacts: dict[str, str]) -> str:
+    if not handle or handle == "Me":
+        return "Me"
+    key = handle.strip().lower() if "@" in handle else norm_phone(handle)
+    return contacts.get(key) or handle
+
+
+def parse_date(raw: str) -> dt.datetime | None:
+    raw = (raw or "").strip()
+    for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M", "%Y-%m-%d"):
+        try:
+            return dt.datetime.strptime(raw, fmt)
+        except ValueError:
+            continue
+    return None
+
+
+def counterparty(row: dict) -> str:
+    """The other side of the conversation, regardless of message direction."""
+    chat = (row.get("chat_identifier") or "").strip()
+    if chat:
+        return chat
+    if row.get("is_from_me") == "1":
+        return (row.get("destination_caller_id") or "").strip()
+    sender = (row.get("sender") or "").strip()
+    return "" if sender == "Me" else sender
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--who", help="name, phone or email; substring match on either")
+    ap.add_argument("--text", help="search message text")
+    ap.add_argument("--regex", action="store_true", help="treat --text as a regex")
+    ap.add_argument("--case-sensitive", action="store_true")
+    ap.add_argument("--from", dest="since", metavar="YYYY-MM-DD")
+    ap.add_argument("--to", dest="until", metavar="YYYY-MM-DD")
+    ap.add_argument("--context", type=int, default=0, metavar="N",
+                    help="also show N messages either side, from the same thread")
+    ap.add_argument("--limit", type=int, default=200, help="0 for no limit")
+    ap.add_argument("--stats", action="store_true",
+                    help="summarise matches instead of printing them")
+    ap.add_argument("--corpus", type=pathlib.Path, default=CORPUS)
+    args = ap.parse_args()
+
+    if not any((args.who, args.text, args.since, args.until)):
+        ap.error("give at least one of --who, --text, --from, --to")
+    if not args.corpus.exists():
+        print(f"corpus not found: {args.corpus}", file=sys.stderr)
+        return 1
+
+    contacts = load_contacts()
+    since = dt.datetime.strptime(args.since, "%Y-%m-%d") if args.since else None
+    until = dt.datetime.strptime(args.until, "%Y-%m-%d") if args.until else None
+    if until:
+        until += dt.timedelta(days=1)  # --to is inclusive of that whole day
+
+    pattern = None
+    if args.text:
+        flags = 0 if args.case_sensitive else re.IGNORECASE
+        pattern = re.compile(args.text if args.regex else re.escape(args.text), flags)
+
+    who = (args.who or "").strip().lower()
+    who_digits = norm_phone(args.who) if args.who else ""
+
+    def matches_who(row: dict) -> bool:
+        if not who:
+            return True
+        other = counterparty(row)
+        if not other:
+            return False
+        if who_digits and who_digits in norm_phone(other):
+            return True
+        if who in other.lower():
+            return True
+        return who in display(other, contacts).lower()
+
+    rows: list[dict] = []
+    by_thread: dict[str, list[int]] = collections.defaultdict(list)
+    hits: list[int] = []
+
+    with args.corpus.open(newline="", encoding="utf-8", errors="replace") as fh:
+        for idx, row in enumerate(csv.DictReader(fh)):
+            rows.append(row)
+            by_thread[counterparty(row)].append(idx)
+            when = parse_date(row.get("date_sent", ""))
+            if since and (not when or when < since):
+                continue
+            if until and (not when or when >= until):
+                continue
+            if not matches_who(row):
+                continue
+            if pattern and not pattern.search(row.get("text") or ""):
+                continue
+            hits.append(idx)
+
+    if not hits:
+        print("no matches")
+        return 0
+
+    if args.stats:
+        per_person: collections.Counter[str] = collections.Counter()
+        per_year: collections.Counter[str] = collections.Counter()
+        mine = 0
+        for i in hits:
+            row = rows[i]
+            per_person[display(counterparty(row), contacts) or "(unattributed)"] += 1
+            when = parse_date(row.get("date_sent", ""))
+            if when:
+                per_year[str(when.year)] += 1
+            if row.get("is_from_me") == "1":
+                mine += 1
+        print(f"{len(hits):,} matches — {mine:,} sent by me, {len(hits)-mine:,} received")
+        print(f"\nby person ({len(per_person)}):")
+        for name, count in per_person.most_common(20):
+            print(f"  {count:>7,}  {name}")
+        print("\nby year:")
+        for year in sorted(per_year):
+            print(f"  {year}  {per_year[year]:>7,}")
+        return 0
+
+    # Expand each hit with its neighbours from the same thread, so a quote is
+    # never read out of the exchange it sat in.
+    show: set[int] = set(hits)
+    if args.context:
+        for i in hits:
+            siblings = by_thread[counterparty(rows[i])]
+            at = siblings.index(i)
+            lo = max(0, at - args.context)
+            show.update(siblings[lo:at + args.context + 1])
+
+    ordered = sorted(show)
+    if args.limit:
+        ordered = ordered[:args.limit]
+
+    hitset = set(hits)
+    last_thread = None
+    for i in ordered:
+        row = rows[i]
+        other = counterparty(row)
+        if other != last_thread:
+            label = display(other, contacts) if other else "(unattributed)"
+            print(f"\n{'─' * 62}\n{label}\n{'─' * 62}")
+            last_thread = other
+        when = (row.get("date_sent") or "").strip()
+        speaker = "Me" if row.get("is_from_me") == "1" else display(
+            (row.get("sender") or "").strip(), contacts)
+        text = (row.get("text") or "").replace(OBJ, "[attachment]").strip()
+        if not text and row.get("has_attachments") == "1":
+            text = "[attachment]"
+        marker = ">" if i in hitset else " "
+        body = "\n".join(f"{marker}   {line}" for line in (text or "[no text]").splitlines())
+        print(f"{marker} {when}  {speaker}")
+        print(body)
+
+    shown = len(ordered)
+    print(f"\n{'─' * 62}")
+    print(f"{len(hits):,} matching messages"
+          + (f", {shown:,} lines shown (--limit {args.limit})" if args.limit and shown < len(show)
+             else f", {shown:,} lines shown with context" if args.context else ""))
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        raise SystemExit(main())
+    except BrokenPipeError:
+        # Piping into `head`/`less` and quitting early is ordinary use of a
+        # tool that prints transcripts. Exit quietly instead of dumping a
+        # traceback: redirect stdout to devnull so the interpreter's own
+        # flush-on-exit cannot raise a second time.
+        import os
+        os.dup2(os.open(os.devnull, os.O_WRONLY), sys.stdout.fileno())
+        raise SystemExit(0)
+    except KeyboardInterrupt:
+        raise SystemExit(130)
