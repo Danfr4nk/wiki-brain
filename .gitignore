@@ -1,0 +1,39 @@
+exports/
+site/
+.DS_Store
+corpus_*.md
+.gdrive-*.txt
+.README.md.swp
+.hermes-tmp*
+__pycache__/
+
+# ---------------------------------------------------------------------------
+# THIS REPOSITORY IS PUBLIC. github.com/Danfr4nk/wiki-brain
+# ---------------------------------------------------------------------------
+#
+# The message corpus is not Dan's data alone. It contains the phone numbers,
+# email addresses and private words of ~499 other people, none of whom chose
+# to be published. The earlier decision to track `intake/events.jsonl` in a
+# public repo was Dan's to make about Dan. This is not the same decision and
+# it is not his alone to make, so the default here is closed.
+#
+# git history cannot be un-published. Un-ignoring any line below puts that
+# data on the public internet permanently, for everyone in it.
+#
+# To reverse: make the repository private FIRST, verify it, and only then
+# decide whether these lines are still wanted. In that order.
+
+# Raw corpus — every message, in the clear.
+corpus/messages.csv
+
+# Identity material and the hashing salt. The salt is what stops a published
+# thread_id from being brute-forced back to a phone number: there are only
+# ~10^10 US numbers, so an unsalted hash is not anonymisation, it is a speed
+# bump. If this leaks, every derived artifact de-anonymises with it.
+corpus/private/
+
+# Shelved fragment exports — superseded, retained locally as error evidence.
+# See CORPUS_POLICY.md. Same personal data as the corpus, same reasoning.
+shelf/**
+!shelf/README.md
+!shelf/MANIFEST.md
