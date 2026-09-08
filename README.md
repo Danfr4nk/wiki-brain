@@ -9,6 +9,13 @@ layer.**
 
 Published to GitHub Pages: **<https://danfr4nk.github.io/wiki-brain>**
 
+> **One-time setup:** Pages must be enabled by hand — *Settings → Pages →
+> Source: **GitHub Actions***. The workflow cannot do this for you:
+> `configure-pages` has an `enablement` input, but it requires a Personal
+> Access Token rather than the default `GITHUB_TOKEN`, and wiring up a secret
+> is more work than clicking the setting once. Until it is set, `validate`
+> passes and `deploy` fails.
+
 ---
 
 ## The constitutional law

@@ -61,5 +61,19 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      # Pages must be enabled once, by hand:
+      #   Settings -> Pages -> Source: GitHub Actions
+      #
+      # This step cannot do it. configure-pages has an `enablement` input, but
+      # its own documentation says it "requires a token other than
+      # GITHUB_TOKEN" — a PAT with `repo` scope, or a GitHub App with
+      # `administration:write`. Wiring up a secret is strictly more work than
+      # clicking the setting once, so the switch stays manual.
+      #
+      # The step earns its place anyway: when Pages is off it fails here with
+      # a message naming the cause, instead of letting deploy-pages fail with
+      # a bare "HttpError: Not Found" that reads like a broken workflow.
+      - uses: actions/configure-pages@v5
+
       - id: deployment
         uses: actions/deploy-pages@v4
