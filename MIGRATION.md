@@ -68,9 +68,11 @@ shaped to keep them small:
   (`corpus/messages.csv`, `corpus/private/`, `shelf/**`). Drop nothing from
   either side; the corpus rules are what keep 498 people's messages out of a
   public git history.
-- **`README.md`** — **yours wins outright.** The version on `main` is a
-  placeholder written to be replaced. Keep yours, then add one line under
-  "The governing documents" pointing at `CORPUS_POLICY.md`.
+- **`README.md`** — **merge, do not simply take one side.** This is no longer
+  a placeholder: it now documents the six-layer architecture, the tooling and
+  the privacy split, none of which exists in your copy. Keep whatever your
+  version says about the app and the capture/ingest loop, and keep the
+  architecture, tooling and privacy sections from this side.
 
 ```sh
 git add .gitignore README.md
