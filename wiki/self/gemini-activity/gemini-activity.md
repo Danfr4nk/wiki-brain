@@ -1,0 +1,84 @@
+
+---
+domain: self
+page_type: report
+status: stable
+date_created: 2026-06-22
+date_modified: 2026-07-02
+date_range_start: 2024-01-01
+date_range_end: 2026-01-02
+sources: ["raw/self/gemini-activity/Gemini Activity.html", "raw/self/dox-md/Gemini-_00.md", "raw/self/dox-md/Gemini-_02.md", "raw/self/dox-md/Gemini-_07.md", "raw/self/dox-md/Gemini-_13.md", "raw/self/dox-md/Gemini-_18.md", "raw/self/dox-md/Gemini-_21.md", "raw/self/dox-scan/Gemini-_58.txt"]
+related: ["wiki/mind/synthesis/ai-collaborative-analysis", "wiki/mind/concepts/forensic-method", "wiki/mind/synthesis/totality-themes", "wiki/self/context-core"]
+tags: [ai-collaboration, politics, nyc-era, relationships, addiction-recovery]
+connections:
+  - page: wiki/mind/synthesis/ai-collaborative-analysis
+    type: evidences
+    claim: "This archive is the primary corpus of the AI-collaboration synthesis."
+  - page: wiki/mind/concepts/node-locking
+    type: evidences
+    claim: "This page's theme-frequency table (403 'node,' 1,041 'profile,' 2,258 'lock' mentions, the Jan 2 2026 cluster) is the raw count node-locking's mechanism argument is built from."
+---
+
+
+# Gemini Activity
+
+Corpus report on Dan's Gemini usage: a 21MB Google Takeout HTML activity log plus eight discrete exported sessions. This page holds the aggregate numbers and the map; per-session analysis lives in the dedicated chat pages linked below. The full v1 extraction (verbatim quotes, exhaustive concept tables) is pinned at [[wiki/self/gemini-activity/archive/v1-extract]].
+
+## Corpus Dimensions
+
+| Metric | Value |
+|--------|-------|
+| HTML export size | 21 MB / ~168,000 lines / ~21.8M chars |
+| Conversation entries ("Prompted") | 3,986 (≈4,004 structural blocks) |
+| Timestamped entries | 3,989 |
+| Discrete exported sessions | 8 (_00, _02, _07, _13, _18, _21 + copy, _58) |
+| Peak month | Dec 2025 (938 entries) |
+| Other high months | Jul 2025 (703), Aug 2025 (548), Jun 2025 (340), Sep 2025 (336), Nov 2025 (287) |
+| Peak days | Jul 11 2025 (143), Dec 26 2025 (117), Jul 19 2025 (91), Dec 23 2025 (83), Jan 2 2026 (73) |
+| Key dated cluster | Jan 2 2026 — J6/Wildfall forensics + profile node-locking, ~10:30–11 PM EST |
+
+## Theme Frequencies (full-corpus grep)
+
+| Theme | Count | Where it concentrates |
+|-------|-------|----------------------|
+| ai / gemini | 40,360 | AI-meta: interfaces, control, injection, profile transfer |
+| data | 8,287 | Logging, profiles, retention, DATA_LOGGED tables |
+| annie / eggie | 5,658 | Primary relational anchor — see [[wiki/people/annie-ulmer]] |
+| eli | 5,524 | NYC chaos node; deliberately redacted from profile exports — [[wiki/people/eli]] |
+| work / [[wiki/work/au-zaatar|Au Za'atar]] | ~3,400 | 2021–24 NYC hospitality lore — [[wiki/timeline/periods/2021-2023-employment-block]] |
+| lock / profile / node | 3,702 (2,258 / 1,041 / 403) | Explicit "lock these nodes" memory-persistence commands |
+| loop | 1,872 | Pursuit–withdrawal relational pattern |
+| forensic / anomaly | ~1,200 | J6, work alibis, relationship analysis — [[wiki/mind/concepts/forensic-method]] |
+| uniontown | 507 | Hometown, family, property |
+| trump / j6 / babbitt / psyop | ~920 | Jan 2 2026 cluster — [[wiki/mind/synthesis/political-psyops]] |
+| manipulation / honesty | 474 | Data ethics, no-soften instructions — [[wiki/mind/concepts/exocortex]] |
+| millennial | 44 | Generational-witness framing — [[wiki/mind/synthesis/millennial-digital-witness]] |
+
+## Session Index
+
+| Session | Page | Subject |
+|---------|------|---------|
+| _00 | absorbed into [[wiki/work/au-zaatar]] + [[wiki/timeline/periods/2021-2023-employment-block]] (chat page retired 2026-07-18) | Au Za'atar STORYTIME finale: 9PM alibi post-mortem, Sergio, cash exit Aug 2024 |
+| _02 | absorbed into [[wiki/work/au-zaatar]] + [[wiki/timeline/periods/2021-2023-employment-block]] (chat page retired 2026-07-18) | Au Za'atar Volume I: Tarik, [[wiki/people/dimitri|Dimitri]], DJ, [[wiki/people/valeria-iglesias-cid|Valeria]], shed build |
+| _07 | [[wiki/self/chats/gemini-07]] | Suzy call & 10-day blackout forensics; game-theory Grim Trigger model |
+| _13 | [[wiki/self/chats/gemini-13]] | Bacharach "neighborhood simulation glitch"; 155 Virginia Ave verification |
+| _18 | [[wiki/self/chats/gemini-18]] | Full bio dump + node locking for Grok profile transfer |
+| _21 (+copy) | [[wiki/self/chats/gemini-21]] | Music-industry analysis (Danielle's boyfriend Max); Character.ai jailbreak audit |
+| _58 | [[wiki/self/chats/gemini-58]] | NYC round 1: Full Sail 2010, ishlab, Creative License, Lex era |
+| HTML aggregate | this page | Volume, themes, J6 cluster, profile-lock language |
+
+## Narrative
+
+The Gemini corpus documents a distinctive usage pattern: the model is treated as external memory and a forensic instrument, not a chat toy. The clearest signature is the node-locking workflow — explicit commands to "lock these nodes into your profile," complete with deliberate redactions (the Eli material is purged from every export destined for other models) and structured DATA_LOGGED tables. The same architecture appears in the pinned ChatGPT conversations ([[wiki/self/chats/danfrank-isms-pinned]], 77 nodes), which suggests the pattern is Dan's, not the platform's.
+
+Usage peaks track life events. December 2025 (938 entries) sits inside [[wiki/timeline/periods/dec-2025-spike]]; the January 2, 2026 cluster combines J6/Wildfall forensic deconstruction with the heaviest profile-locking activity, both within [[wiki/timeline/periods/2025-collapse]]. The discrete sessions divide cleanly: work narrative (_00/_02), relationship forensics (_07), anomaly investigation (_13), profile transfer (_18), AI experimentation (_21), and early-biography reconstruction (_58).
+
+Three cross-corpus findings worth keeping. First, relational depth inverts between platforms: Annie and Eli dominate Gemini while Facebook shows breadth without depth, consistent with [[wiki/mind/concepts/contact-gini]]. Second, the forensic method is invariant across subject matter — the same evidence-first, procedural-tells approach is applied to J6 ballistics, workplace tip-siphon alibis, and relationship blackouts (see [[wiki/mind/concepts/forensic-method]]). Third, the corpus is the primary evidence base for [[wiki/mind/synthesis/ai-collaborative-analysis]] — the custom command kernel (!ORLY?, !DANALYSIS, !CHANGELOG), the "LLM Genesis Protocol," and the cross-model transfer experiments all originate here.
+
+## Related
+
+- [[wiki/self/gemini-activity/archive/v1-extract]] — full v1 extraction, pinned
+- [[wiki/mind/synthesis/ai-collaborative-analysis]] · [[wiki/mind/concepts/forensic-method]] · [[wiki/mind/synthesis/political-psyops]] · [[wiki/mind/synthesis/totality-themes]]
+- [[wiki/self/context-core]] · [[wiki/self/chats/j6-chat]]
+
+

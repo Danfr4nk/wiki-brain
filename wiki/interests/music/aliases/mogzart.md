@@ -1,0 +1,79 @@
+
+---
+domain: interests
+page_type: entity
+status: active
+date_created: 2026-06-22
+date_modified: 2026-07-13
+date_range_start: 2014-01-01
+date_range_end: 
+sources:
+  - raw/self/context-core/CONTEXT_CORE_EXPANDED.md
+  - raw/self/dox-md/operating_manual.md
+  - raw/self/twitter/tweets_sample_2019-2026.txt
+related:
+  - wiki/interests/music/overview
+  - wiki/interests/music/aliases/gripnotic
+  - wiki/interests/music/aliases/sloppp
+  - wiki/interests/music/aliases/mogged-up
+  - wiki/interests/music/concepts/sub-bass-signature
+  - wiki/timeline/periods/2015-2016-annie-relationship-start
+  - wiki/self/context-core
+tags: [music-production, uniontown-era, relationships, financial-stress, nyc-era]
+connections:
+  - page: wiki/timeline/periods/uniontown-return-2013-2015
+    type: component-of
+    claim: "The SLOPPP-to-MOGZART handoff (~2014, on the May account rotation) lands inside the Uniontown-return period, dating the alias churn to those years."
+  - page: wiki/mind/synthesis/alias-as-periodization
+    type: instantiates
+    claim: "MOGZART is the instance that uses one name twice — adopted as SLOPPP closes in December 2015, revived March 4 2026 — marking both ends of the same life period without either use changing the sound."
+---
+
+# Mogzart
+
+## Identity
+
+**MOGZART** was Dan Frank's primary production alias from approximately 2014 to 2016, concurrent with the late Uniontown period before the NYC return — and it is the alias he actually revived in 2026: on March 4, 2026 he posted "Odd Mob – Never Alone (feat. Lizzy Land) [MOGZART DnB JUMP UP REMIX]" to SoundCloud, and the 2026 Twitter record groups his current output (DnB remixes, Ableton work) under the name. Genre originally sat in bass house / trap-adjacent electronic, with the same involuntary [[wiki/interests/music/concepts/sub-bass-signature]] (63–85%) as all other aliases; the revival output is jump-up drum & bass.
+
+## Genre & Style
+
+| Dimension | Details |
+|-----------|---------|
+| Primary genre | Bass house / trap-adjacent |
+| Era | ~2014–2016 (Uniontown era, pre-NYC-return) |
+| Sub-bass range | 63–85% (same involuntary signature) |
+| Differentiator from SLOPPP | More stylistically refined, less exploratory |
+| Differentiator from GRIPNOTIC | More trap-adjacent, less tech house; earlier production sensibility |
+| Revival status | **Revived 2026** — DnB jump-up remixes on SoundCloud (`soundcloud.com/mogzartmusic`) |
+
+## Production Chain
+
+> **Gap:** Specific DAW and hardware chain for the MOGZART era not yet in wiki sources. Likely shares NS7 as core hardware (gifted by [[wiki/people/fran-coldren]], production-identity seeding documented in context-core).
+
+## Release Catalog (known)
+
+Reconstructed from link slugs and tweets; SoundCloud metadata not archived in raw/.
+
+| Title | Year | Notes |
+|-------|------|-------|
+| Juicy J bootleg | 2016 | 1,661 plays with zero promotion — context-core's standing example of the shipping bottleneck |
+| Uffie – The Art of Uff (MOGGED UP) | ~2015–16 | Crossover with the [[wiki/interests/music/aliases/mogged-up]] bootleg imprint |
+| It's Nothing | undated | Original |
+| POV Flip (final) | undated | Flip |
+| Odd Mob – Never Alone (feat. Lizzy Land) [MOGZART DnB JUMP UP REMIX] | Mar 4, 2026 | The revival release; posted to SoundCloud with #DnB #Remix |
+
+> **Gap:** the 2014–16 catalog is clearly larger than this — the Juicy J bootleg and the era's output need a dedicated SoundCloud/archive ingest.
+
+## Narrative
+
+MOGZART occupies the middle period of the production arc — after the experimental SLOPPP phase and before the GRIPNOTIC consolidation. The name tracks with the Uniontown return and deep-cycle years (2014–2016), a period defined by [[wiki/timeline/periods/2015-2016-annie-relationship-start]] and the poverty-floor dynamics of [[wiki/timeline/periods/2017-poverty-floor]]. Production would have been happening against significant external instability.
+
+The 2026 revival settles the earlier "archive/revival candidate" question: MOGZART is again a live release identity, running in parallel with GRIPNOTIC rather than superseded by it — MOGZART carrying the DnB material, GRIPNOTIC the bass/tech-house direction.
+
+## Related
+- [[wiki/interests/music/overview]]
+- [[wiki/interests/music/aliases/gripnotic]] (successor)
+- [[wiki/interests/music/aliases/sloppp]] (predecessor)
+- [[wiki/interests/music/concepts/sub-bass-signature]]
+
+

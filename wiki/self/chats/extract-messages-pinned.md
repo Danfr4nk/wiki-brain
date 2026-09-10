@@ -1,0 +1,30 @@
+
+---
+domain: self
+page_type: chat
+status: archived
+date_created: 2026-06-22
+date_modified: 2026-06-22
+sources: ["raw/self/dox-md/_ⒺⓍⓉⓇⒶⒸⓉ ⓂⒺⓈⓈⒶⒼⒺⓈ Pinned chat.md", "raw/self/dox-md/_ⒺⓍⓉⓇⒶⒸⓉ ⓂⒺⓈⓈⒶⒼⒺⓈ Pinned chat copy.md"]
+related: ["wiki/self/chats/danfrank-isms-pinned", "wiki/self/chats/j6-chat", "wiki/self/message-corpora/master-message-dump", "wiki/mind/concepts/forensic-method"]
+tags: [ai-collaboration]
+---
+
+# EXTRACT MESSAGES Pinned Chat
+
+**Source:** Pinned chat export(s) with extract-messages theme.
+
+**Pattern:** Consistent with other pinned sessions (Danfrank-isms 77 nodes, photo ingest, Max, [[wiki/people/mary-kate|Mary-Kate]], 9/11). User directs AI (Gemini) to extract, structure, or analyze message data with "keep ALL" / lossless discipline.
+
+## Relation to Totality
+Directly supports the message corpora ingests (175k+ rows in MASTER dump). Likely focuses on specific thread extraction, stylometric features, attachment sequences, or forensic patterns from iMessage CSVs / dumps.
+
+Ties to operating_manual "Extracting Sent and Received" MD, manipulation prompt (forensic CSV analysis), and core voice stats.
+
+Emphasizes data logging philosophy: node-style or table output, BUFFER STATUS, no consolidation.
+
+**Cross-references:** [[wiki/self/chats/danfrank-isms-pinned]], [[wiki/self/message-corpora/master-message-dump]], [[wiki/mind/concepts/forensic-method]], [[wiki/mind/synthesis/ai-collaborative-analysis]], [[wiki/mind/concepts/exocortex]].
+
+Full node/table extraction from the pinned chat will yield specific counts or behavioral data for wiki pages.
+
+

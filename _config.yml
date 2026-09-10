@@ -1,0 +1,20 @@
+# NOT the deploy path. The published site is built by bin/build-site and
+# shipped by .github/workflows/deploy-site.yml with Pages source set to
+# "GitHub Actions"; that artifact carries .nojekyll, so none of this applies
+# to it. This file only takes effect if Pages is switched back to "Deploy
+# from a branch" — which is exactly the 2026-08 outage: Jekyll cannot resolve
+# [[wikilinks]], so it renders all ~3,150 of them as dead literal text and
+# publishes no llms.txt or agent/* at all. Kept only as a degraded fallback.
+# See AGENT_ACCESS.md.
+theme: jekyll-theme-minimal
+markdown: kramdown
+plugins:
+  - jekyll-relative-links
+relative_links:
+  enabled: true
+  collections: true
+include:
+  - "*.md"
+exclude:
+  - "bin"
+  - "Personal Wiki.app"

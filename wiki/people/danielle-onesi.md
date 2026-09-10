@@ -1,0 +1,141 @@
+
+---
+domain: people
+page_type: entity
+title: "Danielle Onesi"
+aliases: ["Danielle", "Dee"]
+status: stable
+date_created: 2026-06-23
+date_modified: 2026-08-18
+knowledge: mixed
+importance: normal
+sources: [
+  "raw/self/message-csv/MASTER_MESSAGES_DB_DUMP.csv",
+  "raw/self/dox-md/Gemini-_21.md",
+  "raw/self/dox-md/Gemini-_58.txt",
+  "raw/self/gemini-activity/Gemini Activity.html",
+  "raw/self/context-core/CONTEXT_CORE_EXPANDED.md",
+  "raw/self/dox-md/LIFE_EVENTS_CALENDAR.md",
+  "raw/self/dox-md/FULL PROFILE 2026.md",
+  "raw/self/dox-md/Gemini-_18.md",
+  "raw/self/facebook/facebook-ihatedanfrank/",
+  "raw/self/dox-md/CATO_BOOTLOADER_DANFRANK.md"
+]
+related: [
+  "wiki/people/alexis-armel",
+  "wiki/people/annie-ulmer",
+  "wiki/people/tom",
+  "wiki/people/james-dee",
+  "wiki/people/suzanne-frank",
+  "wiki/people/gabe",
+  "wiki/self/gemini-activity/gemini-activity",
+  "wiki/self/chats/gemini-21",
+  "wiki/self/chats/gemini-58",
+  "wiki/timeline/periods/2025-collapse",
+  "wiki/timeline/periods/2015-2016-annie-relationship-start",
+  "wiki/mind/synthesis/attachment-trauma-bond",
+  "wiki/self/context-core"
+]
+tags: [relationships, infidelity, uniontown-era, nyc-era, family]
+infobox:
+  name: "Danielle Onesi"
+  relationship_to_dan: unknown
+  location: nyc
+  known_for: "Dan's first girlfriend (~2005–2009), Uniontown origin, and a figure who has quietly remained in his life ever since — no"
+connections:
+  - page: wiki/timeline/events/bald-eagle-cummings
+    type: follows
+    claim: "Danielle is not the first girlfriend after all: Britney Bolen predates her by roughly three years, which moves the start of Dan's documented relationship history from 2004 back to seventh grade."
+  - page: wiki/timeline/events/franki-fireworks-day-2013
+    type: co-occurs
+    claim: "Suz brought Danielle and Alexis together to bond over their shared grievance against Dan in July 2013 — the earliest documented instance of the maternal switchboard operating on the relational graph rather than the financial one, and per the capture it 'caused a huge thing'."
+  - page: wiki/mind/synthesis/dormancy-not-exit
+    type: instantiates
+    claim: "Seventeen years of continuous presence after the 2009 breakup — Suzanne's closest friend, the cat's co-guardian, a Christmas fixture — is the cleanest case of a romantic role ending without the tie ending."
+  - page: wiki/timeline/events/james-analysis-pdf
+    type: caused-by
+    claim: "Being sent a psychological profile of her own live-in boyfriend, four minutes after he was, is what converted Dan's critique into an exposure and ended the friendship in the following eight minutes."
+  - page: wiki/people/james-dee
+    type: contextualizes
+    claim: "James is the boyfriend referred to obliquely on this page as the man who tried to buy cocaine through Annie; the 2025 corpus gives him a name, a phone handle, a catalog and an eight-week arc."
+---
+
+# Danielle Onesi ("Dee")
+
+Dan's first girlfriend (~2005–2009), Uniontown origin, and a figure who has quietly remained in his life ever since — not as a romantic presence but as his mother Suzanne's closest friend. The relationship ended badly: Dan cheated in Orlando toward the end of his time at Full Sail, with a girl from Baltimore he met through Jack from All Time Low. He owns this in the CATO bootloader ("regret"). Despite that, Danielle never fully left the picture. She picked out [[wiki/people/gabe|Gabe]] the cat the day after Dan arrived in Orlando in August 2008, and paid for his euthanasia in November 2023 when Dan couldn't afford it. Dan has said he has "always maintained" he owes her for that. As of 2025–2026, she shows up at family Christmas and is a constant in the Suzanne orbit. The current relationship is friendly, structurally entangled through his mother, and complicated: her boyfriend James tried to buy cocaine through Annie, Dan said nothing to protect the family node, and the whole situation gets analyzed at length in the Gemini activity as a test of restraint and Game Theory.
+
+## Background
+
+Uniontown, PA — same Rust Belt cohort as Dan's pre-NYC origin. First serious relationship, labeled "The Origin" in the HTML bio ("Danielle (05-09): The Origin"). Dan dates Danielle from roughly 2005 through 2009, spanning the Uniontown years and into his Full Sail (Orlando) period. She appears on Dan's Facebook under "Previous relationships: Danielle Onesi, Alexis Armel." She and Suzanne have maintained a close friendship that has outlasted Dan's relationship with her by fifteen-plus years.
+
+## The Breakup (2009)
+
+Dan ended the relationship by cheating — a girl from Baltimore, connected through All Time Low, while Dan was in Orlando wrapping up Full Sail. The CATO bootloader records his regret over it explicitly. This is the inflection point: post-Danielle, Dan moves directly into the Alexis (Lex) Armel era (~2010–2015), which overlaps with his NYC arrival and the ishlab years.
+
+A 2025 account fills the breakup in with specifics the bootloader does not carry. The other girl is named — **Kelly Mulroy** — and the connection is stated as knowing **Alex Gaskarth** rather than Jack, which Dan describes as a credential that carried real weight in 2009. The date is given as **Valentine's Day**, five months into the Orlando move, and Dan characterizes his own execution without hedging: he broke up with Danielle *"in a real cruel shitty way"* and left with Kelly for a show in Jacksonville. The affair itself went nowhere; his stated reason is that Kelly is *"the only girl ever"* who required a condom, and the encounter ended there.
+
+> **The guilt is dated, and it is not from 2009.** In the same 2025 conversation Dan writes: *"the stuff with Annie has made me feel guilty for the first time in my life about how i treated danielle."* Sixteen years after the fact, and only after [[wiki/people/annie-ulmer|Annie]] had done something structurally similar to him. The mechanism is symmetry rather than remorse — the injury became legible from the receiving end — and the hedge he attaches to it (*"at least i didn't torture her for 6 months and consistently break promises"*) is scoring his own conduct against hers on a metric he only has because of her. Full context at [[wiki/timeline/events/james-analysis-pdf]].
+
+## Gabe (Cat Debt)
+
+Danielle went with Dan to the shelter the day after he arrived in Orlando in August 2008 and picked out the cat who became Gabe — Dan's cat for fifteen years. In November 2023, when Gabe was dying and Dan couldn't pay for euthanasia, Danielle covered it. This becomes a named concept in the Gemini Game Theory analysis: "Cat Debt." It is the clearest single act of ongoing goodwill in the whole Danielle ledger, and Dan invokes it explicitly as something he owes her.
+
+## NYC Arrival (2010)
+
+The _58 Gemini source flags an anomaly: on May 1, 2010 — Dan's birthday, the day he framed as his "I arrived" shot — he's photographed in front of the Brooklyn Bridge with Suzanne and Danielle. This is the NYC arrival moment, the move to 424 Bedford Ave. That Danielle is there (alongside his mother) at this pivot is notable: the romantic relationship is already over, but she's present for the hinge. From this point the Lex era takes over.
+
+## 2025–2026: James, Game Theory, and the Christmas Node
+
+The most substantive recent Danielle material comes from the Gemini HTML bio cluster and _21. Her boyfriend — variously called "James" (in the Game Theory/coke narrative) and "the most wild dude I've ever met" (in _21's music personality analysis) — is a CNA-turned-aspiring-producer who plays Dan a concept album and receives what Dan calls rare extended music praise: "knows more about music than I do... I don't give that to any other people." He now has his own page at [[wiki/people/james-dee]], built from the 2025 message corpus and a full ChatGPT log neither of those sources contained.
+
+> **CORRECTED [2026-08-18]:** this paragraph had the identification right and the wiki did not act on it. A separate entity page, `wiki/people/max-danielle-bf`, was created in June 2026 for the same man under the name "Max" — read off a line in `Gemini-_21.md` where Dan addresses the **AI persona** ([[wiki/people/max]]) before handing it the recording. The wiki therefore carried two pages for one person, one of them named after a chatbot, while this sentence sat here saying they were the same. The pages are merged into [[wiki/people/james-dee]].
+
+The same man asks Annie (through back-channels) for cocaine. Dan finds out. He says nothing to Danielle. The reasoning, laid out in the HTML Gemini analysis:
+
+> "i was nice because i said nothing to danielle, his girlfriend who was my first girlfriend and who remains my moms closest friend to this day. she was here on christmas, last night and AGAIN tonight"
+
+The Gemini framing is explicit: "James is a parasite in this system. Danielle is a foundational support node." Telling Danielle would have protected her but detonated the family network — Suzanne's best friend in crisis during Christmas. Dan chose not to. Whether that was loyalty, cowardice, or strategic restraint is unresolved in the sources.
+
+The seventeen-year persistence itself is the point generalised at
+[[wiki/mind/synthesis/dormancy-not-exit]]: the romantic role ended in 2009 and
+the tie did not — it changed job. Danielle is the cleanest member of that rule,
+with the caveat noted there that the relationship now runs through Suzanne and
+may be his mother's maintenance rather than his own.
+
+> "You don't do it to hurt James. You do it to liberate Danielle."
+> "If Danielle ever sees your phone, or Annie's phone, or James's phone, the 'hearsay' defense dissolves."
+
+## Message Corpus
+
+| Metric | Value |
+|--------|-------|
+| iMessage handle | +17243664916 |
+| Messages | 44 (received-dominant) |
+| Date range | 2016-03-23 – 2025-11-01 |
+
+Low volume — consistent with her role as a biographical anchor and family-adjacent presence rather than an active contact. The thread likely reflects practical coordination (visits, Gabe logistics, family events) rather than ongoing personal correspondence with Dan directly.
+
+## Relationship Summary
+
+| Era | Role |
+|-----|------|
+| 2005–2009 | First girlfriend; Uniontown + Full Sail |
+| 2009 | Breakup (Dan cheated); pivot to Lex |
+| 2008–2023 | Cat co-guardian (Gabe) |
+| 2010 | Present at NYC arrival photo |
+| 2010–present | Suzanne's closest friend; structural family node |
+| 2025–2026 | Christmas fixture; boyfriend James / Game Theory tension |
+
+## Timeline
+
+| Date | Event | Source |
+|------|-------|--------|
+| ~2005 | Relationship begins; Uniontown baseline | HTML bio; context-core |
+| Aug 2008 | Danielle picks out Gabe at shelter, day after Dan arrives at Full Sail | context-core; CATO |
+| ~2009 | Dan cheats (Baltimore girl, Jack/ATL connection); relationship ends in Orlando | CATO_BOOTLOADER_DANFRANK.md; context-core |
+| May 1, 2010 | Brooklyn Bridge birthday photo — Dan + Suz + Danielle; "I arrived" shot; move to 424 Bedford | _58.txt verbatim |
+| 2010–2015 | Lex era (NYC); Danielle exits romantic picture but stays in Suz orbit | _58; context-core |
+| Nov 2023 | Danielle pays for Gabe's euthanasia | context-core; HTML bio |
+| ~2025–2026 | James (Danielle's BF) requests cocaine through Annie; Dan withholds; Christmas node tension | Gemini HTML; _21.md |
+
+

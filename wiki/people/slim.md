@@ -1,0 +1,43 @@
+
+---
+domain: people
+page_type: entity
+status: stub
+date_created: 2026-06-23
+date_modified: 2026-07-25
+date_range_start: 2019-06-01
+date_range_end: 2019-08-04
+sources: ["raw/self/message-csv/MASTER_MESSAGES_DB_DUMP.csv"]
+tags: [digital-footprint, nyc-era]
+knowledge: derived
+infobox:
+  name: "Slim"
+  relationship_to_dan: unknown
+  handles: ["+16466420260"]
+  location: NYC (646 area code)
+  first_contact: 2019-06-01
+  known_for: "NYC-era contact known only by the handle 'slim,' active summer 2019"
+connections:
+  - page: wiki/mind/concepts/contact-gini
+    type: instance-of
+    claim: "A low-volume NYC-era contact in the social periphery, active only during the summer 2019 window."
+---
+
+# Slim
+
+Slim is an NYC-area contact (646 area code, stored as lowercase "slim" in Google Contacts) who appears in the iMessage corpus with 31 messages across a two-month summer window, June–August 2019 — placing the contact squarely in the NYC-II era during Dan's time at [[wiki/places/307-e-76th-st|307 E 76th St]]. No last name or identifying detail beyond the handle is available.
+
+## Corpus Dimensions
+
+| Metric | Value |
+|--------|-------|
+| Messages | 31 |
+| Date range | 2019-06-01 – 2019-08-04 |
+| Handle | +16466420260 |
+| Direction | All received (export artifact) |
+
+## Gaps
+
+Identity entirely unresolved. The nickname and the NYC summer-2019 timing could place this in any number of social, recreational, or transactional contexts. No Facebook or other corpus cross-references found.
+
+

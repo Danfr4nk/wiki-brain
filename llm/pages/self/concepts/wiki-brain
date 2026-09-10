@@ -1,0 +1,273 @@
+---
+
+domain: self
+
+page_type: concept
+
+title: "The Wiki-Brain"
+
+aliases: ["wiki-brain", "second brain"]
+
+status: active
+
+knowledge: earned
+
+date_created: 2026-08-19
+
+date_modified: 2026-08-21
+
+importance: critical
+
+tags: [ai-collaboration, digital-footprint, personality-profile]
+
+sources: []
+
+synthesizes:
+
+- wiki/self/message-corpora/source-coverage-index
+
+- wiki/self/concepts/llm
+
+connections:
+
+- page: wiki/self/overview
+
+type: instantiates
+
+claim: "The wiki-brain is the externalized model of the mind the overview page summarizes in a paragraph — every person, event, and connection mapped as Dan's brain registered them, which is why the wiki is about the mapper rather than the mapped."
+
+- page: wiki/mind/synthesis/block-unblock-loop
+
+type: instance-of
+
+claim: "The loop is the system's proof of concept and its best correction at once: a rule found only by reading Annie and Tom across each other, which then predicted a severance that failed 52 days later — the falsification, kept visible on the page, is the wiki's own demonstration that findings written back are what let the model improve rather than merely accumulate."
+
+- page: wiki/people/annie-ulmer
+
+type: evidences
+
+claim: "The Annie page is the wiki's most-read case study, the one that tests whether the system can model a single relationship across 17 years of primary sources."
+
+- page: wiki/self/message-corpora/source-coverage-index
+
+type: component-of
+
+claim: "The source-coverage-index is the wiki's instrument panel — it tracks what the corpus can and cannot see, and flags the silent failures."
+
+- page: wiki/self/concepts/llm
+
+type: contains
+
+claim: "LLMs are the wiki-brain's working engine; the altitude ladder is only traversable because a model can hold many pages at once, and its ceiling is that model's context limit."
+
+- page: wiki/self/concepts/claude
+
+type: contains
+
+claim: "Claude sessions are where the wiki's prose and its typed edges are written."
+
+- page: wiki/self/concepts/claude-code
+
+type: contains
+
+claim: "Claude Code sessions are where the gates, the tooling and the commits happen — the wiki-brain's rules are enforceable only because this member can run them."
+
+- page: wiki/self/concepts/gemini
+
+type: contains
+
+claim: "Gemini is where the bootloader system that governs how models read this wiki was designed."
+
+- page: wiki/self/concepts/chatgpt
+
+type: contains
+
+claim: "ChatGPT is where the bootloader concept was first prototyped, which makes it the wiki-brain's own origin point."
+
+- page: wiki/self/concepts/ally-and-dan-love-as-destiny
+
+type: contains
+
+claim: "That page is the wiki's only forward-looking projection and its hardest test: a system built to hold conclusions to falsification now has to hold a wish to the same standard."
+
+- page: wiki/mind/synthesis/the-commissioned-self
+
+type: caused-by
+
+claim: "This repository is the current and largest instance of a self-measurement apparatus that already ran four generations deep — and the first whose readings are published where other instruments will read them back."
+
+---
+
+# The Wiki-Brain
+
+> **RE-CHECKED [2026-08-20] — a structural assumption of the corpus turned out
+
+> to be false, and this page is where that belongs.** Flagged stale against
+
+> [[wiki/self/message-corpora/source-coverage-index]] (2026-08-20). **No claim
+
+> here is withdrawn**, but the system gains a defect worth naming at this level:
+
+> **a handle is not a person.** Every message-derived attribution in this wiki
+
+> assumes the sender of a row is the owner of the handle it came from. At least
+
+> six inbound rows on Annie's 212 handle across July–August 2026 were typed by a
+
+> third party holding her phone, in three separate episodes, all during crises —
+
+> the periods the corpus draws its highest-stakes claims from. Counts are
+
+> unaffected; attributions are not. There is no column for this and no
+
+> automated detector; the three known episodes were each identifiable from
+
+> register alone. This is the same class of failure as the AI-secondary
+
+> attribution reversals of 2026-08-19 and the `MASTER_MESSAGES_DB_DUMP` count
+
+> error — the wiki's recurring defect is not bad data but **confident metadata
+
+> that answers a slightly different question than the one being asked.**
+
+> **RE-CHECKED [2026-08-21] — premise moved, and it refines this page's origin
+
+> claim without overturning it.** [[wiki/self/concepts/llm]] moved on
+
+> 2026-08-21: Gemini's 'chicken nugget' passage was corrected off Dan's ledger,
+
+> and the post-GPT-5 causation of ChatGPT's decline was marked untested. This
+
+> page carries an edge claiming ChatGPT is *"where the bootloader concept was
+
+> first prototyped, which makes it the wiki-brain's own origin point."* That
+
+> survives, with one dating refinement now available from the 375-thread
+
+> export: Dan's ChatGPT use starts **2022-12-10**, ten days after launch, and
+
+> the first eleven threads are puns, voice-over rewrites and a video essay. The
+
+> bootloader work is a later development on the platform, not the thing he
+
+> arrived with — so ChatGPT is the origin *site*, not the origin *motive*.
+
+The wiki-brain is a second brain about one person, Dan Frank. It is a custom-built knowledge repository that collects, stores, and synthesizes every available datum about his life, mind, history, ideology, environment, and relationship to reality — every story, every friend, every place, every perspective, every development, every thought. Its job is not to archive but to **mine one life for hidden connections**: linkages between people, events, money, substances, music, work, and psychology that no single source states, but that the corpus proves when read across itself.
+
+It is built on plain files, one direction of flow: `inbox/` → `raw/` → `wiki/` → `caakehorn/home` public/wiki/. Material arrives via capture or drop, is filed immutably into `raw/`, is read to exhaustion, and the understanding extracted is written into `wiki/` as prose pages. From then on, reasoning happens FROM the wiki, returning to `raw/` only when the wiki is silent or a claim needs primary verification. The portal (`caakehorn/home`) renders the wiki as a static site, but its `public/wiki/` is a derived snapshot regenerated hourly — anything written there is destroyed within the hour. Pages are `wiki/**.md`, never JSON.
+
+## The core loop
+
+The system runs on one repeating cycle: **Story → Entry → Analysis → Synthesized finding → Saved back to every entry it touches → Repeat.**
+
+1. A memory, fact, or document is captured once and filed immutably into `raw/`.
+
+2. It's read from `raw/` **to exhaustion**, and that understanding is written into a `wiki/` page — a ground-floor entry.
+
+3. Once enough ground entries exist, they're read *across* each other — not one at a time — looking for a pattern that no single entry states but that several together prove.
+
+4. That pattern becomes its own finding: a synthesis, stated as a falsifiable claim, not a vague observation.
+
+5. The finding is written back into **every ground entry it draws from**, via a typed connection with an argued claim — so the insight doesn't have to be re-derived the next time someone lands on that entry.
+
+6. The finding itself becomes a premise for the *next* round: junctions can be read across each other to find doctrine, the same way ground entries were read across each other to find junctions.
+
+This is **amortized insight**. Analysis is expensive to do well, so it's done once, saved at every point it's relevant, and each future pass starts from a higher floor instead of re-deriving what's already known.
+
+## The altitude ladder
+
+The product isn't flat. Every conclusion written today is a **premise** available tomorrow:
+
+- **T0** — Immutable source: `raw/` files.
+
+- **T1** — Ground page: one entity, event, period, or place, read out of `raw/`.
+
+- **T2** — Junction page: one pattern found across 3+ ground pages, spanning 2+ domains.
+
+- **T3** — Doctrine: one rule found across 2+ junctions, domain-general.
+
+Each layer declares its `synthesizes:` list, naming exactly what it was built from, so the dependency chain is visible, checkable, and stays current when something below it changes. The loop is meant to run forever: ingest raises the floor, CLIMB raises the ceiling, and the new ceiling becomes the floor for the next climb. A repository of accurate ground pages with nothing built on top of them is an archive. **The altitude is the brain.**
+
+## The sources
+
+The wiki draws from a finite, immutable archive of primary and AI-secondary sources:
+
+**Primary** — records of what happened. Message dumps and per-thread exports; the GEDCOM; `contacts.csv` and the Facebook address book; Goodreads, YouTube, Twitter and Facebook takeouts; the Gchat archive; photographs and documents.
+
+**AI-secondary** — a model reasoning about the corpus. The Gemini and ChatGPT sessions under `dox-md/`, `THE_DAN_FRANK_BOOTLOADER.md`, `THE_DAN_FRANK_MANUAL.md`, `CATO_*`, `DANSYNTH.txt`, the profile dumps. Dan's own words inside a session are primary testimony; the model's factual assertions are not evidence.
+
+**The spine** — `raw/self/context-core/CONTEXT_CORE_EXPANDED.md` sits above both tiers: curated, internally cross-checked, explicit about its own gaps. It is the single most authoritative raw source for facts about Dan.
+
+The corpus is 217,573 messages across 503 handles, 106,629 sent / 110,944 received. It is 9.6x duplicated — a feature, not a bug: the Rick correction and the `sic semper` inversion were each found by one export contradicting another. Consolidating would destroy the only error-detection the corpus has.
+
+## Dan's role
+
+Dan Frank is the architect, the operator, and the subject. He built the system, he governs its operations, and he is the person it models. He answers gaps directly, corrects the wiki's errors, and supplies the raw material — but the wiki is not a monument to him. It is a map of his own mind, and the people in it appear only as his brain has registered them. The distinction matters: the wiki is about the mapper, not the mapped.
+
+## What it's building towards
+
+The wiki-brain is building towards a comprehensive model of one mind — not a static archive but a living system that compounds insight over time. Its current campaigns run in parallel:
+
+**Depth (extraction).** The binding constraint. Sources already marked ingested routinely turn out to hold three times what the first pass took, and the leftovers are not marginal — they are the findings that reorganize pages.
+
+**Height (the climb).** Four domains — `self`, `timeline`, `work`, `places` — have three or more pages and nothing above any of them. The climb turns N scattered observations into one reusable premise.
+
+**Breadth (the retrofit).** Converting the legacy graph to typed connections, page by page, deepening body copy from raw in the same pass.
+
+## The typed edges system
+
+Every connection between pages is a **typed edge with a one-sentence argued claim**, stored in frontmatter and (for load-bearing edges) argued in prose. "Related: tom" records that two pages touch, not how. "Tom `supplies` the neurochemical stack whose delivery failures are the proximate trigger of the friendship's rupture" is knowledge — it survives being read cold, it is greppable, and chains of typed edges compose into queryable arguments.
+
+The vocabulary is fixed: `causes`/`caused-by`, `evidences`/`evidenced-by`, `instantiates`/`instance-of`, `precedes`/`follows`, `supplies`/`supplied-by`, `component-of`/`contains`, `contradicts`, `parallels`, `mirrors`, `co-occurs`. Choosing `co-occurs` when the raw would support `causes` is a substance failure; choosing `causes` when the raw only supports `co-occurs` is a provenance failure. The type IS the analytical commitment.
+
+## The governing documents
+
+The wiki is governed by six documents, in the order a new reader should meet them:
+
+| File | Governs | Wins on |
+
+|---|---|---|
+
+| **STRATEGY.md** | what we are doing and why | intent |
+
+| **CLAUDE.md** | the operations | process |
+
+| **EXTRACTION_SPEC.md** | how deep to go into a source | depth |
+
+| **STYLE_GUIDE.md** | page format and the substance standard | format |
+
+| **CONNECTIONS_SPEC.md** | typed edges and their claims | edges |
+
+| **SYNTHESIS_SPEC.md** | altitude — how conclusions stack | climbing |
+
+`BACKLOG.md` holds the standing work; `LLM_HANDOFF.md` holds the exact resume point. These seven files are the page's own reference material rather than corpus evidence: `sources:` is reserved for `raw/` paths, so they are cited here in prose instead.
+
+## The five unbreakable rules
+
+1. **Never write an untyped link.** Every connection gets a `type` and a `claim`.
+
+2. **Never state a fact without a raw source that exists on disk.** Verify numbers and quotes against `raw/` before writing them.
+
+3. **Never stop at what you came for.** A source is read when it is exhausted, not when it has answered your question.
+
+4. **Never clear a stale warning by bumping the date.** If `wiki-climb check` says a page's premise moved, read what changed and decide whether the conclusion survives, then record that decision on the page.
+
+5. **Leave the site as you found it, plus your work.** Run `bin/wiki-lint`, `bin/wiki-connect check`, and `bin/wiki-climb check` before committing.
+
+## What a finished piece of work looks like
+
+For synthesis pages: verified members, typed edges with argued claims, inverse edges on every member, one governing rule stated plainly, gaps named. For ground pages: every claim re-derived from raw, corrections flagged rather than silently applied, and the mundane kept.
+
+Two things are worth more than volume of output. **Negative results** — "checked X, it is not there" — are cheap falsifiers and belong on pages. And **corrections of the wiki's own errors**, with the old claim left visible, are the most valuable artifact the repository produces, because they are where the model of Dan actually improves.
+
+## Prediction
+
+The wiki-brain will continue to compound insight as long as the core loop runs. Its failure mode is not error but **stale premises** — conclusions built on pages that have since moved, with nobody re-checking whether the conclusion survives. The staleness cascade is the system's immune response: it flags what needs re-reading. The prohibited move is silencing that alarm by bumping a date.
+
+**What would falsify this:** a synthesis page whose thesis is "these things are related" rather than a falsifiable rule. A ground page that leads with corpus statistics instead of the story. A correction applied silently, with the old claim deleted. A source declared ingested when it was only skimmed.
+
+The wiki-brain is not a finished product. It is a process — one that gets more valuable the longer it runs, because every finding written back is a finding that never has to be re-derived.
+
+---
+
+**Up:** [[wiki/self/index|Self]]

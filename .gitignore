@@ -7,40 +7,17 @@ corpus_*.md
 .hermes-tmp*
 __pycache__/
 
-# ---------------------------------------------------------------------------
-# THIS REPOSITORY IS PUBLIC. github.com/Danfr4nk/wiki-brain
-# ---------------------------------------------------------------------------
+# THE INTAKE LEDGER'S DATA IS TRACKED, and this repository is public.
 #
-# The message corpus is not Dan's data alone. It contains the phone numbers,
-# email addresses and private words of ~499 other people, none of whom chose
-# to be published. The earlier decision to track `intake/events.jsonl` in a
-# public repo was Dan's to make about Dan. This is not the same decision and
-# it is not his alone to make, so the default here is closed.
+# That is a decision, not an oversight, and it was made twice: the guard was
+# restored on 2026-08-30 when the "repo is private now" premise turned out to be
+# false, and removed again the same day when the operator asked for the ledger to
+# sync while the repository is public, stating they understood the implications.
 #
-# git history cannot be un-published. Un-ignoring any line below puts that
-# data on the public internet permanently, for everyone in it.
+# What that means concretely: `intake/events.jsonl` is a public, permanent record
+# of consumption, readable by anyone, and git history cannot be un-published. It
+# is tracked because the wiki has to be able to read it — a sealed or ignored
+# ledger is invisible to the analysis it exists to feed.
 #
-# To reverse: make the repository private FIRST, verify it, and only then
-# decide whether these lines are still wanted. In that order.
-
-# Raw corpus — every message, in the clear.
-corpus/messages.csv
-
-# Identity material and the hashing salt. The salt is what stops a published
-# thread_id from being brute-forced back to a phone number: there are only
-# ~10^10 US numbers, so an unsalted hash is not anonymisation, it is a speed
-# bump. If this leaks, every derived artifact de-anonymises with it.
-corpus/private/
-
-# Shelved fragment exports — superseded, retained locally as error evidence.
-# See CORPUS_POLICY.md. Same personal data as the corpus, same reasoning.
-#
-# Note what these lines do NOT do: the source Google Sheet is deliberately
-# shared "anyone with the link" (see corpus/README.md), so the corpus is
-# already reachable by URL. Ignoring it here keeps it out of git history,
-# which is permanent and searchable. That is worth doing on its own terms —
-# but it is not what is protecting this data, and it should not be mistaken
-# for that.
-shelf/**
-!shelf/README.md
-!shelf/MANIFEST.md
+# To reverse: make the repository private FIRST, verify it, and only then decide
+# whether the ignore lines are still wanted. In that order.

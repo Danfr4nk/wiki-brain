@@ -1,0 +1,51 @@
+---
+
+domain: interests
+
+page_type: entity
+
+status: stable
+
+date_created: 2026-08-01
+
+date_modified: 2026-08-01
+
+sources:
+
+- "raw/self/concerts/table.csv"
+
+related: []
+
+tags: [digital-footprint, personality-profile]
+
+connections:
+
+- page: wiki/interests/concert-record/festivals/oddball-comedy-curiosity-festival
+
+type: component-of
+
+claim: "John Mulaney performed at Oddball Comedy & Curiosity Festival on Aug 30, 2013 (Post-Gazette Pavilion (First Niagara Pavilion), Burgettstown, PA)."
+
+---
+
+# John Mulaney
+
+John Mulaney is a comedian Dan Frank saw perform live at the Oddball Comedy & Curiosity Festival on Aug 30, 2013, at Post-Gazette Pavilion, Burgettstown, PA. This page records that appearance from Dan's concert log.
+
+## Live appearances
+
+All dates, venues, cities, and notes below are taken from the source table and preserved in full, including tentative or unconfirmed items.
+
+| Date | Show / Context | Venue | City | Note |
+
+|------|---------------|-------|------|------|
+
+| Aug 30, 2013 | Oddball Comedy & Curiosity Festival | Post-Gazette Pavilion (First Niagara Pavilion) | Burgettstown, PA | Confirmed. |
+
+## Notes per appearance
+
+- **Aug 30, 2013** — Oddball Comedy & Curiosity Festival, Post-Gazette Pavilion (First Niagara Pavilion), Burgettstown, PA. Confirmed.
+
+---
+
+**Up:** [[wiki/interests/index|Interests]] › [[wiki/interests/concert-record/index|Concert Record]]

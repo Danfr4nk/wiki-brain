@@ -1,0 +1,395 @@
+#!/usr/bin/env python3
+"""wiki-tui — a tiny full-screen capture terminal for the wiki-brain.
+
+Type a fact (or a paragraph). Press F2 or Ctrl-G to submit it. The fact is
+saved to inbox/ in the repo's capture format, then handed to the Hermes agent
+(via `hermes -z`) which researches and expands it into the wiki as much as
+possible (new/extended pages, lint, commit — no push).
+
+You can queue several facts; research runs one at a time in the background so
+the TUI stays live. Each job's status + the agent's final report show in the
+log at the bottom.
+
+Keys
+  Enter        newline
+  F2 / Ctrl-G  submit the current fact for research
+  Ctrl-K       clear the box (start a new fact)
+  Ctrl-Q       quit (press twice if a job is still running)
+  Arrows       move cursor; Home/End jump to line ends
+"""
+import curses
+import os
+import re
+import shutil
+import subprocess
+import sys
+import threading
+import time
+from datetime import datetime
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+INBOX = ROOT / "inbox"
+HERMES = shutil.which("hermes") or "/Users/Suzanne/.local/bin/hermes"
+
+# ---- job queue (serialized research) ---------------------------------------
+job_q: "queue.Queue" = None
+jobs = []
+jobs_lock = threading.Lock()
+
+
+def stamp():
+    return datetime.now().strftime("%Y-%m-%d_%H%M%S")
+
+
+def slugify(text, maxlen=40):
+    slug = re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+    return slug[:maxlen].rstrip("-") or "note"
+
+
+def save_fact(text):
+    """Save the fact to inbox/ in capture.md format. Returns the Path."""
+    INBOX.mkdir(exist_ok=True)
+    body = text.strip()
+    title = body.splitlines()[0][:60] if body else "untitled"
+    path = INBOX / f"{stamp()}_{slugify(title)}.md"
+    words = len(body.split())
+    kind = "story" if words > 150 else "fact"
+    front = [
+        "---",
+        f"captured: {datetime.now().strftime('%Y-%m-%d %H:%M')}",
+        f"title: {title}",
+        f"type: {kind}",
+        "tags: []",
+        "source: wiki-tui",
+        "---",
+        "",
+    ]
+    path.write_text("\n".join(front) + body + "\n", encoding="utf-8")
+    return path
+
+
+def build_prompt(fact, filepath):
+    return f"""You are operating inside the wiki-brain repo at {ROOT}.
+A new seed fact was just captured by the user to: {filepath}
+
+SEED FACT (verbatim, as typed by the user):
+\"\"\"
+{fact}
+\"\"\"
+
+TASK: Research and expand this fact into the wiki as much as possible.
+1. Read {ROOT}/CLAUDE.md and {ROOT}/STYLE_GUIDE.md (if present) for conventions, frontmatter spec, and the ingest protocol.
+2. Search the wiki (index.md, domain indexes under wiki/) AND raw/ for anything related to this fact. Web-search if the fact references external/verifiable information you don't already have.
+3. Create or extend the most appropriate wiki page(s) — domain is one of: self, mind, timeline, people, work, interests, health, places, legal. Add correct frontmatter (domain, page_type, status, date_created/modified, sources, related, tags). Write thorough, linked, SOURCED synthesis: expand the single seed fact into real context, evidence, and cross-links — not a stub.
+4. If the fact belongs on an existing page, extend that page rather than duplicating. If it conflicts with an existing page, follow the contradiction/revision rules in CLAUDE.md (flag + correct, never bulldoze earned pages).
+5. Wire new pages into the relevant domain index and index.md.
+6. Run `python3 bin/wiki-lint` and fix any errors you introduced. Do NOT touch pre-existing warnings.
+7. Commit: `git add -A && git commit -q -m "capture: expand seed fact — {slugify(fact.splitlines()[0] if fact.strip() else 'note', 50)}"`.
+8. Do NOT push and do NOT open a PR.
+
+When done, report back in <=150 words: which page(s) you created/changed and the key expansion you added."""
+
+
+def worker():
+    while True:
+        job = job_q.get()
+        if job is None:
+            break
+        with jobs_lock:
+            job["status"] = "researching"
+            job["started"] = time.time()
+        prompt = build_prompt(job["fact"], str(job["filepath"]))
+        try:
+            proc = subprocess.Popen(
+                [HERMES, "-z", prompt],
+                cwd=str(ROOT),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                bufsize=1,
+            )
+            out = []
+            while True:
+                line = proc.stdout.readline() if proc.stdout else ""
+                if not line:
+                    break
+                out.append(line)
+                if time.time() - job["started"] > 1800:
+                    proc.kill()
+                    with jobs_lock:
+                        job["status"] = "timeout"
+                        job["output"] = "".join(out)[-400:]
+                    break
+            rc = proc.wait()
+            with jobs_lock:
+                if job["status"] != "timeout":
+                    job["status"] = "done" if rc == 0 else "error"
+                    job["returncode"] = rc
+                    job["output"] = "".join(out)[-400:]
+        except FileNotFoundError:
+            with jobs_lock:
+                job["status"] = "error"
+                job["output"] = "hermes CLI not found — fact saved to inbox only."
+        except Exception as e:  # noqa: BLE001
+            with jobs_lock:
+                job["status"] = "error"
+                job["output"] = str(e)[:400]
+        with jobs_lock:
+            job["finished"] = time.time()
+        job_q.task_done()
+
+
+# ---- text buffer editing ---------------------------------------------------
+class Buffer:
+    def __init__(self):
+        self.lines = [""]
+        self.row = 0
+        self.col = 0
+        self.top = 0  # first visible line
+
+    def _clamp(self):
+        self.row = max(0, min(self.row, len(self.lines) - 1))
+        self.col = max(0, min(self.col, len(self.lines[self.row])))
+
+    def insert(self, ch):
+        line = self.lines[self.row]
+        self.lines[self.row] = line[: self.col] + ch + line[self.col :]
+        self.col += 1
+
+    def newline(self):
+        line = self.lines[self.row]
+        self.lines[self.row] = line[: self.col]
+        self.lines.insert(self.row + 1, line[self.col :])
+        self.row += 1
+        self.col = 0
+
+    def backspace(self):
+        if self.col > 0:
+            line = self.lines[self.row]
+            self.lines[self.row] = line[: self.col - 1] + line[self.col :]
+            self.col -= 1
+        elif self.row > 0:
+            prev = self.lines[self.row - 1]
+            self.lines[self.row - 1] = prev + self.lines[self.row]
+            del self.lines[self.row]
+            self.row -= 1
+            self.col = len(prev)
+
+    def delete(self):
+        line = self.lines[self.row]
+        if self.col < len(line):
+            self.lines[self.row] = line[: self.col] + line[self.col + 1 :]
+        elif self.row < len(self.lines) - 1:
+            self.lines[self.row] = line + self.lines[self.row + 1]
+            del self.lines[self.row + 1]
+
+    def left(self):
+        if self.col > 0:
+            self.col -= 1
+        elif self.row > 0:
+            self.row -= 1
+            self.col = len(self.lines[self.row])
+
+    def right(self):
+        if self.col < len(self.lines[self.row]):
+            self.col += 1
+        elif self.row < len(self.lines) - 1:
+            self.row += 1
+            self.col = 0
+
+    def up(self):
+        if self.row > 0:
+            self.row -= 1
+            self.col = min(self.col, len(self.lines[self.row]))
+
+    def down(self):
+        if self.row < len(self.lines) - 1:
+            self.row += 1
+            self.col = min(self.col, len(self.lines[self.row]))
+
+    def home(self):
+        self.col = 0
+
+    def end(self):
+        self.col = len(self.lines[self.row])
+
+    def text(self):
+        return "\n".join(self.lines)
+
+
+# ---- TUI -------------------------------------------------------------------
+def main(stdscr):
+    global job_q
+    curses.cbreak()
+    curses.noecho()
+    stdscr.keypad(True)
+    curses.start_color()
+    curses.use_default_colors()
+    try:
+        curses.init_pair(1, curses.COLOR_GREEN, -1)
+        curses.init_pair(2, curses.COLOR_YELLOW, -1)
+        curses.init_pair(3, curses.COLOR_RED, -1)
+        curses.init_pair(4, curses.COLOR_CYAN, -1)
+    except curses.error:
+        pass
+
+    job_q = __import__("queue").Queue()
+    t = threading.Thread(target=worker, daemon=True)
+    t.start()
+
+    buf = Buffer()
+    status_msg = "Ready. Type a fact, then F2/Ctrl-G to submit."
+    quit_pending = False
+    last_report = ""
+
+    while True:
+        h, w = stdscr.getmaxyx()
+        header_h = 2
+        log_h = max(6, min(12, h // 4))
+        area_top = header_h
+        area_h = h - header_h - log_h
+
+        stdscr.erase()
+        # header
+        stdscr.addstr(0, 0, " wiki-tui — capture a fact for the wiki ".ljust(w, "─"), curses.A_REVERSE)
+        stdscr.addstr(1, 0, "F2/Ctrl-G submit   Ctrl-K clear   Ctrl-Q quit   Enter=newline".ljust(w), curses.A_DIM)
+        # text area
+        if buf.row - buf.top >= area_h - 1:
+            buf.top = buf.row - (area_h - 2)
+        if buf.row - buf.top < 0:
+            buf.top = max(0, buf.row - (area_h // 2))
+        for i in range(area_h):
+            ln = buf.top + i
+            if ln >= len(buf.lines):
+                break
+            stdscr.addstr(area_top + i, 0, buf.lines[ln][: w - 1])
+        # log
+        log_top = area_top + area_h
+        stdscr.addstr(log_top, 0, "─" * w, curses.A_DIM)
+        stdscr.addstr(log_top + 1, 0, " QUEUE / RESEARCH LOG ".ljust(w, "─"), curses.A_REVERSE)
+        with jobs_lock:
+            shown = list(jobs)[- (log_h - 3) :]
+            for j, job in enumerate(shown):
+                y = log_top + 2 + j
+                if y >= h - 1:
+                    break
+                st = job["status"]
+                icon = {"queued": "•", "researching": "…", "done": "✓", "error": "✗", "timeout": "T"}.get(st, "?")
+                color = {"done": 1, "researching": 2, "error": 3, "timeout": 3}.get(st, 4)
+                summary = job["summary"][: w - 22]
+                line = f" {icon} {job['t']} {summary}"
+                try:
+                    stdscr.addstr(y, 0, line[: w - 1], curses.color_pair(color))
+                except curses.error:
+                    pass
+            if last_report:
+                yr = log_top + 2 + len(shown)
+                if yr < h - 1:
+                    try:
+                        stdscr.addstr(yr, 0, (" LAST: " + last_report)[: w - 1], curses.A_DIM)
+                    except curses.error:
+                        pass
+        # status line
+        try:
+            stdscr.addstr(h - 1, 0, status_msg[: w - 1], curses.A_BOLD)
+        except curses.error:
+            pass
+        # cursor
+        cy = area_top + (buf.row - buf.top)
+        if cy < h - 1:
+            try:
+                stdscr.move(cy, min(buf.col, w - 1))
+            except curses.error:
+                pass
+        stdscr.refresh()
+
+        ch = stdscr.getch()
+        if ch == curses.KEY_RESIZE:
+            continue
+        if ch in (7, curses.KEY_F2):  # Ctrl-G or F2 -> submit
+            text = buf.text().strip()
+            if not text:
+                status_msg = "Nothing to submit — type a fact first."
+                continue
+            fp = save_fact(text)
+            with jobs_lock:
+                jobs.append(
+                    {
+                        "t": datetime.now().strftime("%H:%M:%S"),
+                        "summary": text.splitlines()[0][:48],
+                        "fact": text,
+                        "filepath": fp,
+                        "status": "queued",
+                        "output": "",
+                    }
+                )
+            job_q.put(jobs[-1])
+            buf.lines = [""]
+            buf.row = buf.col = buf.top = 0
+            status_msg = f"Queued for research → {fp.name}. Type another, or wait."
+            continue
+        if ch == 11:  # Ctrl-K clear
+            buf.lines = [""]
+            buf.row = buf.col = buf.top = 0
+            status_msg = "Box cleared."
+            continue
+        if ch == 17:  # Ctrl-Q quit
+            with jobs_lock:
+                running = any(j["status"] in ("queued", "researching") for j in jobs)
+            if running and not quit_pending:
+                quit_pending = True
+                status_msg = "Jobs still running — press Ctrl-Q again to force quit."
+                continue
+            break
+        if ch == curses.KEY_ENTER or ch == 10:
+            buf.newline()
+        elif ch == curses.KEY_BACKSPACE or ch == 127 or ch == 8:
+            buf.backspace()
+        elif ch == curses.KEY_DC:
+            buf.delete()
+        elif ch == curses.KEY_LEFT:
+            buf.left()
+        elif ch == curses.KEY_RIGHT:
+            buf.right()
+        elif ch == curses.KEY_UP:
+            buf.up()
+        elif ch == curses.KEY_DOWN:
+            buf.down()
+        elif ch == curses.KEY_HOME:
+            buf.home()
+        elif ch == curses.KEY_END:
+            buf.end()
+        elif 32 <= ch <= 126 or ch in (9,):  # printable + tab
+            buf.insert(chr(ch))
+        # else ignore
+
+    # capture the latest finished report for the user's benefit
+    with jobs_lock:
+        for job in reversed(jobs):
+            if job["status"] in ("done", "error") and job["output"].strip():
+                last_report = job["output"].strip().splitlines()[-1][:120]
+                break
+    job_q.put(None)
+    curses.endwin()
+    if last_report:
+        print("Last agent report:\n" + last_report)
+
+
+def self_test():
+    fact = "Dan's first synth was a Korg MS-2000 bought in 2009 from a pawnshop in Uniontown."
+    p = save_fact(fact)
+    print(f"saved test fact -> {p}")
+    pr = build_prompt(fact, str(p))
+    print(f"prompt length: {len(pr)} chars; hermes resolves to: {HERMES}")
+    print("self-test OK (did not launch curses or hermes)")
+
+
+if __name__ == "__main__":
+    if "--selftest" in sys.argv:
+        self_test()
+    else:
+        try:
+            curses.wrapper(main)
+        except KeyboardInterrupt:
+            curses.endwin()

@@ -1,0 +1,2219 @@
+---
+
+domain: self
+
+page_type: period
+
+status: stable
+
+date_created: 2026-09-02
+
+date_modified: 2026-09-03
+
+knowledge: mixed
+
+date_range_start: 2009-01-07
+
+date_range_end: 2009-12-31
+
+title: "Twitter / X — 2009"
+
+sources:
+
+- "raw/self/twitter/archive.jsonl"
+
+- "raw/self/twitter/tweet-archive.xlsx"
+
+tags: [nyc-era, relationships, music-production, digital-footprint]
+
+connections:
+
+- page: wiki/self/twitter
+
+type: component-of
+
+claim: 'The 2009 originals are one year of the @danfrank public record filed under the twitter hub.'
+
+- page: wiki/self/twitter/2008
+
+type: follows
+
+claim: 'The 2009 record continues directly from the account''s first year without a break; 118 of this page''s rows were recovered alongside 2008 on 2026-09-02.'
+
+- page: wiki/self/twitter/2010
+
+type: precedes
+
+claim: '2009 is the immediately previous year of originals before 2010 on the same account.'
+
+- page: wiki/timeline/periods/full-sail-2008-2010
+
+type: contextualizes
+
+claim: 'The 2009 tweets are public-side weather for the life period already documented at that page.'
+
+- page: wiki/mind/synthesis/2020-left-turn
+
+type: evidences
+
+claim: 'The earliest dated political self-description in the corpus — "i no longer consider myself a republican" (2009-11-28) — is a departure with no named destination, eleven years before the 2020 arrival, and it runs the same leaving-a-tribe mechanism that page''s 2022 O&A account describes.'
+
+- page: wiki/mind/synthesis/millennial-digital-witness
+
+type: evidences
+
+claim: 'The Balloon Boy day (2009-10-15) shows the habit of watching the coverage rather than the event — "watching CNN on delay via a paused DVR", "the best one-off meme ever" — three years before the Sandy tweet that page dates the noticing to. It demonstrates the disposition without stating it, so it moves the habit earlier without moving the articulation.'
+
+- page: wiki/people/alexis-armel
+
+type: evidences
+
+claim: 'The relationship''s first six weeks are on this page in real time: the unnamed "her" of 29-30 November in PA, the first @alexisarmel tweet on 14 December, and "d&a''s first christmas" eleven days later — with the surrounding weather (illness, finals, two states) that the relationship tables cannot carry.'
+
+- page: wiki/timeline/periods/full-sail-2008-2010
+
+type: contradicts
+
+claim: 'Two contemporaneous dates contradict the August 2009 graduation that page carries: a "last month of college" beginning 1 September 2009, and coursework with a Pro Tools lab, a practical and an AWS final running to 19 December 2009.'
+
+- page: wiki/interests/favorites/music/artists/flight-of-the-conchords
+
+type: evidences
+
+claim: "Dates the fandom ten weeks before the ticket: 'omg so excited for flight of the conchords tonight.' on Sunday 25 January 2009 is the HBO series, and the UCF Arena show is 8 April — so the concert followed the watching rather than starting it."
+
+- page: wiki/interests/favorites/music/artists/john-mayer
+
+type: evidences
+
+claim: "Thirteen months after the confirmed 2008 show the records are still in rotation ('good moods breed good moods') and by November he is bantering with a dedicated fan account, @JMayerFan216 — engagement no ticket table reaches."
+
+---
+
+# Twitter / X — 2009
+
+**The last full year before the life the rest of this wiki is about.** 2009
+
+opens on a twenty-year-old finishing an audio degree in Winter Park and closes
+
+on a twenty-one-year-old in love, driving I-95 north with a girlfriend the
+
+corpus will still be documenting sixteen years later. Between those two points
+
+the account records the end of school, the first sustained studio practice, a
+
+dated departure from the Republican party, and — in its last six weeks — the
+
+beginning of the relationship that becomes the control case for every
+
+attachment question the wiki asks. What it does **not** record is the thing
+
+that arrives seven weeks after the final tweet: Suboxone, 17 February 2010.
+
+2009 is the year immediately upstream of that, written from inside it by
+
+somebody who did not know it was coming.
+
+**Read the Gaps section before believing any pattern on this page.** The first
+
+nine months are not a sample of 2009. They are a sample of the last two days
+
+of each month, and the distinction is the difference between a finding and an
+
+artifact.
+
+## School ends, and the record says it ends later than the wiki does
+
+The Full Sail material runs the whole year and it is unglamorous: *"surround
+
+sound lecture"* (26 January), *"48 hours of hell is about to begin"* into
+
+*"1 down bitttches. Studying all night"* (26–27 February), the Songcraft
+
+final, an ESA lecture, and the flat indignity of *"learning how to wrap
+
+cables. are you kidding me fs?"* (31 March) — a paying student annoyed at
+
+being taught the trade's most menial physical skill.
+
+Two dates on this page contradict the graduation date the rest of the wiki
+
+carries. On **31 August 2009** he writes *"so weirded out i start my last
+
+month of college tomorrow. having multiple reality checks."* — which places
+
+the final month in **September**, not August. And in December he is plainly
+
+still enrolled: *"pro tools lab. noice"* (30 November), *"aced my practical
+
+without headphones"* (14 December), *"in class...."* (15 December), *"long
+
+day of class tomorrow"* (17 December), and on **19 December** *"taking aws
+
+final with it."*
+
+> **CONTRADICTION [2026-09-03]:** `raw/self/context-core/CONTEXT_CORE_EXPANDED.md`
+
+> states *"AS Recording Arts; graduated Aug 2009 (top 5%)"*, and
+
+> [[wiki/timeline/periods/full-sail-2008-2010]] and [[wiki/people/alexis-armel]]
+
+> both build on that date. The contemporaneous public record contradicts it in
+
+> two independent places: a "last month of college" beginning 1 September, and
+
+> coursework with a final examination running to 19 December. The two cannot
+
+> both be true. The record here is dated, first-person and contemporaneous;
+
+> the August date is first-person testimony given years later. **Neither is
+
+> corrected on the strength of the other** — the disagreement is held, and the
+
+> only artefact that would settle it is a Full Sail transcript, which the
+
+> corpus does not have. The narrow claim this page will support is that Dan
+
+> was still taking classes and sitting finals in December 2009.
+
+Note what is *not* in dispute: the top-5% class standing, which nothing here
+
+touches either way.
+
+## The studio year
+
+This is the year music production stops being a subject and becomes a
+
+practice. It opens with the comparison already made in the language of the
+
+industry he wants into — *"my life is literally like FBR now- no food, no
+
+sleep, just records"* (12 January, Fueled By Ramen) — and proceeds through an
+
+Afterplayrewind recording session (31 March), *"planning all the money i'm
+
+gonna spend on this minimicro home studio"* (30 April), *"Day 1 of rtn shit.
+
+Scratch tracks and drums today"* (30 June), and *"8am i'm still awake working
+
+on a song"* (30 October). On **31 October**, the night before his
+
+twenty-first birthday, he states the ambition outright and hedges it in the
+
+same breath: *"maybe I'll one day be a hip hop producer. maybe I'll one day be
+
+pow enough for @djgenie."*
+
+He also talks *to* the musicians he listens to rather than only about them —
+
+`@markhoppus` of Blink-182 gets a joke about studio interns (31 March),
+
+`@GabrielSaporta` of [[wiki/interests/favorites/music/artists/cobra-starship|Cobra Starship]] gets an album endorsement (31 July). The
+
+distance between fan and participant is already something he does not
+
+observe.
+
+## Politics: a dated exit, eleven years before the arrival
+
+On **28 November 2009**, linking out twice in succession, he writes:
+
+> *"people like this are why i no longer consider myself a republican...wowwwwwwwww"*
+
+This is the earliest dated political self-description in the corpus, and its
+
+shape matters more than its date. It is a **departure, not an arrival** — he
+
+says what he has stopped being, names no replacement, and the sentence is
+
+triggered by *people*, by a link to somebody behaving badly, rather than by an
+
+argument or a policy. [[wiki/mind/synthesis/2020-left-turn]] dates the arrival
+
+of the democratic-socialist identity to 22 August 2020 and has since found a
+
+second causal account in 2022 — the O&A fanbase splitting rightward and
+
+repelling him leftward, also a departure from a tribe. The 2009 line is the
+
+same mechanism, running eleven years earlier against the tribe he was raised
+
+in: `CONTEXT_CORE_EXPANDED` records a *"Republican household + talk-radio diet
+
+(Limbaugh/Beck/Hannity)"*. **The exit is old; only the destination is new.**
+
+The caution is that one tweet is one tweet. It is not evidence of a 2009
+
+left turn, nothing else on this page is political, and the eleven-year gap
+
+between leaving and arriving is itself the finding rather than a problem with
+
+it.
+
+## Balloon Boy, and watching the coverage instead of the event
+
+On **15 October 2009** a six-year-old was believed to be aboard a runaway
+
+helium balloon over Colorado. Dan posted through the whole day, and almost
+
+nothing he wrote is about the child:
+
+> *"reasons why i love this country: #1- little kids in hot air balloons
+
+> bombing around denver. #2- popcorn"*
+
+> *"HIS NAME IS FALCON. OMG perfect"*
+
+> *"watching CNN on delay via a paused DVR. this is a little bit riveting."*
+
+> *"smoke one for balloon boy. the best one-off meme ever."*
+
+The subject is the coverage, the naming, the DVR, and the object's status as a
+
+**meme** — a word he applies to a live news event on the day it happens.
+
+[[wiki/mind/synthesis/millennial-digital-witness]] dates the underlying
+
+disposition to a Hurricane Sandy tweet of 30 October 2012 and calls it
+
+*"fourteen years older than the theory"*. This is the same disposition three
+
+years earlier still.
+
+It is a **weaker instance than Sandy and must not be filed as an equal one.**
+
+The 2012 line names the category — *"first true 'digital disaster'"*, *"so
+
+much user generated content"* — and is a claim about the medium. The 2009 day
+
+demonstrates the habit without ever stating it: he watches the watching, and
+
+does not say that he is doing so. The precise correction to the synthesis is
+
+that the *habit* is at least seventeen years old rather than fourteen, while
+
+the *articulation* stays where that page put it.
+
+## The last six weeks: "her", then a name
+
+The year's final act is a relationship starting in real time, and it is
+
+already fully mined on [[wiki/people/alexis-armel]] — the unnamed *"her"* of
+
+29–30 November in Pennsylvania, the first `@alexisarmel` tweet on 14 December
+
+(*"you amaze me. can't believe you're real"*, and separately *"dan in
+
+love."*), *"i have the most amaaaazing girlfriend"* two days later, Seven
+
+Springs on 22 December, and *"d&a's first christmas"* on the 25th. Eleven days
+
+from the first use of her name to a shared Christmas presented as an
+
+established unit.
+
+What this page adds is the **surrounding weather**, which the relationship
+
+tables cannot carry: he is sick for most of December, driving between two
+
+states, sitting finals, and writing *"i'm so blessed"* on Christmas Day. The
+
+speed is not the speed of a man with nothing else going on. It is the speed of
+
+a man doing everything at once and putting the relationship at the front of
+
+it.
+
+## Pennsylvania, and the shuttle
+
+The account moves physically all year and hates one end of the trip. October:
+
+*"packing/getting house in order"*, the airport bit about *"businessmen
+
+things: expense reduction! bottom line! coffee!"*, then home for Saw VI, a
+
+Steelers game and Halloween. November: back for Thanksgiving, Pitt–WVU with
+
+`@joshbrannan` (*"my true love"*), *"pennsylvania, what's a stoner to do?!"*.
+
+December: the drive north on the 19th *"in the most hyped storm evar"*, then
+
+the I-95 run back south on the 30th, narrated in numbered *"road update"*
+
+posts. He is at home in Pennsylvania and unwilling to be there, which is the
+
+same posture 2008 recorded in cruder words (*"i fucking hate going home"*).
+
+The Western Pennsylvania identity is intact underneath the complaint —
+
+Steelers throughout, *"PENS"*, *"yeaaaaah malkin"*, Big Ben called *"a mark
+
+ass bitch"* mid-game, the Backyard Brawl. Leaving the place did not touch the
+
+allegiances.
+
+## Two lines on the same day, at twenty
+
+On **22 October 2009**, nine days before turning twenty-one, he posts *"retire
+
+by 25"* and, hours later, *"country club status. bloated sense of self
+
+worth."* Both are jokes. Neither is only a joke: the first is a timeline with
+
+a deadline on it and the second is a diagnosis of the person holding the
+
+timeline, and the corpus's later account of how Dan measures himself — an
+
+on/off verdict with no middle setting, a countdown running underneath it — is
+
+recognisable in both at twenty years old, sixteen years before anybody wrote
+
+it down as a finding.
+
+## Cannabis is everywhere here, and opiates are nowhere
+
+Cannabis is continuous and casual across the year: *"Jester thinks I have
+
+swine flu and won't share a spliff"* (30 April), *"smoke one for balloon boy"*
+
+(15 October), *"pennsylvania, what's a stoner to do?!"* (25 November),
+
+*"sour diesel"* among the things he is thankful for (26 November), *"can't
+
+wait to get home and smoke this kush"* (30 November), *"i'm high as a
+
+motherfucker, flyyy as a motherfucker"* (28 December).
+
+**There is not one opiate reference on this page.** That is a negative result
+
+worth stating plainly rather than an absence worth passing over, because
+
+`CONTEXT_CORE_EXPANDED` dates the first opiate — Roxicet, then Oxy — to
+
+**2007**, two years before this record, and Suboxone begins on **17 February
+
+2010**, seven weeks after it ends. So the public account of the years bracketing
+
+the onset of opioid dependence contains cannabis, alcohol and no opiates at
+
+all. The honest reading is not that it was not happening; it is that **this
+
+account was never where that was written**, and the same silence should be
+
+expected of every later year here. A public feed is evidence of what a person
+
+was willing to publish.
+
+## The texture, which is the point of keeping all of it
+
+Under the findings the page is mostly a twenty-year-old's day: Chipotle as flu
+
+medicine, Chick-fil-A four times in a week, a pancake party advertised with a
+
+ten-pound bag of batter, an Ed Hardy shirt bought as a joke and immediately
+
+disclaimed (*"note: i don't really wear Ed hardy"*), fourteen hours of *Left 4
+
+Dead* and *World of Warcraft*, *The Big Lebowski* quoted at three separate
+
+people, *"i turn last.fm off before i listen to embarassing music"*, and — on
+
+17 October — *"do NOT vote for dan frank for congress. he's an impostor.
+
+looking into my legal options"*, which is the first recorded instance of him
+
+noticing that his own name belongs to other people on the internet.
+
+Two small ones with long shadows. On **31 March** he writes *"Kinda sad I
+
+check twtr, fbook, and email before I even get out of bed. Idgaf."* — the
+
+saturation named and dismissed in the same sentence, at twenty. And on
+
+**14 October**, *"doesn't it make perfect sense that the day after i started
+
+reading 'the secret', i had a shitty day."* He read the self-help book and
+
+made a falsification joke out of it within twenty-four hours.
+
+## What would change this reading
+
+If the missing 2009 months arrive from a complete X export and January
+
+through September turn out to be as dense as the last quarter, the "quiet
+
+first three quarters" impression this page currently gives is void — it was
+
+never a claim about his posting, only about the fetch. If a Full Sail
+
+transcript surfaces with an August 2009 conferral date, the contradiction
+
+above resolves against this page's reading and in favour of the testimony,
+
+and the December coursework needs a different explanation. And if any 2009
+
+material anywhere mentions opiates, the negative result above is withdrawn
+
+rather than qualified.
+
+## Coverage
+
+| | |
+
+|---|---|
+
+| Originals on this page | 283 |
+
+| From operator spreadsheet | 0 |
+
+| From live X scrape | 165 |
+
+| From the 2026-09-02 backend fetch | 118 |
+
+| Pure reposts | omitted by rule (no @danfrank quote text) |
+
+## Gaps
+
+The operator spreadsheet begins 2013-08-17, so none of this year comes from it.
+
+The 283 rows here have two origins: 165 walked from live X search in batches of
+
+ten, and 118 recovered by the 2026-09-02 backend fetch that also produced the
+
+2008 page. Do not treat the present count as the year's total.
+
+**The distribution of this page is an artefact of how it was fetched, and it
+
+will mislead anyone who reads it as behaviour.** Both retrieval methods were
+
+capped at ten results per query, and the queries were month-bounded. The
+
+consequence is visible on the page: January through September survive almost
+
+entirely as clusters on the last one to three days of each month — 26–28
+
+February, 31 March, 29–30 April, 30–31 May, 28–30 June, 31 July, 30–31 August,
+
+29–30 September — while October through December run continuously, day after
+
+day. Dan did not post only at month-ends for three quarters and then start
+
+posting daily in October. The cap did that.
+
+**What follows for anyone using this page:** no claim about posting frequency,
+
+volume, cadence, or a subject going quiet is supportable for January–September
+
+2009, and none should be made. Presence is evidence here; absence is not. A
+
+complete X account export is the only thing that fixes it.
+
+This page is the text archive. Every original and every quote-tweet with Dan's own text that has been retrieved for the year is below, oldest first. Pure reposts with no @danfrank quote content are omitted.
+
+## The record
+
+**2009-01-07 20:11:05 UTC** · [1102670744](https://x.com/danfrank/status/1102670744)
+
+*likes 0 · replies 0 · reposts 0*
+
+> class.
+
+**2009-01-12 20:10:19 UTC** · [1113894671](https://x.com/danfrank/status/1113894671)
+
+*likes 0 · replies 0 · reposts 0*
+
+> my life is literally like FBR now- no food, no sleep, just records.
+
+**2009-01-19 00:25:11 UTC** · [1129258111](https://x.com/danfrank/status/1129258111)
+
+*likes 0 · replies 0 · reposts 0*
+
+> what the actual fuck.
+
+> fuck baltimore
+
+**2009-01-19 03:23:14 UTC** · [1129585647](https://x.com/danfrank/status/1129585647)
+
+*likes 0 · replies 0 · reposts 0*
+
+> that was immense. so stoked to go to the superbowl!
+
+**2009-01-19 18:56:35 UTC** · [1131117321](https://x.com/danfrank/status/1131117321)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @rlich8  lick, lick, salute.. 3 years 16 minutes ago from Tweetie
+
+**2009-01-25 08:12:07 UTC** · [1146355389](https://x.com/danfrank/status/1146355389)
+
+*likes 0 · replies 0 · reposts 0*
+
+> i don't tweet enough anymore...
+
+**2009-01-25 22:18:38 UTC** · [1147575045](https://x.com/danfrank/status/1147575045)
+
+*likes 0 · replies 0 · reposts 0*
+
+> omg so excited for flight of the conchords tonight.
+
+**2009-01-26 19:01:58 UTC** · [1149838517](https://x.com/danfrank/status/1149838517)
+
+*likes 0 · replies 0 · reposts 0*
+
+> surround sound lecture.
+
+**2009-02-26 21:00:11 UTC** · [1255285599](https://x.com/danfrank/status/1255285599)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @ericjester hahahahaha your doing it wrong when.... http://twitpic.com/1pm8h
+
+**2009-02-26 23:23:34 UTC** · [1255845383](https://x.com/danfrank/status/1255845383)
+
+*likes 0 · replies 0 · reposts 0*
+
+> 48 hours of hell is about to begin.
+
+**2009-02-27 05:13:59 UTC** · [1256963348](https://x.com/danfrank/status/1256963348)
+
+*likes 0 · replies 0 · reposts 0*
+
+> 1 down bitttches. Studying all night, expect constant twitter updates.
+
+**2009-02-27 05:57:28 UTC** · [1257066438](https://x.com/danfrank/status/1257066438)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @lexjosephine PLEASE tell me that show isn't tonight?
+
+**2009-02-27 06:20:10 UTC** · [1257116572](https://x.com/danfrank/status/1257116572)
+
+*likes 0 · replies 0 · reposts 0*
+
+> are you KIDDDDING me? can't believe i missed this prov tonight : (
+
+**2009-02-27 20:20:38 UTC** · [1259543774](https://x.com/danfrank/status/1259543774)
+
+*likes 0 · replies 0 · reposts 0*
+
+> today is mazin in just about every way.
+
+**2009-02-27 21:44:58 UTC** · [1259869169](https://x.com/danfrank/status/1259869169)
+
+*likes 0 · replies 0 · reposts 0*
+
+> stuuuudyin with @ericjester @mattdunnisatool @jfreshest
+
+**2009-02-28 04:56:38 UTC** · [1261143612](https://x.com/danfrank/status/1261143612)
+
+*likes 0 · replies 0 · reposts 0*
+
+> ugh so sick.
+
+**2009-02-28 15:01:59 UTC** · [1262177627](https://x.com/danfrank/status/1262177627)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Songcraft final(e)
+
+**2009-02-28 21:45:57 UTC** · [1263351528](https://x.com/danfrank/status/1263351528)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @aprcorey I should be going ugh....
+
+**2009-03-31 02:34:18 UTC** · [1421922504](https://x.com/danfrank/status/1421922504)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @jfriedline http://tinyurl.com/2zzdwm  "QUIET YOU!!!!!"
+
+**2009-03-31 12:36:15 UTC** · [1424002332](https://x.com/danfrank/status/1424002332)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Kinda sad I check twtr, fbook, and email before I even get out of bed. Idgaf.
+
+**2009-03-31 13:01:36 UTC** · [1424115903](https://x.com/danfrank/status/1424115903)
+
+*likes 0 · replies 0 · reposts 0*
+
+> ESA lecture. putting up with @ericjester 's shit for another 30 days at least.
+
+**2009-03-31 14:40:10 UTC** · [1424647092](https://x.com/danfrank/status/1424647092)
+
+*likes 0 · replies 0 · reposts 0*
+
+> "he's probably a peeping jeff"  omg yes
+
+**2009-03-31 15:02:46 UTC** · [1424785711](https://x.com/danfrank/status/1424785711)
+
+*likes 0 · replies 0 · reposts 0*
+
+> learning how to wrap cables. are you kidding me fs?
+
+**2009-03-31 18:15:32 UTC** · [1425971144](https://x.com/danfrank/status/1425971144)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Afterplayrewind recording sesh today/ it's nasty in fla. Need mood elevation via electronica.
+
+**2009-03-31 18:18:44 UTC** · [1425989634](https://x.com/danfrank/status/1425989634)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @markhoppus isn't that what studio inters are for?? "find me some colgate, bro!"
+
+**2009-03-31 19:18:53 UTC** · [1426341855](https://x.com/danfrank/status/1426341855)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Drumz!  http://twitpic.com/2nes0
+
+**2009-03-31 20:15:49 UTC** · [1426649017](https://x.com/danfrank/status/1426649017)
+
+*likes 0 · replies 0 · reposts 0*
+
+> i could go for chic-fil-a. will be like the 4th time in the past week.
+
+**2009-03-31 22:40:54 UTC** · [1427494162](https://x.com/danfrank/status/1427494162)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Sitting at gas stations with j freshest
+
+**2009-04-29 19:39:29 UTC** · [1651897087](https://x.com/danfrank/status/1651897087)
+
+*likes 0 · replies 0 · reposts 0*
+
+> well, it's official...i already hate everyone that's gonna be in jersey this weekend (cos i could've/should've been there.)
+
+**2009-04-29 20:16:42 UTC** · [1652226926](https://x.com/danfrank/status/1652226926)
+
+*likes 0 · replies 0 · reposts 0*
+
+> way sick still. thinking it might be another 10pm nyquill session.
+
+**2009-04-30 00:05:49 UTC** · [1654162975](https://x.com/danfrank/status/1654162975)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Jester thinks I have swine flu and won't share a spliff.
+
+**2009-04-30 01:13:36 UTC** · [1654733813](https://x.com/danfrank/status/1654733813)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Blah having a cold is super lame but my new schedule is so good that idgaf
+
+**2009-04-30 12:20:39 UTC** · [1658302163](https://x.com/danfrank/status/1658302163)
+
+*likes 0 · replies 0 · reposts 0*
+
+> i got a crew too.
+
+**2009-04-30 13:31:27 UTC** · [1658810867](https://x.com/danfrank/status/1658810867)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Going through that "feeling even more awesome, because you were sick phase"- rad!
+
+**2009-04-30 14:01:55 UTC** · [1659067132](https://x.com/danfrank/status/1659067132)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @iamcoreybrown so proud of you.
+
+**2009-04-30 15:15:03 UTC** · [1659714599](https://x.com/danfrank/status/1659714599)
+
+*likes 0 · replies 0 · reposts 0*
+
+> planning all the money i'm gonna spend on this minimicro home studio.
+
+**2009-04-30 19:59:58 UTC** · [1662264308](https://x.com/danfrank/status/1662264308)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Ughhhh. Fucking cat got out, looking for that fool.
+
+**2009-04-30 23:06:46 UTC** · [1663847306](https://x.com/danfrank/status/1663847306)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Bummed out rn
+
+**2009-05-30 07:22:20 UTC** · [1969541390](https://x.com/danfrank/status/1969541390)
+
+*likes 0 · replies 0 · reposts 0*
+
+> HEY! add me on lala. http://www.lala.com/member/17824@60758
+
+**2009-05-30 08:19:40 UTC** · [1969814420](https://x.com/danfrank/status/1969814420)
+
+*likes 0 · replies 0 · reposts 0*
+
+> ashton kutcher is that annoying dude at the party who won't stop talking.
+
+**2009-05-30 16:51:29 UTC** · [1972772303](https://x.com/danfrank/status/1972772303)
+
+*likes 0 · replies 0 · reposts 0*
+
+> think i'm officially an insomniac
+
+**2009-05-30 23:05:18 UTC** · [1975873678](https://x.com/danfrank/status/1975873678)
+
+*likes 0 · replies 0 · reposts 0*
+
+> been listening to crystal castles all day. feels nice.
+
+**2009-05-31 01:51:24 UTC** · [1976717060](https://x.com/danfrank/status/1976717060)
+
+*likes 0 · replies 0 · reposts 0*
+
+> PENS
+
+**2009-05-31 02:06:07 UTC** · [1976798374](https://x.com/danfrank/status/1976798374)
+
+*likes 0 · replies 0 · reposts 0*
+
+> sparks ilu.
+
+**2009-05-31 04:33:41 UTC** · [1977720881](https://x.com/danfrank/status/1977720881)
+
+*likes 0 · replies 0 · reposts 0*
+
+> The look of DEFEAT http://twitpic.com/6bc5g
+
+**2009-05-31 07:03:15 UTC** · [1978661030](https://x.com/danfrank/status/1978661030)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Watching death proof cos i'm a tarintino fanboy
+
+**2009-05-31 09:47:14 UTC** · [1979378085](https://x.com/danfrank/status/1979378085)
+
+*likes 0 · replies 0 · reposts 0*
+
+> tonight was zany. gonna watch the big lebowski and pass out. you're out of your element, donnie.
+
+**2009-05-31 17:41:45 UTC** · [1982183563](https://x.com/danfrank/status/1982183563)
+
+*likes 0 · replies 0 · reposts 0*
+
+> starting tomorrow: no fun/smiles/optimism- so says my schedule.
+
+**2009-06-28 14:39:47 UTC** · [2371995445](https://x.com/danfrank/status/2371995445)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Landed in pittsburgh. Ready to work. A little bit of smiley face mixed with a bit of frown face.
+
+**2009-06-28 20:56:14 UTC** · [2376356481](https://x.com/danfrank/status/2376356481)
+
+*likes 0 · replies 0 · reposts 0*
+
+> what day is it?  being in PA is weird.
+
+**2009-06-28 21:46:51 UTC** · [2376977572](https://x.com/danfrank/status/2376977572)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Lol I found this autographed chris benoit picture at home. Do people pay for signatures of pol who kill their fams http://twitpic.com/8p9tf
+
+**2009-06-29 02:14:42 UTC** · [2380910481](https://x.com/danfrank/status/2380910481)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Doing it correctly with @joshbrannan
+
+**2009-06-29 18:20:33 UTC** · [2391097611](https://x.com/danfrank/status/2391097611)
+
+*likes 0 · replies 0 · reposts 0*
+
+> i forgot my phone charger in fla and i'm super sick. today is fucking lameee
+
+**2009-06-29 23:52:41 UTC** · [2395567889](https://x.com/danfrank/status/2395567889)
+
+*likes 0 · replies 0 · reposts 0*
+
+> yeah, i'm waking up at 8pm. great to be back in UT....or not.
+
+**2009-06-30 02:47:36 UTC** · [2397787954](https://x.com/danfrank/status/2397787954)
+
+*likes 0 · replies 0 · reposts 0*
+
+> the history channel is chock-full of drama tonight.
+
+**2009-06-30 02:48:19 UTC** · [2397797386](https://x.com/danfrank/status/2397797386)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @iamcoreybrown  nah man i was super sick....or super hungover. you decide.
+
+**2009-06-30 16:01:48 UTC** · [2405393730](https://x.com/danfrank/status/2405393730)
+
+*likes 0 · replies 0 · reposts 0*
+
+> luck is the residue of skill.
+
+**2009-06-30 16:54:01 UTC** · [2406134169](https://x.com/danfrank/status/2406134169)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Day 1 of rtn shit. Scratch tracks and drums today.
+
+**2009-07-31 17:37:31 UTC** · [3054844133](https://x.com/danfrank/status/3054844133)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @karakillsgirls orlando! it's the raddest
+
+**2009-07-31 18:14:38 UTC** · [3055410577](https://x.com/danfrank/status/3055410577)
+
+*likes 0 · replies 0 · reposts 0*
+
+> tommy hopton is like a walking facepalm. i don't even need to see/hear from that kid for him to annoy the piss out of me. go hide yr face.
+
+**2009-07-31 19:08:19 UTC** · [3056214796](https://x.com/danfrank/status/3056214796)
+
+*likes 0 · replies 0 · reposts 0*
+
+> meetings and sheiiiiiiit
+
+**2009-07-31 19:30:24 UTC** · [3056605606](https://x.com/danfrank/status/3056605606)
+
+*likes 0 · replies 0 · reposts 0*
+
+> pancake party tonight! whos hungry?
+
+**2009-07-31 19:47:53 UTC** · [3056910292](https://x.com/danfrank/status/3056910292)
+
+*likes 0 · replies 0 · reposts 0*
+
+> bring your own bottle...of maple syrup. everyone's invited, i have 3 pounds of batter to get rid of.
+
+**2009-07-31 19:56:49 UTC** · [3057064205](https://x.com/danfrank/status/3057064205)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @DAV1DKeller  yes!  it's gonna be a messssssss
+
+**2009-07-31 20:10:30 UTC** · [3057306199](https://x.com/danfrank/status/3057306199)
+
+*likes 0 · replies 0 · reposts 0*
+
+> i lied- it's a 10 pound bag. make pancakes,. not money: http://twitpic.com/cac9f
+
+**2009-07-31 21:27:30 UTC** · [3058612731](https://x.com/danfrank/status/3058612731)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @djgenie hope yr ready for some POWcakes
+
+**2009-07-31 22:25:34 UTC** · [3059561941](https://x.com/danfrank/status/3059561941)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @GabrielSaporta good choice, the audition kill it.
+
+**2009-07-31 22:26:32 UTC** · [3059577763](https://x.com/danfrank/status/3059577763)
+
+*likes 0 · replies 0 · reposts 0*
+
+> yall hungry? is almost pancake time
+
+**2009-08-30 08:04:42 UTC** · [3641986301](https://x.com/danfrank/status/3641986301)
+
+*likes 0 · replies 0 · reposts 0*
+
+> so it sounds like there's def some sort of stripper party going on upstairs. too much reggaeton, dudes.
+
+**2009-08-30 18:18:17 UTC** · [3649200369](https://x.com/danfrank/status/3649200369)
+
+*likes 0 · replies 0 · reposts 0*
+
+> enjoying
+
+**2009-08-30 22:22:08 UTC** · [3653233056](https://x.com/danfrank/status/3653233056)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Sunday family meal u no. making Caesar tonight
+
+**2009-08-31 00:46:37 UTC** · [3655708683](https://x.com/danfrank/status/3655708683)
+
+*likes 0 · replies 0 · reposts 0*
+
+> should be cleaning house, but i'm too tired for that nonsense.
+
+**2009-08-31 01:01:07 UTC** · [3655974735](https://x.com/danfrank/status/3655974735)
+
+*likes 0 · replies 0 · reposts 0*
+
+> true blood
+
+**2009-08-31 05:34:15 UTC** · [3660441435](https://x.com/danfrank/status/3660441435)
+
+*likes 0 · replies 0 · reposts 0*
+
+> so weirded out i start my last month of college tomorrow. having multiple reality checks.
+
+**2009-08-31 14:11:14 UTC** · [3666039070](https://x.com/danfrank/status/3666039070)
+
+*likes 0 · replies 0 · reposts 0*
+
+> locked myself out without keys, so i walked to school. iz so hot
+
+**2009-08-31 20:13:48 UTC** · [3672719854](https://x.com/danfrank/status/3672719854)
+
+*likes 0 · replies 0 · reposts 0*
+
+> am appy and sploring the outlets
+
+**2009-08-31 20:30:34 UTC** · [3673001892](https://x.com/danfrank/status/3673001892)
+
+*likes 0 · replies 0 · reposts 0*
+
+> u guys like my new steeze? it's got a lion raping a dragon on a skateboard on the back http://twitpic.com/g0a51
+
+**2009-08-31 23:52:33 UTC** · [3676718542](https://x.com/danfrank/status/3676718542)
+
+*likes 0 · replies 0 · reposts 0*
+
+> note: i don't really wear Ed hardy.
+
+**2009-09-29 08:22:46 UTC** · [4465782453](https://x.com/danfrank/status/4465782453)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @DAV1DKeller  i never heard from you! maybe we can meet up at disney tmw. when are you going down?
+
+**2009-09-29 08:23:00 UTC** · [4465784798](https://x.com/danfrank/status/4465784798)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @ericjester it was a unique moment
+
+**2009-09-29 17:01:00 UTC** · [4474483558](https://x.com/danfrank/status/4474483558)
+
+*likes 0 · replies 0 · reposts 0*
+
+> crisis averted- the cat totally spilled water on this bitch.
+
+**2009-09-29 18:11:27 UTC** · [4476070047](https://x.com/danfrank/status/4476070047)
+
+*likes 0 · replies 0 · reposts 0*
+
+> anyone notice the similarity between maydayparade's "bruised and scarred" and "mr.brightside". hmmmm.....
+
+**2009-09-29 20:03:39 UTC** · [4478529753](https://x.com/danfrank/status/4478529753)
+
+*likes 0 · replies 0 · reposts 0*
+
+> http://twitpic.com/jmv53
+
+**2009-09-30 01:46:50 UTC** · [4486280760](https://x.com/danfrank/status/4486280760)
+
+*likes 0 · replies 0 · reposts 0*
+
+> it's weird when people don't get your eHumor. i can deal with it, but....weird.
+
+**2009-09-30 02:57:24 UTC** · [4487934246](https://x.com/danfrank/status/4487934246)
+
+*likes 0 · replies 0 · reposts 0*
+
+> "I was the first person at taco bell today...10:30am" --@matteffindunn
+
+**2009-09-30 05:08:45 UTC** · [4490422734](https://x.com/danfrank/status/4490422734)
+
+*likes 0 · replies 0 · reposts 0*
+
+> i'm getting super jammy to john mayer today. good moods breed good moods.
+
+**2009-09-30 08:48:45 UTC** · [4493077113](https://x.com/danfrank/status/4493077113)
+
+*likes 0 · replies 0 · reposts 0*
+
+> I've been on the phone for like 5 days. That's usually bad, but...
+
+**2009-09-30 18:11:15 UTC** · [4503273246](https://x.com/danfrank/status/4503273246)
+
+*likes 0 · replies 0 · reposts 0*
+
+> parked for free at epcot. pro.
+
+**2009-10-14 07:04:04 UTC** · [4856782770](https://x.com/danfrank/status/4856782770)
+
+*likes 0 · replies 0 · reposts 0*
+
+> i started watching the maine's doc....but then i realized i didn't care.
+
+**2009-10-14 09:17:36 UTC** · [4858176811](https://x.com/danfrank/status/4858176811)
+
+*likes 0 · replies 0 · reposts 0*
+
+> guess who's not sleeping tonight? it's okay you don't HAVE to guess.
+
+**2009-10-14 23:35:54 UTC** · [4874990512](https://x.com/danfrank/status/4874990512)
+
+*likes 0 · replies 0 · reposts 0*
+
+> watching wanted. i don't think they used any cgi in this movie. sighhhhhh
+
+**2009-10-14 23:58:04 UTC** · [4875486254](https://x.com/danfrank/status/4875486254)
+
+*likes 0 · replies 0 · reposts 0*
+
+> doesn't it make perfect sense that the day after i started reading "the secret", i had a shitty day.
+
+**2009-10-15 09:05:50 UTC** · [4884814316](https://x.com/danfrank/status/4884814316)
+
+*likes 0 · replies 0 · reposts 0*
+
+> i might go vegetarian. go me!
+
+**2009-10-15 12:11:07 UTC** · [4887054854](https://x.com/danfrank/status/4887054854)
+
+*likes 0 · replies 0 · reposts 0*
+
+> "do it to it....lars!"
+
+**2009-10-15 18:37:39 UTC** · [4895277004](https://x.com/danfrank/status/4895277004)
+
+*likes 0 · replies 0 · reposts 0*
+
+> fast cars! danger! fire! knives!
+
+**2009-10-15 19:11:11 UTC** · [4896042241](https://x.com/danfrank/status/4896042241)
+
+*likes 0 · replies 0 · reposts 0*
+
+> reasons why i love this country: #1- little kids in hot air balloons bombing around denver. #2- popcorn
+
+**2009-10-15 19:17:40 UTC** · [4896196140](https://x.com/danfrank/status/4896196140)
+
+*likes 0 · replies 0 · reposts 0*
+
+> HIS NAME IS FALCON. OMG perfect
+
+**2009-10-15 19:27:59 UTC** · [4896443711](https://x.com/danfrank/status/4896443711)
+
+*likes 0 · replies 0 · reposts 0*
+
+> alright i'm done being lulsy about balloon boy. be safe, young gentleman.
+
+**2009-10-15 20:06:40 UTC** · [4897342665](https://x.com/danfrank/status/4897342665)
+
+*likes 0 · replies 0 · reposts 0*
+
+> watching CNN on delay via a paused DVR. this is a little bit riveting.
+
+**2009-10-15 22:09:35 UTC** · [4899828820](https://x.com/danfrank/status/4899828820)
+
+*likes 0 · replies 0 · reposts 0*
+
+> smoke one for balloon boy. the best one-off meme ever.
+
+**2009-10-15 23:59:31 UTC** · [4902137356](https://x.com/danfrank/status/4902137356)
+
+*likes 0 · replies 0 · reposts 0*
+
+> i bet my torrent ratio is bigger than yours. ohhhhh yeah.
+
+**2009-10-16 03:57:34 UTC** · [4907685852](https://x.com/danfrank/status/4907685852)
+
+*likes 0 · replies 0 · reposts 0*
+
+> my house isn't really my house.
+
+**2009-10-16 06:44:47 UTC** · [4910293334](https://x.com/danfrank/status/4910293334)
+
+*likes 0 · replies 0 · reposts 0*
+
+> what ain't no country I ever heard of!
+
+**2009-10-16 07:39:08 UTC** · [4910917353](https://x.com/danfrank/status/4910917353)
+
+*likes 0 · replies 0 · reposts 0*
+
+> it's dirty south night here.
+
+**2009-10-16 19:23:09 UTC** · [4923640969](https://x.com/danfrank/status/4923640969)
+
+*likes 0 · replies 0 · reposts 0*
+
+> i'm not really staying up that late, i'm just on pacific time. also,i should have gone to the nfg thing today.
+
+**2009-10-16 19:46:04 UTC** · [4924158268](https://x.com/danfrank/status/4924158268)
+
+*likes 0 · replies 0 · reposts 0*
+
+> i don't understand this...virtual drowning? http://bit.ly/79rZ8
+
+**2009-10-16 20:01:41 UTC** · [4924527619](https://x.com/danfrank/status/4924527619)
+
+*likes 0 · replies 0 · reposts 0*
+
+> #beatcancer gets one cent donated to cancer research. i want to know what i hashtag to donate to the @allylubin drunk tweet wine foundation
+
+**2009-10-16 22:49:10 UTC** · [4928377642](https://x.com/danfrank/status/4928377642)
+
+*likes 0 · replies 0 · reposts 0*
+
+> i turn last.fm off before i listen to embarassing music.
+
+**2009-10-17 11:48:45 UTC** · [4940535322](https://x.com/danfrank/status/4940535322)
+
+*likes 0 · replies 0 · reposts 0*
+
+> baking cookies/watching cartoons.
+
+**2009-10-17 22:45:39 UTC** · [4952992497](https://x.com/danfrank/status/4952992497)
+
+*likes 0 · replies 0 · reposts 0*
+
+> do NOT vote for dan frank for congress. he's an impostor. looking into my legal options. http://bit.ly/tPgbD
+
+**2009-10-18 00:42:27 UTC** · [4955278233](https://x.com/danfrank/status/4955278233)
+
+*likes 0 · replies 0 · reposts 0*
+
+> just had weird moment of clarity. i know EXACTLY what to do.
+
+**2009-10-18 07:48:42 UTC** · [4962780083](https://x.com/danfrank/status/4962780083)
+
+*likes 0 · replies 0 · reposts 0*
+
+> OK is not "okay"..............it's a man on his side.
+
+**2009-10-18 08:22:50 UTC** · [4963144955](https://x.com/danfrank/status/4963144955)
+
+*likes 0 · replies 0 · reposts 0*
+
+> someone called murphys law on me tonight, i swurr.
+
+**2009-10-18 21:30:17 UTC** · [4974808046](https://x.com/danfrank/status/4974808046)
+
+*likes 0 · replies 0 · reposts 0*
+
+> left 4 dead.
+
+**2009-10-19 01:00:23 UTC** · [4979171280](https://x.com/danfrank/status/4979171280)
+
+*likes 0 · replies 0 · reposts 0*
+
+> curb!
+
+**2009-10-19 08:54:04 UTC** · [4986753469](https://x.com/danfrank/status/4986753469)
+
+*likes 0 · replies 0 · reposts 0*
+
+> don't trust machines: http://twitpic.com/m3xxx
+
+**2009-10-19 20:20:51 UTC** · [4999537163](https://x.com/danfrank/status/4999537163)
+
+*likes 0 · replies 0 · reposts 0*
+
+> at the vet with teh kitty
+
+**2009-10-19 20:53:44 UTC** · [5000240511](https://x.com/danfrank/status/5000240511)
+
+*likes 0 · replies 0 · reposts 0*
+
+> people love making cat noises. that shit is universal.
+
+**2009-10-20 21:13:12 UTC** · [5027528206](https://x.com/danfrank/status/5027528206)
+
+*likes 0 · replies 0 · reposts 0*
+
+> packing/getting house in order.
+
+**2009-10-21 05:15:10 UTC** · [5037529411](https://x.com/danfrank/status/5037529411)
+
+*likes 0 · replies 0 · reposts 0*
+
+> wow i fell asleep. going to do that again.
+
+**2009-10-21 16:18:00 UTC** · [5046979699](https://x.com/danfrank/status/5046979699)
+
+*likes 0 · replies 0 · reposts 0*
+
+> airport fun. I'm gonna talk to these businessmen about businessmen things: expense reduction! bottom line! coffee!
+
+**2009-10-21 17:26:19 UTC** · [5048171084](https://x.com/danfrank/status/5048171084)
+
+*likes 0 · replies 0 · reposts 0*
+
+> aisle seat. score. now shooting for a clear row so I can nap out on this flight
+
+**2009-10-21 17:29:17 UTC** · [5048224095](https://x.com/danfrank/status/5048224095)
+
+*likes 0 · replies 0 · reposts 0*
+
+> the "s" in aisle is totally unnecessary. who is responsible for these irreverent decisions?
+
+**2009-10-22 03:52:50 UTC** · [5061117468](https://x.com/danfrank/status/5061117468)
+
+*likes 0 · replies 0 · reposts 0*
+
+> celebrating pennsylvania with jonjon
+
+**2009-10-22 16:45:13 UTC** · [5073490387](https://x.com/danfrank/status/5073490387)
+
+*likes 0 · replies 0 · reposts 0*
+
+> my dentist told me i'm a hardcore teeth grinder. i was just excited he told me i was hardcore.
+
+**2009-10-22 19:03:36 UTC** · [5076636999](https://x.com/danfrank/status/5076636999)
+
+*likes 0 · replies 0 · reposts 0*
+
+> retire by 25
+
+**2009-10-22 23:05:37 UTC** · [5082111700](https://x.com/danfrank/status/5082111700)
+
+*likes 0 · replies 0 · reposts 0*
+
+> I feel funny via a nap. exhaustion almost seems more tolerable
+
+**2009-10-22 23:59:01 UTC** · [5083320493](https://x.com/danfrank/status/5083320493)
+
+*likes 0 · replies 0 · reposts 0*
+
+> country club status. bloated sense of self worth.
+
+**2009-10-23 15:59:27 UTC** · [5099943674](https://x.com/danfrank/status/5099943674)
+
+*likes 0 · replies 0 · reposts 0*
+
+> getting a new lisence picture with a shitty haircut. here's to 4 more years of embarassment.
+
+**2009-10-23 19:37:36 UTC** · [5104929577](https://x.com/danfrank/status/5104929577)
+
+*likes 0 · replies 0 · reposts 0*
+
+> just found a picture of me and chris benoit. IM LOLING  SO HARD. http://bit.ly/2d3uAr
+
+**2009-10-23 22:30:12 UTC** · [5108691613](https://x.com/danfrank/status/5108691613)
+
+*likes 0 · replies 0 · reposts 0*
+
+> the new t&s is my AOTY so far. obsessed.
+
+**2009-10-23 22:42:54 UTC** · [5108966741](https://x.com/danfrank/status/5108966741)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @__lindsey  no u.... i died laughing.
+
+**2009-10-24 01:40:36 UTC** · [5112685758](https://x.com/danfrank/status/5112685758)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @ericjester ur sucha babay!!!
+
+**2009-10-24 01:42:52 UTC** · [5112732633](https://x.com/danfrank/status/5112732633)
+
+*likes 0 · replies 0 · reposts 0*
+
+> going to see saw vi. I haven't seen the past 4 movies...oh welll
+
+**2009-10-24 05:42:35 UTC** · [5117126364](https://x.com/danfrank/status/5117126364)
+
+*likes 0 · replies 0 · reposts 0*
+
+> watching rugrats in paris with a pretty girl. the most random of nights.
+
+**2009-10-24 20:51:23 UTC** · [5131071090](https://x.com/danfrank/status/5131071090)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @Lapiana are you going to the game tmw?
+
+**2009-10-24 20:57:22 UTC** · [5131185093](https://x.com/danfrank/status/5131185093)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @ericjester http://bit.ly/Q9Z9m
+
+**2009-10-24 20:58:06 UTC** · [5131198622](https://x.com/danfrank/status/5131198622)
+
+*likes 0 · replies 0 · reposts 0*
+
+> sleep isn't going to save me at this point. getting some dinner and then to the waterfront.
+
+**2009-10-25 01:56:58 UTC** · [5137129608](https://x.com/danfrank/status/5137129608)
+
+*likes 0 · replies 0 · reposts 0*
+
+> paranormal activity. I'm scurrd
+
+**2009-10-25 16:04:35 UTC** · [5149489811](https://x.com/danfrank/status/5149489811)
+
+*likes 0 · replies 0 · reposts 0*
+
+> steeler game!
+
+**2009-10-25 18:35:06 UTC** · [5152578974](https://x.com/danfrank/status/5152578974)
+
+*likes 0 · replies 0 · reposts 0*
+
+> oh my http://twitpic.com/mwvra
+
+**2009-10-25 22:19:45 UTC** · [5157363877](https://x.com/danfrank/status/5157363877)
+
+*likes 0 · replies 0 · reposts 0*
+
+> sunday night airport crowd is weird. flying back to the o
+
+**2009-10-26 01:33:50 UTC** · [5161651415](https://x.com/danfrank/status/5161651415)
+
+*likes 0 · replies 0 · reposts 0*
+
+> celeb spotting in charlotte airport. o hai mike phelps.
+
+**2009-10-26 23:27:09 UTC** · [5186263358](https://x.com/danfrank/status/5186263358)
+
+*likes 0 · replies 0 · reposts 0*
+
+> i want more cold weather.
+
+**2009-10-28 20:18:11 UTC** · [5239389458](https://x.com/danfrank/status/5239389458)
+
+*likes 0 · replies 0 · reposts 0*
+
+> chipotle! that'll cure this flu.
+
+**2009-10-28 23:08:10 UTC** · [5243425224](https://x.com/danfrank/status/5243425224)
+
+*likes 0 · replies 0 · reposts 0*
+
+> i miss @snlbn09 =[
+
+**2009-10-29 04:10:06 UTC** · [5250761989](https://x.com/danfrank/status/5250761989)
+
+*likes 0 · replies 0 · reposts 0*
+
+> hookah at meridian. vibbbbed out
+
+**2009-10-29 07:34:45 UTC** · [5253680719](https://x.com/danfrank/status/5253680719)
+
+*likes 0 · replies 0 · reposts 0*
+
+> new SA...whoa, idk if i like--
+
+**2009-10-29 23:43:47 UTC** · [5272949021](https://x.com/danfrank/status/5272949021)
+
+*likes 0 · replies 0 · reposts 0*
+
+> that nap ranks in the top 5 of my power rankings for all-time most beneficial napz
+
+**2009-10-30 01:18:38 UTC** · [5275314223](https://x.com/danfrank/status/5275314223)
+
+*likes 0 · replies 0 · reposts 0*
+
+> ale haüs
+
+**2009-10-30 12:03:42 UTC** · [5285396477](https://x.com/danfrank/status/5285396477)
+
+*likes 0 · replies 0 · reposts 0*
+
+> 8am i'm still awake working on a song. shyahhhh
+
+**2009-10-30 19:35:06 UTC** · [5295711837](https://x.com/danfrank/status/5295711837)
+
+*likes 0 · replies 0 · reposts 0*
+
+> where am I?  had a dream about campground murderer...I escaped. +5 for me
+
+**2009-10-30 23:58:12 UTC** · [5301542965](https://x.com/danfrank/status/5301542965)
+
+*likes 0 · replies 0 · reposts 0*
+
+> itunes library sharing is amazing. savin the dayyy
+
+**2009-10-31 00:14:12 UTC** · [5301895665](https://x.com/danfrank/status/5301895665)
+
+*likes 0 · replies 0 · reposts 0*
+
+> maybe I'll one day be a hip hop producer. maybe I'll one day be pow enough for @djgenie.
+
+**2009-10-31 17:13:07 UTC** · [5318001529](https://x.com/danfrank/status/5318001529)
+
+*likes 0 · replies 0 · reposts 0*
+
+> this gon be me someday lolz http://bit.ly/1UxB2S
+
+**2009-10-31 23:49:18 UTC** · [5325699037](https://x.com/danfrank/status/5325699037)
+
+*likes 0 · replies 0 · reposts 0*
+
+> birthday night x halloween x jesters last night in the o. hoooooly inebriated.
+
+**2009-11-22 02:16:12 UTC** · [5934894883](https://x.com/danfrank/status/5934894883)
+
+*likes 0 · replies 0 · reposts 0*
+
+> by a booth I meant a rigid oak chair... but I can SEE a booth
+
+**2009-11-22 03:22:19 UTC** · [5936357288](https://x.com/danfrank/status/5936357288)
+
+*likes 0 · replies 0 · reposts 0*
+
+> sake!
+
+**2009-11-22 08:25:26 UTC** · [5941691254](https://x.com/danfrank/status/5941691254)
+
+*likes 0 · replies 0 · reposts 0*
+
+> lol you don't answer your phone but we know you're up. the cow you haul around with you needs food every 2 hours. by food i mean dennys.
+
+**2009-11-22 08:31:08 UTC** · [5941766096](https://x.com/danfrank/status/5941766096)
+
+*likes 0 · replies 0 · reposts 0*
+
+> nothing washes down riot punch, bad decisions, and whale blubber like a trip to this "Frommer's Reccomended" treat- http://twitpic.com/qhg6o
+
+**2009-11-22 19:41:11 UTC** · [5953404129](https://x.com/danfrank/status/5953404129)
+
+*likes 0 · replies 0 · reposts 0*
+
+> ahhhhhh sunday.
+
+**2009-11-22 20:43:44 UTC** · [5954955761](https://x.com/danfrank/status/5954955761)
+
+*likes 0 · replies 0 · reposts 0*
+
+> ughomg i NEED direct tv today, all these games are a+ and i can't watch them all at one time. anyone down for bwwz
+
+**2009-11-22 20:54:30 UTC** · [5955250755](https://x.com/danfrank/status/5955250755)
+
+*likes 0 · replies 0 · reposts 0*
+
+> big ben is acting like a mark ass bitch. this game is yours to lose, bro.
+
+**2009-11-22 21:07:15 UTC** · [5955616364](https://x.com/danfrank/status/5955616364)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @EricJester alice doesn't like when you trash talk teh stillerz
+
+**2009-11-23 02:21:15 UTC** · [5963670121](https://x.com/danfrank/status/5963670121)
+
+*likes 0 · replies 0 · reposts 0*
+
+> you busied me with your beans, mocha joe!!!!
+
+**2009-11-23 16:17:17 UTC** · [5980248829](https://x.com/danfrank/status/5980248829)
+
+*likes 0 · replies 0 · reposts 0*
+
+> classè... so passè
+
+**2009-11-24 16:01:11 UTC** · [6011448283](https://x.com/danfrank/status/6011448283)
+
+*likes 0 · replies 0 · reposts 0*
+
+> this is the distance between point a and point b
+
+**2009-11-24 17:42:10 UTC** · [6014076980](https://x.com/danfrank/status/6014076980)
+
+*likes 0 · replies 0 · reposts 0*
+
+> well after a whole two days of being busy on the reg... i think a vacation is deserved
+
+**2009-11-24 17:53:45 UTC** · [6014364986](https://x.com/danfrank/status/6014364986)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @ericjester I'm in the control24 rooms right now. PT1 bitch
+
+**2009-11-25 06:28:17 UTC** · [6042895572](https://x.com/danfrank/status/6042895572)
+
+*likes 0 · replies 0 · reposts 0*
+
+> got an early flight.. why sleep now?
+
+**2009-11-25 12:20:10 UTC** · [6048051022](https://x.com/danfrank/status/6048051022)
+
+*likes 0 · replies 0 · reposts 0*
+
+> great so holiday travel isn't nearly as exciting as I was made to believe. I got here like 4 hours early and went straight through uh..
+
+**2009-11-25 14:47:34 UTC** · [6051246137](https://x.com/danfrank/status/6051246137)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @Lapiana yep! what are you flying?
+
+**2009-11-25 16:27:23 UTC** · [6053916702](https://x.com/danfrank/status/6053916702)
+
+*likes 0 · replies 0 · reposts 0*
+
+> nice. free wifi on my flight
+
+**2009-11-25 16:32:20 UTC** · [6054052797](https://x.com/danfrank/status/6054052797)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @koreantomcruise  that rug really tied the room together.
+
+**2009-11-25 17:21:59 UTC** · [6055370087](https://x.com/danfrank/status/6055370087)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @Lapiana  WTF me too! stop following meh, Lapiana
+
+**2009-11-25 17:35:26 UTC** · [6055717560](https://x.com/danfrank/status/6055717560)
+
+*likes 0 · replies 0 · reposts 0*
+
+> there's an indoor smoking room in the Atlanta airport, wrong kind of smoke..
+
+**2009-11-25 19:52:55 UTC** · [6059236792](https://x.com/danfrank/status/6059236792)
+
+*likes 0 · replies 0 · reposts 0*
+
+> pennsylvania, what's a stoner to do?!
+
+**2009-11-25 21:28:17 UTC** · [6061615326](https://x.com/danfrank/status/6061615326)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @Lapiana no I flew delta. also I'm about 2 minutes from your favorite academic institution: CAL U!
+
+**2009-11-25 22:41:20 UTC** · [6063491092](https://x.com/danfrank/status/6063491092)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @kellymulroy Enjoy your ravens getting beat by my steelers this weekend : )
+
+**2009-11-26 06:04:46 UTC** · [6074044351](https://x.com/danfrank/status/6074044351)
+
+*likes 0 · replies 0 · reposts 0*
+
+> more bass!!!
+
+**2009-11-26 17:41:31 UTC** · [6087513228](https://x.com/danfrank/status/6087513228)
+
+*likes 0 · replies 0 · reposts 0*
+
+> i haven't eaten in so long, and by a circumstance of fate- it happens to be thanksgiving. purrrrrfuct.
+
+**2009-11-26 18:10:14 UTC** · [6088249629](https://x.com/danfrank/status/6088249629)
+
+*likes 0 · replies 0 · reposts 0*
+
+> i miss this era, huge sadface... http://twitpic.com/r16el
+
+**2009-11-26 19:13:40 UTC** · [6089835565](https://x.com/danfrank/status/6089835565)
+
+*likes 0 · replies 0 · reposts 0*
+
+> i'm thankful for my family/friend, sour diesel, tropical lifesaver gummies, and @joshbrannan / @jfriedline for their sign stealing abilities
+
+**2009-11-26 20:56:16 UTC** · [6092256790](https://x.com/danfrank/status/6092256790)
+
+*likes 0 · replies 0 · reposts 0*
+
+> nice! home alone!!
+
+**2009-11-26 21:44:17 UTC** · [6093368079](https://x.com/danfrank/status/6093368079)
+
+*likes 0 · replies 0 · reposts 0*
+
+> The past 48 hrs have been incredible. I'm vibed http://twitpic.com/r2ezk
+
+**2009-11-27 19:08:24 UTC** · [6119846248](https://x.com/danfrank/status/6119846248)
+
+*likes 0 · replies 0 · reposts 0*
+
+> pitt x wvu with @joshbrannan , my true love.
+
+**2009-11-27 22:17:02 UTC** · [6124197060](https://x.com/danfrank/status/6124197060)
+
+*likes 0 · replies 0 · reposts 0*
+
+> this is amazing. <3 you west virginia...sorta
+
+**2009-11-27 22:56:44 UTC** · [6125124792](https://x.com/danfrank/status/6125124792)
+
+*likes 0 · replies 0 · reposts 0*
+
+> backyard brawl!
+
+**2009-11-28 04:03:46 UTC** · [6132383627](https://x.com/danfrank/status/6132383627)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @JMayerFan216 LUVZ JOHN MAYER!
+
+**2009-11-28 04:04:53 UTC** · [6132408444](https://x.com/danfrank/status/6132408444)
+
+*likes 0 · replies 0 · reposts 0*
+
+> i had the absolute best day. heart is full from seeing true friends today. you're all amazing <3
+
+**2009-11-28 05:23:40 UTC** · [6134067394](https://x.com/danfrank/status/6134067394)
+
+*likes 0 · replies 0 · reposts 0*
+
+> people like this are why i no longer consider myself a republican...wowwwwwwwww: http://bit.ly/8VFv2v
+
+**2009-11-28 05:27:18 UTC** · [6134139034](https://x.com/danfrank/status/6134139034)
+
+*likes 0 · replies 0 · reposts 0*
+
+> ...oh and then there's this. i'm just not even sure what to say... http://bit.ly/6i0IpH
+
+**2009-11-29 02:02:08 UTC** · [6157681440](https://x.com/danfrank/status/6157681440)
+
+*likes 0 · replies 0 · reposts 0*
+
+> -stealing Dan.
+
+**2009-11-29 04:41:09 UTC** · [6161371407](https://x.com/danfrank/status/6161371407)
+
+*likes 0 · replies 0 · reposts 0*
+
+> you're too good to be.
+
+**2009-11-29 22:20:23 UTC** · [6181815374](https://x.com/danfrank/status/6181815374)
+
+*likes 0 · replies 0 · reposts 0*
+
+> cookies, water, beer, wine, and her.
+
+**2009-11-30 04:30:56 UTC** · [6191996569](https://x.com/danfrank/status/6191996569)
+
+*likes 0 · replies 0 · reposts 0*
+
+> let's go lers!! watching the game with someone special.
+
+**2009-11-30 10:15:44 UTC** · [6197734979](https://x.com/danfrank/status/6197734979)
+
+*likes 0 · replies 0 · reposts 0*
+
+> up getting ready to fly. see you soon orlando
+
+**2009-11-30 12:11:05 UTC** · [6199571908](https://x.com/danfrank/status/6199571908)
+
+*likes 0 · replies 0 · reposts 0*
+
+> in the most insane security line ever. it's like a quarter mile long fuhreal
+
+**2009-11-30 12:33:58 UTC** · [6200002742](https://x.com/danfrank/status/6200002742)
+
+*likes 0 · replies 0 · reposts 0*
+
+> I miss her already.
+
+**2009-11-30 13:04:03 UTC** · [6200605143](https://x.com/danfrank/status/6200605143)
+
+*likes 0 · replies 0 · reposts 0*
+
+> RT @motivation: "Appetite, with an opinion of attaining, is called hope; the same, without such opinion, despair." - Thomas Hobbes
+
+**2009-11-30 16:02:54 UTC** · [6205102034](https://x.com/danfrank/status/6205102034)
+
+*likes 0 · replies 0 · reposts 0*
+
+> can't wait to get home and smoke this kush. charlotte layover~
+
+**2009-11-30 16:28:12 UTC** · [6205790302](https://x.com/danfrank/status/6205790302)
+
+*likes 0 · replies 0 · reposts 0*
+
+> going home...but things are different now http://twitpic.com/rlf69
+
+**2009-11-30 20:21:12 UTC** · [6211910380](https://x.com/danfrank/status/6211910380)
+
+*likes 0 · replies 0 · reposts 0*
+
+> home again home again.
+
+**2009-11-30 21:45:53 UTC** · [6213665453](https://x.com/danfrank/status/6213665453)
+
+*likes 0 · replies 0 · reposts 0*
+
+> pro tools lab. noice
+
+**2009-12-14 03:56:13 UTC** · [6650980915](https://x.com/danfrank/status/6650980915)
+
+*likes 0 · replies 0 · reposts 0*
+
+> yall wish you had dis http://twitpic.com/tg6ew
+
+**2009-12-14 04:33:27 UTC** · [6651933506](https://x.com/danfrank/status/6651933506)
+
+*likes 0 · replies 0 · reposts 0*
+
+> dan in love.
+
+**2009-12-14 07:51:31 UTC** · [6655811282](https://x.com/danfrank/status/6655811282)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @alexisarmel you amaze me. can't believe you're real <3
+
+**2009-12-14 19:35:50 UTC** · [6670948316](https://x.com/danfrank/status/6670948316)
+
+*likes 0 · replies 0 · reposts 0*
+
+> nursing this cute girl back to health.........so we can drink again tonight.
+
+**2009-12-14 20:21:43 UTC** · [6672130227](https://x.com/danfrank/status/6672130227)
+
+*likes 0 · replies 0 · reposts 0*
+
+> owwwee! aced my practical without headphones. this calls for celebration
+
+**2009-12-14 21:39:14 UTC** · [6674191835](https://x.com/danfrank/status/6674191835)
+
+*likes 0 · replies 0 · reposts 0*
+
+> almost done. chipotle with bby, and then shwayze/CRUSH tnight.
+
+**2009-12-14 22:42:01 UTC** · [6675945103](https://x.com/danfrank/status/6675945103)
+
+*likes 0 · replies 0 · reposts 0*
+
+> oh hello, cow dressed as santa, dancing outside of chic-fil a
+
+**2009-12-15 06:54:59 UTC** · [6689085903](https://x.com/danfrank/status/6689085903)
+
+*likes 0 · replies 0 · reposts 0*
+
+> sleepy... gonna watch movies and zzzzz with a <3
+
+**2009-12-15 16:25:52 UTC** · [6700465262](https://x.com/danfrank/status/6700465262)
+
+*likes 0 · replies 0 · reposts 0*
+
+> .........ughhhh
+
+**2009-12-15 16:39:58 UTC** · [6700849623](https://x.com/danfrank/status/6700849623)
+
+*likes 0 · replies 0 · reposts 0*
+
+> in class....
+
+**2009-12-15 19:14:35 UTC** · [6704900617](https://x.com/danfrank/status/6704900617)
+
+*likes 0 · replies 0 · reposts 0*
+
+> we bought some wine and paper cups.
+
+**2009-12-15 21:13:19 UTC** · [6707916094](https://x.com/danfrank/status/6707916094)
+
+*likes 0 · replies 0 · reposts 0*
+
+> stawwwwked for dashboard tonight.
+
+**2009-12-15 22:01:32 UTC** · [6709208802](https://x.com/danfrank/status/6709208802)
+
+*likes 0 · replies 0 · reposts 0*
+
+> need to get out of this funk. gonna mix nonstop for a couple hours and walk it off...
+
+**2009-12-16 00:32:16 UTC** · [6713382034](https://x.com/danfrank/status/6713382034)
+
+*likes 0 · replies 0 · reposts 0*
+
+> bonded/made bfflz with kid cudi's twin.  probably the highlight of my day so far...I know, it's not saying much
+
+**2009-12-16 01:49:18 UTC** · [6715671230](https://x.com/danfrank/status/6715671230)
+
+*likes 0 · replies 0 · reposts 0*
+
+> datenight with @alexisarmel
+
+**2009-12-16 07:48:18 UTC** · [6724077252](https://x.com/danfrank/status/6724077252)
+
+*likes 0 · replies 0 · reposts 0*
+
+> i have the most amaaaazing girlfriend
+
+**2009-12-16 11:00:32 UTC** · [6726998004](https://x.com/danfrank/status/6726998004)
+
+*likes 0 · replies 0 · reposts 0*
+
+> woke up, made weird sketchy vanilla coffee, back to bed.
+
+**2009-12-16 20:53:35 UTC** · [6741714162](https://x.com/danfrank/status/6741714162)
+
+*likes 0 · replies 0 · reposts 0*
+
+> crispers!
+
+**2009-12-16 21:00:06 UTC** · [6741887734](https://x.com/danfrank/status/6741887734)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @ericjester pick a pair omnomnom!
+
+**2009-12-17 06:51:13 UTC** · [6757155881](https://x.com/danfrank/status/6757155881)
+
+*likes 0 · replies 0 · reposts 0*
+
+> time2sleep. long day of class tomorrow....can't wait to feel like this all day.
+
+**2009-12-17 14:07:24 UTC** · [6764460970](https://x.com/danfrank/status/6764460970)
+
+*likes 0 · replies 0 · reposts 0*
+
+> okay I feel like hell. but at least t-pain kid is cheering me up by getting lost in google maps in the pacific ocean. call an SOS plz
+
+**2009-12-17 16:12:29 UTC** · [6767351335](https://x.com/danfrank/status/6767351335)
+
+*likes 0 · replies 0 · reposts 0*
+
+> i had chris henry on my fantasy team, is there some sort of fantasy life insurance points that i'll be receiving?
+
+**2009-12-17 23:02:38 UTC** · [6777426930](https://x.com/danfrank/status/6777426930)
+
+*likes 0 · replies 0 · reposts 0*
+
+> is it rly Christmas? I haven't bought aaaanything
+
+**2009-12-17 23:08:50 UTC** · [6777590568](https://x.com/danfrank/status/6777590568)
+
+*likes 0 · replies 0 · reposts 0*
+
+> check my pressure, patch me right up. you're too good to be.
+
+**2009-12-17 23:43:16 UTC** · [6778516035](https://x.com/danfrank/status/6778516035)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @Ericjester SOOOOOOOO whats up with one of those p-funx big guy
+
+**2009-12-18 01:29:59 UTC** · [6781542265](https://x.com/danfrank/status/6781542265)
+
+*likes 0 · replies 0 · reposts 0*
+
+> cheesecake factory with a. I'm finna get drunk...I'm not funny.
+
+**2009-12-18 16:47:13 UTC** · [6801377039](https://x.com/danfrank/status/6801377039)
+
+*likes 0 · replies 0 · reposts 0*
+
+> up up and awake
+
+**2009-12-18 18:31:04 UTC** · [6804278022](https://x.com/danfrank/status/6804278022)
+
+*likes 0 · replies 0 · reposts 0*
+
+> I can't wait for a new season of true blood.
+
+**2009-12-18 21:50:18 UTC** · [6809514870](https://x.com/danfrank/status/6809514870)
+
+*likes 0 · replies 0 · reposts 0*
+
+> its ugggg outside.
+
+**2009-12-19 05:55:08 UTC** · [6821758480](https://x.com/danfrank/status/6821758480)
+
+*likes 0 · replies 0 · reposts 0*
+
+> gnight.  BIG day tomorrow. +++++++vibes to me plz
+
+**2009-12-19 12:15:57 UTC** · [6827531190](https://x.com/danfrank/status/6827531190)
+
+*likes 0 · replies 0 · reposts 0*
+
+> let's try this Dorthy style and see if it works: i don't wish I could go home, I don't wish I could go home, I don't wish I could go home
+
+**2009-12-19 12:16:24 UTC** · [6827538054](https://x.com/danfrank/status/6827538054)
+
+*likes 0 · replies 0 · reposts 0*
+
+> oh and...*click click click*
+
+**2009-12-19 13:54:47 UTC** · [6829227563](https://x.com/danfrank/status/6829227563)
+
+*likes 0 · replies 0 · reposts 0*
+
+> the hayyyle is this weather? 45...really?
+
+**2009-12-19 14:01:07 UTC** · [6829353718](https://x.com/danfrank/status/6829353718)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @iamcoreybrown I found our a-tron pencils WITH fun eraser. taking aws final with it. give me power, lord nostalgia!!!
+
+**2009-12-19 18:47:03 UTC** · [6836275915](https://x.com/danfrank/status/6836275915)
+
+*likes 0 · replies 0 · reposts 0*
+
+> can't believe I'm about to drive to PA....let alone in the most hyped storm evar.
+
+**2009-12-19 19:23:57 UTC** · [6837192676](https://x.com/danfrank/status/6837192676)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @danpolyak I'm on the train, b thur in 15
+
+**2009-12-19 20:19:44 UTC** · [6838516399](https://x.com/danfrank/status/6838516399)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @kellymulroy how much snow did you guys get??
+
+**2009-12-19 20:22:32 UTC** · [6838582455](https://x.com/danfrank/status/6838582455)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @DanPolyak sorry I was hanging with @sn00ki and lost track of time. betheresoon
+
+**2009-12-19 20:38:23 UTC** · [6838951844](https://x.com/danfrank/status/6838951844)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @EricJester why are you having the weirdest day ever???
+
+**2009-12-20 07:58:02 UTC** · [6855157484](https://x.com/danfrank/status/6855157484)
+
+*likes 0 · replies 0 · reposts 0*
+
+> in GA listening to jeezy...ooooo ya
+
+**2009-12-20 23:31:05 UTC** · [6874764446](https://x.com/danfrank/status/6874764446)
+
+*likes 0 · replies 0 · reposts 0*
+
+> home again with much help from my amazing girlfriend. soooooo happy =]
+
+**2009-12-21 19:49:30 UTC** · [6903371681](https://x.com/danfrank/status/6903371681)
+
+*likes 0 · replies 0 · reposts 0*
+
+> oh shit! did you see the way she got her toes did?!
+
+**2009-12-21 23:48:05 UTC** · [6909742382](https://x.com/danfrank/status/6909742382)
+
+*likes 0 · replies 0 · reposts 0*
+
+> seeing my boyzzzz @jfriedline @joshbrannan tonight.
+
+**2009-12-21 23:50:30 UTC** · [6909814590](https://x.com/danfrank/status/6909814590)
+
+*likes 0 · replies 0 · reposts 0*
+
+> call me neurotic but, putting lights on a tree seems sketchy. #firehazard
+
+**2009-12-22 01:52:39 UTC** · [6913463803](https://x.com/danfrank/status/6913463803)
+
+*likes 0 · replies 0 · reposts 0*
+
+> at 7springs with the most amazing girl <3
+
+**2009-12-22 04:01:43 UTC** · [6917433005](https://x.com/danfrank/status/6917433005)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @alexisarmel has stolen Dan for the entireeee night. he's mine, sorry.
+
+**2009-12-22 23:17:19 UTC** · [6945243647](https://x.com/danfrank/status/6945243647)
+
+*likes 0 · replies 0 · reposts 0*
+
+> got to see jerbear and joshypoo. life=complete.
+
+**2009-12-23 04:20:28 UTC** · [6953580911](https://x.com/danfrank/status/6953580911)
+
+*likes 0 · replies 0 · reposts 0*
+
+> you've got my head spinning; heart beating out of my chest
+
+**2009-12-23 21:40:25 UTC** · [6977483531](https://x.com/danfrank/status/6977483531)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @woodguts I just went to see you at hawt tawpix but you weren't there =[
+
+**2009-12-24 00:06:52 UTC** · [6981369465](https://x.com/danfrank/status/6981369465)
+
+*likes 0 · replies 0 · reposts 0*
+
+> out with bby
+
+> http://bit.ly/7Cjsjf
+
+**2009-12-24 02:16:21 UTC** · [6984761734](https://x.com/danfrank/status/6984761734)
+
+*likes 0 · replies 0 · reposts 0*
+
+> yeaaaaah malkin.
+
+**2009-12-24 02:53:10 UTC** · [6985797839](https://x.com/danfrank/status/6985797839)
+
+*likes 0 · replies 0 · reposts 0*
+
+> out with the most uhmaaaazin girl
+
+**2009-12-24 07:45:36 UTC** · [6993346201](https://x.com/danfrank/status/6993346201)
+
+*likes 0 · replies 0 · reposts 0*
+
+> she'll never know what she means to me..
+
+**2009-12-24 22:05:23 UTC** · [7013024158](https://x.com/danfrank/status/7013024158)
+
+*likes 0 · replies 0 · reposts 0*
+
+> omg so hungry. out for dinner~
+
+**2009-12-24 22:30:35 UTC** · [7013641846](https://x.com/danfrank/status/7013641846)
+
+*likes 0 · replies 0 · reposts 0*
+
+> bah!  http://twitpic.com/v0ycm
+
+**2009-12-24 23:03:05 UTC** · [7014433618](https://x.com/danfrank/status/7014433618)
+
+*likes 0 · replies 0 · reposts 0*
+
+> dinner @ caileigh's. I miss muh girlfriend.
+
+**2009-12-25 18:42:22 UTC** · [7039004559](https://x.com/danfrank/status/7039004559)
+
+*likes 0 · replies 0 · reposts 0*
+
+> d&a's first christmas. could not be in a better mood. I'm so blessed.
+
+**2009-12-26 23:30:18 UTC** · [7073366798](https://x.com/danfrank/status/7073366798)
+
+*likes 0 · replies 0 · reposts 0*
+
+> you can't be broke and happy, so me I'm mad rich
+
+**2009-12-27 23:29:58 UTC** · [7103822435](https://x.com/danfrank/status/7103822435)
+
+*likes 0 · replies 0 · reposts 0*
+
+> springs w @alexisarmel and @alexarandolph
+
+**2009-12-28 01:57:27 UTC** · [7107779912](https://x.com/danfrank/status/7107779912)
+
+*likes ? · replies ? · reposts ?*
+
+> @AlexaRandolph ah! mb I can meet you guys at the goggle? let me know
+
+**2009-12-28 01:59:46 UTC** · [7107843734](https://x.com/danfrank/status/7107843734)
+
+*likes ? · replies ? · reposts ?*
+
+> bawwww. so bored with my fam
+
+**2009-12-28 04:14:23 UTC** · [7111675991](https://x.com/danfrank/status/7111675991)
+
+*likes ? · replies ? · reposts ?*
+
+> they say your attitude determines your latitude; i'm high as a motherfucker, flyyy as a motherfucker
+
+**2009-12-28 15:54:16 UTC** · [7126068473](https://x.com/danfrank/status/7126068473)
+
+*likes ? · replies ? · reposts ?*
+
+> 2.0
+
+**2009-12-28 21:56:59 UTC** · [7136218980](https://x.com/danfrank/status/7136218980)
+
+*likes ? · replies ? · reposts ?*
+
+> the amount of gossip girl that i watch is a little alarming.
+
+**2009-12-28 22:51:07 UTC** · [7137767379](https://x.com/danfrank/status/7137767379)
+
+*likes ? · replies ? · reposts ?*
+
+> dinner w the girlfriend. :)
+
+**2009-12-29 17:09:43 UTC** · [7164867873](https://x.com/danfrank/status/7164867873)
+
+*likes ? · replies ? · reposts ?*
+
+> so comfy. laying in bed watching the snow~
+
+**2009-12-29 19:18:32 UTC** · [7168690283](https://x.com/danfrank/status/7168690283)
+
+*likes ? · replies ? · reposts ?*
+
+> eets so cold. can't wait to be back in sunny FLA
+
+**2009-12-30 00:16:15 UTC** · [7177141983](https://x.com/danfrank/status/7177141983)
+
+*likes ? · replies ? · reposts ?*
+
+> going home!
+
+**2009-12-30 02:00:22 UTC** · [7180178539](https://x.com/danfrank/status/7180178539)
+
+*likes ? · replies ? · reposts ?*
+
+> only 12 more hours on the road.  womp wampppp
+
+**2009-12-30 04:48:44 UTC** · [7185143511](https://x.com/danfrank/status/7185143511)
+
+*likes ? · replies ? · reposts ?*
+
+> road update #1: I-95 is boring...unless you're in our car.
+
+**2009-12-30 05:32:52 UTC** · [7186371582](https://x.com/danfrank/status/7186371582)
+
+*likes ? · replies ? · reposts ?*
+
+> road update #2: listening to the @skeetonmytwits mix of this ke$ha jam  is crucial
+
+**2009-12-30 08:40:16 UTC** · [7190657325](https://x.com/danfrank/status/7190657325)
+
+*likes ? · replies ? · reposts ?*
+
+> road update #3 (south Carolina rest stop x dj Steve aoki remix): I don't even know what I'm talking about. have a headcold ugh
+
+**2009-12-30 08:52:09 UTC** · [7190869588](https://x.com/danfrank/status/7190869588)
+
+*likes ? · replies ? · reposts ?*
+
+> I'm so in love <3
+
+**2009-12-30 10:01:07 UTC** · [7192008992](https://x.com/danfrank/status/7192008992)
+
+*likes ? · replies ? · reposts ?*
+
+> almost to jax: the city of...not much
+
+**2009-12-30 15:48:06 UTC** · [7199251468](https://x.com/danfrank/status/7199251468)
+
+*likes ? · replies ? · reposts ?*
+
+> our trip was saved entirely by @alexisarmel . she's more rad than you.
+
+**2009-12-31 03:52:18 UTC** · [7220677325](https://x.com/danfrank/status/7220677325)
+
+*likes ? · replies ? · reposts ?*
+
+> girlfriend is nursing me back to health. MUST get better for nye
+
+**2009-12-31 05:13:55 UTC** · [7223155843](https://x.com/danfrank/status/7223155843)
+
+*likes ? · replies ? · reposts ?*
+
+> rewatching east bound & down. sooo good.
+
+**2009-12-31 15:30:56 UTC** · [7237122323](https://x.com/danfrank/status/7237122323)
+
+*likes ? · replies ? · reposts ?*
+
+> blah still sick.
+
+**2009-12-31 22:52:03 UTC** · [7250405864](https://x.com/danfrank/status/7250405864)
+
+*likes ? · replies ? · reposts ?*
+
+> cheesecake factory & avatar with a.
+
+---
+
+**Up:** [[wiki/self/index|Self]] › [[wiki/self/twitter|Twitter]] · **Previous:** [[wiki/self/twitter/2008|2008]] · **Next:** [[wiki/self/twitter/2010|2010]]

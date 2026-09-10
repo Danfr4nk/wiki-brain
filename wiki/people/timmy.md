@@ -1,0 +1,88 @@
+
+---
+domain: people
+page_type: entity
+title: "Timmy"
+status: closed
+knowledge: mixed
+date_created: 2026-06-22
+date_modified: 2026-07-18
+sources:
+  - raw/legal/bfs-dispute/BFS_BOOTLOADER_v2.md
+  - "raw/self/dox-md/Drawer shortage dispute with assistant manager.md"
+  - "raw/self/dox-md/Cash register shortage explanation.md"
+  - raw/self/context-core/CONTEXT_CORE_EXPANDED.md
+tags: [career, uniontown-era]
+infobox:
+  name: "Timmy"
+  relationship_to_dan: former coworker-adjacent (BFS/Little Caesars)
+  sex: male
+  location: uniontown
+  known_for: "Underage Little Caesars employee whose vape/gambling episode is the template for Anita's blame-pivot pattern"
+connections:
+  - page: wiki/people/anita
+    type: co-occurs
+    claim: "Timmy is the subject of the episode that establishes Anita's backward-narrative pattern: she sold him a vape underage, then pivoted the blame for his ban through Kim to 'Daniel'."
+  - page: wiki/work/bfs-foods
+    type: component-of
+    claim: "The Timmy vape/gambling saga is the two-weeks-prior precedent that makes the drawer dispute legible as a repeat of an established pattern rather than a one-off."
+  - page: wiki/people/kim
+    type: co-occurs
+    claim: "Kim pulled the camera footage on Timmy's gambling that incidentally exposed Anita's vape sale, then was falsely named by Anita as the one who reported him."
+---
+
+# Timmy
+
+Timmy was an 18–19-year-old employee of the company-owned Little Caesars
+attached to the BFS gas station in Uniontown, and the subject of the
+episode that — two weeks before Dan's own [[wiki/work/bfs-foods|drawer
+dispute]] — established general manager [[wiki/people/anita|Anita]]'s
+operating pattern of backward-built narratives and blame-pivots. He never
+worked with Dan directly (the two storefronts share a building and an
+owner but not staff), but he is a load-bearing node: his story is the
+template the drawer dispute then instantiates.
+
+## The sequence
+
+Timmy had been slipping over to the gas-station side to play its three
+slot machines *while still on the clock* at Little Caesars, sitting on
+them for ten minutes at a time and blocking the store's regular gamblers
+(roughly ten people who feed the machines daily). The regulars
+complained; Anita took it to the Little Caesars manager
+[[wiki/people/kim|Kim]]; Kim requested the corporate camera replay to
+document the on-clock gambling. Somewhere in accessing that footage, it
+came out that **Anita had sold Timmy a vape while he was underage** — a
+licensing liability that nearly got her fired. She kept her job. Timmy was
+banned, and Anita announced the store would now card everyone "with no
+exceptions." Dan privately clocked, but never verbalized, that gambling
+on the clock "seems like something most anywhere would fire you for."
+
+Two things then complicate the clean story. First, the ban was
+short-lived and contradictory in the group text (a May 12 "if he's in
+here call the cops" reversed by a May 14 "not banned as of yet"), and per
+Timmy, Anita kept selling him vapes afterward. When Timmy later tried to
+buy nicotine from Dan, Dan declined — citing the one explicit instruction
+he'd been given — while openly flagging the contradiction that Timmy's ID
+scanned as *valid*, so he wasn't sure what the real conflict was. Timmy
+returned with his mother, who questioned Dan briefly and then warmed to
+him on realizing he wasn't messing with her son.
+
+## The blame-pivot — the actual template
+
+The payload came from a Little Caesars employee (one of Timmy's friends)
+who pulled Dan aside "to talk on the low": Anita had told Timmy that
+**Kim** was the one who reported him. When Timmy confronted Kim, she
+denied it — so Anita switched the story to say **"Daniel"** had reported
+him. Dan had zero involvement in any of it. Maddox and Dakota independently
+corroborated the pivot. This is the exact shape that recurs in the drawer
+dispute: a manager who, faced with a problem she partly caused, constructs
+a causal narrative aimed at whoever is the path of least resistance, runs
+it past the target, and adjusts it when it fails to stick. Timmy is why
+the $50 claim reads as pattern rather than accident.
+
+**Gaps:** Timmy's surname; his exact age and the nature of the ID/age
+discrepancy (valid-scanning ID vs. Anita's "not old enough" framing); his
+status after the ban reversal; whether the vape sales to him continued or
+drew any consequence.
+
+

@@ -1,0 +1,108 @@
+
+---
+domain: people
+page_type: entity
+status: active
+knowledge: mixed
+date_created: 2026-07-19
+date_modified: 2026-07-19
+date_range_start: 2013-07-05
+date_range_end: 2022-01-10
+sources:
+  - "raw/self/facebook/facebook-ihatedanfrank/messages/inbox/bobbycole_-p2picui8w/message_1.html"
+tags: [uniontown-era, nyc-era, digital-footprint, personality-profile]
+infobox:
+  name: "Bobby Cole"
+  sex: male
+  relationship_to_dan: friend
+  known_for: "Nine-year Opie & Anthony / Ron & Fez fandom friendship; recipient of Dan's most detailed account of his own 2019 open-mic stand-up attempt and a SiriusXM job application"
+connections:
+  - page: wiki/interests/opie-and-anthony
+    type: evidences
+    claim: "Bobby is the corpus's clearest real-world case of the radio-archive obsession sustaining an actual, nine-year, name-checking-comedians-daily friendship rather than just solitary listening."
+  - page: wiki/interests/stand-up-comedy
+    type: evidences
+    claim: "The Oct 2, 2019 exchange is the corpus's only direct evidence of a completed open-mic performance (a specific bit, and the audience's negative reaction) — filling a gap the page had flagged as undocumented — and separately identifies the previously-unnamed Dec 2018 Philadelphia taping as a Chip Chipperson show."
+  - page: wiki/mind/synthesis/2020-left-turn
+    type: evidences
+    claim: "An April 24, 2021 message — 'i'm fully aware that i've made a big time lefty heel turn recently' — is a self-aware check-in on the conversion eight months after its Aug 2020 origin, confirming the shift had settled rather than reverted."
+---
+
+# Bobby Cole
+
+Bobby Cole is a nine-year Facebook Messenger friendship (July 2013 –
+January 2022, ~940 messages) built almost entirely on a single shared
+obsession: the [[wiki/interests/opie-and-anthony|Opie & Anthony / Ron &
+Fez]] radio-archive universe. Where that page documents the listening as
+a solitary YouTube-archive binge, this thread is the corpus's clearest
+proof it also anchored a real, sustained friendship — nine years of
+trading clips, relitigating old bits, and tracking the health and
+whereabouts of has-been shock-jocks and their orbit of comics.
+
+## The open-mic bit and the SiriusXM application
+
+The thread's single most valuable exchange, October 2, 2019, is the
+corpus's only direct evidence that Dan actually **performed** stand-up,
+not merely aspired to it — a gap
+[[wiki/interests/stand-up-comedy|the stand-up comedy page]] had flagged
+as undocumented. Dan describes bombing a specific bit: "i have a bit
+about a hooker using my credit card to cut a line of coke and not
+realizing she was going to remember the digits on the card to buy
+herself stuff online... and i barely finished the word 'escort' before i
+heard groans." He is unsparing about why he kept going: "the only thing
+that has kept me going to open mics is one thought: 'rich vos AND vic
+henley can do this,'" and blunt about his material's real subject: "all
+of my material is just me saying a bunch of ways 'i am a drug addict and
+a failure in most endeavors' — which, i guess, is not funny in and of
+itself." In the same conversation he reveals he'd physically walked into
+"the fishbowl" — the SiriusXM studio — to apply for a job, hoping (with
+evident irony) to be placed on **OutQ** rather than the "Jim and Sam"
+show he found unbearable; no outcome for the application is recorded.
+
+## The Chip Chipperson taping, identified
+
+Bobby also resolves a small, previously open gap: the
+"Philadelphia 2018 taping" that
+[[wiki/interests/stand-up-comedy|stand-up-comedy.md]] names but doesn't
+identify. Bobby invites Dan on December 1, 2018 ("Nana cumia will be
+there... You wanna go?"), and Dan reports back on December 8 that he
+went to Philadelphia — a 9+ hour round trip for a 65-minute set — for a
+**Chip Chipperson** taping, and privately found it "pretty bad": "I
+didn't laugh once. I did crack a smile a few times... it was fucking
+cool to watch them do 'radio' after 10 years of listening to them all
+day everyday" — an honest, private divergence between the show's actual
+quality and what ten years of fandom meant to him emotionally.
+
+## Politics and personal life, in passing
+
+An April 24, 2021 aside is a useful late check-in on
+[[wiki/mind/synthesis/2020-left-turn|the 2020 left turn]]: "i'm fully
+aware that i've made a big time lefty heel turn recently but i still
+think it's pretty dishonest not to" [call out performative centrism] —
+eight months after the documented August 2020 conversion, confirming it
+had settled rather than reverted, framed against 2021 conservatism
+meaning "basically...trump, cancel culture, and pro police." On August
+14, 2021, the two share real grief over an unnamed public figure's death
+that Dan calls "literally the first celebrity death I've ever actually
+cared about" — notable as a superlative regardless of who prompted it,
+since no other death in the corpus draws that specific claim from Dan.
+
+Bobby's own life surfaces only incidentally: a daughter he co-parents
+(an August 2020 aside references "the first weekend in October" as his
+custody weekend), a second child born around April 26, 2021 ("I'm legit
+in the hospital room holding my newborn"), and a girlfriend who by 2021
+had grown genuinely interested in the O&A world alongside him.
+
+## Corpus record
+
+| Metric | Value |
+|---|---|
+| Messages | ~940 (Facebook Messenger, both directions) |
+| Date range | 2013-07-05 – 2022-01-10 |
+| Content | Almost entirely Opie & Anthony / Ron & Fez fandom; two substantive personal exchanges (Oct 2019 stand-up/SiriusXM; Apr 2021 politics) |
+
+**Gaps:** a five-year silence between the July 2013 and October 2018
+messages; the outcome of the SiriusXM application; the identity of the
+August 2021 death; Bobby's current circumstances.
+
+

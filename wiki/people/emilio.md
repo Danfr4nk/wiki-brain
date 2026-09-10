@@ -1,0 +1,108 @@
+
+---
+domain: people
+page_type: entity
+status: stub
+knowledge: mixed
+date_created: 2026-08-17
+date_modified: 2026-08-17
+date_range_start: 2015-11-29
+date_range_end: 2015-12-29
+sources:
+  - exports/annie-corpus.csv (built by bin/annie-corpus)
+tags: [relationships, uniontown-era]
+connections:
+  - page: wiki/people/annie-ulmer
+    type: precedes
+    claim: "Emilio held the partner slot Dan took: Annie was still with him on the night of the golf-course meeting and ended it within days, which is what makes the November 2015 switch mutual rather than one-sided."
+  - page: wiki/mind/synthesis/bond-switch-2015
+    type: evidences
+    claim: "He is the missing half of the switch — the partner displaced on Annie's side — and his retaliation through her family on December 2 is the fallout that nearly ended the relationship in its first week."
+  - page: wiki/people/claire-ulmer
+    type: co-occurs
+    claim: "Claire is his channel into the family: 'because fucking Emilio texted her about me' is Annie's own account, in the moment, of why her sister turned on her during the December 2 confrontation."
+  - page: wiki/timeline/annie-record
+    type: evidenced-by
+    claim: "Everything known about him is relayed through Annie in the hand-read corpus — he has no channel of his own in any export, and the corpus never names him in the November window where he matters most."
+infobox:
+  name: "Emilio"
+  sex: male
+  location: uniontown
+  relationship_to_dan: "romantic rival — Annie's partner at the moment of the 2015 switch"
+  first_contact: 2015-11-29
+  known_for: "The partner Annie left for Dan in November 2015, and the person whose message to her sister triggered the December 2 family confrontation"
+---
+
+# Emilio
+
+Emilio was [[wiki/people/annie-ulmer|Annie]]'s partner at the moment
+[[wiki/mind/synthesis/bond-switch-2015|the 2015 switch]] happened — the half of
+it that every account of the switch, for a decade, did not know existed. He is
+a stub because he has **no channel of his own** in any export: everything below
+is relayed through Annie's messages to Dan.
+
+> **PROVENANCE:** The corpus never names him in the November 2015 window. He is
+> called *"dude"* and *"turd boy"* there, and the identification of that man as
+> Emilio is an **operator answer of 2026-08-17**, treated per `CLAUDE.md`'s CLOSE
+> protocol as T0 testimony rather than proof. The December 2 and December 13
+> Emilio references *are* in the record by name; the November one is not, and
+> the join between them is the operator's.
+
+## The three appearances
+
+**2015-11-29 — he is with Annie and her family on the night she meets Dan.**
+*"my fam and dude are here and are going to force me to leave with them"*
+(01:35). Dan calls him *"turd boy"* (02:49). Annie: *"I don't like him. At
+all."* → **"I am going to get rid of him just like you just did"**
+(02:50–02:52). She ends it within days.
+
+**2015-12-02 — he retaliates through her family, and nearly ends the
+relationship.** Three days after being displaced, he does not contact Annie. He
+contacts her sister. Annie, inside the confrontation, in the moment: *"because
+fucking Emilio texted her about me"* (18:45). [[wiki/people/claire-ulmer|Claire]]
+turns on her; [[wiki/people/ellen-ulmer|Ellen]] is *"almost crying"*; the
+objection that then carries the evening is Dan's reputation, not Emilio's
+grievance. This is the day Annie says *"I'd rather lose all of them then to not
+be with you"* and Dan drafts a letter to her parents.
+
+**2015-12-13 — he is still going.** Annie: *"FUCKINGG Emilio just texted me / In
+gonna go off on him about throwing shit at me the other night"* (21:07–21:08).
+He had thrown gum wrappers at her. His own message that night: *"Honestly I just
+miss having fun with you!"* (22:23). Dan: *"This kid is so stupid that he hardly
+seems alive"* (22:20). Annie tells him she has a boyfriend now (22:40) — the
+first time she claims the title to a third party.
+
+A "Becca" appears on 2015-12-29 described as the ex's new girlfriend, which
+would make the fortnight of contact overlap a new relationship of his own. The
+attribution of Becca to Emilio specifically is not firm in the record.
+
+## Why he matters more than a stub suggests
+
+The switch has always been documented as a cost paid on Dan's side — the Alexis
+eviction, the [[wiki/people/zachariah-harshman|Harshman]] rupture on December
+23. Emilio is the same cost on Annie's side, and it lands *first*. Both
+partners were displaced inside the same seventy-two hours, and both
+displacements detonated something in the following month: his through her
+family on December 2, Harshman's through Dan's friendship on December 23. The
+singular-slot mechanism has a symmetric bill.
+
+He is also the reason the December 2 crisis has an agent at all. Before this
+identification the confrontation read as exposure by bad luck — someone saw a
+car. It was partly that, and partly a displaced partner making a phone call.
+
+## Gaps
+
+- **Surname.** Unknown. He is "Emilio" in every reference.
+- **His own channel.** Nothing of his traffic is in any export. Every line here
+  is Annie quoting or describing him.
+- **Whether he told Ellen about the car.** He is **not** currently that person —
+  the informant on *"someone told me your car was at Dan Frank's this morning"*
+  is never named, and both Dan and Annie blame
+  [[wiki/people/casey-bondarenka|Casey]]. His documented vector is Claire.
+  Do not collapse the two.
+- **When and how it actually ended between him and Annie**, and whether the
+  December 13 contact was the last.
+- **Becca** (2015-12-29) — described as the ex's new girlfriend; not firmly
+  attached to Emilio.
+
+

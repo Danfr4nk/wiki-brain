@@ -1,0 +1,123 @@
+#!/usr/bin/env python3
+"""wiki-freshness — is the generated corpus in sync with wiki/?
+
+Generated artifacts (llm/, DIGEST.md, RECENT.md, OPEN.md) are committed, so they
+drift the moment a content pass forgets to re-run the generators. The 2026-08-20
+mechanical audit found llm/manifest.json eleven pages behind wiki/.
+
+Method — deliberately the boring one:
+
+  * The manifest already records the exact page list it was built from, so the
+    check is an exact SET DIFFERENCE against `wiki/**/*.md` (same selection rule
+    as bin/llm-publish, including its SKIP_DIRS). Set difference, not a count:
+    an added page and a deleted page cancel out in a count and do not here.
+  * The published page bodies are compared by BYTE LENGTH against the manifest's
+    own `bytes` field, which catches an edited page whose name did not change.
+  * Nothing is regenerated and nothing in the working tree is written. Run the
+    generators yourself to fix — the failure message says which.
+
+Exit 0 = in sync, 1 = drift, 2 = cannot run (missing artifact / bad JSON).
+
+    bin/wiki-freshness            # human output
+    bin/wiki-freshness --quiet    # exit code only, for hooks
+"""
+import argparse
+import json
+import os
+import sys
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+WIKI = os.path.join(ROOT, "wiki")
+MANIFEST = os.path.join(ROOT, "llm", "manifest.json")
+
+# Must mirror bin/llm-publish SKIP_DIRS. Kept as a literal rather than imported
+# because llm-publish has no .py extension; the test suite asserts they agree.
+SKIP_DIRS = {".obsidian"}
+
+FIX = "  fix:  bin/wiki-digest && bin/llm-publish   (then commit the result)"
+
+
+def wiki_page_set(root=ROOT):
+    """Repo-relative paths of every page llm-publish would include."""
+    wiki = os.path.join(root, "wiki")
+    out = set()
+    for dirpath, _dirs, files in os.walk(wiki):
+        parts = set(os.path.relpath(dirpath, root).split(os.sep))
+        if parts & SKIP_DIRS:
+            continue
+        for f in files:
+            if f.endswith(".md"):
+                out.add(os.path.relpath(os.path.join(dirpath, f), root))
+    return out
+
+
+def manifest_pages(path=MANIFEST):
+    """(page -> bytes) as recorded by the last llm-publish run."""
+    with open(path, encoding="utf-8") as fh:
+        data = json.load(fh)
+    return {e["page"]: e.get("bytes") for e in data.get("pages", [])}
+
+
+def compare(root=ROOT, manifest_path=MANIFEST):
+    """Return (missing, stale_removed, changed) — all sorted lists."""
+    actual = wiki_page_set(root)
+    recorded = manifest_pages(manifest_path)
+    missing = sorted(actual - set(recorded))          # in wiki, not published
+    removed = sorted(set(recorded) - actual)          # published, no longer in wiki
+    changed = []
+    for page in sorted(actual & set(recorded)):
+        want = recorded[page]
+        if want is None:
+            continue
+        try:
+            size = os.path.getsize(os.path.join(root, page))
+        except OSError:
+            continue
+        if size != want:
+            changed.append((page, want, size))
+    return missing, removed, changed
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    ap.add_argument("--quiet", action="store_true", help="exit code only")
+    args = ap.parse_args()
+
+    if not os.path.exists(MANIFEST):
+        print(f"wiki-freshness: llm/manifest.json not found\n{FIX}", file=sys.stderr)
+        return 2
+    try:
+        missing, removed, changed = compare()
+    except (json.JSONDecodeError, KeyError, TypeError) as e:
+        print(f"wiki-freshness: cannot read llm/manifest.json ({e})\n{FIX}", file=sys.stderr)
+        return 2
+
+    drift = len(missing) + len(removed) + len(changed)
+    if args.quiet:
+        return 1 if drift else 0
+
+    total = len(wiki_page_set())
+    if not drift:
+        print(f"wiki-freshness: {total} pages, generated corpus in sync")
+        return 0
+
+    print(f"wiki-freshness: {total} pages, {drift} drifted — generated corpus is STALE\n")
+    for page in missing:
+        print(f"  NOT PUBLISHED   {page}   (new since last llm-publish)")
+    for page in removed:
+        print(f"  ORPHANED        {page}   (published but no longer in wiki/)")
+    for page, want, size in changed:
+        print(f"  CHANGED         {page}   (published {want}B, now {size}B)")
+    print(f"\n{FIX}")
+    return 1
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except BrokenPipeError:
+        # piping into `head` is ordinary usage; die quietly rather than tracebacking
+        try:
+            sys.stdout.close()
+        finally:
+            os._exit(1)

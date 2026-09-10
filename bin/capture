@@ -1,0 +1,125 @@
+#!/usr/bin/env python3
+"""capture — drop a fact, story, or file into the wiki inbox.
+
+Usage:
+  capture                    interactive: type or paste, Ctrl-D (or a line with
+                             only ".") to finish; prompts for title and tags
+  capture "some quick fact"  one-shot note, no prompts
+  capture -f FILE [FILE...]  copy files into the inbox (any format)
+  capture status             show what's waiting in the inbox
+
+Everything lands in inbox/ as plain text with a small metadata header.
+Nothing is deleted or modified — ingestion into the wiki happens later,
+one source at a time.
+"""
+import datetime
+import re
+import shutil
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+INBOX = ROOT / "inbox"
+
+
+def slugify(text, maxlen=40):
+    slug = re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+    return slug[:maxlen].rstrip("-") or "note"
+
+
+def stamp():
+    return datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S")
+
+
+def save_note(body, title=None, tags=None):
+    INBOX.mkdir(exist_ok=True)
+    title = title or body.strip().splitlines()[0][:60]
+    path = INBOX / f"{stamp()}_{slugify(title)}.md"
+    words = len(body.split())
+    kind = "story" if words > 150 else "fact"
+    front = [
+        "---",
+        f"captured: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}",
+        f"title: {title}",
+        f"type: {kind}",
+        f"tags: [{', '.join(tags or [])}]",
+        "source: capture-tool",
+        "---",
+        "",
+    ]
+    path.write_text("\n".join(front) + body.strip() + "\n", encoding="utf-8")
+    print(f"saved: {path.relative_to(ROOT)}  ({words} words, {kind})")
+
+
+def interactive():
+    print("Type or paste your fact/story. Finish with Ctrl-D or a line containing only '.'")
+    print("-" * 60)
+    lines = []
+    try:
+        for line in sys.stdin:
+            if line.strip() == ".":
+                break
+            lines.append(line)
+    except KeyboardInterrupt:
+        print("\ncancelled, nothing saved")
+        return
+    body = "".join(lines)
+    if not body.strip():
+        print("empty, nothing saved")
+        return
+    # prompts must read from the tty since stdin may be exhausted
+    try:
+        tty = open("/dev/tty")
+        print("Title (Enter to auto-generate): ", end="", flush=True)
+        title = tty.readline().strip() or None
+        print("Tags, comma-separated (Enter for none): ", end="", flush=True)
+        tags = [t.strip() for t in tty.readline().split(",") if t.strip()]
+    except OSError:
+        title, tags = None, []
+    save_note(body, title, tags)
+
+
+def add_files(paths):
+    INBOX.mkdir(exist_ok=True)
+    for p in paths:
+        src = Path(p).expanduser()
+        if not src.exists():
+            print(f"skip (not found): {p}")
+            continue
+        dest = INBOX / f"{stamp()}_{src.name}"
+        if src.is_dir():
+            shutil.copytree(src, dest)
+        else:
+            shutil.copy2(src, dest)
+        print(f"copied to inbox: {dest.name}")
+
+
+def status():
+    items = sorted(p for p in INBOX.glob("*") if not p.name.startswith("."))
+    if not items:
+        print("inbox is empty — nothing waiting for ingestion")
+        return
+    print(f"{len(items)} item(s) waiting for ingestion:\n")
+    for p in items:
+        size = sum(f.stat().st_size for f in p.rglob("*") if f.is_file()) if p.is_dir() else p.stat().st_size
+        print(f"  {p.name}  ({size:,} bytes)")
+
+
+def main(argv):
+    if not argv:
+        interactive()
+    elif argv[0] in ("-h", "--help"):
+        print(__doc__)
+    elif argv[0] == "status":
+        status()
+    elif argv[0] in ("-f", "file", "--file"):
+        if len(argv) < 2:
+            print("usage: capture -f FILE [FILE...]")
+        else:
+            add_files(argv[1:])
+    else:
+        save_note(" ".join(argv))
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

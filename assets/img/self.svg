@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Identity diagram">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#eaf2ff"/><stop offset="1" stop-color="#cdd9f2"/></linearGradient></defs>
+  <rect width="200" height="200" fill="url(#g)"/>
+  <circle cx="100" cy="78" r="34" fill="none" stroke="#3366cc" stroke-width="3"/>
+  <path d="M48 168 C48 122 152 122 152 168" fill="none" stroke="#3366cc" stroke-width="3"/>
+  <circle cx="100" cy="150" r="5" fill="#3366cc"/>
+  <text x="100" y="192" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#202122">Self</text>
+</svg>

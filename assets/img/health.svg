@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Health diagram">
+  <rect width="200" height="200" fill="#fdecec"/>
+  <path d="M100 50 V80 H70 V100 H100 V150 H100" fill="none" stroke="#b32424" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M100 80 H130 V110 H100" fill="none" stroke="#b32424" stroke-width="6" stroke-linejoin="round"/>
+  <text x="100" y="192" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#202122">Health</text>
+</svg>

@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+"""ingest-apply — apply an LLM's ingestion response to the wiki.
+
+Usage:
+  bin/ingest-apply <response-file>            validate + apply + lint
+  bin/ingest-apply <response-file> --commit   ...then git commit
+
+Accepts the block format produced by bin/ingest-pack prompts:
+  ===FILE: wiki/x.md=== ... ===END===   (any number)
+  ===MOVE: inbox/a -> raw/d/c/a===      (exactly one)
+  ===LOG: ingest | domain | desc===     (exactly one)
+  ===COMMIT: message===                 (exactly one)
+
+Safety: FILE paths must be under wiki/ (or be index.md/queue.md); MOVE must
+go inbox/ -> raw/; everything else in the response is ignored. Lint runs
+after applying; nothing is committed unless --commit and lint passes.
+"""
+import datetime
+import re
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+ALLOWED_LOOSE = {"index.md", "queue.md"}
+
+
+def fail(msg):
+    print(f"REFUSED: {msg}")
+    sys.exit(1)
+
+
+def main(argv):
+    if not argv or argv[0] in ("-h", "--help"):
+        print(__doc__)
+        return
+    resp = Path(argv[0]).expanduser()
+    if not resp.exists():
+        fail(f"response file not found: {resp}")
+    do_commit = "--commit" in argv
+    text = resp.read_text(encoding="utf-8", errors="replace")
+
+    files = re.findall(r"===FILE: *(\S+?) *===\n(.*?)\n?===END===", text, re.S)
+    moves = re.findall(r"===MOVE: *(\S+) *-> *(\S+?) *===", text)
+    logs = re.findall(r"===LOG: *(.+?) *===", text)
+    commits = re.findall(r"===COMMIT: *(.+?) *===", text)
+
+    if not files:
+        fail("no ===FILE:=== blocks found")
+    if len(moves) != 1:
+        fail(f"expected exactly 1 MOVE line, found {len(moves)}")
+    if len(logs) != 1:
+        fail(f"expected exactly 1 LOG line, found {len(logs)}")
+
+    # validate before touching anything
+    for rel, _ in files:
+        if not (rel.startswith("wiki/") and rel.endswith(".md")) and rel not in ALLOWED_LOOSE:
+            fail(f"FILE path outside wiki/: {rel}")
+        if "/archive/" in rel:
+            fail(f"FILE path targets an archive/ dir (never updated): {rel}")
+        if ".." in rel:
+            fail(f"suspicious path: {rel}")
+    src, dst = moves[0]
+    if not (src.startswith("inbox/") and dst.startswith("raw/")):
+        fail(f"MOVE must be inbox/ -> raw/, got: {src} -> {dst}")
+    if ".." in src or ".." in dst:
+        fail("suspicious MOVE path")
+    if not (ROOT / src).exists():
+        fail(f"MOVE source not in inbox: {src}")
+
+    # apply
+    for rel, content in files:
+        p = ROOT / rel
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(content.rstrip() + "\n", encoding="utf-8")
+        print(f"wrote  {rel}  ({len(content):,} chars)")
+    dstp = ROOT / dst
+    dstp.parent.mkdir(parents=True, exist_ok=True)
+    shutil.move(str(ROOT / src), str(dstp))
+    print(f"moved  {src} -> {dst}")
+    today = datetime.date.today().isoformat()
+    with open(ROOT / "log.md", "a", encoding="utf-8") as f:
+        f.write(f"## [{today}] {logs[0]}\n")
+    print(f"logged {logs[0]}")
+
+    lint = subprocess.run([sys.executable, str(ROOT / "bin" / "wiki-lint")],
+                          capture_output=True, text=True, cwd=ROOT)
+    print("\n" + lint.stdout.splitlines()[0] if lint.stdout else "")
+    if lint.returncode != 0:
+        print(lint.stdout)
+        print("lint FAILED — changes are applied but NOT committed; fix and commit manually.")
+        sys.exit(1)
+
+    msg = commits[0] if commits else f"ingest: {logs[0]}"
+    if do_commit:
+        subprocess.run(["git", "add", "-A"], cwd=ROOT, check=True)
+        subprocess.run(["git", "commit", "-q", "-m", msg], cwd=ROOT, check=True)
+        print(f"committed: {msg}")
+    else:
+        print(f"review with git diff, then commit. suggested message:\n  {msg}")
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

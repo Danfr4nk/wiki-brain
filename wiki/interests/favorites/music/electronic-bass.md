@@ -1,0 +1,89 @@
+
+---
+domain: interests
+page_type: synthesis
+status: active
+date_created: 2026-06-22
+date_modified: 2026-07-14
+sources: ["raw/self/favorites/FAVS MASTERLIST.csv"]
+synthesizes:
+  - wiki/interests/music/concepts/sub-bass-signature
+  - wiki/interests/music/concepts/lyrics-as-timbre
+  - wiki/interests/music/aliases/gripnotic
+related:
+  - wiki/interests/favorites/music
+  - wiki/interests/favorites/music/artists/lyny
+  - wiki/interests/music/concepts/sub-bass-signature
+  - wiki/interests/music/concepts/lyrics-as-timbre
+  - wiki/interests/music/aliases/gripnotic
+  - wiki/self/context-core
+tags: [music-production]
+---
+
+# Electronic & Bass Music Cluster
+
+Nine artists beyond [[wiki/interests/favorites/music/artists/lyny]] and
+Knock2 make up the rest of the
+electronic/bass tier: Effin, Mau P, PEEKABOO, Levity, Nikita the Wicked,
+rSUN, oskar med k, borne, and A.M.C — roughly 46 tracks together, all
+logged under "SPOTIFY LIKED 2025-2026." This is, alongside JPEGMAFIA and
+the emo cluster, one of the three real gravitational centers of the
+favorites library, and it is the one with the most direct line to Dan's
+own work: this is the genre space [[wiki/interests/music/aliases/gripnotic|GRIPNOTIC]]
+operates in, not an adjacent taste running in parallel to the production
+practice.
+
+## What the track titles say about the genre, if not the words
+
+Per [[wiki/interests/music/concepts/lyrics-as-timbre]], lyric content
+isn't the mechanism doing the work here — but the *titles* themselves are
+worth noting as a genre-level tell, because bass house as a form is
+unusually honest about its own function in its naming conventions.
+PEEKABOO's "All I Need Is Bass" states the genre's thesis outright.
+Nikita the Wicked's "SHAKE," "DOOM," and "LOUDER" and A.M.C's "Nightmare"
+and "Run!" are titled for physical and visceral effect, not narrative or
+emotional confession — verbs and states, not stories. This is a genre
+built to be felt in the chest before it's parsed at all, which is
+consistent with — arguably the purest instance of — the "lyrics as
+timbre" pattern: even the *titles* here gesture at physical sensation
+rather than meaning.
+
+## The producer's-ear reading
+
+As on [[wiki/interests/favorites/music/artists/lyny]], this cluster reads
+most plausibly as craft-level listening rather than casual consumption.
+Mau P's "BEATS FOR THE UNDERGROUND" and the multiple "-Mixed" / VIP-style
+entries across the cluster (Mau P's "MERTHER – Mixed," the dashstar*
+original-and-VIP pairing among Knock2's six masterlist entries) show engagement with how
+tracks get reworked and remixed, not just which ones chart. rSUN's
+seven-track presence — the same count as LYNY — and the recurring motif
+of physical-space and motion titles across the cluster (oskar med k's
+"keep your feet," "On The Ground," "Spellbound"; borne's "Go Again,"
+"Hold Me Down") point toward attention on rhythm, drop placement, and
+groove architecture: exactly the "intro, build, drop reset, build, drop"
+structure Dan has described, in his own words, as the specific technical
+skill he's had to relearn in returning to production (see
+[[wiki/people/tom]]). Read this way, the cluster isn't background
+listening — it's closer to a reference library for the exact structural
+problem the current production era is trying to solve.
+
+## Connection to the sub-bass signature
+
+Every artist in this cluster operates in the same low-end-forward
+register as the involuntary [[wiki/interests/music/concepts/sub-bass-signature]]
+documented across all four of Dan's own aliases (63–85% sub-bass presence,
+SLOPPP through GRIPNOTIC). That signature was identified as structural —
+present regardless of stated genre target — which means this cluster
+isn't simply "genres Dan likes"; it's the genre space where his own
+involuntary sonic fingerprint and the current commercial center of the
+scene happen to be the same thing. That overlap is worth taking
+seriously as more than coincidence: it's plausible this cluster functions
+as calibration listening, keeping the ear tuned to where the genre
+currently sits, in a lane where Dan's own baseline sound was already
+sitting before he ever set out to match it.
+
+## Related
+
+[[wiki/interests/favorites/music]] · [[wiki/interests/favorites/music/artists/lyny]] · [[wiki/interests/music/concepts/sub-bass-signature]] · [[wiki/interests/music/concepts/lyrics-as-timbre]] · [[wiki/interests/music/aliases/gripnotic]]
+
+

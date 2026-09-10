@@ -1,0 +1,134 @@
+# Build the static wiki + LLM/agent feed and publish to GitHub Pages on
+# every push to main. Uses the stdlib-only bin/build-site (no Jekyll, no deps).
+name: Deploy wiki site
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-wiki
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build site
+        env:
+          AGENT_BASE_URL: https://caakehorn.github.io/wiki-brain
+        run: |
+          chmod +x bin/build-site
+          python3 bin/build-site --out site
+          echo "--- site file count ---"
+          find site -type f | wc -l
+          ls -lh site/llms.txt site/index.html site/agent/manifest.json site/agent/corpus.md
+
+      - name: Build LLM feed (llm/) and fold into site
+        # llm-publish writes to repo root/llm (no --out); the deployable
+        # copy must live under site/ so GitHub Pages serves it. Without
+        # this, llm/index.txt 404s.
+        run: |
+          chmod +x bin/llm-publish
+          python3 bin/llm-publish
+          cp -r llm site/llm
+          ls -lh site/llm/index.txt site/llm/manifest.json site/llm/corpus.txt
+
+      - name: Point Pages at this workflow
+        # 2026-08 outage: Pages was set back to "Deploy from a branch", so the
+        # legacy Jekyll builder served main/ verbatim — [[wikilinks]] rendered
+        # as dead literal text and llms.txt / agent/* never existed at all —
+        # while this job died on "Get Pages site failed ... Not Found".
+        # PUT moves an existing branch-built site onto workflow builds; POST
+        # creates the site when Pages was never enabled. Only warn on failure:
+        # configure-pages below is the real gate.
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          api="https://api.github.com/repos/${GITHUB_REPOSITORY}/pages"
+          hdr=(-H "Accept: application/vnd.github+json"
+               -H "Authorization: Bearer ${GH_TOKEN}"
+               -H "X-GitHub-Api-Version: 2022-11-28")
+          code=$(curl -sS -o /tmp/pages.json -w '%{http_code}' \
+                 -X PUT "${hdr[@]}" "$api" -d '{"build_type":"workflow"}')
+          echo "PUT /pages -> $code"
+          if [ "$code" = "404" ]; then
+            code=$(curl -sS -o /tmp/pages.json -w '%{http_code}' \
+                   -X POST "${hdr[@]}" "$api" -d '{"build_type":"workflow"}')
+            echo "POST /pages -> $code"
+          fi
+          case "$code" in
+            2*) echo "Pages build_type is now 'workflow'." ;;
+            *)  cat /tmp/pages.json || true
+                echo "::warning::could not set build_type=workflow (HTTP $code) — \
+                if the deploy fails, set Settings → Pages → Source to GitHub Actions by hand" ;;
+          esac
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        with:
+          # Create/repoint the Pages site rather than failing when it is
+          # missing or still branch-built.
+          enablement: true
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
+
+      - name: Smoke-test the published site
+        # The 2026-08 breakage was silent for days: Pages answered 200 the
+        # whole time, just with the wrong build. Probing paths that ONLY the
+        # bin/build-site artifact contains distinguishes "our site is live"
+        # from "something is live", so a wrong Pages source fails loudly here.
+        run: |
+          base="${{ steps.deployment.outputs.page_url }}"
+          base="${base%/}"
+          fail=0
+          for path in index.html llms.txt agent/manifest.json agent/critical.md \
+                      agent/corpus.md wiki/self/index.html wiki/self/index.md \
+                      search.json llm/index.txt; do
+            code=000
+            for attempt in 1 2 3 4 5; do
+              code=$(curl -sS -o /dev/null -w '%{http_code}' -m 30 "$base/$path" || echo 000)
+              [ "$code" = "200" ] && break
+              sleep 15
+            done
+            if [ "$code" = "200" ]; then
+              echo "ok    $base/$path"
+            else
+              echo "::error::HTTP $code for $base/$path"
+              fail=1
+            fi
+          done
+          if [ "$fail" != "0" ]; then
+            echo "::error::Pages is not serving the built site. Check that \
+            Settings → Pages → Source is 'GitHub Actions', not 'Deploy from a branch'."
+            exit 1
+          fi
+          echo "Published site verified at $base/"

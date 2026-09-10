@@ -1,0 +1,79 @@
+---
+
+domain: interests
+
+page_type: entity
+
+status: stable
+
+date_created: 2026-08-01
+
+date_modified: 2026-09-04
+
+sources:
+
+- "raw/self/concerts/table.csv"
+
+- "raw/self/twitter/archive.jsonl"
+
+related: []
+
+tags: [music-production, digital-footprint]
+
+connections:
+
+- page: wiki/self/twitter/2008
+
+type: evidenced-by
+
+claim: "The log's 17 November 2008 date is independently corroborated from inside The Social that night, and the archive supplies the only reaction on record: 'holy fuck, jedi mind tricks are so fucking scary.' — posted at 01:50, walking out."
+
+---
+
+# Jedi Mind Tricks
+
+Jedi Mind Tricks is an act Dan Frank saw live 1 time between 2008, per the concert log he kept (preserved in the corpus). This page records those appearances and the details attached to each in the source.
+
+## Live appearances
+
+All dates, venues, cities, and notes below are taken from the source table and preserved in full, including tentative or unconfirmed items.
+
+| Date | Show / Context | Venue | City | Note |
+
+|------|---------------|-------|------|------|
+
+| Nov 17, 2008 | Jedi Mind Tricks | The Social | Orlando, FL | Resolved. With Outerspace / Reef the Lost Cause. |
+
+## Notes per appearance
+
+- **Nov 17, 2008** — Jedi Mind Tricks, The Social, Orlando, FL. Resolved. With Outerspace / Reef the Lost Cause.
+
+**Corroborated from inside the room [2026-09-04].** The concert table's date
+
+was established by routing checks. Two tweets that night establish it
+
+independently, and they are the only record of what he made of it:
+
+| Eastern time | Tweet |
+
+|---|---|
+
+| 2008-11-17, 21:19 | *"Jedi mind tricks"* |
+
+| 2008-11-18, 01:50 | *"holy fuck, jedi mind tricks are so fucking scary."* |
+
+The four-hour gap is the set. **"Scary" is the reaction and it is not a
+
+complaint** — this is an Orlando audio student two months into Full Sail,
+
+already deep in the emo and pop-punk circuit that fills the rest of autumn
+
+2008 ([[wiki/self/twitter/2008]]), walking out of a Philadelphia
+
+horrorcore show having enjoyed it. The taste is wider at twenty than the
+
+concert table's overwhelmingly pop-punk 2008 rows suggest on their own.
+
+---
+
+**Up:** [[wiki/interests/index|Interests]] › [[wiki/interests/favorites/index|Favorites]] › [[wiki/interests/favorites/music|Music]]

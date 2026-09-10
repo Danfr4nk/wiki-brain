@@ -1,0 +1,248 @@
+
+---
+domain: mind
+page_type: profile
+title: "INTP — The Cognitive Function Stack"
+aliases: ["Ti-Ne-Si-Fe", "cognitive functions"]
+status: stable
+importance: high
+date_created: 2026-07-13
+date_modified: 2026-08-26
+sources:
+  - raw/self/dox-md/FULL PROFILE 2026.md
+  - raw/self/dox-scan/Dan Profile.txt
+  - raw/self/context-core/CONTEXT_CORE_EXPANDED.md
+related:
+  - wiki/mind/profile/index
+  - wiki/mind/profile/enneagram-5w4
+  - wiki/mind/concepts/forensic-method
+  - wiki/mind/concepts/conflict-architecture
+  - wiki/mind/concepts/phenomenology-lens
+tags: [personality-profile, trauma-bond, addiction-recovery]
+connections:
+  - page: wiki/interests/roman-republic
+    type: evidenced-by
+    claim: "The great-man-theory tag cluster on the 2024 Caesar/Alexander/Oppenheimer reads is corpus evidence for the singular-figure-versus-the-system self-myth this profile documents."
+  - page: wiki/people/elizabeth-eleanor
+    type: evidenced-by
+    claim: "A July 2013 message — 'as an INTP and heavily introverted, logic-based dude...i can't see myself flourishing in AA/NA' — is the earliest dated primary-source instance of Dan self-typing INTP, used there to explain a rejection of group-based recovery in favor of self-directed reflection."
+  - page: wiki/interests/film-canon
+    type: evidenced-by
+    claim: "The Taxi Driver / King of Comedy self-portrait pair in the film canon is the same hyperaware-observer self-myth chosen as a mirror in cinema."
+  - page: wiki/mind/psychosexual/taboo-and-boundary-testing
+    type: parallels
+    claim: "'Compulsive curiosity to find edge conditions and bypass arbitrary limits' is stated in nearly identical language on both pages — the cognitive-style claim and the sexual one are the same mechanism described from two source passes over the same dossier material."
+  - page: wiki/mind/politics/axioms
+    type: parallels
+    claim: "The great-man-theory reading tag and the singular-figure-versus-the-system self-myth this profile documents are the same fascination the politics page reframes — recurring analytical attention to what one actor does to a system's checks, not hero worship."
+  - page: wiki/mind/synthesis/the-commissioned-self
+    type: component-of
+    claim: "The 2013 self-typing predates the models by a decade and is genuinely primary, but it is the pattern's origin rather than an exception to it: the type is deployed there as a credential in an argument against group recovery, not as a description of an inner state, which is what the apparatus has done at scale ever since."
+  - page: wiki/mind/synthesis/the-cato-seat
+    type: evidences
+    claim: "The 'singular perceiver against a system too dull to see what he sees' self-myth gets a number from the taste record: 24 of 25 curated artworks carry collapse, wound, observer, glitch, rupture or fortress, and 'observer' is joint-largest at six — but the figures are not great men, since Caesar is on the shelf and Cato is on the prompt."
+  - page: wiki/timeline/periods/2021-2023-employment-block
+    type: evidenced-by
+    claim: "The introversion cost is stated in primary voice — fifteen-table freezing Saturday nights took 'literally EVERYTHING i had in me' — hospitality as a direct stressor of the documented type."
+  - page: wiki/people/ally-lubin
+    type: evidenced-by
+    claim: "The Fe-inferior conversion (emotional bids adjudicated rather than met) has its one documented interruption here: a challenge conceded in six words after the challenger narrows rather than escalates, raising the open question of whether the 10%-valuing score is a fixed ceiling or a floor a particular interlocutor can lift."
+  - page: wiki/mind/profile/neurodivergence
+    type: parallels
+    claim: "The self-identified-autistic label and this INTP read describe the same measured profile — bottom-percentile sociability, explicit-over-inferred meaning, systematizing run for its own sake — in two different vocabularies, neither checked against the other before both were accepted."
+  - page: wiki/mind/synthesis/the-binary-verdict
+    type: evidences
+    claim: "The Ti-dominant/Fe-inferior split (96% latent vs. 10% valuing) is the cognitive-function mechanism behind a corpus-wide pattern: verdict questions on a person's worth, a taste's authenticity, an order's legitimacy or an actor's trustworthiness collapse to two states because the dominant function tests only for binary closure while the function that would grade a verdict relationally is nearly absent — 'Fe's absence removes the social brake that would otherwise soften conclusions for company' is that page's rule, stated here first."
+  - page: wiki/mind/synthesis/the-deferred-audit
+    type: evidences
+    claim: "Ti's own definition of truth — 'a system that holds under recursive collapse' — is the structural reason a chosen object's audit is never local: selecting something is how this stack extends its own system, so a later audit of that object re-runs the coherence test on a piece of the system that produced the original choice, which is why the finding implicates the chooser rather than staying contained to the object."
+  - page: wiki/mind/synthesis/totality-themes
+    type: evidences
+    claim: "'Dan's own audit apparatus, turned on himself' — that page's phrase for the risk the Irreversibility Firewall defends against — names this stack's Ti-dominance specifically: the same coherence-testing engine that makes truth 'a system that holds under recursive collapse' is what a finished, shipped, or admitted act would expose to a verdict, which is why finishing, shipping and admitting are one category of dangerous event rather than three unrelated ones."
+  - page: wiki/mind/synthesis/the-embedded-objective
+    type: evidences
+    claim: "Ti's internal-verification standard ('a system that holds under recursive collapse,' never social consensus) is why an assignment does not motivate until it is privately re-derived: a goal handed over by an employer has not passed that verification, but the same goal re-authored on Dan's own terms (a tip split, a status ladder) has, and behaves afterward like any other self-generated conclusion — defended past the point the external role would justify."
+  - page: wiki/mind/synthesis/dormancy-not-exit
+    type: evidences
+    claim: "Two functions explain two different halves of that page's 'suspend, not delete' rule: Si-tertiary's non-pruning archive is why a dormant tie costs nothing to reactivate after years of silence, and Fe-inferior at 10% valuing is why a Ti-generated decision that a tie is over never becomes felt-settled without an external terminating statement supplying the relational judgment this stack cannot produce internally."
+  - page: wiki/mind/synthesis/supply-network
+    type: evidences
+    claim: "The same Ti-dominance mechanism the-deferred-audit uses for chosen-object audit timing explains why supplier reliability inverts with intimacy: enforcing a standard on a friend-supplier is an audit that risks a verdict on the friendship, so Tom's failures accumulate for eighteen years while a stranger's failure is noticed and acted on immediately."
+  - page: wiki/mind/synthesis/alias-as-periodization
+    type: evidences
+    claim: "Si-tertiary's role as the high-fidelity archive is why the sub-bass signature never turns over across four aliases: it is an involuntary, identified-post-hoc trait rather than a Ti-negotiated public choice, so it sits outside the audit-and-revise cycle the name itself is subject to."
+  - page: wiki/mind/synthesis/music-as-identity
+    type: evidences
+    claim: "Ti's closure standard — a verdict, once reached, does not get relitigated — explains that page's Fall Out Boy freeze-at-boundary pattern more precisely than 'the objects can't betray him' does, since the pattern holds even on a defunct band's catalog that carries zero relational risk to begin with."
+  - page: wiki/mind/synthesis/instrument-is-subject
+    type: causes
+    claim: "The exocortex prompt's evidentiary standard — unwavering honesty, no softening, residue over testimony — is Ti-dominance's own truth criterion ('a system that holds under recursive collapse') exported into an instruction, which is why that page's recursion problem is a predictable consequence of this specific stack rather than an accident of which AI tool got used."
+  - page: wiki/interests/food-and-diet
+    type: causes
+    claim: "The same closure test named for worth, taste and trust verdicts runs on a plate: an unrequested ingredient fails Ti's pass/fail standard outright, with Fe (10% valuing) too weak to run the graded negotiation that would soften it into 'acceptable enough' — the most literal instance of the mechanism found so far, because a sandwich cannot be lobbied or flattered the way a person sometimes can."
+  - page: wiki/places/the-unpapered-address
+    type: causes
+    claim: "Ti's definition of truth as 'a system that holds under recursive collapse' is why paper was never sought from a housing provider rather than merely never offered: demanding a lease from someone who has already granted access audits whether they can be trusted to keep granting it, which risks the choice to depend on them, not just the housing itself."
+  - page: wiki/mind/synthesis/attachment-trauma-bond
+    type: causes
+    claim: "The Ti-Si loop is why that page's bond-collapse crisis reactivated exactly the two schemas it already names (the 2004-05 rupture, the Alexis collapse) rather than fading into ordinary grief, and Ni-leak's mythic-overfitting is the measured function behind the 'burning rituals' language — the mind's own analytical strength turned on the wound, not a metaphor for its intensity."
+  - page: wiki/mind/synthesis/dan-annie-fallout-verdict
+    type: causes
+    claim: "That page's 'Ti-dominant processing reads emotional bids as propositions to litigate' line is Ti-dominance and Fe-inferior named without being sourced: Ti supplies the adjudication reflex, and Fe at 10% valuing is too weak to supply the empathic acknowledgment the engine skips — 'Fe's absence removes the social brake that would otherwise soften conclusions for company,' running here at full load."
+  - page: wiki/mind/synthesis/block-unblock-loop
+    type: causes
+    claim: "Two distinct functions explain that page's corrected rule ('the exit is executed; the deletion never is'): Si-tertiary's non-pruning archive is why nothing co-held is ever actually erased, and Fe-inferior (10% valuing) is why an executed severance never becomes felt-settled without an external terminating statement — the same account already established for dormancy-not-exit, run here on the channel-operation layer."
+  - page: wiki/mind/synthesis/august-grievance-verdict
+    type: causes
+    claim: "That page's grievance 6 — a demand for a statement that registers a different true answer as no answer at all — is Ti-dominance running with no Fe-mediated grading function available to read the different answer as responsive; the page's own scoring of the grievance as false is what this mechanism looks like from outside it."
+  - page: wiki/mind/synthesis/the-rescue-premise
+    type: causes
+    claim: "That page's own claim that the system 'cannot generate one from behavioural evidence' — a severance signal — is Fe-inferior (10% valuing) named without being sourced: the function that would read a decade of withdrawal as implicit closure is too weak to do it, which is why nothing short of an explicit statement can substitute."
+  - page: wiki/mind/synthesis/morgantown-call-three-participant-ethical-analysis
+    type: causes
+    claim: "That page's own 'deepest moral failure' finding — instrumentalization, converting concern into an optimization problem and designing a stronger signal when ordinary conversation fails — is Ti-dominance's 'internal simulation labs' turned on a person: the same faculty that stress-tests ideas and relationships against a truth standard holding 'under recursive collapse, not social consensus,' with the wrong kind of object in it."
+  - page: wiki/mind/synthesis/fayette-return
+    type: causes
+    claim: "Core Axiom 1's binary self-worth verdict, running on Ti-dominance with no Fe-mediated grading function, is why that page's 'personal failure' misfiling of a family return is consequential rather than loose: with no graded middle available, the misfiling resolves straight to the worthless pole rather than to a discounted setback."
+  - page: wiki/interests/favorites/eclecticism
+    type: evidences
+    claim: "The dual architecture of the favorites CSV is this stack on leisure: auxiliary Ne keeps three music clusters live in parallel, dominant Ti closes observational sets through unique witnesses, and those opposite operations share a one-creator-per-entry surface that was misread as range."
+---
+
+# INTP — The Cognitive Function Stack
+
+Dan types INTP on every pass, and the function measurements are extreme
+enough to matter more than the four-letter label: dominant introverted
+thinking near ceiling (Ti 96% latent / 95% aptitude), strong extraverted
+intuition (Ne 84% latent / 80% valuing), an unusually loud introverted
+intuition for an INTP (Ni 84% latent — the profile's single biggest
+irregularity), middling introverted sensing (Si 57%), and an extraverted
+feeling function that is barely valued at all (Fe 10% valuing / 46% active).
+The dossiers stress that this is not the cheerful "scientist" INTP of type
+descriptions: filtered through the 5w4 sx/sp emotional structure
+([[wiki/mind/profile/enneagram-5w4]]), every function runs darker.
+
+| Function | Score | Plain reading |
+|----------|-------|---------------|
+| Ti (dominant) | 96% latent / 95% aptitude | Lead logic; builds frameworks from first principles |
+| Ne (auxiliary) | 84% latent / 80% valuing | Exploratory; scans for patterns and edge cases |
+| Ni (leak) | 84% latent | Weak intuition; pattern-overfitting, reads coincidence as fate |
+| Si (tertiary) | 57% latent | High-fidelity memory; also carries the trauma material |
+| Fe (inferior) | 10% valuing / 46% active | Feeling function, weak but craved; used tactically |
+
+## Ti — the existential scalpel
+
+Dominant Ti is not applied to mechanical puzzles but to the self, social
+systems, and the cosmos. It engineers frameworks from first principles and
+defines truth as "a system that holds under recursive collapse, not social
+consensus" — he trusts only what he can simulate in his own head, running
+"internal simulation labs" where ideas, relationships, and futures are
+stress-tested. The scalpel strips social niceties, dogma, and comforting
+illusion on principle, and follows logical chains to their conclusions even
+when the conclusions are psychologically devastating. Injustice registers as
+logical inconsistency before it registers as feeling. The documented outputs:
+philosophical nihilism as default resting state, compulsive system
+deconstruction (legal, bureaucratic, social conventions exposed as arbitrary
+machines), and the evidence-first analytical practice formalized in
+[[wiki/mind/concepts/forensic-method]].
+
+## Ne — the sniper scout
+
+Auxiliary Ne is described as *selective divergence*, not brainstorming
+spray: it explores conceptual space "like a sniper scout," projecting
+implications ahead and generating edge-condition hypotheses that Ti then
+weaves into arguments. It powers the cross-domain synthesis visible
+everywhere in the corpus — politics read with the same tools as music trends,
+geology-with-mythology-style combinations, the anomaly clustering behind
+Dan's Law. Pointed at the favorites CSV, the same split is the dual
+architecture at [[wiki/interests/favorites/eclecticism]]: Ne keeps three
+music clusters running in parallel with no completion condition; Ti closes
+observational sets (books, art, film) through unique witnesses and stops
+at the edge. Under stress it inverts into a paranoia generator, feeding the
+5-core's fear with endless what-if scenarios and producing the documented
+analysis paralysis: "conceptualize everything before acting."
+
+## Ni — the leak
+
+An INTP is not supposed to run this much introverted intuition. The 84%
+latent Ni is flagged in the sources as a "shadow strategist" that leaks
+mythic overfitting into the system: over-ascribing cosmic meaning to
+coincidence, weaving events into a fated grand narrative, feeling the
+"symbolic convergence" of a pattern before the evidence justifies it. This is
+the engine of the pattern-apophenia risk, and the corpus treats
+[[wiki/mind/concepts/dans-law]] as the deliberately installed countermeasure
+— a formal procedure for stripping mythic gravity off genuine anomaly
+clusters. The Ni leak also explains the fatalistic tone the Socionics reading
+picks up ([[wiki/mind/profile/socionics-and-attitudinal]]).
+
+## Si — memory and the trauma pattern
+
+Tertiary Si maintains the vast high-fidelity archive — the minute recall of
+years-old details that makes the whole self-documentation project (and this
+wiki) possible. It is also where the old betrayal pattern lives: memory of
+past betrayals (the 2004–05 parental rupture, the Alexis collapse) gets
+projected onto present situations and can take over his reactions without
+warning. The **Ti-Si loop** is the type's signature pathology and is well
+documented in
+the record: bypassing exploratory Ne to cycle between internal logic and past
+experience — replaying failures in exhaustive detail, nocturnal schedule
+displacement, rigid comfort-food ritual alongside broader physical neglect,
+sensory hypochondria. The loop's interpretive elaboration lives at
+[[wiki/mind/concepts/phenomenology-lens]].
+
+## Fe — the feeling function, weak but craved
+
+Inferior Fe is the weakest point and the most consequential. The need it
+represents — connection, emotional truth, validation — is desperately real
+(especially with the sx instinct), but the function itself is distrusted as
+irrational and deployed tactically, "like an actor uses makeup": high social
+intelligence, low emotional trust. Documented consequences: rejection
+hypersensitivity that can turn a minor slight into withdrawal or explosive
+sarcasm; immature eruptions under stress; genuine blindness to hierarchy,
+reputation, and etiquette (identical irreverence toward authority and
+subordinates); and the "invisible genius" outcome — high output, low
+recognition, no networking instinct. In relationships, Fe-inferior is a
+prime mover of [[wiki/mind/concepts/conflict-architecture]]: emotional bids
+arrive as claim-shaped propositions and get adjudicated instead of met.
+
+That conversion has exactly one documented interruption. On August 18, 2026,
+in the [[wiki/people/ally-lubin|Ally Lubin]] channel: **ALLY** *"You just love
+bomb"* (a bid arriving shaped as judgment) → **DAN** *"But love bomb is like a
+malicious tactic and there very little malice"* (the adjudication, exactly as
+described above) → **ALLY** *"I didn't say malicious"* (declining to be
+adjudicated) → **DAN** *"Okay that's fair then."* No other exchange in the
+corpus completes that sequence. The finding is not that Fe improved — it is
+that the conversion is refusable from the outside, by narrowing the claim
+rather than escalating against it, which raises the open question of whether
+the 10%-valuing score is a fixed ceiling or a floor a particular kind of
+interlocutor can lift. Read against [[wiki/mind/synthesis/the-binary-verdict]],
+even that one exception is a **binary flip** (wrong → fair) rather than a
+graded middle ("partly fair"): the gate moved, but a gate is still what it
+is.
+
+## The stack as one machine
+
+Run together, the functions produce the behavioral record with uncomfortable
+precision: Ti supplies the standard of proof, Ne supplies the anomaly
+candidates, Si supplies the archive to check them against, Ni supplies the
+narrative gravity that must be actively resisted, and Fe's absence removes
+the social brake that would otherwise soften conclusions for company. That is
+the forensic default, derived rather than chosen. The same arithmetic
+explains the costs: a mind that can prove things cannot stop litigating
+([[wiki/mind/concepts/conflict-architecture]]), and a memory that cannot
+forget keeps every wound current
+([[wiki/mind/concepts/attachment-model]]). The self-myth the stack
+sustains — the singular perceiver against a system too dull to see what
+he sees — also shows in what he chooses to consume: the great-man shelf
+of the 2024 [[wiki/interests/roman-republic|Roman-Republic year]]
+(Caesar, Alexander, Oppenheimer, all tagged great-man-theory) and the
+Taxi Driver / King of Comedy self-portrait pair in his
+[[wiki/interests/film-canon|film canon]] pick out the same figure in
+history and cinema.
+
+**Gaps:** function scores are AI-inferred from corpus behavior, not from a
+proctored instrument; the Ni measurement in particular has no independent
+confirmation; no data on how the stack presents post-closure (all sources
+pre-date June 2026).
+
+

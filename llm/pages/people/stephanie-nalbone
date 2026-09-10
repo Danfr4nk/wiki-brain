@@ -1,0 +1,167 @@
+---
+
+domain: people
+
+page_type: entity
+
+status: closed
+
+knowledge: mixed
+
+date_created: 2026-07-19
+
+date_modified: 2026-07-19
+
+date_range_start: 2009-09-25
+
+date_range_end: 2009-11-10
+
+sources:
+
+- "raw/self/facebook/facebook-ihatedanfrank/messages/inbox/stephanienalbone_tnsgkur3lq/message_1.html"
+
+tags: [relationships, uniontown-era]
+
+infobox:
+
+name: "Stephanie Nalbone"
+
+sex: female
+
+location: uniontown
+
+relationship_to_dan: ex-partner
+
+first_contact: 2009-09-25
+
+known_for: "A previously undocumented six-week long-distance relationship, Sept-Nov 2009, right at the close of Full Sail — reconnected after graduation, visited in person, ended without explanation"
+
+connections:
+
+- page: wiki/timeline/periods/full-sail-2008-2010
+
+type: evidences
+
+claim: "A previously undocumented relationship falling inside this period's own relationship-pivot window — Stephanie's Sept-Nov 2009 thread runs concurrently with the Danielle-ending/Alexis-beginning transition the period page already documents, without resolving how the three overlap."
+
+- page: wiki/timeline/periods/full-sail-2008-2010
+
+type: evidenced-by
+
+claim: "A previously undocumented Sept-Nov 2009 relationship falls inside this period's own Danielle-to-Alexis pivot window without resolving how the three overlap."
+
+---
+
+# Stephanie Nalbone
+
+Stephanie Nalbone is an ex-girlfriend from a relationship the corpus
+
+had no other record of: a six-week, high-intensity long-distance
+
+romance running late September to early November 2009, reconnecting
+
+old Uniontown history right at the close of
+
+[[wiki/timeline/periods/full-sail-2008-2010|Full Sail]].
+
+## The relationship
+
+The thread opens with Stephanie reaching out cold after a long silence
+
+("daaan! whats up?! havent talked to u in forever"), the same week Dan
+
+describes having "just graduated today for music production" and
+
+announces a plan to "mov[e] to LA in a month to work in a studio" — a
+
+plan that, per the rest of the corpus, never happened; he instead
+
+stayed in Orlando through the Pro Tools certification that winter and
+
+moved to Brooklyn the following April. Within two weeks the exchange
+
+turns explicitly romantic and stays there without interruption:
+
+constant "I ♥ you," daily phone dates, drunk-texting confessions,
+
+YouTube-link flirting, and a real in-person visit — Dan traveling from
+
+Orlando back to Uniontown for a weekend that included a shared
+
+screening of *Saw VI* (released October 23, 2009, dating the trip to
+
+late October; a message to a third party afterward — "yea i was with
+
+steph at saw 6" — confirms it). A rough patch surfaces the night before
+
+he leaves: Dan apologizes at length for a "shitty night" — smoking, an
+
+argument with his mother — and lands on something closer to real
+
+self-diagnosis than anything else in the thread: "I remember why i
+
+left here — I can feel it as soon as i get back, and it's too real for
+
+me to deal with. 'it' makes me sick...but i don't know what 'it' is."
+
+It is the thread's only crack in an otherwise uniformly affectionate
+
+exchange, and a rare pre-corpus glimpse of a Uniontown-return dread
+
+that recurs throughout his adult life, dated here to 2009 — years
+
+earlier than any other documented instance of the pattern. The
+
+relationship winds down abruptly after November 5, with Stephanie
+
+apologizing for being "beat... via irresponsive," and the thread goes
+
+quiet after November 10, 2009.
+
+## An unresolved sequencing question
+
+[[wiki/timeline/periods/full-sail-2008-2010|The Full Sail period page]]
+
+already documents Dan's relationship with
+
+[[wiki/people/danielle-onesi|Danielle Onesi]] ending during this same
+
+general window (over an affair, "a girl from Baltimore") and
+
+[[wiki/people/alexis-armel|Alexis]] beginning "the same year (2009)"
+
+without a specific month. This relationship — genuinely mutual,
+
+romantic, and dated precisely to September–November 2009 — sits
+
+somewhere inside that same gap, and nothing in either thread clarifies
+
+whether it preceded Alexis, overlapped the Danielle ending, or was a
+
+short rebound between the two. The corpus does not name Stephanie
+
+anywhere else, so the relationship's place in the 2009 sequence is
+
+genuinely unresolved rather than merely undocumented in detail.
+
+## Corpus record
+
+| Metric | Value |
+
+|---|---|
+
+| Messages | ~120 (Facebook Messenger, both directions) |
+
+| Date range | 2009-09-25 – 2009-11-10 |
+
+| Defining event | An in-person visit, late October 2009 (dated via a Saw VI reference) |
+
+**Gaps:** how the relationship ended (no breakup message survives, only
+
+declining frequency); where it falls relative to Danielle and Alexis in
+
+2009; Stephanie's life after November 2009.
+
+---
+
+**Up:** [[wiki/people/index|People]]

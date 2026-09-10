@@ -1,0 +1,391 @@
+#!/usr/bin/env python3
+"""wiki-connect — connective-tissue engine for the wiki graph.
+
+Pure stdlib, no dependencies, per repo convention.
+
+Subcommands:
+  audit               Graph-health report: edge counts, link-quality mix,
+                      islanded pages, domain-pair coverage, claim coverage.
+  candidates [N]      Mine and score unmade connections from four evidence
+                      signals (shared raw sources, unlinked co-mentions,
+                      co-citation, tag overlap). Writes connection-queue.md
+                      (default N=60 pairs).
+  check               Lint typed connections: every `connections:` entry needs
+                      type+claim; flags asymmetric edges and surviving bare
+                      "## Related" footers. Exit 1 on errors.
+
+The unit of connective tissue is the TYPED EDGE (see CONNECTIONS_SPEC.md):
+a link is a claim about how two pages relate, not an adjacency. This tool
+finds where claims are owed and polices that they get written.
+"""
+import os, re, sys, itertools, collections
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+WIKI = os.path.join(ROOT, "wiki")
+
+LINK_RE = re.compile(r"\[\[([^\]|#]+)(?:#[^\]|]*)?(?:\|[^\]]+)?\]\]")
+MD_RE = re.compile(r"\]\((?:/)?(wiki/[^)#\s]+)")
+
+EDGE_TYPES = {
+    "causes", "caused-by", "evidences", "evidenced-by", "contradicts",
+    "instantiates", "instance-of", "parallels", "precedes", "follows",
+    "supplies", "supplied-by", "mirrors", "escalates", "resolves",
+    "contextualizes", "component-of", "contains", "co-occurs",
+}
+SYMMETRIC = {"contradicts", "parallels", "mirrors", "co-occurs"}
+INVERSE = {
+    "causes": "caused-by", "caused-by": "causes",
+    "evidences": "evidenced-by", "evidenced-by": "evidences",
+    "instantiates": "instance-of", "instance-of": "instantiates",
+    "precedes": "follows", "follows": "precedes",
+    "supplies": "supplied-by", "supplied-by": "supplies",
+    "component-of": "contains", "contains": "component-of",
+}
+
+
+def load_pages():
+    pages = {}
+    for root, _dirs, files in os.walk(WIKI):
+        for f in files:
+            if f.endswith(".md"):
+                p = os.path.relpath(os.path.join(root, f), ROOT)
+                with open(os.path.join(root, f), encoding="utf-8", errors="replace") as fh:
+                    pages[p] = fh.read()
+    return pages
+
+
+def split_fm(txt):
+    if txt.startswith("---"):
+        e = txt.find("\n---", 3)
+        if e > 0:
+            return txt[: e + 4], txt[e + 4 :]
+    return "", txt
+
+
+def fm_list(fm, key):
+    m = re.search(r"^%s:\s*\[([^\]]*)\]" % key, fm, re.M)
+    if m:
+        return [x.strip().strip("\"'") for x in m.group(1).split(",") if x.strip()]
+    m2 = re.search(r"^%s:\s*\n((?:\s+-\s*.+\n)+)" % key, fm, re.M)
+    if m2:
+        return [x.strip().strip("\"'") for x in re.findall(r"-\s*(.+)", m2.group(1))]
+    return []
+
+
+def parse_connections(fm):
+    """Parse the typed `connections:` block.
+    Format (list of maps):
+      connections:
+        - page: wiki/people/tom
+          type: supplies
+          claim: "one argued sentence"
+    """
+    out = []
+    m = re.search(r"^connections:\s*\n((?:\s+.+\n)+)", fm, re.M)
+    if not m:
+        return out
+    block = m.group(1)
+    cur = None
+    for line in block.split("\n"):
+        pm = re.match(r"\s+-\s*page:\s*(.+)", line)
+        if pm:
+            if cur:
+                out.append(cur)
+            cur = {"page": pm.group(1).strip().strip("\"'")}
+            continue
+        km = re.match(r"\s+(type|claim):\s*(.+)", line)
+        if km and cur is not None:
+            cur[km.group(1)] = km.group(2).strip().strip("\"'")
+    if cur:
+        out.append(cur)
+    return out
+
+
+def resolver(pages):
+    by_base = {}
+    for p in pages:
+        by_base.setdefault(os.path.splitext(os.path.basename(p))[0], p)
+
+    def resolve(t):
+        t = t.strip().rstrip("/")
+        if t.endswith(".md"):
+            t = t[:-3]
+        if (t + ".md") in pages:
+            return t + ".md"
+        if ("wiki/" + t + ".md") in pages:
+            return "wiki/" + t + ".md"
+        return by_base.get(os.path.basename(t))
+
+    return resolve
+
+
+def prose_edges(pages, resolve):
+    edges = collections.defaultdict(set)
+    for p, txt in pages.items():
+        _fm, body = split_fm(txt)
+        for m in itertools.chain(LINK_RE.finditer(body), MD_RE.finditer(body)):
+            r = resolve(m.group(1))
+            if r and r != p:
+                edges[p].add(r)
+    return edges
+
+
+def is_index(p):
+    return os.path.basename(p) == "index.md"
+
+
+def is_quarantine(p):
+    return "/contacts/" in p
+
+
+def dom(p):
+    parts = p.split("/")
+    return parts[1] if len(parts) > 1 else "?"
+
+
+# ---------------------------------------------------------------- audit
+def cmd_audit(pages):
+    resolve = resolver(pages)
+    edges = prose_edges(pages, resolve)
+    inl = collections.defaultdict(set)
+    for s, ts in edges.items():
+        for t in ts:
+            inl[t].add(s)
+    nonindex = [p for p in pages if not is_index(p)]
+    total = sum(len(v) for v in edges.values())
+    print("pages: %d  (non-index: %d)" % (len(pages), len(nonindex)))
+    print("prose edges: %d  avg outdegree: %.1f" % (total, total / max(len(pages), 1)))
+
+    idx = {p for p in pages if is_index(p)}
+    islanded = [
+        p for p in nonindex
+        if not (inl[p] - idx) and not is_quarantine(p)
+    ]
+    print("islanded (index-only inbound, excl. contacts/): %d" % len(islanded))
+    for p in sorted(islanded):
+        print("  ISLAND  %s" % p)
+
+    # claim coverage
+    typed = untyped_rel = 0
+    for p, txt in pages.items():
+        fm, _ = split_fm(txt)
+        typed += len(parse_connections(fm))
+        untyped_rel += len(fm_list(fm, "related"))
+    print("typed connections (with claims): %d" % typed)
+    print("bare related: entries (untyped): %d" % untyped_rel)
+
+    # bare Related footers
+    footers = [
+        p for p, txt in pages.items()
+        if re.search(r"^##\s*(Related|See also)\s*$", txt, re.M | re.I)
+    ]
+    print("pages with bare '## Related' footers: %d" % len(footers))
+
+    # domain-pair synthesis coverage
+    mat = collections.Counter()
+    for s, ts in edges.items():
+        for t in ts:
+            a, b = sorted((dom(s), dom(t)))
+            if a != b:
+                mat[(a, b)] += 1
+    doms = sorted({dom(p) for p in pages})
+    print("\ncross-domain edge coverage (0 = disconnected domain pair):")
+    for a, b in itertools.combinations(doms, 2):
+        print("  %-10s <-> %-10s %d" % (a, b, mat.get((a, b), 0)))
+
+
+# ---------------------------------------------------------- candidates
+def cmd_candidates(pages, n=60):
+    resolve = resolver(pages)
+    edges = prose_edges(pages, resolve)
+    linked = set()
+    for s, ts in edges.items():
+        for t in ts:
+            linked.add(frozenset((s, t)))
+    # also treat existing related:/connections: as linked (don't re-suggest)
+    for p, txt in pages.items():
+        fm, _ = split_fm(txt)
+        for r in fm_list(fm, "related"):
+            rr = resolve(r)
+            if rr:
+                linked.add(frozenset((p, rr)))
+        for c in parse_connections(fm):
+            rr = resolve(c.get("page", ""))
+            if rr:
+                linked.add(frozenset((p, rr)))
+
+    eligible = [p for p in pages if not is_index(p) and not is_quarantine(p)]
+    # display names for co-mention detection
+    names = {}
+    for p in eligible:
+        base = os.path.splitext(os.path.basename(p))[0].replace("-", " ")
+        if len(base) > 4:
+            names[base] = p
+        fm, _ = split_fm(pages[p])
+        tm = re.search(r'^title:\s*"?([^"\n]+)"?', fm, re.M)
+        if tm and len(tm.group(1)) > 4:
+            names[tm.group(1).lower()] = p
+        for al in fm_list(fm, "aliases"):
+            if len(al) > 4:
+                names[al.lower()] = p
+
+    evidence = collections.defaultdict(lambda: collections.defaultdict(list))
+
+    # 1. co-mention without link
+    for p in eligible:
+        low = pages[p].lower()
+        tgts = edges.get(p, set())
+        for name, tgt in names.items():
+            if tgt == p or tgt in tgts:
+                continue
+            if re.search(r"\b" + re.escape(name) + r"\b", low):
+                key = frozenset((p, tgt))
+                if key not in linked:
+                    evidence[key]["mention"].append("%s names '%s' unlinked" % (p, name))
+
+    # 2. shared raw sources
+    src_pages = collections.defaultdict(set)
+    for p in eligible:
+        fm, _ = split_fm(pages[p])
+        for s in fm_list(fm, "sources"):
+            src_pages[s].add(p)
+    for s, ps in src_pages.items():
+        if len(ps) < 2 or len(ps) > 25:
+            continue
+        for a, b in itertools.combinations(sorted(ps), 2):
+            key = frozenset((a, b))
+            if key not in linked:
+                evidence[key]["source"].append(s)
+
+    # 3. co-citation: both linked from the same third page
+    cocite = collections.Counter()
+    for s, ts in edges.items():
+        tl = [t for t in ts if not is_index(t) and not is_quarantine(t)]
+        for a, b in itertools.combinations(sorted(tl), 2):
+            key = frozenset((a, b))
+            if key not in linked:
+                cocite[key] += 1
+    for key, c in cocite.items():
+        if c >= 2:
+            evidence[key]["cocite"].append("co-cited from %d pages" % c)
+
+    # 4. tag overlap
+    tagmap = collections.defaultdict(set)
+    for p in eligible:
+        fm, _ = split_fm(pages[p])
+        for t in fm_list(fm, "tags"):
+            tagmap[t].add(p)
+    for t, ps in tagmap.items():
+        if len(ps) > 40:
+            continue
+        for a, b in itertools.combinations(sorted(ps), 2):
+            key = frozenset((a, b))
+            if key in evidence:  # tags only reinforce, never initiate
+                evidence[key]["tag"].append(t)
+
+    scored = []
+    for key, ev in evidence.items():
+        a, b = sorted(key)
+        s = (
+            2.0 * min(len(ev.get("source", [])), 4)
+            + 1.5 * min(len(ev.get("mention", [])), 2)
+            + 0.5 * min(int(re.search(r"\d+", ev["cocite"][0]).group()) if ev.get("cocite") else 0, 6)
+            + 0.75 * min(len(ev.get("tag", [])), 3)
+        )
+        if dom(a) != dom(b):
+            s *= 1.4  # cross-domain tissue is the scarce resource
+        scored.append((s, a, b, ev))
+    scored.sort(key=lambda x: -x[0])
+
+    out = [
+        "# Connection Queue — mined candidates (generated by bin/wiki-connect)",
+        "",
+        "Each pair below has concrete evidence of an unmade connection. The job",
+        "is NOT to add a link: it is to read both pages (and raw if needed),",
+        "decide the relationship TYPE, and write the CLAIM sentence per",
+        "CONNECTIONS_SPEC.md. If no defensible claim exists, mark the pair",
+        "`rejected:` with one line of reasoning — a considered non-edge is also",
+        "knowledge. Process top-down; strike entries as done.",
+        "",
+    ]
+    for s, a, b, ev in scored[:n]:
+        out.append("## [%.1f] %s <-> %s" % (s, a, b))
+        for src in ev.get("source", [])[:4]:
+            out.append("- shared source: `%s`" % src)
+        for mnt in ev.get("mention", [])[:2]:
+            out.append("- %s" % mnt)
+        for cc in ev.get("cocite", []):
+            out.append("- %s" % cc)
+        if ev.get("tag"):
+            out.append("- shared tags: %s" % ", ".join(ev["tag"][:3]))
+        out.append("- [ ] type: ______  claim: ______")
+        out.append("")
+    path = os.path.join(ROOT, "connection-queue.md")
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(out))
+    print("wrote %s (%d candidates from %d evidenced pairs)" % (path, min(n, len(scored)), len(scored)))
+
+
+# --------------------------------------------------------------- check
+def cmd_check(pages):
+    resolve = resolver(pages)
+    errors = warnings = 0
+    conn_map = {}
+    for p, txt in pages.items():
+        fm, _ = split_fm(txt)
+        conns = parse_connections(fm)
+        conn_map[p] = conns
+        for c in conns:
+            tgt = resolve(c.get("page", ""))
+            if not tgt:
+                print("ERROR %s: connection target does not resolve: %r" % (p, c.get("page")))
+                errors += 1
+                continue
+            if c.get("type") not in EDGE_TYPES:
+                print("ERROR %s -> %s: missing/invalid type %r" % (p, tgt, c.get("type")))
+                errors += 1
+            claim = c.get("claim", "")
+            if len(claim) < 25:
+                print("ERROR %s -> %s: claim missing or too thin (%r)" % (p, tgt, claim))
+                errors += 1
+    # symmetry / inverse presence
+    for p, conns in conn_map.items():
+        for c in conns:
+            tgt = resolve(c.get("page", ""))
+            t = c.get("type")
+            if not tgt or t not in EDGE_TYPES:
+                continue
+            want = t if t in SYMMETRIC else INVERSE.get(t)
+            if want is None:
+                continue
+            back = conn_map.get(tgt, [])
+            if not any(resolve(b.get("page", "")) == p and b.get("type") == want for b in back):
+                print("WARN  %s --%s--> %s: no %r edge back" % (p, t, tgt, want))
+                warnings += 1
+    # surviving bare footers
+    for p, txt in pages.items():
+        if re.search(r"^##\s*(Related|See also)\s*$", txt, re.M | re.I):
+            print("WARN  %s: bare '## Related' footer — convert to Connections" % p)
+            warnings += 1
+    print("check: %d errors, %d warnings" % (errors, warnings))
+    return 1 if errors else 0
+
+
+def main():
+    args = sys.argv[1:]
+    cmd = args[0] if args else "audit"
+    pages = load_pages()
+    if cmd == "audit":
+        cmd_audit(pages)
+    elif cmd == "candidates":
+        n = int(args[1]) if len(args) > 1 else 60
+        cmd_candidates(pages, n)
+    elif cmd == "check":
+        sys.exit(cmd_check(pages))
+    else:
+        print(__doc__)
+        sys.exit(2)
+
+
+if __name__ == "__main__":
+    main()

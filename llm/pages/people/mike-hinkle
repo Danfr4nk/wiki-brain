@@ -1,0 +1,95 @@
+---
+
+domain: people
+
+page_type: entity
+
+status: stub
+
+date_created: 2026-06-23
+
+date_modified: 2026-09-04
+
+date_range_start: 2018-03-08
+
+date_range_end: 2019-07-03
+
+sources: ["raw/self/message-csv/MASTER_MESSAGES_DB_DUMP.csv"]
+
+tags: [digital-footprint, relationships]
+
+knowledge: derived
+
+infobox:
+
+name: "Mike Hinkle"
+
+relationship_to_dan: unknown
+
+handles: ["+19043124149"]
+
+location: Jacksonville, FL area (904 area code)
+
+first_contact: 2018-03-08
+
+known_for: "Contact who checked in about Fran's health during her final months"
+
+connections:
+
+- page: wiki/people/fran-coldren
+
+type: co-occurs
+
+claim: "The sample message 'Hope Fran is ok' places Hinkle in Dan's social circle during Fran Coldren's final decline, close enough to know Fran by first name."
+
+- page: wiki/mind/concepts/contact-gini
+
+type: instance-of
+
+claim: "A low-volume, personal-register contact in the mid-tier social periphery."
+
+---
+
+# Mike Hinkle
+
+> **COUNT CORRECTED [2026-09-04] — 24, not 21.** This page reported the
+
+> Received-only figure as the whole thread. Dan's 3 messages to this contact
+
+> are in `raw/self/dox-scan/all_imessages_complete_dump.txt`, which this page
+
+> did not read; they were never missing from the record. Found by
+
+> `bin/wiki-crosslink counts`, built the same day after the same defect was
+
+> found by hand a fourth time — `bruce-burish` and `zach-clingan` already
+
+> carried corrections for it, and `rod-banks` and `zach-hendricks` got theirs
+
+> hours earlier. **Thirteen pages were wrong the same way.** The prose below
+
+> was written against the smaller, one-sided thread and has not been re-derived.
+
+Mike Hinkle is a contact based in the Jacksonville, Florida area (904 area code, confirmed via Google Contacts with two phone entries) who appears in the iMessage corpus across a 16-month window, March 2018 to July 2019. The preserved sample — "What? Are you a pimp now or something? Hope Fran is ok" — is notable for its casual familiarity and for placing Hinkle in Dan's social circle during [[wiki/people/fran-coldren|Fran Coldren]]'s final decline and death (April 4, 2018). He knew Fran by first name, suggesting either a family connection or a close enough friendship to be aware of the caregiving situation.
+
+## Corpus Dimensions
+
+| Metric | Value |
+
+|--------|-------|
+
+| Messages | **24** — 3 sent (Dan), 21 received (was: 21) |
+
+| Date range | 2018-03-08 – 2019-07-03 |
+
+| Handle | +19043124149 |
+
+| Direction | **3 Sent / 21 Received** — corrected 2026-09-04 |
+
+## Gaps
+
+Relationship to Dan and to Fran unresolved. The Florida area code suggests he may be a Full Sail-era (2008–2010) or later connection who relocated, but this is speculation. No Facebook or other corpus cross-references found.
+
+---
+
+**Up:** [[wiki/people/index|People]]

@@ -1,0 +1,393 @@
+---
+
+domain: interests
+
+page_type: entity
+
+status: stable
+
+date_created: 2026-07-16
+
+date_modified: 2026-09-04
+
+sources:
+
+- "raw/self/youtube-watch-history/YOUTUBE WATCH HISTORY (2010-2025).html"
+
+- "raw/self/dox-scan/Dan Profile.txt"
+
+- "raw/self/facebook/facebook-ihatedanfrank/pages_and_profiles/pages_you_ve_liked.html"
+
+tags: [personality-profile, digital-footprint, nyc-era]
+
+connections:
+
+- page: wiki/mind/synthesis/2020-left-turn
+
+type: causes
+
+claim: "The fanbase's rightward drift after Cumia's firing is a cause of Dan's leftward turn in his own words — 'we were radicalized to leftist politics' — supplying the departure half that the 2020 conversion story, built on media he sought out, does not have."
+
+- page: wiki/mind/synthesis/interests-as-era-markers
+
+type: instantiates
+
+claim: "The loudest era-marker in the whole intake record: the two peak YouTube years of a two-decade log, 2012–13, are substantially this one subject."
+
+- page: wiki/self/youtube-watch-history
+
+type: evidenced-by
+
+claim: "The ~450 fan-archive-channel watches and the 3,538/2,742 peak-year counts are the primary record this page interprets."
+
+- page: wiki/interests/stand-up-comedy
+
+type: causes
+
+claim: "The pipeline is direct: the 2012–13 radio-archive binge trained the taste that surfaces as the 2017–19 comedy-club interest cluster and the 2019 NYC live run — he was steeped in the scene's radio precursor for most of a decade before attending it."
+
+- page: wiki/mind/profile/linguistic-profile
+
+type: causes
+
+claim: "The callous, riff-driven, gallows-irony register the profile calls a 'psychic ventilator' is the native dialect of the O&A universe — this binge is where that idiom was trained."
+
+- page: wiki/mind/profile/voice-modes
+
+type: contextualizes
+
+claim: "Supplies the media source behind the shock-comic voice mode: the register was absorbed from years of archive listening, not invented."
+
+- page: wiki/people/bobby-cole
+
+type: evidenced-by
+
+claim: "Nine years (2013–2022) of a real Facebook friendship sustained almost entirely by trading O&A/Ron & Fez clips and lore is the clearest case of the archive obsession anchoring a lived relationship, not just solitary listening."
+
+- page: wiki/mind/synthesis/closing-the-set
+
+type: instantiates
+
+claim: "About 450 watches across three fan-archive channels is not fandom but archive exhaustion: a dead broadcast corpus worked through in order until it ran out, which is why it produces the two loudest years in a two-decade watch log and then stops rather than tapering."
+
+- page: wiki/interests/music/bands/batteries-not-included
+
+type: parallels
+
+claim: "Both are formative teenage counterculture immersions Dan explicitly credits decades later — the hardcore scene via Seth LeDonne, the shock-radio archive via years of solo listening — that trained the same anti-normie, no-flinch aesthetic register."
+
+- page: wiki/work/tech/ai-video-essays
+
+type: parallels
+
+claim: "A decade of shock-radio/long-form comedy immersion is the structural template Dan reaches for when designing his own long-form video format — Some More News is explicitly named as the model to reverse-engineer."
+
+- page: wiki/self/twitter/2012
+
+type: evidenced-by
+
+claim: 'Dan disavows the show\'s politics while committing to its comedy on 2012-02-26, ten years before the retrospective account, and applies for an O&A internship on 2012-11-18 — the only job application anywhere in the 2010-2012 record.'
+
+- page: wiki/self/twitter/2014
+
+type: contradicts
+
+claim: 'Dan backed Cumia the day after the firing — "nothing but love and respect ant" (2014-07-04) — and endorsed his anti-political-correctness framing as "brilliant" three months earlier. The 2022 radicalization account\'s timing does not survive it; its direction of travel does.'
+
+- page: wiki/self/twitter/2018
+
+type: evidenced-by
+
+claim: 'The middle term of the sequence: "opie sucks though" (2018-10-29), three words with no argument attached, four years after the firing and four before the retrospective.'
+
+- page: wiki/self/twitter/2021
+
+type: contradicts
+
+claim: "The move away from comedy free-speech absolutism is dated five months earlier than this page states: 'Lenny Bruce was arrested...not by the public, but by the state. Dave Chappelle is facing criticism which is, I'm told, different.' (2021-10-26), against the Louis CK defence of 2019-01-16."
+
+- page: wiki/self/twitter/replies
+
+type: evidenced-by
+
+claim: "The Sandy week of October 2012 is a reply relationship rather than fandom at a distance: he feeds the live broadcast sourced material — the Breezy Point fire video, the Atlantic's photo debunk, 911 call volume, the HMS Bounty sinking — across a single storm."
+
+---
+
+# Opie & Anthony / Shock Radio
+
+The single most-watched thing in Dan's entire YouTube history is not
+
+music, politics, or a game — it is the **Opie & Anthony shock-radio
+
+archive**. The watch-history page ([[wiki/self/youtube-watch-history]])
+
+records it as raw channel counts, but those counts describe a formative
+
+obsession that shaped his sense of humor, his idiom, and the comedy taste
+
+documented on [[wiki/interests/stand-up-comedy]]. This page is the
+
+"lived meaning" behind the numbers.
+
+## The scale of it
+
+The 2012–2013 YouTube peak — the two loudest years in a two-decade log —
+
+is almost entirely O&A radio-archive bingeing:
+
+| Year | Watched events | Character |
+
+|------|----------------|-----------|
+
+| 2011 | 1,552 | radio consumption emerging |
+
+| 2012 | 3,538 (all-time peak) | O&A / Opie Radio archive heavy |
+
+| 2013 | 2,742 | O&A / Opie peak continues |
+
+By archive channel, the top of his entire watch history is shock radio:
+
+| Channel | Watches |
+
+|---------|---------|
+
+| O&A, R&F, TESD and Scorch Archive | 168 |
+
+| Opie Radio | 165 |
+
+| O&A, R&F, & Bennington Archive | 115 |
+
+That is ~450 watches across just the three main fan-archive channels —
+
+more than any music or politics channel. "R&F" is *Ron & Fez*; "TESD" is
+
+*Tell 'Em Steve-Dave*; "Bennington" is the *Ron Bennington* interview
+
+archive. This is a person who consumed the entire SiriusXM/terrestrial
+
+comedy-radio universe of the early 2010s through fan re-uploads, in order,
+
+for years.
+
+## The cast as an idiom source
+
+The O&A world is a who's-who of the comics who later show up as Dan's
+
+*live* favorites and idiom donors:
+
+- **Jim Norton** — an O&A third-mic staple; also a named Facebook
+
+"comedy/skeptic" interest.
+
+- **Patrice O'Neal** — the show's legendary guest; the archetype of the
+
+brutal, no-flinch honesty Dan prizes.
+
+- **Bill Burr** — regular O&A guest, listed as a Facebook interest.
+
+- **Ron Bennington / Dave Attell** — both appear on his live-comedy
+
+favorites list in [[wiki/interests/stand-up-comedy]].
+
+The pipeline is direct: the 2012–13 radio-archive binge → the 2017–2019
+
+Facebook comedy-club interest cluster (Comedy Cellar, The Stand, Gotham)
+
+→ the 2019 live New York stand-up run. He didn't discover the alt-comedy
+
+scene in New York; he'd been steeped in its radio precursor for most of a
+
+decade first.
+
+## The fanbase split, and which side Dan took
+
+The show's afterlife has a politics, and Dan gave his own account of it on
+
+**18 July 2022**, writing to Opie directly:
+
+> *"something to consider - while many O&A fans followed Anthony down the
+
+> reactionary rabbit hole of white-grievance politics…a lot of the online
+
+> community were so repulsed by the racism and fascistic overtones that we
+
+> were radicalized to leftist politics (1/3)"*
+
+Two things in one sentence. He names the fanbase's rightward drift after
+
+Anthony Cumia's 2014 firing as a **reactionary rabbit hole of white-grievance
+
+politics** — not a euphemism, and written to the co-host rather than about
+
+him. And he places himself in the counter-current: *"we were radicalized to
+
+leftist politics."*
+
+> **CONTRADICTION [2026-09-03] — he was not repulsed in 2014.** The
+
+> contemporaneous record runs the other way. Anthony Cumia was fired on
+
+> **3 July 2014** over racist posts about a Black woman who had hit him in
+
+> Times Square. On **4 July 2014** Dan tweeted at him:
+
+>
+
+> > *"nothing but love and respect ant. Thanks for not selling your soul
+
+> > through this whole mess."*
+
+>
+
+> And on **25 March 2014**: *"brilliant point re 'tranny' outrage. Minority
+
+> groups feel entitled to have at least 1 term ruled a slur."* 2014 is a
+
+> **spreadsheet-complete year** on [[wiki/self/twitter/2014]] — 170 of 171 rows
+
+> from the operator export — so the absence of any post expressing discomfort
+
+> is itself evidence, and the record is not merely silent but opposed.
+
+>
+
+> **What survives and what does not.** *"We were radicalized"* describes a
+
+> process, and a process may begin well after its cause; the 2020 turn
+
+> independently corroborates the eventual direction. What does not survive is
+
+> the **timing** the sentence implies. Recorded as **t015** in the testimony
+
+> ledger — `partial`, failure mode `compression`, direction `early`, slant
+
+> **`flattering`**, the first self-favouring error that ledger holds.
+
+>
+
+> **This makes the page's argument bigger, not smaller.** A man repelled at the
+
+> moment of the offence has changed nothing about himself. A man who
+
+> congratulated Cumia on his integrity in July 2014 and arrived at democratic
+
+> socialism by August 2020 has moved a real distance, and the six-year lag —
+
+> previously an awkward gap — is the measure of it.
+
+That makes this page load-bearing for
+
+[[wiki/mind/synthesis/2020-left-turn]], which dates his socialist conversion
+
+to August 2020 and attributes it to Chapo, Hasan, ContraPoints and lockdown
+
+reading. This tweet supplies a cause that page does not have — repulsion from
+
+a community he was already inside. Both can be true, and the combination is
+
+more explanatory than either: the show he had listened to for years turned
+
+into something he could not follow, and the vacancy was filled by the
+
+dirtbag-left media that shares its register.
+
+He was inside the community deeply enough for the split to be personal —
+
+*"I was a regular in the storied opieandanthony subreddit before it was
+
+banned"* (18 November 2022) — and he kept engaging the hosts publicly
+
+throughout: sixteen tweets to `@OpieRadio`, ten to `@AnthonyCumia`, nine each
+
+to `@JimNorton` and `@notsam`, spanning 2012 to 2022.
+
+**One documented consequence.** On **28 March 2022**, during the Chris
+
+Rock/Will Smith argument, he stated a position that the show's own ethic would
+
+not recognise: *"I've moved away from belief in comedy's absolutist defense of
+
+free speech ('it's just a joke') and have a more sympathetic view of how the
+
+abstract qualities of stand up as an art form can be abused to spread bigotry
+
+(usually transphobia) disguised as profound truth."* It is a genuine shift and
+
+not a conversion — in the same thread he defends the Rock joke as *"not
+
+particularly malicious"* and warns against *"wokescoldery"* — but "it's just a
+
+joke" is the exact doctrine the show ran on, and he says he has left it.
+
+> **CORRECTED [2026-09-03] — March 2022 is not the earliest instance.** The
+
+> shift is dated five months earlier by [[wiki/self/twitter/2021]]. On
+
+> **26 October 2021**, during the Chappelle row, he wrote:
+
+>
+
+> > *"Lenny Bruce was arrested...not by 'the public', but by the state. Dave
+
+> > Chappelle is facing criticism which is, I'm told, different."*
+
+>
+
+> That is the same position, argued rather than declared, and aimed precisely
+
+> at the martyrdom analogy the absolutist defence depends on. Bounding it from
+
+> the other side: on **16 January 2019** he was still fully inside the old
+
+> position — *"The recent joke shaming of Louis CK is so fucking disturbing.
+
+> You don't have to agree with the material to appreciate the essence of what a
+
+> joke is."* So the move happens somewhere in the thirty-three months between
+
+> those two dates, and the March 2022 thread is the moment he **states** it
+
+> about himself, not the moment he arrives at it.
+
+**Gap:** the 18 July 2022 tweet is marked **(1/3)** and parts 2 and 3 are not
+
+in the archive. His fullest public statement about what the show's collapse
+
+did to him politically survives only as its opening third.
+
+## Why it matters
+
+O&A is the missing keystone between three already-documented things: the
+
+YouTube watch-history peak (previously just a number), the linguistic
+
+profile ([[wiki/mind/profile/linguistic-profile]], [[wiki/mind/profile/voice-modes]])
+
+— the callous, riff-driven, "gallows/black-irony" register that the
+
+profile calls a "psychic ventilator" is the native dialect of that
+
+show — and the [[wiki/interests/stand-up-comedy]] pursuit. The value of
+
+shock radio to Dan is the same value he assigns to everything: unfiltered,
+
+anti-normie, anti-sentimental honesty delivered as comedy. It is where
+
+his humor was *trained*.
+
+**Gaps:** The listening is documented via YouTube fan-archive watches,
+
+not a Sirius/subscription log — so the true volume (car listening, app
+
+listening) is certainly higher than the ~450 archive watches captured.
+
+The many "Opie" hits in the message dump refer to a local Uniontown
+
+person, not the radio host, and are excluded here. Exact first-listen date
+
+is not established; 2011 is the earliest cluster in the watch history.
+
+---
+
+**Up:** [[wiki/interests/index|Interests]]

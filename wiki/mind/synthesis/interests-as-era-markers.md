@@ -1,0 +1,173 @@
+
+---
+domain: mind
+page_type: synthesis
+status: active
+knowledge: earned
+date_created: 2026-07-17
+date_modified: 2026-08-19
+sources:
+  - "raw/self/favorites/FAVS MASTERLIST.csv"
+  - "raw/self/youtube-watch-history/YOUTUBE WATCH HISTORY (2010-2025).html"
+  - "raw/self/dox-scan/all_imessages_complete_dump.txt"
+  - "raw/self/facebook/facebook-ihatedanfrank/posts/your_posts_1.html"
+synthesizes:
+  - wiki/mind/synthesis/intake-constancy
+  - wiki/mind/synthesis/2020-left-turn
+  - wiki/mind/synthesis/closing-the-set
+  - wiki/interests/opie-and-anthony
+  - wiki/interests/roman-republic
+tags: [personality-profile, digital-footprint, forensic-analysis]
+connections:
+  - page: wiki/mind/synthesis/intake-constancy
+    type: caused-by
+    claim: "The fixed-rate intake metabolism is the enabling condition: because volume never varies, the only degree of freedom left is subject, so subject-rotation is where the era signal lives."
+  - page: wiki/interests/opie-and-anthony
+    type: instance-of
+    claim: "The loudest marker in the ledger: the two peak YouTube years of a two-decade log, 2012–13, are substantially one subject — the shock-radio archive binge of the post-Full-Sail drift years."
+  - page: wiki/interests/golf
+    type: instance-of
+    claim: "The 2016–19 marker where the interest literally was the era — sport, social world, and primary paycheck at once through the caddying job spanning the poverty-floor years."
+  - page: wiki/interests/roman-republic
+    type: instance-of
+    claim: "The cleanest single-year marker: the 2024 Roman-Republic syllabus read back-to-back and evangelized outward, concurrent with the return to Pennsylvania."
+  - page: wiki/mind/synthesis/2020-left-turn
+    type: instance-of
+    claim: "The already-synthesized instance: the lockdown politics binge is an intake obsession that dated a life period so precisely it carries its own birthday, 2020-08-22."
+  - page: wiki/interests/video-games
+    type: instance-of
+    claim: "The longest-wavelength marker: a 2007 teen-identity coordinate that goes quiet for years at a time and resurfaces as datable events — the 2016 PlayStation winter, the 2025 liquidation."
+  - page: wiki/interests/stand-up-comedy
+    type: instance-of
+    claim: "The 2019 marker: the dated NYC live-club attendance run and the open-mic ambition are the New-York-era signature, prepared by the earlier radio era."
+  - page: wiki/interests/film-canon
+    type: mirrors
+    claim: "The control case: a stable eleven-title canon rather than an era binge — but Eyes Wide Shut's meaning is itself era-indexed (2017 completion target → 2019 arrangement self-lens → 2023 household ritual), so even the fixed list dates its own readings."
+  - page: wiki/mind/concepts/the-cool-metric
+    type: caused-by
+    claim: "The admission criterion operating upstream of the intake record: subjects had to pass a performed-versus-authentic filter before they could become era markers at all."
+  - page: wiki/mind/synthesis/closing-the-set
+    type: instantiates
+    claim: "The completism this page names in one unmeasured clause is the mechanism behind its own dating power: eras end when their set closes, which is why the 2024 Rome year stops at Augustus rather than fading, and why the transitions are sharp enough to pin."
+  - page: wiki/interests/extreme-sports
+    type: instantiates
+    claim: "The 2000–2006 freeskiing/inline era is an unrecorded pre-cursor to the era-marker series — a total-obsession adolescence that left no digital intake record, making it the first era marker that cannot be verified from watch logs alone."
+---
+
+# Interests as Era-Markers
+
+Dan's biography can be periodized two ways: by external events (jobs,
+moves, the Annie relationship's arcs) or by what his intake channel was
+locked onto. This page argues the second method is as reliable as the
+first, and explains why. [[wiki/mind/synthesis/intake-constancy]]
+established that the *rate* of intake is the most stable fact in twenty
+years of behavioral record — roughly 11.6 YouTube watches and 20 logged
+search actions per active day, invariant across cities, jobs, and
+relationships. What that page did not say is the corollary this one
+exists for: **because the rate never moves, the subject is the only
+thing free to move — and it moves in discrete, dateable, near-total
+obsessions.** The interest ledger is therefore a timeline instrument.
+Tell me what Dan was consuming and I can tell you, usually to the year,
+where in his life you are standing.
+
+## The marker series
+
+The pattern holds across every documented intense interest, each argued
+in full on its own page:
+
+- **2007 — the teen identity cluster.** The Facebook status layer names
+  its coordinates in one breath: Fall Out Boy tour devotion, "slaying on
+  halo," Super Mario Galaxy ([[wiki/interests/video-games]],
+  [[wiki/timeline/events/teen-concert-years]]). The interests are not
+  adjacent to the identity; they are its stated content.
+- **2012–13 — the shock-radio archive.** The two loudest years in the
+  entire YouTube history are substantially one subject: the
+  [[wiki/interests/opie-and-anthony|O&A archive binge]], ~450 watches
+  across three fan-archive channels, filling the post-Full-Sail drift
+  years and training the humor that surfaces later as the live-comedy
+  pursuit.
+- **2016–19 — golf.** The one era where the marker and the era are the
+  same object: [[wiki/interests/golf]] was simultaneously his sport,
+  his social world, and — through the caddying job at
+  [[wiki/work/nemacolin-caddying|Nemacolin, Laurel Valley, and Pikewood]] —
+  his main income across the hardest financial years.
+- **2019 — live stand-up.** The dated NYC club run and the open-mic
+  ambition ([[wiki/interests/stand-up-comedy]]) are the New-York-era
+  signature — an obsession the 2012–13 radio era had spent a decade
+  preparing.
+- **2020 — the left turn.** The already-synthesized instance: the
+  lockdown politics binge is so precisely dating that
+  [[wiki/mind/synthesis/2020-left-turn]] gives the resulting ideology a
+  birthday, 2020-08-22.
+- **2024 — the Roman Republic.** The cleanest single-year detonation:
+  the standard modern syllabus (Carlin → Holland → Goldsworthy →
+  Plutarch) read essentially back-to-back and evangelized to multiple
+  contacts at once ([[wiki/interests/roman-republic]]), concurrent with
+  the return to Pennsylvania.
+
+## The control case
+
+[[wiki/interests/film-canon]] looks like a counterexample — a stable
+eleven-title canon, not a binge — and that is exactly why it belongs
+here. The canon's *contents* don't rotate, but its *readings* do: Eyes
+Wide Shut is a completion target in 2017, a self-lens on the arrangement
+in 2019 ("living some eyes wide shut shit vicariously through her"), and
+a deadpan household Christmas ritual by 2023. Even where the interest is
+fixed, the era shows through in what the interest is used *for*. The
+marker mechanism is not the novelty of the subject; it is the totality
+of engagement, and totality leaves dated fingerprints either way.
+
+## Why the pattern exists
+
+Three already-documented facts compose into the mechanism. First, the
+fixed-rate metabolism ([[wiki/mind/synthesis/intake-constancy]]) means
+intake hours are a conserved quantity — a new obsession cannot add
+volume, it can only displace the previous subject, which is why the
+transitions are sharp enough to date. Second, the engagement style is
+total rather than casual — the same completism that produces a Kubrick
+checklist, a full Goldsworthy shelf, and an in-order radio archive
+run-through. Third, the obsessions are *evangelized* — pushed on
+partners and contacts in dated messages — which is what leaves the
+corroborating timestamps outside the watch logs themselves.
+
+## What this is for
+
+Practically, this page licenses an inference rule for future work: an
+undated artifact (a photo, an unexported chat fragment, a playlist) that
+shows a marker interest can be approximately dated by it, and
+conversely, a period page missing its marker is incomplete. The junction
+also names a gap: the
+[[wiki/timeline/periods/2021-2023-employment-block|2021–2023 employment-block]]
+years have no identified marker obsession yet — either the record is thin there or the
+marker (market-watching? the meme-stock thread?) hasn't been promoted
+out of its host pages. That absence is itself worth resolving.
+
+**Gaps:** The pre-2007 childhood layer has no intake record at all, so
+the series starts where the digital footprint starts. The
+[[wiki/timeline/periods/2021-2023-employment-block|2021–23]] marker
+is unidentified (above). The claim "rate constant, subject rotates" is
+verified at the year scale, not the month scale — sub-year obsession
+boundaries (e.g. exactly when the 2024 Rome year ended) are not yet
+established from raw.
+
+## What "totality of engagement" turns out to mean
+
+The mechanism section above names completism in one clause — *"the same
+completism that produces a Kubrick checklist, a full Goldsworthy shelf, and an
+in-order radio archive run-through"* — and treats it as a description of
+engagement style. Measured, it is the engine of this page's own dating power.
+
+The favorites record shows the marker subjects being consumed as **closed
+sets**: forty books on one presidency by thirty different authors, twenty on the
+fall of the Republic by fourteen, ~450 watches working through a dead radio
+show's fan archive in order, a Kubrick filmography with a countable remainder
+Dan reports in his own words. That is why the transitions are sharp enough to
+pin. An era does not end because attention wandered to something newer; **it
+ends because its set closed** — which is why the 2024 Rome year stops at
+Augustus, a point at which the material is still available and rated 4 but the
+object, the Republic, is over. Conserved intake hours explain why only one
+obsession runs at a time; set-closure explains why the previous one terminates
+instead of thinning. Full distributions at
+[[wiki/mind/synthesis/closing-the-set]].
+
+

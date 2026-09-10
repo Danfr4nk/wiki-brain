@@ -1,0 +1,46 @@
+
+---
+domain: people
+page_type: entity
+status: active
+date_created: 2026-06-23
+date_modified: 2026-07-20
+sources:
+  - raw/self/dox-md/BFS_BOOTLOADER_v2.md
+  - raw/self/dox-md/BFS Anita Quagmire strategy and legal exposure.md
+  - raw/self/chats/Drawer shortage dispute with assistant manager (1).md
+tags: [career]
+infobox:
+  name: "Dakota"
+  relationship_to_dan: unknown
+  known_for: "Little Caesars employee in Timmy's friend group; first to disclose Anita's blame-pivot naming Dan for Timmy's firing"
+connections:
+  - page: wiki/work/bfs-foods
+    type: evidenced-by
+    claim: "Dakota is the first, hearsay disclosure channel for the Timmy blame-pivot pattern that [[wiki/work/bfs-foods]] documents in full as 'the pattern template' for Anita's operational conduct."
+  - page: wiki/people/maddox
+    type: parallels
+    claim: "Maddox's unprompted, first-person account during the May 21, 2026 sidewalk recording independently corroborates the same blame-pivot sequence Dakota disclosed to Dan earlier."
+---
+
+# Dakota
+
+Dakota is a Little Caesars employee at the BFS Foods building and a
+member of [[wiki/people/timmy|Timmy]]'s friend group. He was the first
+person to tell Dan that [[wiki/people/anita|Anita]] had pivoted blame
+for Timmy's firing onto him. No direct quotes from Dakota are preserved in the
+corpus — the disclosure is hearsay, relayed informally rather than
+through a documented message thread — but the bootloader synthesis
+treats it as credible, and it was independently corroborated weeks
+later when [[wiki/people/maddox|Maddox]] gave a fuller, unprompted,
+first-person account of the same sequence. The full narrative — Timmy's
+gambling-on-shift firing, Anita's initial blame of
+[[wiki/people/kim|Kim]], Kim's denial, and the pivot to "it was
+Daniel" despite Dan having zero involvement — is told in full on
+[[wiki/work/bfs-foods]]; this page exists to record Dakota's specific
+role as the originating witness, not to re-narrate the chain.
+
+**Gaps:** how Dan and Dakota know each other beyond the shared
+building; no direct quotes or message thread.
+
+

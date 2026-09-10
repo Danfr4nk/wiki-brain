@@ -1,0 +1,48 @@
+
+---
+domain: interests
+page_type: event
+status: stable
+date_created: 2026-08-01
+date_modified: 2026-08-01
+sources:
+  - "raw/self/concerts/table.csv"
+related: []
+tags: [music-production, digital-footprint]
+connections:
+  - page: wiki/interests/favorites/music/artists/incubus
+    type: contains
+    claim: "Incubus performed at Rolling Rock Town Fair on Aug 4, 2001 (Westmoreland Fairgrounds, Latrobe / Mt. Pleasant, PA)."
+  - page: wiki/interests/favorites/music/artists/outkast
+    type: contains
+    claim: "Outkast performed at Rolling Rock Town Fair on Jul 27, 2002 (Westmoreland Fairgrounds, Latrobe / Mt. Pleasant, PA)."
+  - page: wiki/interests/favorites/music/artists/default
+    type: contains
+    claim: "Default performed at Rolling Rock Town Fair on Jul 27, 2002 (Westmoreland Fairgrounds, Latrobe / Mt. Pleasant, PA)."
+---
+
+# Rolling Rock Town Fair
+
+Rolling Rock Town Fair is a festival / tour Dan Frank attended. This page records the edition(s) he is documented at, with full lineups and notes, preserved from the concert log.
+
+## Editions
+
+| Date | Venue | City | Note |
+|------|-------|------|------|
+| Aug 4, 2001 | Westmoreland Fairgrounds | Latrobe / Mt. Pleasant, PA | Confirmed. |
+| Jul 27, 2002 | Westmoreland Fairgrounds | Latrobe / Mt. Pleasant, PA | Alien Ant Farm cancelled (bus accident); Tommy Lee filled in. |
+| Jul 31, 2004 | Westmoreland Fairgrounds | Latrobe / Mt. Pleasant, PA | Heavy rain/mud reported; no postponement found. |
+
+## Lineups (per edition)
+
+### Aug 4, 2001 — Westmoreland Fairgrounds, Latrobe / Mt. Pleasant, PA
+Stone Temple Pilots · Deftones · [[wiki/interests/favorites/music/artists/incubus]] · Live · Oleander · Staind · Tantric
+
+### Jul 27, 2002 — Westmoreland Fairgrounds, Latrobe / Mt. Pleasant, PA
+Godsmack · [[wiki/interests/favorites/music/artists/outkast]] · Nickelback · P.O.D. · Sevendust · [[wiki/interests/favorites/music/artists/default]] · Injected · Tommy Lee
+
+### Jul 31, 2004 — Westmoreland Fairgrounds, Latrobe / Mt. Pleasant, PA
+Staind · Disturbed · Velvet Revolver · Three Days Grace · Finch · Finger Eleven · Hoobastank · N.E.R.D · Sevendust
+
+
+

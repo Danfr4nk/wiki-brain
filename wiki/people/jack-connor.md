@@ -1,0 +1,57 @@
+
+---
+domain: people
+page_type: entity
+title: "Jack Connor"
+aliases: ["Jack"]
+status: stable
+date_created: 2026-08-03
+date_modified: 2026-08-03
+tags: [legal, uniontown-era]
+infobox:
+  name: "Jack Connor"
+  relationship_to_dan: "defence lawyer (2015–2016)"
+  location: uniontown
+  first_contact: 2015
+  known_for: "The Fayette County lawyer who got Dan into ARD against a District Attorney policy that categorically excluded cocaine charges"
+connections:
+  - page: wiki/legal/2015-possession-arrest
+    type: causes
+    claim: "The DA of the period refused ARD to anyone charged with a cocaine misdemeanor, residue or not, so the diversion that kept Dan's only real arrest off his record is attributable to Connor defeating a categorical bar rather than to the case being minor."
+  - page: wiki/people/suzanne-frank
+    type: co-occurs
+    claim: "The one other trace of Connor in the corpus places him at a casino cash-claw drawing Suz was also attending, which is consistent with a local professional known to the family through the gambling circuit rather than retained cold."
+---
+
+# Jack Connor
+
+Jack Connor is the Fayette County defence lawyer who represented Dan after
+[[wiki/legal/2015-possession-arrest|the 2015 possession arrest]], and he is
+the reason that arrest left no permanent record. Dan's assessment of him is
+the most unqualified endorsement of any professional anywhere in the corpus:
+"my fucking absolute LEGEND of a lawyer."
+
+The work he did was not routine. Dan was charged with possession of a Class B
+controlled substance over **residue** in an empty cocaine bag, and the
+District Attorney of the period held a standing policy of denying
+Pennsylvania's ARD diversion programme to anyone facing a cocaine or heroin
+misdemeanor — residue or not. On the face of it the outcome Dan received was
+unavailable to him. Connor obtained it anyway, at a cost Dan puts at several
+thousand dollars. The contemporaneous message record describes the same
+manoeuvring from the outside without knowing what it was against: "Jack had to
+do some wheeling and dealing to make it happen."
+
+One other trace of him survives in the corpus, and it is incidental rather
+than legal. A message describes a casino "cash claw" drawing at which "the
+first name they called was Jack Connor," alongside the observation that anyone
+who did not try to solicit a job from him would be crazy. It places Connor in
+the same Fayette County gambling-venue circuit that
+[[wiki/people/suzanne-frank|Suz]] moved in, which is a plausible route by which
+the family knew to call him — though no source states how he was retained.
+
+**Gaps:** his firm, his fee in exact terms, whether he handled
+[[wiki/legal/2015-retail-theft-arrest|the Combos matter]] as well, and any
+later contact are all unrecorded. The message placing him at the cash-claw
+drawing is undated in the extract available.
+
+

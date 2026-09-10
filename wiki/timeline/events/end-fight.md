@@ -1,0 +1,68 @@
+
+---
+domain: timeline
+page_type: event
+status: archived
+date_created: 2026-06-23
+date_modified: 2026-06-23
+date_range_start: 2026-05-31
+date_range_end: 2026-06-01
+sources: ["raw/self/message-csv/THE END FIGHT.csv", "raw/self/message-csv/annie_all_time_logs.csv", "raw/self/dox-md/LIFE_EVENTS_CALENDAR.md"]
+related: ["wiki/people/annie-ulmer", "wiki/timeline/events/group-chat-closure", "wiki/timeline/periods/2025-collapse", "wiki/mind/concepts/attachment-model", "wiki/mind/concepts/conflict-architecture"]
+tags: [addiction-recovery, trauma-bond]
+connections:
+  - page: wiki/mind/synthesis/dan-annie-fallout-verdict
+    type: evidences
+    claim: "This event corpus is the primary RAW-CSV backbone of the fallout verdict's defamation and independent-validation findings."
+  - page: wiki/people/jerel-coles
+    type: co-occurs
+    claim: "He is the counterpart of the terminal group chat that closed the relationship on June 1, 2026."
+---
+
+
+# The End Fight (May 31 – June 16 2026)
+
+## What happened
+Extended confrontation sequence captured in dedicated "THE END FIGHT" CSV export and the `imessage_export_7248123683_20260624.csv` extension. Begins May 31 with fragmented messages ("Please…", cut-off texts) and escalates into raw accusations, references to past addiction/survival ("I saved you from fucking DYING when you were shooting coke"), lying/defamation, and culminates June 1 00:27 with Annie's "Goodbye forever. This was not how it should have ended but. sic semper lupanis."
+
+Dan's responses include finality declarations, shame, boundary on "poison pill", and refusal to let the narrative be rewritten. The fight includes group-chat elements with a hostile third-party ("Tuquick") confirming defamation.
+
+**June 15-16 Epilogue:** Two weeks after the closure, Dan fine-tuned an AI model on the raw text logs of the fight and shared it, along with a custom Spotify crate, with Annie and Tuquick. During this exchange, it was revealed that Tuquick had defected and independently validated Dan's assessment of Annie ("She’s a compulsive liar with a drug addiction").
+
+## When
+- 2026-05-31: Bulk of sequence (468 entries), evening escalation.
+- 2026-06-01 ~00:00-00:28: Closure cluster (121 entries in fight CSV; ~40 in annie logs).
+- 2026-06-15 to 2026-06-16: Post-closure epilogue (AI model, Spotify crate, Tuquick defection).
+
+## People involved
+- [[wiki/people/annie-ulmer]] (primary counterpart; +12124702449 handle dominant in sequence)
+- Dan (sent heavy output)
+- [[wiki/people/tuquick-17248123683]] (+17248123683; hostile third-party attacker who later defected)
+- Implicit: [[wiki/people/eli|Eli]] (referenced in context of betrayal), Annie's network (defamation recipients)
+
+## Significance
+Specific event corpus for the terminal closure. Demonstrates the "unring this bell" irreversibility, asymmetry (Dan sustained output), and explicit severance signal absent until the external group confirmation.
+
+Ties directly to attachment closure failure (no prior explicit severance despite 299+ love affirmations in broader corpus) and conflict-architecture (halt-condition failure, gaslight loops surfacing in accusations).
+
+Data record includes raw escalation from logistics/denial fragments to final mythic/Latin closure phrase.
+
+## Related events
+- [[wiki/timeline/events/group-chat-closure]] (overlaps; this is the detailed fight thread feeding the group confirmation)
+- [[wiki/timeline/events/eli-incident]] (the sustained third-party relationship confirmed here)
+- Dec 2025 spike (last high mutual investment before this breakdown)
+- 2025-08 separation and 2026-02 denial (context for "you will never unring this bell")
+
+## Data Record
+- CSV volume: 591 rows (THE END FIGHT.csv) + 2,993 rows (imessage_export_7248123683_20260624.csv); concentrated May 31 evening + June 1 early morning, followed by the June 15 extension.
+- Key verbatim (from sequence):
+  - Annie fragments: "Please…", cut-offs.
+  - Dan: "i am not delusional enough to believe that you will ever want anything to do with me again but you know… it's probably time to cut your losses..."; "too bad so sad you just couldn't give me any decency and now there's a poison pill baked in"; "I saved you from fucking DYING when you were shooting coke and you would sell me out to virtue signal your loyalty to someone else?"; "Shame on you. Seriously. I hope your parents will be able to set you right also stop lying about whoever the fuck this is. Youre not being threatened. You just can’t stop lying"; "and you will never unring this bell. Have a nice life. Do not forget that you did this to me tonight."
+  - Annie closure: "Goodbye forever. This was not how it should have ended but. sic semper lupanis."
+- Cross: Matches annie_all_time_logs end cluster and LIFE calendar relational/legal nodes.
+
+**Sources note:** Dedicated fight export provides granular thread order/timestamps not fully in master dump. Complements annie logs for the 2026-06-01 closure.
+
+The moral synthesis built on this event corpus — the wronged-in-fact verdict with the diagnosis-to-behavior gap held in the same frame, every load-bearing claim provenance-tiered to raw rows — is [[wiki/mind/synthesis/dan-annie-fallout-verdict]].
+
+

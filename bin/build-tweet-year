@@ -1,0 +1,144 @@
+#!/usr/bin/env python3
+"""build-tweet-year — regenerate a yearly tweet page's transcript from the archive.
+
+Pure stdlib. The yearly pages under wiki/self/twitter/ are the presentation
+layer over raw/self/twitter/archive.jsonl, and until 2026-09-02 they were
+written by hand. That was fine while the archive only grew at the end; it
+stopped being fine when a backend backfill added 216 rows scattered across
+2008-2024 and repaired 15 more in place.
+
+What it preserves and what it rewrites
+--------------------------------------
+Everything above the first `### ` heading is **prose written by a person** —
+frontmatter, the year's framing paragraph, the Gaps section — and is copied
+through untouched, except for the three counts in the Coverage table, which are
+facts about the data and are recomputed. Everything from the first `### `
+onward is the transcript and is regenerated from the archive.
+
+So a year page never drifts from raw/, and no hand-written sentence is ever
+lost to a rebuild. Running it on a year whose page does not exist prints the
+body to stdout instead of writing, so a new year can be scaffolded by hand
+with the prose a human still has to supply.
+
+Usage
+-----
+  bin/build-tweet-year 2009            rewrite that page's transcript
+  bin/build-tweet-year 2009 --check    exit 1 if the page is out of date
+  bin/build-tweet-year 2008 --body     print the transcript, write nothing
+"""
+import argparse, json, os, re, sys
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ARCHIVE = os.path.join(ROOT, "raw", "self", "twitter", "archive.jsonl")
+PAGES = os.path.join(ROOT, "wiki", "self", "twitter")
+ENTRY = re.compile(r"^### ", re.M)
+
+
+def load(year):
+    rows = []
+    for line in open(ARCHIVE, encoding="utf-8"):
+        line = line.strip()
+        if not line:
+            continue
+        r = json.loads(line)
+        if r["created_at"][:4] == year:
+            rows.append(r)
+    rows.sort(key=lambda r: (r["created_at"], int(r["id"])))
+    return rows
+
+
+def metric(r, key):
+    v = r.get(key)
+    return "?" if v is None else v
+
+
+def body(rows):
+    out = []
+    for r in rows:
+        ts = r["created_at"].replace("T", " ")
+        out.append(f"### {ts} UTC · [{r['id']}]({r['url']})")
+        out.append(f"*likes {metric(r,'likes')} · replies {metric(r,'replies')} "
+                   f"· reposts {metric(r,'reposts')}*")
+        out.append("")
+        text = (r.get("text") or "").strip()
+        if text:
+            for ln in text.split("\n"):
+                out.append(f"> {ln}" if ln.strip() else ">")
+        else:
+            media = r.get("media") or []
+            kinds = ", ".join(sorted({m.get("type", "media") for m in media}))
+            out.append(f"> *(no text; {kinds or 'no media'} only)*")
+        if r.get("quoted"):
+            q = r["quoted"]
+            q = q if isinstance(q, str) else f"{q.get('handle','')} {q.get('text') or ''}".strip()
+            out.append("")
+            out.append(f"> — quoting: {q}")
+        out.append("")
+        out.append("")
+    return "\n".join(out).rstrip() + "\n"
+
+
+def counts(rows):
+    n = len(rows)
+    src = {}
+    for r in rows:
+        src[r["source"]] = src.get(r["source"], 0) + 1
+    return n, src
+
+
+def retable(head, rows):
+    """Recompute the three Coverage numbers in place; leave every other line."""
+    n, src = counts(rows)
+    head = re.sub(r"(\| Originals on this page \| )\d+( \|)", rf"\g<1>{n}\g<2>", head)
+    head = re.sub(r"(\| From operator spreadsheet \| )\d+( \|)",
+                  rf"\g<1>{src.get('operator-spreadsheet', 0)}\g<2>", head)
+    head = re.sub(r"(\| From live X scrape \| )\d+( \|)",
+                  rf"\g<1>{src.get('live-x-scrape', 0)}\g<2>", head)
+    return head
+
+
+def main():
+    p = argparse.ArgumentParser(prog="build-tweet-year",
+                                description=__doc__.split("\n")[0])
+    p.add_argument("year")
+    p.add_argument("--check", action="store_true", help="exit 1 if out of date")
+    p.add_argument("--body", action="store_true", help="print transcript only")
+    a = p.parse_args()
+
+    rows = load(a.year)
+    if not rows:
+        sys.exit(f"build-tweet-year: no tweets for {a.year}")
+    new_body = body(rows)
+
+    if a.body:
+        sys.stdout.write(new_body)
+        return
+
+    path = os.path.join(PAGES, f"{a.year}.md")
+    if not os.path.exists(path):
+        sys.stderr.write(f"no page at {path} — printing body; write the prose by hand\n")
+        sys.stdout.write(new_body)
+        return
+
+    cur = open(path, encoding="utf-8").read()
+    m = ENTRY.search(cur)
+    if not m:
+        sys.exit(f"build-tweet-year: {path} has no '### ' transcript to replace")
+    head = retable(cur[:m.start()], rows)
+    out = head + new_body
+
+    if a.check:
+        if out != cur:
+            sys.exit(f"build-tweet-year: {a.year}.md is out of date with the archive")
+        print(f"build-tweet-year: {a.year}.md is current ({len(rows)} rows)")
+        return
+
+    if out == cur:
+        print(f"build-tweet-year: {a.year}.md already current ({len(rows)} rows)")
+        return
+    open(path, "w", encoding="utf-8").write(out)
+    print(f"build-tweet-year: rewrote {a.year}.md — {len(rows)} rows")
+
+
+if __name__ == "__main__":
+    main()

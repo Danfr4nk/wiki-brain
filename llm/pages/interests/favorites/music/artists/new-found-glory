@@ -1,0 +1,127 @@
+---
+
+domain: interests
+
+page_type: entity
+
+status: active
+
+date_created: 2026-06-22
+
+date_modified: 2026-07-14
+
+sources: ["raw/self/favorites/FAVS MASTERLIST.csv"]
+
+related:
+
+- wiki/interests/favorites/music
+
+- wiki/interests/favorites/music/artists/fall-out-boy
+
+- wiki/interests/favorites/music/artists/taking-back-sunday
+
+- wiki/self/context-core
+
+- wiki/interests/music/concepts/lyrics-as-timbre
+
+changelog:
+
+- 2026-07-14: Full rewrite from stub. Added track-specific reading, tonal contrast with the darker emo cluster.
+
+tags: [personality-profile]
+
+---
+
+# New Found Glory
+
+Coral Springs, Florida pop-punk band, active since 1997, best known for
+
+the double punch of *Sticks and Stones* (2002) and *Catalyst* (2004) —
+
+records built on tight, hook-forward songwriting rather than the
+
+theatrical devastation of their scene contemporaries. Where My Chemical
+
+Romance staged death and Taking Back Sunday documented real betrayal, New
+
+Found Glory's mode is faster and lighter: romantic disappointment
+
+processed through momentum rather than mourning.
+
+## In Favorites
+
+Eight tracks — the second-highest count in the emo/pop-punk cluster after
+
+My Chemical Romance: "My Friends Over You," "Understatement," "Head On
+
+Collision," "All Downhill From Here," "Heartless At Best," "Hit Or Miss,"
+
+"too good to be [true]," and "Don't Let Her Pull You Down." The title
+
+track of the set, "My Friends Over You," states its thesis outright —
+
+choosing platonic loyalty over a romantic relationship that isn't worth
+
+the cost — and several of the others ("Heartless At Best," "Don't Let Her
+
+Pull You Down") carry a related theme: a friend or bystander's-eye warning
+
+about a partner who isn't good for the person they're with.
+
+> **Caveat:** Dan does not process sung lyrics as language while
+
+> listening — words register as timbre, not semantic content (see
+
+> [[wiki/interests/music/concepts/lyrics-as-timbre]]). "My Friends Over
+
+> You" as a stated thesis is more likely known from the title and cultural
+
+> reputation than parsed from the sung lyric during listening; the
+
+> tonal-contrast reading below stands independently of that caveat, since
+
+> it rests on the band's overall register (fast, hook-forward, lighter)
+
+> rather than lyric content specifically.
+
+## The tonal outlier in the cluster
+
+Set against
+
+[[wiki/interests/favorites/music/artists/my-chemical-romance]],
+
+[[wiki/interests/favorites/music/artists/say-anything]], and
+
+[[wiki/interests/favorites/music/artists/taking-back-sunday]] — all of
+
+which process betrayal, self-loathing, or mortality at close to full
+
+intensity — New Found Glory is the cluster's release valve: still the
+
+genre, still relationship-focused, but built for motion rather than
+
+dwelling. Its presence in the library at a meaningful count (eight
+
+tracks, more than either Say Anything or Taking Back Sunday) suggests the
+
+emo attraction isn't purely about seeking out the darkest material
+
+available — there's real range within the genre being drawn on, from
+
+New Found Glory's forward-moving loyalty anthems to the far heavier
+
+material elsewhere in the cluster. Read generously, "My Friends Over You"
+
+specifically — a song that explicitly ranks platonic loyalty above a bad
+
+romantic bargain — sits comfortably next to the lateral-trust,
+
+vertical-suspicion pattern already documented in
+
+[[wiki/mind/synthesis/vertical-authority-skepticism]]: friends over
+
+partners is a preference this whole corpus otherwise backs up.
+
+## Related
+
+[[wiki/interests/favorites/music]] · [[wiki/interests/favorites/music/artists/fall-out-boy]] · [[wiki/interests/favorites/music/artists/taking-back-sunday]]

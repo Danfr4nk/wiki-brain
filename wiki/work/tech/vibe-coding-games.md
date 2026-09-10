@@ -1,0 +1,53 @@
+
+---
+domain: work
+page_type: entity
+title: "Vibe-Coding Games (Matter.js)"
+status: active
+date_created: 2026-07-13
+date_modified: 2026-07-13
+sources:
+  - raw/self/dox-md/CATO_BOOTLOADER_DANFRANK.md
+related:
+  - wiki/work/tech/index
+  - wiki/work/tech/grok-build/overview
+  - wiki/mind/synthesis/ai-collaborative-analysis
+tags: [forensic-analysis, ai-collaboration]
+connections:
+  - page: wiki/mind/concepts/bunker-core
+    type: co-occurs
+    claim: "Bunker Core, the iMessage Analysis Toolkit, and the vibe-coded games all belong to the same 2025–26 tool-building wave — the period context-core logs as 'agent/AI build work, music reactivation.'"
+---
+
+# Vibe-Coding Games (Matter.js)
+
+A 2025–26 side-project line: browser physics games built entirely through
+AI-directed "vibe coding," with Dan as conceptual director rather than
+implementer. The CATO bootloader documents the working method as the
+"Antigravity" execution environment — he pastes complete instruction
+blocks and the AI writes and runs the code "without Dan touching the
+terminal directly." The stack is deliberately minimal: **Matter.js only,
+no framework dependencies**.
+
+## Known projects
+
+| Project | Engine/mechanic |
+|---------|-----------------|
+| whoano | Matter.js physics game |
+| trickrun | Matter.js physics game |
+| jumprun | Matter.js physics game |
+| basketball_sandbox | "Pulse Engine" mechanic |
+
+## Context
+
+The games sit in the same 2025–26 tool-building wave as the iMessage
+analysis toolkit, Bunker Core, and the MAX interview system — the period
+context-core logs as "vibe-coding (Matter.js), agent/AI build work, music
+reactivation." They are the purest example in the record of the
+conceptual-director work pattern: total creative sovereignty, zero
+bureaucracy, no vertical structure — the exact conditions the profile
+says he requires ([[wiki/mind/synthesis/vertical-authority-skepticism]]).
+
+**Gaps:** no repository links, playable URLs, or screenshots in raw/;
+development dates per game unknown; whether any were finished or shipped
+is undocumented.

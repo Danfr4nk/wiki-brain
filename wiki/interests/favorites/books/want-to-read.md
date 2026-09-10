@@ -1,0 +1,226 @@
+
+---
+domain: interests
+page_type: synthesis
+status: active
+knowledge: derived
+date_created: 2026-07-14
+date_modified: 2026-07-14
+sources:
+  - raw/self/dox-md/DAN_COMP.md
+synthesizes:
+  - wiki/interests/favorites/books
+  - wiki/interests/favorites/books/topics/politics
+  - wiki/interests/favorites/books/topics/ancient-history
+  - wiki/self/context-core
+related:
+  - wiki/interests/favorites/books
+  - wiki/interests/favorites/books/topics/politics
+  - wiki/interests/favorites/books/topics/ancient-history
+  - wiki/self/context-core
+tags: [politics, ideology, personality-profile, nyc-era, addiction-recovery]
+---
+
+# Book Want-to-Read List
+
+149 titles on Dan's Goodreads "want to read" shelf — never mined before
+this pass, distinct from the 120-book *read* corpus already covered in
+[[wiki/interests/favorites/books]]. Where the read list is a record of
+what Dan has actually consumed, this is a map of intent: what he considers
+worth his time next, which is its own signal about the shape of his
+interests even before a single page gets turned.
+
+## Dimensions
+
+| Metric | Value |
+|--------|-------|
+| Total titles | 149 |
+| Average Goodreads rating | 4.11 |
+| Rated 4.4+ (aspirational top tier) | 19 |
+| Highest-rated on the shelf | *The Sinister Truth: Mk-Ultra* (Ciaccia, 4.75) |
+
+## Patterns
+
+The list is a direct extension of the read corpus's obsessions rather
+than a departure from them: Trump-era politics and institutional collapse
+(~34 titles — *How Fascism Works*, *A Very Stable Genius*, *Where Law
+Ends*, *The Cult of Trump*), ancient Rome (~18 — Goldsworthy's *Punic
+Wars* and *Caesar's Civil War*, Duncan's *History of Rome: The Republic*,
+multiple Cicero/Caesar/Cleopatra titles), and intelligence/conspiracy
+history (~14 — *Dark Alliance*, *Operation Paperclip*, *JFK and the
+Unspeakable*, three separate Kennedy-assassination books, *The Ghost*
+on James Jesus Angleton). A distinct NYC-history thread appears here that
+barely shows up in the read list: *The Power Broker*, *Gotham*-adjacent
+titles like *Boss Tweed*, *The Bowery*, *St. Marks Is Dead*, *Lost New
+York* — consistent with the period he spent living there with
+[[wiki/people/annie-ulmer|Annie]].
+
+Two additions worth flagging on their own: *MindHub: Personality
+Profiler* sits on the shelf next to the Rome and Trump titles — a
+personality-typology tool alongside the same shelf that holds *Personality
+Types* and *The INTP* in the read list (see [[wiki/mind/profile/index]]) —
+and *How Democracies Die* / *The Anatomy of Fascism* / *Wannabe Fascists*
+cluster with the already-read Finchelstein title, showing the
+fascism-comparison reading isn't a one-off but a sustained line of
+inquiry.
+
+## Full List
+
+| Title | Author(s) | Avg Rating |
+|-------|-----------|-----------|
+| How Fascism Works: The Politics of Us and Them | Stanley, Jason F. | 4.23 |
+| Guns, Germs, and Steel: The Fates of Human Societies | Diamond, Jared | 4.04 |
+| A Very Stable Genius: Donald J. Trump's Testing of America | Rucker, Philip & Leonnig, Carol | 4.10 |
+| The Laws of Human Nature | Greene, Robert | 4.35 |
+| Digging Up Mother | Stanhope, Doug | 4.31 |
+| This Is Not Fame | Stanhope, Doug | 4.22 |
+| The Art of Power: My Story as America's First Woman Speaker of the House | Pelosi, Nancy | 3.97 |
+| A Brief History of Time | Hawking, Stephen | 4.21 |
+| Cosmos | Sagan, Carl | 4.40 |
+| Phenomenology of Spirit | Hegel, Georg Wilhelm Friedrich | 3.96 |
+| Tales from the Dark Looking Glass | House, Chapo Trap | 3.87 |
+| Burr | Vidal, Gore | 4.09 |
+| Where Law Ends: Inside the Mueller Investigation | Weissmann, Andrew | 4.38 |
+| The Cult of Trump: A Leading Cult Expert Explains How the President Uses Mind Control | Hassan, Steven | 4.10 |
+| The Reactionary Mind: Conservatism from Edmund Burke to Sarah Palin | Robin, Corey | 3.94 |
+| What If?: Serious Scientific Answers to Absurd Hypothetical Questions | Munroe, Randall | 4.14 |
+| It's Even Worse Than You Think: What the Trump Administration is Doing to America | Johnston, David Cay | 4.05 |
+| Frankly, We Did Win This Election: The Inside Story of How Trump Lost | Bender, Michael C. | 4.02 |
+| The Reckoning: Our Nation's Trauma and Finding a Way to Heal | Trump, Mary L. | 4.10 |
+| The Autobiography of Malcolm X | X, Malcolm & Haley, Alex | 4.37 |
+| The Power Broker: Robert Moses and the Fall of New York | Caro, Robert A. | 4.52 |
+| Operation Paperclip: The Secret Intelligence Program that Brought Nazi Scientists to America | Jacobsen, Annie | 4.14 |
+| Dark Alliance: The CIA, the Contras, and the Crack Cocaine Explosion | Webb, Gary | 4.30 |
+| The Sinister Truth: Mk-Ultra | Ciaccia, Jason | 4.75 |
+| 9/11 on Trial: The World Trade Center Collapse | Thorn, Victor | 3.93 |
+| A Short History of Nearly Everything | Bryson, Bill | 4.22 |
+| The Current Affairs Mindset: Essays on People, Politics, and Culture | Robinson, Nathan J. | 4.13 |
+| Trump's Brain: An FBI Profile of Donald Trump | Decker, Dr. | 3.72 |
+| Romney: A Reckoning | Coppins, McKay | 4.35 |
+| Where Have All the Democrats Gone? | Judis, John B. | 3.97 |
+| The Portable Henry Rollins | Rollins, Henry | 3.99 |
+| Hyena | Angelini, Jude | 4.09 |
+| Reaganland: America's Right Turn 1976-1980 | Perlstein, Rick | 4.33 |
+| King: A Life | Eig, Jonathan | 4.65 |
+| The Jakarta Method | Bevins, Vincent | 4.61 |
+| Predicting the Next President: The Keys to the White House, 2020 | Lichtman, Allan J. | 3.94 |
+| The Gulag Archipelago 1918-1956 | Solzhenitsyn, Aleksandr | 4.33 |
+| The Shock Doctrine | Klein, Naomi | 4.29 |
+| Listen, Liberal | Frank, Thomas | 4.18 |
+| Insane Clown President | Taibbi, Matt | 4.05 |
+| Ratf**ked | Daley, David | 4.15 |
+| The Ghost: The Secret Life of CIA Spymaster James Jesus Angleton | Morley, Jefferson | 3.93 |
+| The Dangerous Case of Donald Trump | Lee, Bandy X. | 4.05 |
+| How Democracies Die | Levitsky, Steven & Ziblatt, Daniel | 4.16 |
+| The Anatomy of Fascism | Paxton, Robert O. | 4.22 |
+| The Delusions Of Crowds | Bernstein, William J. | 3.60 |
+| Broadway: A History of New York City in Thirteen Miles | Leadon, Fran | 4.04 |
+| Fall and Rise: The Story of 9/11 | Zuckoff, Mitchell | 4.67 |
+| Disconnecting the Dots: How 9/11 Was Allowed to Happen | Fenton, Kevin | 3.94 |
+| The New Pearl Harbor | Griffin, David Ray | 4.10 |
+| Why We Did It | Miller, Tim | 3.97 |
+| Thank You For Your Servitude | Leibovich, Mark | 4.17 |
+| The Wrecking Crew | Frank, Thomas | 3.97 |
+| Lincoln | Vidal, Gore | 4.25 |
+| Nightfall and Other Stories | Asimov, Isaac | 4.25 |
+| On the Historicity of Jesus | Carrier, Richard C. | 4.32 |
+| Team of Rivals | Goodwin, Doris Kearns | 4.28 |
+| 1776 | McCullough, David | 4.10 |
+| Endgame at Stalingrad (Vol. 3) | Glantz, David M. | 4.52 |
+| The Bowery | DeVil, Stephen Paul | 3.82 |
+| The Only Plane in the Sky: An Oral History of 9/11 | Graff, Garrett M. | 4.72 |
+| Perversion of Justice: The Jeffrey Epstein Story | Brown, Julie K. | 4.13 |
+| Watergate: A New History | Graff, Garrett M. | 4.49 |
+| The Trigger: Hunting the Assassin Who Brought the World to War | Butcher, Tim | 3.81 |
+| Contested Will: Who Wrote Shakespeare? | Shapiro, James | 4.04 |
+| The End of History and the Last Man | Fukuyama, Francis | 3.61 |
+| The Assassination of Fred Hampton | Haas, Jeffrey | 4.46 |
+| The Signal and the Noise | Silver, Nate | 3.97 |
+| The Trial of the Chicago 7: The Official Transcript | Levine, Mark L. & Hoffman, Abbie & Hayden, Tom | 4.19 |
+| Supercommunicators | Duhigg, Charles | 4.00 |
+| The Roman Triumph | Beard, Mary | 3.99 |
+| A People's Tragedy: The Russian Revolution, 1891-1924 | Figes, Orlando | 4.37 |
+| Alexander the Great | Freeman, Philip | 4.32 |
+| Napoleon: A Life | Roberts, Andrew | 4.24 |
+| America's Good Terrorist: John Brown and the Harpers Ferry Raid | Poland, Charles P Jr. | 3.51 |
+| Dynasty: The Rise and Fall of the House of Caesar | Holland, Tom | 4.16 |
+| The Storm Before the Storm | Duncan, Mike | 4.25 |
+| Boss Tweed | Ackerman, Kenneth D. | 3.84 |
+| New York for New Yorkers | Greene, Liza M. & Zimmerman, Jean | 3.60 |
+| St. Marks Is Dead | Calhoun, Ada | 4.06 |
+| Then Everything Changed | Greenfield, Jeff | 3.62 |
+| Superforecasting | Tetlock, Philip E. & Gardner, Dan | 4.08 |
+| The Hollow Parties | Schlozman, Daniel | 3.63 |
+| The Stakes: America at the Point of No Return | Anton, Michael | 4.12 |
+| The Point of No Return | Edsall, Thomas Byrne | 3.78 |
+| The Bitter End: The 2020 Presidential Campaign | Sides, John & Teres, Michael | 3.84 |
+| The Divided States of America | Kettl, Donald F. | 3.51 |
+| The Fourth Turning | Strauss, William & Howe, Neil | 3.88 |
+| The Shallows | Carr, Nicholas | 3.89 |
+| Julius Caesar | Shakespeare, William | 3.71 |
+| The War That Made the Roman Empire | Strauss, Barry S. | 4.05 |
+| Rome's Last Citizen: Cato, Mortal Enemy of Caesar | Goodman, Rob & Soni, Rob | 4.16 |
+| The Ides of March | Wilder, Thornton | 3.97 |
+| The Babylonian Woe | Astle, David | 4.35 |
+| Caesar and Christ (Story of Civilization #3) | Durant, Will | 4.40 |
+| A Tale of Two Cities | Dickens, Charles | 3.88 |
+| A Place of Greater Safety | Mantel, Hilary | 4.00 |
+| Demagogue for President | Mercieca, Jennifer R. | 4.01 |
+| A Generation of Sociopaths | Gibney, Bruce Cannon | 3.55 |
+| How Did We Get Here? | Dallek, Robert | 3.55 |
+| Caesar's Civil War | Goldsworthy, Adrian | 4.03 |
+| Antony and Cleopatra | Goldsworthy, Adrian | 3.97 |
+| Get Honest or Die Lying | God, Charlamagne Tha | 3.85 |
+| Parliamentary America | Stearns, Maxwell L. | 4.11 |
+| Invisible Doctrine: The Secret History of Neoliberalism | Monbiot, George | 4.41 |
+| Illiberal America: A History | Hahn, Steven | 4.24 |
+| The Search for Reagan | Shirley, Craig | 4.18 |
+| Kill Switch: The Rise of the Modern Senate | Jentleson, Adam | 4.25 |
+| Breaking the Two-Party Doom Loop | Drutman, Lee | 4.14 |
+| Worst. President. Ever.: James Buchanan | Strauss, Robert | 3.51 |
+| The Propagandists' Playbook | Bolla, Francesca Tripodi | 3.98 |
+| Too Dumb to Fail | Lewis, Matt K. | 3.50 |
+| Napoleon: A Life Told in Gardens and Shadows | Scurr, Ruth | 3.72 |
+| Washington: A Life | Chernow, Ron | 4.16 |
+| The Death of a President: November 1963 | Manchester, William | 4.25 |
+| Vienna 1814 | King, David | 3.99 |
+| The French Revolution: From Enlightenment to Tyranny | Davidson, Ian | 3.59 |
+| Dictator (Cicero #3) | Harris, Robert | 4.41 |
+| Through Two Doors at Once | Ananthaswamy, Anil | 4.26 |
+| American Rule | Sexton, Jared Yates | 4.32 |
+| The History of Rome: The Republic | Duncan, Mike | 4.59 |
+| Fall of Civilizations | Cooper, Paul M.M. | 4.37 |
+| Against the Web | Brooks, Michael | 4.09 |
+| Challenger: A True Story of Heroism and Disaster | Higginbotham, Adam | 4.52 |
+| Lost New York | Silver, Nathan | 4.26 |
+| Aberration in the Heartland of the Real: Timothy McVeigh | Painting, Wendy S. | 4.57 |
+| Blackshirts and Reds | Parenti, Michael | 4.40 |
+| JFK and the Unspeakable | Douglass, James W. | 4.35 |
+| The Punic Wars | Goldsworthy, Adrian | 4.20 |
+| Hannibal: Rome's Greatest Enemy | Freeman, Philip | 4.21 |
+| Stalingrad: The Fateful Siege, 1942-1943 | Beevor, Antony | 4.32 |
+| The Guns of August | Tuchman, Barbara W. | 4.18 |
+| The Rise of Rome | Everitt, Anthony | 3.95 |
+| Impeached: Andrew Johnson | Stewart, David O. | 4.02 |
+| Carthage Must Be Destroyed | Miles, Richard | 3.95 |
+| The Brain: A User's Guide | New Scientist | 3.92 |
+| The Achilles Trap: Saddam Hussein, the CIA | Coll, Steve | 4.36 |
+| MindHub: Personality Profiler | snapshot_systems | 4.34 |
+| The Charisma Myth | Cabane, Olivia Fox | 3.92 |
+| Blink | Gladwell, Malcolm | 3.96 |
+| Butler: The Near Assassination of Donald Trump | Zito, Salena | 4.55 |
+| Six Seconds in Dallas | Thompson, Josiah | 4.31 |
+| On the Trail of the Assassins | Garrison, Jim | 4.06 |
+| Shakespeare and the Fall of the Roman Republic | Gray, Patrick | 4.00 |
+| History as Mystery | Parenti, Michael | 4.19 |
+| Revenge: Trump's Return to Power | Isenstadt, Alex | 3.82 |
+| Why We're Getting Poorer | Moran, Cahal | 4.01 |
+| On Democracies and Death Cults | Murray, Douglas | 4.43 |
+| A Protest History of the United States | Browne-Marshall, Gloria J. | 4.25 |
+| The History of the Ancient World | Bauer, Susan Wise | 4.11 |
+
+## Sources
+
+`raw/self/dox-md/DAN_COMP.md` — an image-transcription export of Dan's full Goodreads "Read" and "Want to Read" shelves. The "Read" section (120 titles) duplicates the corpus already covered by [[wiki/interests/favorites/books]]; this page covers only the "Want to Read" section, which had not been mined before.
+
+

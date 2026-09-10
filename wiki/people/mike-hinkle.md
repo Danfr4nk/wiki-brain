@@ -1,0 +1,46 @@
+
+---
+domain: people
+page_type: entity
+status: stub
+date_created: 2026-06-23
+date_modified: 2026-07-25
+date_range_start: 2018-03-08
+date_range_end: 2019-07-03
+sources: ["raw/self/message-csv/MASTER_MESSAGES_DB_DUMP.csv"]
+tags: [digital-footprint, relationships]
+knowledge: derived
+infobox:
+  name: "Mike Hinkle"
+  relationship_to_dan: unknown
+  handles: ["+19043124149"]
+  location: Jacksonville, FL area (904 area code)
+  first_contact: 2018-03-08
+  known_for: "Contact who checked in about Fran's health during her final months"
+connections:
+  - page: wiki/people/fran-coldren
+    type: co-occurs
+    claim: "The sample message 'Hope Fran is ok' places Hinkle in Dan's social circle during Fran Coldren's final decline, close enough to know Fran by first name."
+  - page: wiki/mind/concepts/contact-gini
+    type: instance-of
+    claim: "A low-volume, personal-register contact in the mid-tier social periphery."
+---
+
+# Mike Hinkle
+
+Mike Hinkle is a contact based in the Jacksonville, Florida area (904 area code, confirmed via Google Contacts with two phone entries) who appears in the iMessage corpus across a 16-month window, March 2018 to July 2019. The preserved sample — "What? Are you a pimp now or something? Hope Fran is ok" — is notable for its casual familiarity and for placing Hinkle in Dan's social circle during [[wiki/people/fran-coldren|Fran Coldren]]'s final decline and death (April 4, 2018). He knew Fran by first name, suggesting either a family connection or a close enough friendship to be aware of the caregiving situation.
+
+## Corpus Dimensions
+
+| Metric | Value |
+|--------|-------|
+| Messages | 21 |
+| Date range | 2018-03-08 – 2019-07-03 |
+| Handle | +19043124149 |
+| Direction | All received (export artifact) |
+
+## Gaps
+
+Relationship to Dan and to Fran unresolved. The Florida area code suggests he may be a Full Sail-era (2008–2010) or later connection who relocated, but this is speculation. No Facebook or other corpus cross-references found.
+
+

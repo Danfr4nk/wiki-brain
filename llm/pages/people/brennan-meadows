@@ -1,0 +1,83 @@
+---
+
+domain: people
+
+page_type: entity
+
+status: closed
+
+date_created: 2026-06-23
+
+date_modified: 2026-09-04
+
+date_range_start: 2016-02-07
+
+date_range_end: 2016-04-19
+
+sources: ["raw/self/message-csv/MASTER_MESSAGES_DB_DUMP.csv"]
+
+related: ["wiki/self/message-corpora/master-message-dump", "wiki/mind/concepts/contact-gini"]
+
+tags: [addiction-recovery, financial-stress, digital-footprint]
+
+knowledge: mixed
+
+infobox:
+
+handles: ["+17243227262"]
+
+name: "Brennan Meadows"
+
+relationship_to_dan: unknown
+
+first_contact: 2016-02-07
+
+known_for: "A brief early-2016 contact (+17243227262, 28 messages, Feb–Apr) whose thread mixes small-scale suboxone sourcing ('Did y"
+
+---
+
+# Brennan Meadows
+
+> **COUNT CORRECTED [2026-09-04] — 61, not 28.** This page reported the
+
+> Received-only figure. Dan's 33 messages to this contact are in
+
+> `raw/self/dox-scan/all_imessages_complete_dump.txt`, which this page did not
+
+> read. Its handle was not declared in `infobox.handles:` either — it was
+
+> sitting in the page's own Corpus Dimensions table where no tool could use it —
+
+> so `bin/wiki-crosslink counts` could not see this page until the handle was
+
+> promoted the same day. **The prose below was written against the one-sided
+
+> thread and has not been re-derived.**
+
+A brief early-2016 contact (`+17243227262`, 28 messages, Feb–Apr) whose thread mixes small-scale suboxone sourcing ("Did you ever find subs") with a small personal loan request. Brennan says he found a source willing to sell "a half" and asks Dan to lend him $20 to be repaid $30 on the following Wednesday's paycheck, mentioning a possible tax-refund windfall as a backup repayment plan. A later message asks if Dan would want to buy part of a sub strip. The thread fades after mid-February with only a single unanswered "What's up what are you doing" in April.
+
+## Corpus Dimensions
+
+| Metric | Value |
+
+|--------|-------|
+
+| Messages | **61** — 33 sent (Dan), 28 received (was: 28) |
+
+| Date range | 2016-02-07 to 2016-04-19 |
+
+| Direction | **33 Sent / 28 Received** — corrected 2026-09-04 |
+
+| Handle | +17243227262 |
+
+## Gaps
+
+No contacts.csv match and no further mentions elsewhere in the corpus; identity beyond the name is unconfirmed.
+
+## Related
+
+[[wiki/self/message-corpora/master-message-dump]] · [[wiki/mind/concepts/contact-gini]]
+
+---
+
+**Up:** [[wiki/people/index|People]]

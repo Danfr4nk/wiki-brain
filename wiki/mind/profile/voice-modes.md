@@ -1,0 +1,155 @@
+
+---
+domain: mind
+page_type: profile
+title: "Voice Modes — Dan's Texting Register by Emotional State"
+aliases: ["mode activation", "composite voice model"]
+status: stable
+date_created: 2026-07-13
+date_modified: 2026-08-26
+sources:
+  - raw/self/google-drive-export/Composite Voice Model for Dan Frank.md
+related:
+  - wiki/mind/profile/index
+  - wiki/mind/profile/linguistic-profile
+  - wiki/mind/concepts/conflict-architecture
+  - wiki/mind/concepts/attachment-model
+connections:
+  - page: wiki/mind/profile/linguistic-profile
+    type: parallels
+    claim: "The eight emotional-state modes documented here and linguistic-profile.md's audience-based code-switching (romantic/platonic, supportive/conflict) are two independent organizing axes over the same baseline mechanics — mood and who he's talking to modulate register separately."
+  - page: wiki/mind/synthesis/the-commissioned-self
+    type: component-of
+    claim: "The Composite Voice Model is the apparatus at its most literal: a specification of how Dan writes, commissioned by Dan, detailed enough to generate him — the point at which self-description crosses into self-implementation."
+  - page: wiki/mind/profile/texting-deviance-audit
+    type: parallels
+    claim: "The eight emotional-state modes here and that page's seven countable structural turn-modes are orthogonal cuts of the same output; the structural taxonomy is the one with numbers on it, and it finds the Irritated mode's 'short and staccato, rapid bursts' description to be the NORM rather than the deviation — 8.5% of his 2026 turns against his interlocutors' 10.5%."
+  - page: wiki/mind/profile/lexicon
+    type: contradicts
+    claim: "This page states Affectionate mode suppresses cold, intellectualizing phrasing so sincerity can stand uncushioned; the bespoke lexicon's compliments to Ally do the opposite — maximally intellectualized, forensic-bureaucratic diction as the delivery mechanism for sincere affection, not a defense against it."
+---
+
+# Voice Modes — Dan's Texting Register by Emotional State
+
+[[wiki/mind/profile/linguistic-profile]] establishes the stable baseline —
+"forensic intimacy," the fixed mechanics that never change. This page
+covers the layer on top of that baseline: eight distinct **modes**, each a
+trigger-activated cluster of stylistic choices that amplify some baseline
+traits and suppress others. The core voice (slang-heavy diction, expressive
+elongation, laughter-as-tone-marker) persists in every mode — what changes
+is which features get turned up and which go silent.
+
+## The eight modes
+
+**Neutral** — the default, low-stakes control sample: moderate message
+length, standard "lol" density, nothing amplified or suppressed. Everyday
+logistics and small talk live here.
+
+**Playful** — activates on jokes, teasing, memes, comfort with the other
+person. Amplifies slang, sarcasm, elongated words for comic effect
+("deaaaad"), rapid-fire banter volleys, and mock-serious all-caps for
+irony. Suppresses seriousness almost entirely — profanity here reads as
+affectionate, not harsh, and the mode actively steers away from conflict.
+
+**Affectionate** — triggered by intimacy or vulnerability with a partner or
+someone he deeply cares for. The defensive front drops: direct terms of
+endearment, explicit statements of care, longer messages that actually
+spell out feelings he'd otherwise hint at. Sarcasm and cold, intellectualizing
+phrasing are suppressed — sincerity is allowed to stand instead of being
+cushioned with a deflecting "lol."
+
+> **CONTRADICTION:** [[wiki/mind/profile/lexicon]] — a compliment-phrase
+> generator built by Dan explicitly around Ally — is the opposite move.
+> Categories I and II are sincere affection addressed directly to her, and
+> the intellectualizing register is not suppressed to let sincerity stand;
+> it is amplified to carry it ("she has rendered ordinary adjectives
+> inadequate," "an unreasonable concentration of beauty"). Read together
+> with this page's own Playful description ("profanity here reads as
+> affectionate, not harsh"), the more accurate model may be that Playful and
+> Affectionate fuse for this specific relationship rather than that
+> Affectionate strips the defenses Playful still wears — performed,
+> deadpan-authority sincerity rather than bare sincerity. Not resolved here;
+> see the lexicon page's own analysis.
+
+**Irritated** — frustration, disrespect, broken trust. Messages turn short
+and staccato, often arriving in rapid bursts; profanity escalates to convey
+anger rather than humor; selective capitalization signals shouting. No
+emoji cushions, no "lol" — humor and tact both drop out almost completely,
+and his low-agreeableness trait is fully visible.
+
+**Persuasive** — a conscious, controlled attempt to win an argument through
+logic rather than emotion, deployed even when his ego is under attack, as
+an alternative to an angry snap. Fewer, longer, more structured messages;
+explicit connective logic ("so," "because," "therefore"); calmer,
+more deliberate punctuation. Emotional pleading is suppressed in favor of
+reasoned appeal — though the mode is fragile: sustained provocation can
+collapse it back into Irritated.
+
+**Storytelling** — narrating an anecdote, often prompted by "what happened?"
+or a nostalgic impulse. The scene gets set, then the story unfolds across
+installments with heavy ellipses for suspense, in-text sound effects and
+reenacted dialogue, and his signature metaphors and pop-culture analogies.
+Brevity and detachment are suppressed — he holds the floor and monologues
+rather than volleying short exchanges.
+
+**Stressed** — real-time crisis or emotional overwhelm. Fragmented,
+erratic messages; typos; loss of capitalization discipline; repeated
+words and rephrased questions when he isn't getting an answer; oscillation
+between pleading and frustration; self-blame and catastrophizing language.
+Coherence and structure are suppressed almost entirely — this is the least
+filtered mode in the set, and it typically resolves into Reflective or
+Neutral once the acute crisis passes, sometimes with an apologetic
+follow-up once he's calmer.
+
+**Reflective** — introspection, guilt, or the calm after a conflict, often
+late at night or alone with his thoughts. Slower pace, longer and more
+organized messages that read like journal entries, elevated vocabulary
+including psychological or philosophical terms, explicit self-labeling
+("my 5w4 tendency to withdraw"). Defensive humor and performative persona
+are both suppressed — the mask comes down, and even swearing here serves
+sincerity rather than attack.
+
+## Finer-grained triggers (psych-driven modifiers)
+
+Underneath the eight modes, the same source describes ten specific
+psychological triggers, each mapped to a precise mechanical tweak rather
+than a whole-register shift — these can fire inside any mode and combine
+when multiple are active at once:
+
+- **Excitement** — all-caps interjections and word elongation up ~40%, extra "!" and "OMG"/"LOL."
+- **Affection/warmth** — terms of endearment and soothing language roughly double; harsh profanity down ~70% unless joking.
+- **Anger/frustration** — profanity up ~50%, sentences shorten to biting fragments, laughter markers vanish entirely.
+- **Anxiety/fear of abandonment** — message frequency and repetition roughly double, punctuation and grammar degrade, tone turns pleading ("Are you there?? ... hello??").
+- **Intense intellectual focus** — messages lengthen ~30%, syntax tightens, slang drops, laughter and emoji recede as the analytical mode takes over.
+- **Melancholy/low mood** — exclamation points down ~80%, ellipses increase, lowercase dominates, replies shorten to one word.
+- **Dark humor (defense mechanism)** — sarcastic and self-deprecating quips up ~50%, typically deployed right after a serious or hurtful remark, to regain control of the narrative.
+- **Perceived betrayal or trust violation** — an abrupt pivot to interrogative, forensic tone ("Explain to me **how** that made sense?!"); warmth vanishes in a single message; the old betrayal pattern flares up.
+- **Sexual arousal/flirtation** — provocative word choice up ~40%, pacing either quickens (rapid) or slows into deliberate ellipsis-laden tease.
+- **Ego challenge (feeling dismissed)** — academic/niche vocabulary up ~30%, one deliberately crafted "perfect" cutting sentence to reassert intellectual dominance, then a return to casual banter once the point lands.
+
+The strongest active trigger tends to lead when several compete, but the
+model is explicit that they combine rather than simply overriding one
+another — a single message can carry both the anxiety spike and the
+betrayal-trigger's cold interrogation, for instance.
+
+## Mode conflicts and recovery
+
+Modes compete rather than switching cleanly. The system favors the
+strongest emotional cue, but with visible friction: Irritated can intrude
+on an attempted Persuasive argument (a rational point delivered, then an
+exasperated "you've got to be kidding me?!" breaking through), and
+Affectionate can oscillate against Stressed when he's trying to comfort
+someone he's also frightened about losing — a soothing reassurance
+immediately followed by "please don't leave me, I'm freaking out."
+
+Negative modes (Irritated, Stressed) tend to burn hot but short. After a
+peak, the recovery pattern is consistent: profanity drops, punctuation
+stabilizes, and a Reflective or Neutral follow-up often explicitly
+acknowledges the spike ("...sorry, that was a lot. I'm breathing now.").
+This recovery signature — self-aware, immediate, and typically Reflective
+in register — is itself a diagnostic marker worth cross-referencing
+against the exit-declaration and re-engagement pattern documented for the
+[[wiki/people/annie-ulmer|Annie]] relationship in [[wiki/mind/concepts/conflict-architecture]], where
+the same cooling-down shape recurs at a much larger scale.
+
+

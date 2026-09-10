@@ -1,0 +1,1383 @@
+#!/usr/bin/env python3
+"""wiki-skills — the cross-model skills database, and its public-facing page.
+
+    bin/wiki-skills                     what the database holds right now
+    bin/wiki-skills scan                read this repository's own capabilities
+    bin/wiki-skills push --scan         record them under the running agent
+    bin/wiki-skills push -f manifest.json      record another model's
+    bin/wiki-skills diff claude-code codex     what one has that the other lacks
+    bin/wiki-skills page                regenerate wiki/meta/skills.md
+    bin/wiki-skills check               the gate
+
+WHAT THIS IS, AND WHY IT IS NOT skills/ ITSELF
+
+`skills/` is prose: a contract, a protocol, a routing index, and a handful of
+written skills. It answers "what should an agent do here?" and a human reads it.
+It cannot answer the other question, which is the one that actually blocks
+cross-model work:
+
+    WHAT DOES EACH MODEL ACTUALLY HAVE?
+
+A Claude Code session arrives with skills, MCP servers, plugin tools and
+subagents that a Codex session does not have, and neither can see the other's.
+Every session rediscovers the same surface, and a lesson one model learned about
+a tool the next model also has dies in the transcript. `skills/README.md` already
+names the fix in its third mandatory step — *log or update all skill
+instructions, loops, harnesses, mcp servers etc into the running directory that
+centralizes this archive across parallel running models* — and until now there
+was no directory, no format and no command. This is that.
+
+So: two layers, one subsystem.
+
+    skills/*.md          the contract and the written skills — read by people
+    skills/registry/     the database — written by tools, read by models
+
+EVENT-SOURCED, BECAUSE THE WRITERS RUN IN PARALLEL
+
+`skills/registry/events.jsonl` is append-only and is the source of truth.
+`skills/registry/registry.json` is a projection, regenerated on every write and
+by `rebuild`, and safe to delete. This is the same arrangement as `intake/` and
+for a sharper reason: several models may push in the same hour from different
+branches, and a merge of two appends is a set union by event id, which git
+resolves without losing either side. A single mutable JSON document would make
+every concurrent push a conflict, and the loser would be silently dropped.
+
+A push is IDEMPOTENT. Re-declaring a capability whose content digest already
+matches the live record appends nothing. That matters because this is meant to
+run every session: a tool that grows the log by 40 lines each time it is asked
+"anything new?" is a tool people stop running.
+
+WHAT IT REFUSES TO STORE, AND WHY THAT IS THE LOAD-BEARING PART
+
+This repository is PUBLIC. MCP server configurations are the single most
+reliable place in an agent's environment to find a live API key: they carry
+`env` blocks with tokens in them, and URLs with credentials in the userinfo or
+the query string. "Push everything about your tools into the public wiki" is,
+written naively, an instruction to publish credentials, and git history cannot
+be un-published.
+
+So values never enter the database — only names. For an MCP server this records
+the transport, the command, the argument shape and the SORTED NAMES of the
+environment variables it wants; never a value. URLs are stripped of userinfo and
+query string. Anything still matching a credential shape is a REFUSAL naming the
+field, not a warning, and `check` re-scans the committed file so a hand-edit
+cannot slip one past the writer.
+
+THE MORATORIUM, IN THE RENDERER
+
+`CLAUDE.md` carries a standing operator directive about a living person. One
+retired skill in this repository is named for her. The database records it —
+concealing a capability that exists would make the database lie about the thing
+it is for — but the PUBLIC PAGE is new prose on a public site, so the renderer
+holds those rows out and says how many it held, at their true width. A hole in
+an archive is not a silence; it is drawn hatched.
+"""
+import argparse
+import datetime
+import hashlib
+import json
+import os
+import random
+import re
+import sys
+import time
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+REG = ROOT / "skills" / "registry"
+EVENTS = REG / "events.jsonl"
+PROJECTION = REG / "registry.json"
+PAGE = ROOT / "wiki" / "meta" / "skills.md"
+
+PAGE_CREATED = "2026-08-30"
+
+# The kinds a capability can be. Deliberately broader than "skill": the point is
+# that a foreign model can read what this environment offers, and an MCP server
+# it cannot see is as much a blocker as a skill it cannot see.
+KINDS = (
+    "skill",       # a written instruction an agent loads by trigger
+    "mcp_server",  # a Model Context Protocol server and its tool surface
+    "plugin",      # a marketplace / bundled plugin
+    "tool",        # a single callable tool, native or plugin-supplied
+    "command",     # a repository command an agent is expected to run
+    "hook",        # harness automation that fires without being called
+    "subagent",    # a delegated agent definition
+    "harness",     # the runner itself: CLI, web, IDE, action
+)
+SCOPES = ("repo", "agent", "global")
+EVENT_TYPES = ("agent_seen", "capability_observed", "capability_retired", "note_added")
+
+# Same directive, same pattern, same source of truth as bin/wiki-plain. Kept
+# literal in both files rather than imported: bin/ has no package and a shared
+# import would make one tool's refactor able to silently unlatch the other's.
+MORATORIUM = re.compile(r"\b(annie|ulmer)", re.I)
+
+
+class RegistryError(Exception):
+    """Anything a caller asked for that the database will not record as asked."""
+
+
+# ------------------------------------------------------------------ ids / time
+_CROCKFORD = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
+
+
+def ulid():
+    """Sortable, collision-resistant, stdlib only — as in bin/intake.
+
+    Sortability is what lets two branches' appends be concatenated and still
+    read in the order they happened.
+    """
+    bits = (int(time.time() * 1000) << 80) | random.getrandbits(80)
+    return "".join(_CROCKFORD[(bits >> s) & 31] for s in range(125, -1, -5))
+
+
+def now_iso():
+    return datetime.datetime.now().astimezone().replace(microsecond=0).isoformat()
+
+
+def day(iso):
+    return (iso or "")[:10]
+
+
+def canon(obj):
+    return json.dumps(obj, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+
+
+def slug(text):
+    s = re.sub(r"[^a-z0-9]+", "-", (text or "").lower()).strip("-")
+    return s or "unnamed"
+
+
+# ------------------------------------------------------------------- redaction
+#
+# Refusal rather than redaction for the value-shaped things, because a tool that
+# quietly strips a token teaches the next caller that pushing tokens is fine.
+SECRET_PATTERNS = [
+    (re.compile(r"\bsk-[A-Za-z0-9_\-]{16,}"), "an API key (sk-…)"),
+    (re.compile(r"\bsk-ant-[A-Za-z0-9_\-]{10,}"), "an Anthropic key"),
+    (re.compile(r"\bgh[pousr]_[A-Za-z0-9]{20,}"), "a GitHub token"),
+    (re.compile(r"\bgithub_pat_[A-Za-z0-9_]{20,}"), "a GitHub fine-grained PAT"),
+    (re.compile(r"\bxox[baprs]-[A-Za-z0-9\-]{10,}"), "a Slack token"),
+    (re.compile(r"\bAKIA[0-9A-Z]{16}\b"), "an AWS access key id"),
+    (re.compile(r"\bya29\.[A-Za-z0-9_\-]{20,}"), "a Google OAuth token"),
+    (re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----"), "a private key"),
+    (re.compile(r"\beyJ[A-Za-z0-9_\-]{10,}\.[A-Za-z0-9_\-]{10,}\."), "a JWT"),
+    (re.compile(r"(?i)\bBearer\s+[A-Za-z0-9._\-]{16,}"), "a bearer token"),
+    (re.compile(r"(?i)\b(api[_\-]?key|secret|password|passwd|token|access[_\-]?key)"
+                r"\s*[:=]\s*['\"]?[A-Za-z0-9/+_\-]{12,}"), "a key/value credential"),
+    (re.compile(r"://[^/\s:@]+:[^/\s@]+@"), "credentials in a URL"),
+]
+
+
+def scan_secrets(text, where):
+    """Return a list of (where, why) for every credential shape in `text`."""
+    if not isinstance(text, str) or not text:
+        return []
+    return [(where, why) for pat, why in SECRET_PATTERNS if pat.search(text)]
+
+
+def clean_url(url):
+    """Strip userinfo and query string. A tool link is a location, not a session."""
+    if not url:
+        return ""
+    u = str(url).strip()
+    u = re.sub(r"(://)[^/\s@]+@", r"\1", u)   # userinfo
+    u = u.split("?", 1)[0].split("#", 1)[0]   # query and fragment
+    return u
+
+
+def env_names(env):
+    """Environment variable NAMES only, sorted. Values never enter the record.
+
+    The two branches are treated differently ON PURPOSE. A dict comes from a
+    config file the scanner read off disk: its values are real and are dropped,
+    because reading a machine's actual `.mcp.json` is the whole point of `scan`
+    and refusing it would make the command unusable on any machine with a live
+    key. A list entry is a CALLER TYPING — `--env FOO=bar`, or a hand-written
+    manifest — and a value there is refused rather than stripped. Stripping it
+    silently would teach the next caller that pushing values is fine, which is
+    the habit this file exists to prevent.
+    """
+    if not env:
+        return []
+    if isinstance(env, dict):
+        return sorted(str(k) for k in env)
+    if isinstance(env, (list, tuple)):
+        out = []
+        for item in env:
+            name = str(item)
+            if "=" in name:
+                raise RegistryError(
+                    f"env entry {name.split('=', 1)[0]!r} was given a VALUE. Record "
+                    f"environment variable names only — this repository is public and "
+                    f"its history cannot be un-published.")
+            out.append(name)
+        return sorted(out)
+    return []
+
+
+def one_line(text, limit=400):
+    s = re.sub(r"\s+", " ", str(text or "")).strip()
+    return s[: limit - 1] + "…" if len(s) > limit else s
+
+
+# ---------------------------------------------------------------- capabilities
+#
+# The fields that make up a capability's CONTENT — the ones whose change means
+# the capability itself changed and the revision is worth a row in the history.
+# `first_seen`, `last_seen` and who declared it are metadata about observation
+# and are deliberately outside the digest, or every push would look like an edit.
+CONTENT_FIELDS = ("title", "summary", "triggers", "path", "link", "provider",
+                  "version", "transport", "command", "args", "env", "instructions",
+                  "tools", "scope")
+
+
+def normalise(cap):
+    """Coerce one loose capability dict into the stored shape, or raise.
+
+    Forgiving about what a caller may type — `description` for `summary`,
+    `url` for `link`, a string for `triggers` — because the callers are several
+    different models writing JSON by hand, and a schema nobody can satisfy on
+    the first try is a schema that does not get used.
+    """
+    if not isinstance(cap, dict):
+        raise RegistryError(f"a capability must be an object, got {type(cap).__name__}")
+
+    kind = str(cap.get("kind") or cap.get("type") or "").strip().lower().replace("-", "_")
+    if kind in ("mcp", "server", "mcpserver"):
+        kind = "mcp_server"
+    if kind not in KINDS:
+        raise RegistryError(f"unknown kind {kind!r} — one of {', '.join(KINDS)}")
+
+    name = str(cap.get("name") or cap.get("id") or "").strip()
+    if not name:
+        raise RegistryError(f"{kind} capability has no name")
+
+    summary = one_line(cap.get("summary") or cap.get("description") or "")
+    if not summary:
+        raise RegistryError(f"{kind}/{name}: no summary — a row nobody can read is not a record")
+
+    triggers = cap.get("triggers") or cap.get("trigger") or []
+    if isinstance(triggers, str):
+        triggers = [triggers]
+    triggers = [one_line(t, 200) for t in triggers if str(t).strip()]
+
+    tools = cap.get("tools") or []
+    if isinstance(tools, str):
+        tools = [t.strip() for t in tools.split(",")]
+    tools = sorted({str(t).strip() for t in tools if str(t).strip()})
+
+    args = cap.get("args") or []
+    if isinstance(args, str):
+        args = [args]
+    args = [str(a) for a in args]
+
+    scope = str(cap.get("scope") or ("repo" if cap.get("path") else "agent")).lower()
+    if scope not in SCOPES:
+        raise RegistryError(f"{kind}/{name}: scope must be one of {', '.join(SCOPES)}")
+
+    rec = {
+        "kind": kind,
+        "name": name,
+        "slug": slug(f"{kind}-{name}"),
+        "title": one_line(cap.get("title") or name, 200),
+        "summary": summary,
+        "triggers": triggers,
+        "path": str(cap.get("path") or "").strip(),
+        "link": clean_url(cap.get("link") or cap.get("url") or ""),
+        "provider": one_line(cap.get("provider") or cap.get("vendor") or "", 120),
+        "version": one_line(cap.get("version") or "", 60),
+        "scope": scope,
+        "transport": one_line(cap.get("transport") or "", 40),
+        "command": one_line(cap.get("command") or "", 200),
+        "args": args,
+        "env": env_names(cap.get("env") or cap.get("env_names")),
+        "tools": tools,
+        "instructions": str(cap.get("instructions") or "").strip(),
+    }
+
+    if not (rec["path"] or rec["link"] or rec["instructions"]):
+        raise RegistryError(
+            f"{kind}/{name}: no path, link or instructions — a capability with no "
+            f"provenance cannot be acted on by the model that reads it")
+
+    # The refusal. Every stored string is scanned, including the ones a caller
+    # believed were structural.
+    found = []
+    for field, value in rec.items():
+        if isinstance(value, str):
+            found += scan_secrets(value, field)
+        elif isinstance(value, list):
+            for item in value:
+                found += scan_secrets(str(item), field)
+    if found:
+        why = "; ".join(sorted({f"{w} looks like {p}" for w, p in found}))
+        raise RegistryError(
+            f"{kind}/{name}: refusing to record — {why}. This repository is public. "
+            f"Record environment variable NAMES, never values.")
+
+    rec["digest"] = hashlib.sha256(
+        canon({k: rec[k] for k in CONTENT_FIELDS}).encode("utf-8")).hexdigest()[:16]
+    return rec
+
+
+def normalise_agent(agent):
+    """The declaring model. `id` is the address other agents diff against."""
+    if isinstance(agent, str):
+        agent = {"id": agent}
+    if not isinstance(agent, dict):
+        raise RegistryError("`agent` must be a string or an object")
+    aid = slug(agent.get("id") or agent.get("name") or "")
+    if aid == "unnamed":
+        raise RegistryError("the agent needs an id — the name other models will diff against")
+    return {
+        "id": aid,
+        "name": one_line(agent.get("name") or aid, 80),
+        "vendor": one_line(agent.get("vendor") or "", 60),
+        "surface": one_line(agent.get("surface") or "", 60),
+        "model": one_line(agent.get("model") or "", 80),
+        "note": one_line(agent.get("note") or "", 300),
+    }
+
+
+# -------------------------------------------------------------------- registry
+class Registry:
+    def __init__(self, root=None):
+        self.root = Path(root) if root else ROOT
+        self.reg = self.root / "skills" / "registry"
+        self.events = self.reg / "events.jsonl"
+        self.projection = self.reg / "registry.json"
+        self.page = self.root / "wiki" / "meta" / "skills.md"
+
+    # ---- log
+    def read_events(self):
+        if not self.events.exists():
+            return []
+        out = []
+        for n, line in enumerate(self.events.read_text(encoding="utf-8").splitlines(), 1):
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                out.append(json.loads(line))
+            except json.JSONDecodeError as e:
+                raise RegistryError(f"{self.events}:{n}: unreadable JSON — {e}")
+        out.sort(key=lambda e: (e.get("at", ""), e.get("id", "")))
+        return out
+
+    def append(self, records):
+        """Append event objects. One open, one write — a push is atomic enough."""
+        if not records:
+            return 0
+        self.reg.mkdir(parents=True, exist_ok=True)
+        with self.events.open("a", encoding="utf-8") as fh:
+            for rec in records:
+                fh.write(canon(rec) + "\n")
+        return len(records)
+
+    def event(self, etype, agent_id, data, at=None):
+        if etype not in EVENT_TYPES:
+            raise RegistryError(f"unknown event type {etype!r}")
+        return {"id": ulid(), "event": etype, "at": at or now_iso(),
+                "agent": agent_id, "data": data}
+
+    # ---- projection
+    def project(self, events=None):
+        """Fold the log into current state. Pure; never writes."""
+        events = self.read_events() if events is None else events
+        agents, caps = {}, {}
+
+        def agent_slot(aid, at):
+            slot = agents.setdefault(aid, {
+                "id": aid, "name": aid, "vendor": "", "surface": "", "model": "",
+                "note": "", "first_seen": at, "last_seen": at, "declares": 0})
+            slot["first_seen"] = min(slot["first_seen"], at)
+            slot["last_seen"] = max(slot["last_seen"], at)
+            return slot
+
+        for ev in events:
+            at, aid = ev.get("at", ""), ev.get("agent", "")
+            data = ev.get("data") or {}
+            etype = ev.get("event")
+
+            if etype == "agent_seen":
+                slot = agent_slot(aid, at)
+                for f in ("name", "vendor", "surface", "model", "note"):
+                    if data.get(f):
+                        slot[f] = data[f]
+                continue
+
+            key = f"{data.get('kind')}::{data.get('name')}"
+            if etype == "capability_observed":
+                agent_slot(aid, at)
+                cap = caps.setdefault(key, {
+                    "kind": data.get("kind"), "name": data.get("name"),
+                    "slug": data.get("slug"), "status": "live",
+                    "first_seen": at, "last_seen": at,
+                    "declared_by": {}, "revisions": [], "notes": [], "record": {}})
+                cap["first_seen"] = min(cap["first_seen"], at)
+                cap["last_seen"] = max(cap["last_seen"], at)
+                cap["status"] = "live"
+                cap["record"] = {k: v for k, v in data.items()}
+                d = cap["declared_by"].setdefault(
+                    aid, {"agent": aid, "first_seen": at, "last_seen": at, "digest": ""})
+                d["first_seen"] = min(d["first_seen"], at)
+                d["last_seen"] = max(d["last_seen"], at)
+                if d["digest"] and d["digest"] != data.get("digest"):
+                    cap["revisions"].append(
+                        {"at": at, "agent": aid, "from": d["digest"], "to": data.get("digest")})
+                elif not cap["revisions"] and not d["digest"]:
+                    cap["revisions"].append(
+                        {"at": at, "agent": aid, "from": "", "to": data.get("digest")})
+                d["digest"] = data.get("digest", "")
+
+            elif etype == "capability_retired":
+                cap = caps.get(key)
+                if cap:
+                    cap["status"] = "retired"
+                    cap["retired_at"] = at
+                    cap["retired_by"] = aid
+                    cap["retired_reason"] = one_line(data.get("reason") or "", 300)
+
+            elif etype == "note_added":
+                cap = caps.get(key)
+                if cap:
+                    cap["notes"].append({"at": at, "agent": aid,
+                                         "text": one_line(data.get("text") or "", 600)})
+
+        for cap in caps.values():
+            cap["declared_by"] = sorted(cap["declared_by"].values(), key=lambda d: d["agent"])
+            cap["revisions"] = cap["revisions"][-12:]
+        for aid, slot in agents.items():
+            slot["declares"] = sum(
+                1 for c in caps.values()
+                if c["status"] == "live" and any(d["agent"] == aid for d in c["declared_by"]))
+
+        ordered = sorted(caps.values(), key=lambda c: (c["kind"], c["name"].lower()))
+        by_kind = {}
+        for c in ordered:
+            if c["status"] == "live":
+                by_kind[c["kind"]] = by_kind.get(c["kind"], 0) + 1
+
+        return {
+            "schema": 1,
+            "events": len(events),
+            "agents": sorted(agents.values(), key=lambda a: a["id"]),
+            "capabilities": ordered,
+            "counts": {
+                "agents": len(agents),
+                "capabilities": sum(1 for c in ordered if c["status"] == "live"),
+                "retired": sum(1 for c in ordered if c["status"] != "live"),
+                "by_kind": dict(sorted(by_kind.items())),
+                # A capability more than one model declares is the interesting
+                # row: it is the shared surface a lesson can be written against.
+                "shared": sum(1 for c in ordered
+                              if c["status"] == "live" and len(c["declared_by"]) > 1),
+            },
+            "last_event": events[-1]["at"] if events else "",
+        }
+
+    def write_projection(self, state=None):
+        state = self.project() if state is None else state
+        self.reg.mkdir(parents=True, exist_ok=True)
+        self.projection.write_text(
+            json.dumps(state, indent=2, sort_keys=True, ensure_ascii=False) + "\n",
+            encoding="utf-8")
+        return state
+
+    def live(self, state=None):
+        state = state or self.project()
+        return [c for c in state["capabilities"] if c["status"] == "live"]
+
+
+# --------------------------------------------------------------------- scanner
+#
+# What a running agent can see about THIS repository without being told. The
+# half a model can enumerate about itself — its own MCP servers, its plugin
+# tools, the harness it runs in — it must declare, because nothing in the
+# working tree records it. That asymmetry is the whole reason `push` takes a
+# manifest as well as a scan.
+def _frontmatter(text):
+    m = re.match(r"^---\n(.*?)\n---\n", text, re.S)
+    if not m:
+        return {}, text
+    fm, key = {}, None
+    for line in m.group(1).splitlines():
+        kv = re.match(r"^([A-Za-z_][\w_]*):\s*(.*)$", line)
+        if kv:
+            key = kv.group(1)
+            val = kv.group(2).strip()
+            fm[key] = val if val not in (">", "|", "|-", ">-") else ""
+        elif key and re.match(r"^\s+-\s+", line):
+            fm.setdefault(key + "__list", []).append(re.sub(r"^\s+-\s+", "", line).strip())
+        elif key and line.strip():
+            fm[key] = (fm.get(key, "") + " " + line.strip()).strip()
+    return fm, text[m.end():]
+
+
+def _rel(path, root):
+    try:
+        return str(Path(path).resolve().relative_to(Path(root).resolve()))
+    except ValueError:
+        return str(path)
+
+
+def scan_repo(root=None):
+    """Every capability this repository itself supplies, as a manifest list."""
+    root = Path(root or ROOT)
+    caps = []
+
+    # 1. Harness-native skills: .claude/skills/<name>/SKILL.md
+    for skill in sorted((root / ".claude" / "skills").glob("*/SKILL.md")):
+        fm, body = _frontmatter(skill.read_text(encoding="utf-8", errors="replace"))
+        name = fm.get("name") or skill.parent.name
+        caps.append({
+            "kind": "skill", "name": name, "scope": "repo",
+            "provider": "wiki-brain (.claude/skills)",
+            "summary": fm.get("description") or one_line(body.strip().split("\n")[0]),
+            "path": _rel(skill, root),
+            "triggers": fm.get("triggers__list") or [],
+        })
+
+    # 2. The written skills under skills/ — the prose layer this database sits
+    #    beside. The five governing documents are the contract, not skills.
+    governing = {"README.md", "INDEX.md", "PROTOCOL.md", "INBOX.md", "CHANGELOG.md"}
+    for f in sorted((root / "skills").rglob("*.md")):
+        if f.name in governing and f.parent == root / "skills":
+            continue
+        if "registry" in f.parts:
+            continue
+        fm, body = _frontmatter(f.read_text(encoding="utf-8", errors="replace"))
+        heading = next((l[2:].strip() for l in body.splitlines() if l.startswith("# ")), f.stem)
+        caps.append({
+            "kind": "skill", "name": f"skills/{f.relative_to(root / 'skills')}".replace(".md", ""),
+            "scope": "repo", "provider": "wiki-brain (skills/)",
+            "title": heading,
+            "summary": one_line(fm.get("triggers__list") and
+                                f"{heading} — triggers: " + "; ".join(fm["triggers__list"])
+                                or heading),
+            "path": _rel(f, root),
+            "triggers": fm.get("triggers__list") or [],
+            "version": fm.get("status") or "",
+        })
+
+    # 3. bin/ — the commands a foreign model must run rather than reinvent. Read
+    #    from the docstring so the database cannot drift from the tool's own
+    #    account of itself.
+    for tool in sorted((root / "bin").iterdir()):
+        if not tool.is_file() or tool.name.endswith((".py", ".command")) or tool.name.startswith("."):
+            continue
+        head = tool.read_text(encoding="utf-8", errors="replace")[:2000]
+        m = re.search(r'"""(.+?)(?:\n|""")', head)
+        summary = one_line(m.group(1)) if m else f"{tool.name} — repository command"
+        caps.append({
+            "kind": "command", "name": f"bin/{tool.name}", "scope": "repo",
+            "provider": "wiki-brain (bin/)", "summary": summary,
+            "path": _rel(tool, root),
+        })
+
+    # 4. MCP servers declared in the tree. Names of env vars only — see the
+    #    module docstring; this is the field that would otherwise publish keys.
+    for cfg in (root / ".mcp.json", root / ".claude" / "settings.json",
+                root / ".claude" / "settings.local.json", root / ".claude" / "mcp.json"):
+        if not cfg.exists():
+            continue
+        try:
+            blob = json.loads(cfg.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            continue
+        for name, spec in (blob.get("mcpServers") or {}).items():
+            spec = spec if isinstance(spec, dict) else {}
+            caps.append({
+                "kind": "mcp_server", "name": name, "scope": "repo",
+                "provider": "wiki-brain (%s)" % _rel(cfg, root),
+                "summary": one_line(spec.get("description")
+                                    or f"MCP server '{name}' configured in {_rel(cfg, root)}"),
+                "path": _rel(cfg, root),
+                "transport": spec.get("type") or ("stdio" if spec.get("command") else "http"),
+                "command": spec.get("command") or "",
+                "args": spec.get("args") or [],
+                "env": spec.get("env") or {},
+                "link": spec.get("url") or "",
+            })
+
+    # 5. Hooks — automation that fires without an agent calling it, which is
+    #    exactly the kind of thing a model needs to be told about in advance.
+    settings = root / ".claude" / "settings.json"
+    if settings.exists():
+        try:
+            blob = json.loads(settings.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            blob = {}
+        for event, entries in (blob.get("hooks") or {}).items():
+            for i, entry in enumerate(entries if isinstance(entries, list) else [entries]):
+                matcher = (entry or {}).get("matcher", "*") if isinstance(entry, dict) else "*"
+                caps.append({
+                    "kind": "hook", "name": f"{event}:{matcher}" if matcher else event,
+                    "scope": "repo", "provider": "wiki-brain (.claude/settings.json)",
+                    "summary": one_line(f"{event} hook on '{matcher}' — fires without being called"),
+                    "path": ".claude/settings.json",
+                })
+
+    # 6. Subagent definitions, where the repository ships them.
+    for agent_md in sorted((root / ".claude" / "agents").glob("*.md")):
+        fm, body = _frontmatter(agent_md.read_text(encoding="utf-8", errors="replace"))
+        caps.append({
+            "kind": "subagent", "name": fm.get("name") or agent_md.stem, "scope": "repo",
+            "provider": "wiki-brain (.claude/agents)",
+            "summary": fm.get("description") or one_line(body.strip().split("\n")[0]),
+            "path": _rel(agent_md, root),
+            "tools": fm.get("tools") or "",
+        })
+
+    return caps
+
+
+# ------------------------------------------------------------------ operations
+def do_push(reg, agent, caps, retire_missing=False, at=None, dry=False):
+    """Record one model's declaration. Idempotent by content digest."""
+    agent = normalise_agent(agent)
+    records, problems = [], []
+    for cap in caps:
+        try:
+            records.append(normalise(cap))
+        except RegistryError as e:
+            problems.append(str(e))
+    if problems:
+        raise RegistryError("\n".join(problems))
+
+    state = reg.project()
+    live = {f"{c['kind']}::{c['name']}": c for c in state["capabilities"] if c["status"] == "live"}
+    at = at or now_iso()
+    events, added, changed, unchanged = [], [], [], 0
+
+    known_agent = next((a for a in state["agents"] if a["id"] == agent["id"]), None)
+    if not known_agent or any(known_agent.get(f) != agent[f]
+                              for f in ("name", "vendor", "surface", "model")):
+        events.append(reg.event("agent_seen", agent["id"], agent, at))
+
+    for rec in records:
+        key = f"{rec['kind']}::{rec['name']}"
+        prior = live.get(key)
+        mine = next((d for d in (prior or {}).get("declared_by", []) if d["agent"] == agent["id"]), None)
+        if mine and mine["digest"] == rec["digest"]:
+            unchanged += 1
+            continue
+        events.append(reg.event("capability_observed", agent["id"], rec, at))
+        (changed if mine else added).append(rec)
+
+    if retire_missing:
+        declared = {f"{r['kind']}::{r['name']}" for r in records}
+        for key, cap in sorted(live.items()):
+            if key in declared:
+                continue
+            if not any(d["agent"] == agent["id"] for d in cap["declared_by"]):
+                continue
+            if len(cap["declared_by"]) > 1:
+                continue   # somebody else still has it; it is not gone
+            events.append(reg.event("capability_retired", agent["id"], {
+                "kind": cap["kind"], "name": cap["name"],
+                "reason": f"not present in {agent['id']}'s declaration of {day(at)}"}, at))
+
+    if not dry:
+        reg.append(events)
+        reg.write_projection()
+    return {"events": len(events), "added": added, "changed": changed,
+            "unchanged": unchanged, "agent": agent}
+
+
+def load_manifest(path_or_dash):
+    text = sys.stdin.read() if path_or_dash in ("-", None) else \
+        Path(path_or_dash).read_text(encoding="utf-8")
+    try:
+        blob = json.loads(text)
+    except json.JSONDecodeError as e:
+        raise RegistryError(f"manifest is not JSON — {e}")
+    if isinstance(blob, list):
+        raise RegistryError("manifest must be an object with `agent` and `capabilities`")
+    agent = blob.get("agent") or blob.get("model")
+    if not agent:
+        raise RegistryError("manifest has no `agent` — the database records who declared what")
+    caps = blob.get("capabilities") or blob.get("skills") or []
+    if not isinstance(caps, list):
+        raise RegistryError("`capabilities` must be a list")
+    return agent, caps
+
+
+# ------------------------------------------------------------------- rendering
+KIND_LABEL = {
+    "skill": "Skills", "mcp_server": "MCP servers", "plugin": "Plugins",
+    "tool": "Tools", "command": "Commands", "hook": "Hooks",
+    "subagent": "Subagents", "harness": "Harnesses",
+}
+
+
+WITHHELD = "_[summary withheld — standing directive in `CLAUDE.md`; read the file at the path]_"
+
+
+def held_back(cap):
+    """How far the standing directive reaches into one row: "row" | "summary" | "".
+
+    Two tiers, because one blunt rule gets this wrong in both directions. A
+    capability whose NAME is hers cannot be printed at all — there is no way to
+    render the row without writing her name onto a public page. A capability
+    whose name is neutral but whose SUMMARY names her is a live, useful tool
+    (`corpus-read` is the case), and dropping it would make the database lie
+    about what this repository offers. That row prints; its summary does not.
+
+    The directive is a stop on new writing, not a redaction of what exists — so
+    the path stays, and a reader who wants the summary reads the file it points
+    at, which has been in this public repository all along.
+    """
+    rec = cap.get("record") or {}
+    if MORATORIUM.search(cap.get("name") or ""):
+        return "row"
+    if MORATORIUM.search(" ".join([rec.get("title") or "", rec.get("summary") or "",
+                                   " ".join(rec.get("triggers") or [])])):
+        return "summary"
+    return ""
+
+
+def public_row(cap):
+    """The record as the public page may print it, with the directive applied."""
+    rec = dict(cap.get("record") or {})
+    if held_back(cap) == "summary":
+        rec["summary"] = WITHHELD
+        rec["title"] = cap["name"]
+        rec["triggers"] = []
+    return rec
+
+
+def md_cell(text):
+    return re.sub(r"\s+", " ", str(text or "")).replace("|", "\\|").strip() or "—"
+
+
+def render_page(state, root=None):
+    """The public-facing page. Deterministic: every value comes from the log."""
+    root = Path(root or ROOT)
+    caps = [c for c in state["capabilities"] if c["status"] == "live"]
+    hidden = [c for c in caps if held_back(c) == "row"]
+    muted = [c for c in caps if held_back(c) == "summary"]
+    shown = [c for c in caps if held_back(c) != "row"]
+    agents = state["agents"]
+    modified = day(state.get("last_event")) or PAGE_CREATED
+
+    L = []
+    L.append("---")
+    L.append("domain: meta")
+    L.append("page_type: dataset")
+    L.append('title: "The Skills Database"')
+    L.append("status: active")
+    L.append("knowledge: derived")
+    L.append(f"date_created: {PAGE_CREATED}")
+    L.append(f"date_modified: {modified}")
+    # A count of rows per kind, and nothing else. No score, no weighting, no
+    # threshold chosen for what it would surface — the same rule the portal's
+    # instruments run under, applied to the one number this page has.
+    L.append("chart:")
+    L.append("  kind: bar")
+    L.append('  title: "Capabilities on the record, by kind"')
+    L.append('  x: { label: "Kind", type: category }')
+    L.append('  y: { label: "Live capabilities", type: number }')
+    L.append("  series:")
+    L.append('    - name: "Declared"')
+    L.append("      points:")
+    for kind in KINDS:
+        n = sum(1 for c in caps if c["kind"] == kind)
+        if n:
+            L.append(f'        "{KIND_LABEL.get(kind, kind)}": {n}')
+    L.append("sources: []")
+    L.append("---")
+    L.append("")
+    L.append("# The Skills Database")
+    L.append("")
+    L.append("_Generated by `bin/wiki-skills page` from `skills/registry/events.jsonl`.")
+    L.append("Do not hand-edit — rerun the tool. The append-only log is the record;")
+    L.append("this page and `skills/registry/registry.json` are both derived from it._")
+    L.append("")
+    L.append("[[wiki/meta/index|meta]] · [[wiki/meta/digest|Digest]] · "
+             "[[wiki/meta/recent-activity|Recent]] · [[wiki/meta/open-questions|Open]]")
+    L.append("")
+    L.append("Every other page in this wiki is about Dan Frank. This one is about the")
+    L.append("machines that write them.")
+    L.append("")
+    L.append("Several different models work on this repository — Claude Code in a")
+    L.append("terminal, Claude in a browser, Codex, Cursor, whatever comes next — and")
+    L.append("each arrives with a different set of skills, MCP servers, plugin tools and")
+    L.append("subagents. None of them can see the others'. Without a shared record, every")
+    L.append("session rediscovers the same surface from scratch, and a lesson one model")
+    L.append("learned about a tool the next model also has dies in a transcript nobody")
+    L.append("keeps. This is the shared record: a running database that any model can read")
+    L.append("before it starts and write to when it finishes, so the capabilities")
+    L.append("accumulate the way the rest of the corpus does.")
+    L.append("")
+    L.append("It is public for the same reason the wiki is. A capability list nobody")
+    L.append("outside can read is a capability list that cannot be checked.")
+    L.append("")
+
+    L.append("## What it holds")
+    L.append("")
+    L.append("| | |")
+    L.append("|---|---|")
+    L.append(f"| Capabilities on the record | {len(caps)} |")
+    L.append(f"| Declared by more than one model | {state['counts']['shared']} |")
+    L.append(f"| Models on the record | {state['counts']['agents']} |")
+    L.append(f"| Retired | {state['counts']['retired']} |")
+    L.append(f"| Events in the log | {state['events']} |")
+    L.append(f"| Last push | {modified} |")
+    L.append("")
+    if state["counts"]["by_kind"]:
+        L.append("| Kind | Live |")
+        L.append("|---|---|")
+        for kind, n in sorted(state["counts"]["by_kind"].items(), key=lambda kv: -kv[1]):
+            L.append(f"| {KIND_LABEL.get(kind, kind)} | {n} |")
+        L.append("")
+
+    L.append("## The models on the record")
+    L.append("")
+    if agents:
+        L.append("| Model | Vendor | Surface | Declares | First seen | Last push |")
+        L.append("|---|---|---|---|---|---|")
+        for a in agents:
+            L.append(f"| `{md_cell(a['id'])}` | {md_cell(a['vendor'])} | "
+                     f"{md_cell(a['surface'])} | {a['declares']} | "
+                     f"{day(a['first_seen'])} | {day(a['last_seen'])} |")
+    else:
+        L.append("Nothing has pushed yet.")
+    L.append("")
+
+    # The shared surface is the point of the whole exercise: these are the
+    # capabilities a lesson can be written against and expected to land.
+    shared = [c for c in shown if len(c["declared_by"]) > 1]
+    L.append("## Shared surface")
+    L.append("")
+    L.append("Capabilities more than one model declares. These are the ones where a")
+    L.append("lesson learned by one model transfers to another without translation —")
+    L.append("and therefore the ones worth writing a skill about.")
+    L.append("")
+    if shared:
+        L.append("| Capability | Kind | Declared by |")
+        L.append("|---|---|---|")
+        for c in shared:
+            who = ", ".join(f"`{d['agent']}`" for d in c["declared_by"])
+            L.append(f"| {md_cell(public_row(c).get('title') or c['name'])} | "
+                     f"{md_cell(c['kind'])} | {who} |")
+    else:
+        L.append("No capability is yet declared by more than one model. That is what the")
+        L.append("second push will change.")
+    L.append("")
+
+    for kind in KINDS:
+        rows = [c for c in shown if c["kind"] == kind]
+        if not rows:
+            continue
+        L.append(f"## {KIND_LABEL.get(kind, kind)}")
+        L.append("")
+        L.append("| Name | What it is | Declared by | Where |")
+        L.append("|---|---|---|---|")
+        for c in rows:
+            rec = public_row(c)
+            who = ", ".join(f"`{d['agent']}`" for d in c["declared_by"])
+            where = f"`{rec['path']}`" if rec.get("path") else (
+                rec.get("link") or (f"declared inline by {who}" if rec.get("instructions") else "—"))
+            extra = ""
+            if rec.get("env"):
+                extra = f" _(env: {', '.join('`%s`' % e for e in rec['env'])})_"
+            # Trimmed for the table only; the record keeps the full text and
+            # `bin/wiki-skills show` prints it. A 400-character cell makes a
+            # 27-row table unreadable, which defeats the index it is meant to be.
+            L.append(f"| `{md_cell(c['name'])}` | "
+                     f"{md_cell(one_line(rec.get('summary'), 220))}{extra} | "
+                     f"{who} | {md_cell(where)} |")
+        L.append("")
+
+    revisions = sorted(
+        [(r["at"], c, r) for c in shown for r in c["revisions"] if r.get("from")],
+        key=lambda t: t[0], reverse=True)[:15]
+    L.append("## Recently revised")
+    L.append("")
+    L.append("A capability changes when the model declaring it reports different")
+    L.append("content — a rewritten instruction, a new trigger, a different tool")
+    L.append("surface. The log keeps both digests, so a revision is visible as one.")
+    L.append("")
+    if revisions:
+        L.append("| Date | Capability | Revised by | Digest |")
+        L.append("|---|---|---|---|")
+        for at, c, r in revisions:
+            L.append(f"| {day(at)} | `{md_cell(c['name'])}` | `{md_cell(r['agent'])}` | "
+                     f"`{r['from'][:8]}` → `{r['to'][:8]}` |")
+    else:
+        L.append("Nothing has been revised yet — every capability is at its first digest.")
+    L.append("")
+
+    retired = [c for c in state["capabilities"]
+               if c["status"] != "live" and held_back(c) != "row"]
+    if retired:
+        L.append("## Retired")
+        L.append("")
+        L.append("Kept, never deleted. A capability that was withdrawn and one that never")
+        L.append("existed must not look the same from outside.")
+        L.append("")
+        L.append("| Name | Kind | Retired | Why |")
+        L.append("|---|---|---|---|")
+        for c in retired:
+            L.append(f"| `{md_cell(c['name'])}` | {md_cell(c['kind'])} | "
+                     f"{day(c.get('retired_at'))} | {md_cell(c.get('retired_reason'))} |")
+        L.append("")
+
+    L.append("## How a model pushes into this")
+    L.append("")
+    L.append("When a model is told to update the skills in the wiki, this is the")
+    L.append("operation. It runs in the `wiki-brain` repository:")
+    L.append("")
+    L.append("```bash")
+    L.append("bin/wiki-skills push --scan --agent <id> --vendor <vendor> --surface <surface>")
+    L.append("bin/wiki-skills push -f manifest.json      # everything the scan cannot see")
+    L.append("bin/wiki-skills page && bin/wiki-skills check")
+    L.append("```")
+    L.append("")
+    L.append("`--scan` reads what this repository itself supplies: the skills under")
+    L.append("`.claude/skills/` and `skills/`, the commands in `bin/`, MCP servers")
+    L.append("configured in the tree, hooks, and subagent definitions. The manifest")
+    L.append("carries the other half — the skills, MCP servers, plugin tools and")
+    L.append("harness a model has that nothing in the working tree records. The full")
+    L.append("format is in `skills/registry/README.md`.")
+    L.append("")
+    L.append("A push is idempotent: re-declaring a capability whose content has not")
+    L.append("changed appends nothing to the log.")
+    L.append("")
+
+    L.append("## What is deliberately not here")
+    L.append("")
+    L.append("**No credential values, ever.** This repository is public and its history")
+    L.append("cannot be un-published. An MCP server is recorded with its transport, its")
+    L.append("command, the shape of its arguments and the *names* of the environment")
+    L.append("variables it wants — never a value. `bin/wiki-skills` refuses a push")
+    L.append("containing anything shaped like a key, a token or a URL with credentials")
+    L.append("in it, and names the field rather than quietly stripping it. The gate")
+    L.append("re-scans the committed database, so a hand-edit cannot get one past the")
+    L.append("writer.")
+    L.append("")
+    if hidden or muted:
+        L.append("**Some rows are held back under the standing directive in `CLAUDE.md`.**")
+        L.append("That directive stops new public writing about a living person; it does")
+        L.append("not delete what already exists. So the reach here is as narrow as it can")
+        L.append("be, and the hole is drawn at its true width rather than closed over:")
+        L.append("")
+        if hidden:
+            L.append(f"- **{len(hidden)}** capabilit{'y is' if len(hidden) == 1 else 'ies are'} "
+                     f"omitted from the tables entirely — the name itself cannot be printed")
+            L.append("  here. They remain on the record in `skills/registry/` and are counted")
+            L.append("  in every total above.")
+        if muted:
+            L.append(f"- **{len(muted)}** appear{'s' if len(muted) == 1 else ''} with the "
+                     f"summary withheld. The row, the kind and the path are printed, so the")
+            L.append("  capability is discoverable and the file it points at — long since")
+            L.append("  public in this repository — still answers what it does.")
+        L.append("")
+    L.append("**No prompts, personalities or session state.** A capability is something a")
+    L.append("model can invoke. Where the work stands is `LLM_HANDOFF.md`; what is")
+    L.append("outstanding is `WORK.md`; what agents have *learned* about working here is")
+    L.append("`skills/` itself, which this database indexes but does not replace.")
+    L.append("")
+    return "\n".join(L) + "\n"
+
+
+# ----------------------------------------------------------------- the terminal
+def render_status(reg, state):
+    caps = reg.live(state)
+    if not state["events"]:
+        print("skills database — empty. `bin/wiki-skills push --scan --agent <id>` starts it.")
+        return
+    print(f"skills database · {len(caps)} live capabilities · "
+          f"{state['counts']['agents']} models · {state['events']} events")
+    print()
+    for kind in KINDS:
+        n = state["counts"]["by_kind"].get(kind, 0)
+        if n:
+            print(f"  {KIND_LABEL.get(kind, kind):<14} {n:>4}")
+    print()
+    print(f"  shared by 2+ models   {state['counts']['shared']:>4}")
+    print(f"  retired               {state['counts']['retired']:>4}")
+    print()
+    for a in state["agents"]:
+        bits = " · ".join(x for x in (a["vendor"], a["surface"], a["model"]) if x)
+        print(f"  {a['id']:<20} {a['declares']:>4} declared   "
+              f"last push {day(a['last_seen'])}   {bits}")
+    print()
+    print(f"  page: {_rel(reg.page, reg.root)}   log: {_rel(reg.events, reg.root)}")
+
+
+def render_list(state, kind=None, agent=None, all_rows=False):
+    rows = [c for c in state["capabilities"] if all_rows or c["status"] == "live"]
+    if kind:
+        rows = [c for c in rows if c["kind"] == kind]
+    if agent:
+        rows = [c for c in rows if any(d["agent"] == agent for d in c["declared_by"])]
+    if not rows:
+        print("nothing matches.")
+        return
+    for c in rows:
+        who = ",".join(d["agent"] for d in c["declared_by"])
+        mark = "" if c["status"] == "live" else " [retired]"
+        print(f"{c['kind']:<11} {c['name']:<38} {who}{mark}")
+        print(f"            {one_line(c['record'].get('summary'), 120)}")
+
+
+def render_show(state, name):
+    hits = [c for c in state["capabilities"]
+            if c["name"] == name or c["slug"] == name or name.lower() in c["name"].lower()]
+    if not hits:
+        raise RegistryError(f"no capability matching {name!r}")
+    for c in hits:
+        rec = c["record"]
+        print(f"{c['kind']}/{c['name']}   [{c['status']}]")
+        print(f"  {rec.get('summary')}")
+        for f in ("title", "provider", "path", "link", "version", "scope",
+                  "transport", "command"):
+            if rec.get(f):
+                print(f"  {f:<12} {rec[f]}")
+        for f in ("triggers", "args", "env", "tools"):
+            if rec.get(f):
+                print(f"  {f:<12} {', '.join(str(x) for x in rec[f])}")
+        if rec.get("instructions"):
+            print("  instructions:")
+            for line in rec["instructions"].splitlines():
+                print(f"    {line}")
+        print("  declared by:")
+        for d in c["declared_by"]:
+            print(f"    {d['agent']:<20} {day(d['first_seen'])} → {day(d['last_seen'])} "
+                  f"  digest {d['digest'][:8]}")
+        if c["revisions"]:
+            print("  revisions:")
+            for r in c["revisions"]:
+                print(f"    {day(r['at'])}  {r['agent']:<16} "
+                      f"{(r['from'] or 'new')[:8]} → {r['to'][:8]}")
+        for n in c["notes"]:
+            print(f"  note [{day(n['at'])} {n['agent']}]: {n['text']}")
+        print()
+
+
+def render_diff(state, a, b):
+    """What one model has that the other does not — the iterate-off-each-other view."""
+    have = {}
+    for c in state["capabilities"]:
+        if c["status"] != "live":
+            continue
+        for d in c["declared_by"]:
+            have.setdefault(d["agent"], {})[f"{c['kind']}::{c['name']}"] = c
+    for who in (a, b):
+        if who not in have:
+            raise RegistryError(f"no model {who!r} on the record — "
+                                f"known: {', '.join(sorted(have)) or 'none'}")
+    only_a = sorted(set(have[a]) - set(have[b]))
+    only_b = sorted(set(have[b]) - set(have[a]))
+    both = sorted(set(have[a]) & set(have[b]))
+
+    print(f"{a}  vs  {b}")
+    print(f"  shared: {len(both)}   only {a}: {len(only_a)}   only {b}: {len(only_b)}")
+    for label, keys, src in ((a, only_a, have[a]), (b, only_b, have[b])):
+        if not keys:
+            continue
+        print()
+        print(f"only {label}:")
+        for k in keys:
+            c = src[k]
+            print(f"  {c['kind']:<11} {c['name']:<36} "
+                  f"{one_line(c['record'].get('summary'), 70)}")
+    # Where both have it but the content digests differ, one of them has moved.
+    drift = []
+    for k in both:
+        da = next(d for d in have[a][k]["declared_by"] if d["agent"] == a)
+        db = next(d for d in have[b][k]["declared_by"] if d["agent"] == b)
+        if da["digest"] != db["digest"]:
+            drift.append((k, da["digest"][:8], db["digest"][:8]))
+    if drift:
+        print()
+        print("same capability, different content — one of the two has iterated:")
+        for k, x, y in drift:
+            print(f"  {k:<48} {a}:{x}  {b}:{y}")
+
+
+# ----------------------------------------------------------------------- gate
+def check(reg, fix=False):
+    """The gate. Silent and clean when nothing has ever been pushed."""
+    errors, warnings = [], []
+
+    if not reg.events.exists():
+        print("wiki-skills: 0 errors (no skills database yet)")
+        return 0
+
+    try:
+        events = reg.read_events()
+    except RegistryError as e:
+        print(f"ERROR {e}")
+        print("wiki-skills: 1 error")
+        return 1
+
+    seen_ids, last_at = set(), ""
+    for i, ev in enumerate(events, 1):
+        for field in ("id", "event", "at", "agent"):
+            if not ev.get(field):
+                errors.append(f"event {i}: missing `{field}`")
+        if ev.get("event") not in EVENT_TYPES:
+            errors.append(f"event {ev.get('id')}: unknown type {ev.get('event')!r}")
+        if ev.get("id") in seen_ids:
+            errors.append(f"duplicate event id {ev.get('id')} — a merge lost an append")
+        seen_ids.add(ev.get("id"))
+        last_at = max(last_at, ev.get("at", ""))
+
+    state = reg.project(events)
+
+    # Provenance: a capability nothing can be reached through is a rumour.
+    for c in state["capabilities"]:
+        rec = c["record"]
+        if not (rec.get("path") or rec.get("link") or rec.get("instructions")):
+            errors.append(f"{c['kind']}/{c['name']}: no path, link or instructions")
+        if not rec.get("summary"):
+            errors.append(f"{c['kind']}/{c['name']}: no summary")
+        if rec.get("path") and rec.get("scope") == "repo":
+            if not (reg.root / rec["path"]).exists():
+                warnings.append(f"{c['kind']}/{c['name']}: `{rec['path']}` no longer exists "
+                                f"— the capability may have moved or gone")
+
+    # The refusal, applied to what is COMMITTED rather than to what was pushed.
+    blob = json.dumps(state, ensure_ascii=False)
+    for pat, why in SECRET_PATTERNS:
+        if pat.search(blob):
+            errors.append(f"the database contains something shaped like {why} — "
+                          f"this repository is public; remove it and rewrite history")
+
+    # Projection and page are derived; drift means somebody edited one by hand.
+    fresh = json.dumps(state, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
+    if not reg.projection.exists():
+        (errors if not fix else warnings).append(
+            "skills/registry/registry.json is missing — run `bin/wiki-skills rebuild`")
+        if fix:
+            reg.write_projection(state)
+    elif reg.projection.read_text(encoding="utf-8") != fresh:
+        if fix:
+            reg.write_projection(state)
+        else:
+            errors.append("skills/registry/registry.json disagrees with the log — "
+                          "run `bin/wiki-skills rebuild` (the log is the record)")
+
+    page = render_page(state, reg.root)
+    if not reg.page.exists():
+        (errors if not fix else warnings).append(
+            f"{_rel(reg.page, reg.root)} is missing — run `bin/wiki-skills page`")
+        if fix:
+            reg.page.parent.mkdir(parents=True, exist_ok=True)
+            reg.page.write_text(page, encoding="utf-8")
+    elif reg.page.read_text(encoding="utf-8") != page:
+        if fix:
+            reg.page.write_text(page, encoding="utf-8")
+        else:
+            errors.append(f"{_rel(reg.page, reg.root)} is behind the database — "
+                          f"run `bin/wiki-skills page`")
+
+    # The directive, checked twice and on two different objects. The render is
+    # what the tool WOULD publish; the file on disk is what the portal actually
+    # serves, and the two are only the same when the drift check above passed.
+    # Checking the render alone would let a hand-edited page name her and report
+    # nothing worse than "the page is behind the database".
+    if MORATORIUM.search(page):
+        errors.append("the generated page names a person under the standing directive "
+                      "in CLAUDE.md — the renderer's holdout failed")
+    if reg.page.exists() and MORATORIUM.search(reg.page.read_text(encoding="utf-8")):
+        errors.append(f"{_rel(reg.page, reg.root)} names a person under the standing "
+                      f"directive in CLAUDE.md — this page is published; regenerate it "
+                      f"with `bin/wiki-skills page` and do not hand-edit it")
+
+    for w in warnings:
+        print(f"WARN  {w}")
+    for e in errors:
+        print(f"ERROR {e}")
+    print(f"wiki-skills: {len(errors)} error{'s' if len(errors) != 1 else ''}, "
+          f"{len(warnings)} warning{'s' if len(warnings) != 1 else ''} · "
+          f"{state['counts']['capabilities']} capabilities, "
+          f"{state['counts']['agents']} models, last push {day(last_at) or '—'}")
+    return 1 if errors else 0
+
+
+# ----------------------------------------------------------------------- main
+def main():
+    ap = argparse.ArgumentParser(
+        prog="wiki-skills",
+        description="the cross-model skills database and its public-facing page")
+    ap.add_argument("--root", default=None, help=argparse.SUPPRESS)
+    sub = ap.add_subparsers(dest="cmd")
+
+    sub.add_parser("status", help="what the database holds (default)")
+    sub.add_parser("rebuild", help="regenerate registry.json from the log")
+    sub.add_parser("page", help="regenerate wiki/meta/skills.md")
+
+    p = sub.add_parser("scan", help="this repository's own capabilities, as a manifest")
+    p.add_argument("--agent", default="unknown", help="agent id to stamp the manifest with")
+
+    p = sub.add_parser("push", help="record a model's capabilities")
+    p.add_argument("-f", "--manifest", help="manifest JSON file, or - for stdin")
+    p.add_argument("--scan", action="store_true", help="include what a repo scan finds")
+    p.add_argument("--agent", help="agent id (required with --scan)")
+    p.add_argument("--vendor", default="")
+    p.add_argument("--surface", default="", help="cli · web · ide · action · api")
+    p.add_argument("--model", default="")
+    p.add_argument("--note", default="")
+    p.add_argument("--retire-missing", action="store_true",
+                   help="retire capabilities this agent declared before and no longer has")
+    p.add_argument("--dry-run", action="store_true")
+
+    p = sub.add_parser("declare", help="record one capability from the command line")
+    p.add_argument("kind", choices=KINDS)
+    p.add_argument("name")
+    p.add_argument("summary")
+    p.add_argument("--agent", required=True)
+    p.add_argument("--path", default="")
+    p.add_argument("--link", default="")
+    p.add_argument("--provider", default="")
+    p.add_argument("--version", default="")
+    p.add_argument("--scope", default="agent", choices=SCOPES)
+    p.add_argument("--trigger", action="append", default=[])
+    p.add_argument("--tool", action="append", default=[])
+    p.add_argument("--env", action="append", default=[],
+                   help="environment variable NAME (never a value)")
+    p.add_argument("--instructions", default="")
+
+    p = sub.add_parser("retire", help="mark a capability gone")
+    p.add_argument("kind", choices=KINDS)
+    p.add_argument("name")
+    p.add_argument("--agent", required=True)
+    p.add_argument("--reason", default="")
+
+    p = sub.add_parser("note", help="attach a note to a capability — how it behaved, what it cost")
+    p.add_argument("kind", choices=KINDS)
+    p.add_argument("name")
+    p.add_argument("text")
+    p.add_argument("--agent", required=True)
+
+    p = sub.add_parser("list", help="the capabilities on the record")
+    p.add_argument("--kind", choices=KINDS)
+    p.add_argument("--agent")
+    p.add_argument("--all", action="store_true", help="include retired")
+
+    p = sub.add_parser("show", help="one capability in full, with its history")
+    p.add_argument("name")
+
+    p = sub.add_parser("diff", help="what one model has that another does not")
+    p.add_argument("a")
+    p.add_argument("b")
+
+    p = sub.add_parser("check", help="the gate")
+    p.add_argument("--fix", action="store_true", help="regenerate the derived files instead of failing")
+
+    args = ap.parse_args()
+    reg = Registry(args.root)
+    cmd = args.cmd or "status"
+
+    try:
+        if cmd == "status":
+            render_status(reg, reg.project())
+
+        elif cmd == "rebuild":
+            state = reg.write_projection()
+            print(f"rebuilt {_rel(reg.projection, reg.root)} — "
+                  f"{state['counts']['capabilities']} capabilities from {state['events']} events")
+
+        elif cmd == "page":
+            state = reg.project()
+            reg.page.parent.mkdir(parents=True, exist_ok=True)
+            text = render_page(state, reg.root)
+            changed = not reg.page.exists() or reg.page.read_text(encoding="utf-8") != text
+            reg.page.write_text(text, encoding="utf-8")
+            print(f"{'wrote' if changed else 'unchanged'} {_rel(reg.page, reg.root)} — "
+                  f"{state['counts']['capabilities']} capabilities, "
+                  f"{state['counts']['agents']} models")
+
+        elif cmd == "scan":
+            caps = scan_repo(reg.root)
+            print(json.dumps({"agent": {"id": args.agent}, "capabilities": caps},
+                             indent=2, ensure_ascii=False))
+
+        elif cmd == "push":
+            caps, agent = [], None
+            if args.manifest:
+                agent, caps = load_manifest(args.manifest)
+            if args.scan:
+                if not (args.agent or agent):
+                    raise RegistryError("--scan needs --agent: the database records who declared what")
+                caps = list(caps) + scan_repo(reg.root)
+            if args.agent:
+                agent = {"id": args.agent, "vendor": args.vendor, "surface": args.surface,
+                         "model": args.model, "note": args.note}
+            if not agent:
+                raise RegistryError("nothing to push — give -f MANIFEST, or --scan --agent <id>")
+            if not caps:
+                raise RegistryError("nothing to push — the manifest declared no capabilities")
+            res = do_push(reg, agent, caps, args.retire_missing, dry=args.dry_run)
+            head = "would record" if args.dry_run else "recorded"
+            print(f"{head} {res['events']} event(s) for `{res['agent']['id']}` — "
+                  f"{len(res['added'])} new, {len(res['changed'])} revised, "
+                  f"{res['unchanged']} unchanged")
+            for r in res["added"][:20]:
+                print(f"  + {r['kind']:<11} {r['name']}")
+            for r in res["changed"][:20]:
+                print(f"  ~ {r['kind']:<11} {r['name']}")
+            if not args.dry_run and res["events"]:
+                print("  next: bin/wiki-skills page && bin/wiki-check")
+
+        elif cmd == "declare":
+            cap = {"kind": args.kind, "name": args.name, "summary": args.summary,
+                   "path": args.path, "link": args.link, "provider": args.provider,
+                   "version": args.version, "scope": args.scope, "triggers": args.trigger,
+                   "tools": args.tool, "env": args.env, "instructions": args.instructions}
+            res = do_push(reg, {"id": args.agent}, [cap])
+            print(f"recorded {res['events']} event(s) — {args.kind}/{args.name}"
+                  if res["events"] else "unchanged — already on the record at this digest")
+
+        elif cmd == "retire":
+            state = reg.project()
+            key = f"{args.kind}::{args.name}"
+            if not any(f"{c['kind']}::{c['name']}" == key for c in state["capabilities"]):
+                raise RegistryError(f"{key} is not on the record")
+            reg.append([reg.event("capability_retired", slug(args.agent),
+                                  {"kind": args.kind, "name": args.name,
+                                   "reason": one_line(args.reason, 300)})])
+            reg.write_projection()
+            print(f"retired {args.kind}/{args.name}")
+
+        elif cmd == "note":
+            state = reg.project()
+            key = f"{args.kind}::{args.name}"
+            if not any(f"{c['kind']}::{c['name']}" == key for c in state["capabilities"]):
+                raise RegistryError(f"{key} is not on the record")
+            found = scan_secrets(args.text, "note")
+            if found:
+                raise RegistryError(f"refusing the note — it looks like it contains "
+                                    f"{found[0][1]}; this repository is public")
+            reg.append([reg.event("note_added", slug(args.agent),
+                                  {"kind": args.kind, "name": args.name, "text": args.text})])
+            reg.write_projection()
+            print(f"noted on {args.kind}/{args.name}")
+
+        elif cmd == "list":
+            render_list(reg.project(), args.kind, args.agent, args.all)
+
+        elif cmd == "show":
+            render_show(reg.project(), args.name)
+
+        elif cmd == "diff":
+            render_diff(reg.project(), slug(args.a), slug(args.b))
+
+        elif cmd == "check":
+            return check(reg, args.fix)
+
+    except RegistryError as e:
+        print(f"wiki-skills: {e}", file=sys.stderr)
+        return 2
+    except BrokenPipeError:
+        pass
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

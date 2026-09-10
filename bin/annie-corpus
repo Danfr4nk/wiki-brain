@@ -1,0 +1,231 @@
+#!/usr/bin/env python3
+"""annie-corpus — assemble and page through the complete Dan/Annie message record.
+
+WHY
+---
+The Annie thread is spread across four handles and a dozen partly-overlapping
+exports, and no single file holds all of it:
+
+  +17244346811        2015-11-28 → 2018-12   the original number
+  +17249204125        2018-12-26 → 2020-06   "I texted her yesterday from my
+                                             new number!" (2018-12-27)
+  alulmer28@gmail.com 2020-07-30 → 2020-10   her iMessage email handle
+  +12124702449        2022, 2025 → 2026      the NYC number
+
+Reading any one export straight through silently drops years. This tool merges
+every source that carries Annie traffic, de-duplicates, sorts, and reports what
+coverage actually exists — including the holes, which are real and must not be
+mistaken for quiet periods.
+
+**This tool does not identify events.** It assembles and pages. Deciding what
+counts as an event is done by reading, one window at a time; a regex sweep over
+this material produces nonsense, which is the lesson of the 2026-08-14
+master-timeline and its 2026-08-15 replacement.
+
+PER-CONTACT EXPORT CONVENTION
+-----------------------------
+In a per-contact export (`imessage_<numbers>_both_all_now.csv`) a `sent` row
+carries an empty contact field — the contact is implied by the file. In an
+all-contacts export the same blank means *unattributable*. This tool honours
+that distinction: blanks are claimed as Annie only from Annie-scoped files.
+
+Usage:
+  bin/annie-corpus build            merge sources -> exports/annie-corpus.csv
+  bin/annie-corpus coverage         messages per month, with gaps called out
+  bin/annie-corpus days [YYYY-MM]   per-day counts, to plan a reading session
+  bin/annie-corpus read FROM [TO]   print a window for reading (dates inclusive)
+"""
+
+import argparse
+import csv
+import os
+import sys
+from collections import Counter, defaultdict
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+RAW = os.path.join(ROOT, "raw", "self", "message-csv")
+OUT = os.path.join(ROOT, "exports", "annie-corpus.csv")
+
+ANNIE_HANDLES = {
+    "+17244346811", "7244346811",
+    "+17249204125", "7249204125",
+    "+12124702449", "2124702449",
+    "alulmer28@gmail.com",
+}
+
+# (filename, datetime_col, direction_col, contact_col, text_col, annie_scoped)
+# annie_scoped=True means a blank contact on a row belongs to Annie by
+# construction of the file itself.
+SOURCES = [
+    ("imessage_7244346811+7249204125+2124702449_both_all_now.csv", 0, 1, 2, 5, True),
+    ("imessage_7244346811+2124702449_both_all_now.csv", 0, 1, 2, 5, True),
+    ("imessage_7244346811_both_all_now.csv", 0, 1, 2, 7, True),
+    ("imessage_2124702449_both_all_now.csv", 0, 1, 2, 7, True),
+    ("imessage_2124702449_both_2025-05-14_now.csv", 0, 1, 2, 7, True),
+    ("imessages_2124702449_last6months.csv", 0, 1, 2, 7, True),
+    ("imessage_export_2124702449_20260726.csv", 0, 1, 2, 7, True),
+    ("messages_2124702449.csv", 0, 1, 2, 7, True),
+    ("imessage_ALL_both_all_now.csv", 0, 1, 2, 7, False),
+    ("MASTER_MESSAGES_DB_DUMP.csv", 0, 2, 1, 3, False),
+]
+
+NORM = {"sent": "S", "received": "R", "s": "S", "r": "R"}
+
+
+def norm_dir(d):
+    return NORM.get(d.strip().lower(), d.strip()[:1].upper() or "?")
+
+
+def clean_ts(t):
+    t = t.strip().strip('"')
+    return t[:19]
+
+
+def load_source(path, dt, di, ci, ti, scoped):
+    rows = []
+    try:
+        fh = open(path, encoding="utf-8", errors="replace", newline="")
+    except OSError:
+        return rows
+    r = csv.reader(fh)
+    try:
+        next(r)
+    except StopIteration:
+        return rows
+    need = max(dt, di, ci, ti)
+    for row in r:
+        if len(row) <= need:
+            continue
+        ts = clean_ts(row[dt])
+        if len(ts) < 10 or not ts[:4].isdigit():
+            continue
+        contact = row[ci].strip()
+        direction = norm_dir(row[di])
+        if contact in ANNIE_HANDLES:
+            pass
+        elif not contact and scoped:
+            pass                      # implied by an Annie-scoped file
+        else:
+            continue
+        text = row[ti].strip()
+        if not text:
+            continue
+        rows.append((ts, direction, text))
+    fh.close()
+    return rows
+
+
+def build():
+    seen = set()
+    merged = []
+    per_source = {}
+    for name, dt, di, ci, ti, scoped in SOURCES:
+        path = os.path.join(RAW, name)
+        rows = load_source(path, dt, di, ci, ti, scoped)
+        added = 0
+        for ts, d, text in rows:
+            key = (ts, d, text)
+            if key in seen:
+                continue
+            seen.add(key)
+            merged.append(key)
+            added += 1
+        per_source[name] = (len(rows), added)
+
+    merged.sort(key=lambda x: (x[0], x[1]))
+    os.makedirs(os.path.dirname(OUT), exist_ok=True)
+    with open(OUT, "w", encoding="utf-8", newline="") as fh:
+        w = csv.writer(fh)
+        w.writerow(["datetime", "direction", "text"])
+        w.writerows(merged)
+
+    print(f"wrote {os.path.relpath(OUT, ROOT)} — {len(merged):,} unique messages\n")
+    print(f"{'source':<58} {'annie rows':>11} {'new':>9}")
+    for name, (tot, added) in per_source.items():
+        print(f"  {name:<56} {tot:>11,} {added:>9,}")
+    if merged:
+        print(f"\nspan: {merged[0][0]} → {merged[-1][0]}")
+    return merged
+
+
+def load_corpus():
+    if not os.path.exists(OUT):
+        sys.exit("no corpus yet — run: bin/annie-corpus build")
+    r = csv.reader(open(OUT, encoding="utf-8", newline=""))
+    next(r)
+    return [tuple(row) for row in r if len(row) == 3]
+
+
+def cmd_coverage(_a):
+    rows = load_corpus()
+    per = Counter(r[0][:7] for r in rows)
+    print(f"{len(rows):,} messages · {rows[0][0][:10]} → {rows[-1][0][:10]}\n")
+    y0, y1 = int(rows[0][0][:4]), int(rows[-1][0][:4])
+    for y in range(y0, y1 + 1):
+        months = []
+        for m in range(1, 13):
+            k = f"{y}-{m:02d}"
+            n = per.get(k, 0)
+            months.append(f"{n//1000}k" if n >= 1000 else (str(n) if n else "·"))
+        total = sum(v for k, v in per.items() if k.startswith(str(y)))
+        print(f"  {y}  " + " ".join(f"{m:>4}" for m in months) + f"   = {total:,}")
+    print("\n  (· = no messages at all that month — a real hole in the record,")
+    print("   not a quiet period; Annie's side is absent Oct 2020 → 2024.)")
+
+
+def cmd_days(a):
+    rows = load_corpus()
+    per = Counter(r[0][:10] for r in rows
+                  if not a.month or r[0][:7] == a.month)
+    if not per:
+        sys.exit("no messages in that range")
+    for d in sorted(per):
+        bar = "#" * min(60, per[d] // 10 + 1)
+        print(f"  {d}  {per[d]:>5,}  {bar}")
+    print(f"\n  {len(per)} days · {sum(per.values()):,} messages")
+
+
+def cmd_read(a):
+    rows = load_corpus()
+    lo, hi = a.start, (a.end or a.start)
+    sel = [r for r in rows if lo <= r[0][:10] <= hi]
+    if not sel:
+        sys.exit(f"no messages between {lo} and {hi}")
+    day = None
+    for ts, d, text in sel:
+        if ts[:10] != day:
+            day = ts[:10]
+            print(f"\n────────── {day} ──────────")
+        who = "DAN " if d == "S" else "ANNIE"
+        print(f"{ts[11:16]} {who} | {text}")
+    print(f"\n[{len(sel):,} messages, {lo} → {hi}]")
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    sub = ap.add_subparsers(dest="cmd")
+    sub.add_parser("build")
+    sub.add_parser("coverage")
+    d = sub.add_parser("days")
+    d.add_argument("month", nargs="?", help="YYYY-MM")
+    rd = sub.add_parser("read")
+    rd.add_argument("start")
+    rd.add_argument("end", nargs="?")
+    a = ap.parse_args()
+
+    if a.cmd == "build":
+        build()
+    elif a.cmd == "coverage":
+        cmd_coverage(a)
+    elif a.cmd == "days":
+        cmd_days(a)
+    elif a.cmd == "read":
+        cmd_read(a)
+    else:
+        ap.print_help()
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

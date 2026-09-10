@@ -1,0 +1,337 @@
+---
+
+domain: timeline
+
+page_type: event
+
+title: "March 2026 — The Terminal Phase Peak"
+
+importance: high
+
+status: stable
+
+date_created: 2026-07-11
+
+date_modified: 2026-07-20
+
+date_range_start: 2026-03-01
+
+date_range_end: 2026-03-16
+
+sources:
+
+- raw/self/dox-scan/DanAnnie_CompleteRecord_Final.docx
+
+- raw/self/dox-scan/DanAnnie_CompleteAnalysis_Final.docx
+
+- raw/self/dox-scan/DanAnnie_MasterRecord_FINAL.docx
+
+- raw/self/dox-scan/DanAnnie_TenYears_WithAmendments.docx
+
+- raw/self/dox-scan/DanAnnie_TheoryOfEverything_Updated.docx
+
+- raw/self/message-csv/imessage_2124702449_both_all_now.csv
+
+related:
+
+- wiki/people/annie-ulmer
+
+- wiki/timeline/events/eli-incident
+
+- wiki/timeline/events/group-chat-closure
+
+- wiki/mind/concepts/conflict-architecture
+
+- wiki/mind/concepts/attachment-model
+
+- wiki/timeline/events/april-may-2026-final-weeks
+
+- wiki/people/suzanne-frank
+
+- wiki/mind/concepts/forensic-method
+
+tags: [relationships, trauma-bond, addiction-recovery]
+
+connections:
+
+- page: wiki/mind/synthesis/block-unblock-loop
+
+type: component-of
+
+claim: "The March 19-20 fight is the loop's bidirectional exhibit: Annie threatens exposure, blocks, unblocks to send final lines, and blocks again — the operation is the bond's shared negotiating grammar, not Dan's private defect."
+
+- page: wiki/mind/synthesis/dan-annie-fallout-verdict
+
+type: evidences
+
+claim: "This fortnight is where the verdict's two halves are visible in the same window: his 'I am going to fucking kill myself' at 19:41 on March 1 answered by a complaint about laundry is the diagnosis-to-behavior gap running in real time, and the March 16 'I think that I had misunderstood the conversation' is the row that upgraded the retraction half of the confession pair from dossier-only to [RAW-CSV]."
+
+- page: wiki/self/youtube-watch-history
+
+type: co-occurs
+
+claim: "A near-total gap in one YouTube account's real watch activity runs Nov 2025-Feb 2026, immediately preceding this fortnight — later clarified as a multi-account coverage limitation rather than a documented behavioral response to the crisis, but the temporal proximity was the reason it was checked at all."
+
+---
+
+# March 2026 — The Terminal Phase Peak
+
+The last sixteen days of the documented Dan–[[wiki/people/annie-ulmer|Annie]] record (which runs
+
+November 28, 2015 – March 16, 2026) contain the relationship's most
+
+concentrated gaslighting events. The dossiers treat this fortnight as the
+
+dynamic distilled: extraction, ambiguity, and the systematic prevention of
+
+the one honest conversation that could have ended things cleanly. The
+
+formal closure came later ([[wiki/timeline/events/group-chat-closure]],
+
+June 1), but March is where the record shows the machinery at full load.
+
+## Pre-phase escalation (February 21) and the March 17–31 gap
+
+Two dated incidents (found 2026-07-14, random corpus sample; both expanded
+
+2026-07-14 with the full-day thread) extend the documented pattern on
+
+either side of this page's window.
+
+**February 21, 2026.** The day starts with unrelated household pressure —
+
+Annie texts that morning that she'd "got screamed at again," that her own
+
+mother called her "a thief," and that she'd "never in my life heard my mom
+
+scream at anyone the way she just did." The afternoon runs ordinary
+
+logistics (a suspected blister, pet food, a dinner-plans back-and-forth)
+
+that curdles by early evening into the familiar interrogation pattern —
+
+Annie pressing Dan for a straight answer on whether he's coming over,
+
+Dan going quiet, Annie reading the silence as evasion. Something happens
+
+around 8:37 PM that neither side names directly in text (Dan: "What did
+
+you do that for") and both sides detonate at once: Annie threatens to
+
+"literally fucking tell your parents what you do," blocks him, unblocks to
+
+send a few final lines, and blocks again. In the extended written rant
+
+that follows, she reframes the fight as exposure risk to her, not him — "I
+
+do not give a FUCK about that. You're living a lie... Once everyone finds
+
+out what you're doing — playing games with peoples families... and your
+
+real experience (remember — you were doing IV drugs before you ever met me
+
+and I was able to get you to stop)" — and, in the same breath, "You think
+
+I'm worried people will find out I do drugs or my mom does and facilitated
+
+you doing them" — an incidental admission that her mother was a drug
+
+source for Dan, not just a household backdrop detail. When Dan throws a
+
+suicide reference back at her ("SHUT THE FUCK UP THAT YOU WORRY ABOUT ME
+
+KILLING MYSELF"), her only softening is a flat "Please. Dan. Calm down"
+
+before the thread returns to mutual "goodbye"s and a closing threat —
+
+"You'll be hearing ABOUT me. Not FROM me. Soon enough" — the same
+
+blame-reversal and threat-of-exposure structure documented throughout the
+
+terminal phase, roughly a week before this page's official start date.
+
+**March 19–20, 2026** — inside the otherwise-undocumented gap between this
+
+page (ending March 16) and [[wiki/timeline/events/april-may-2026-final-weeks]]
+
+(starting April 1) — records another full-cycle blowup, this one running
+
+in parallel with an ordinary [[wiki/people/suzanne-frank|Suz]] thread about
+
+pizza and a Spotify link, which sharpens the contrast. March 19 is routine
+
+strain: a $50 shortfall for supply that Annie tries to close by "magically"
+
+getting another fifty from her mother, a black-and-mild candy run, and a
+
+canceled evening ("I cannot stay. My mom asked me to come home... Don't
+
+hate me... Please"). It sours overnight; by March 20 morning Annie opens
+
+with "Hey you know what's really weird? I don't suddenly feel any
+
+different about you cheating on me and shit." By 9 PM she blocks him
+
+("i'm blocking you and now you"), delivering a version of the eulogy
+
+pattern seen elsewhere in the record almost verbatim early — "I knew
+
+everything you were saying was lies... it was that you knew I would care
+
+enough that if you just said 'I love you' I couldn't stop believing you...
+
+I feel 100% sure now that you have been doing this to me and you knew the
+
+whole time you would destroy me" — immediately followed, in the same
+
+minute, by Dan asking Suz "She's gone already?" and Suz answering **"Karma
+
+is a bitch. All I'm saying"** — Dan then sends Suz an unrelated Spotify
+
+link ("Came out today") while Annie is mid-collapse in the adjacent thread.
+
+Annie re-opens roughly twenty minutes later accusing him of lying about his
+
+whereabouts ("I would ask where you really are... you're not hiding it
+
+anymore") and spends the rest of the night alternating between apology and
+
+accusation before going quiet at 11:22 PM. Neither date has been folded
+
+into this page's day-by-day sections above; both are consistent with the
+
+pattern already documented there, and the March 19–20 pair additionally
+
+shows Suz's real-time, unsympathetic read of Annie surfacing a full ten
+
+days before the "Suzy" call analysis on [[wiki/people/suzanne-frank]].
+
+## The crisis-statement record and the laundry response (March 1)
+
+Across the terminal phase the record contains twelve documented crisis
+
+statements from Dan met without care. The exemplar: on March 1, 2026, Dan's
+
+"I am going to fucking kill myself" drew "What the hell Dan" — and one
+
+minute later, "Jesus Christ I can't get my laundry out and put away without
+
+getting 7 texts Dan." The complete-verdict passage in the dossiers hangs
+
+its conclusion on this category: responding to "I want to die" with the
+
+name of a bar requires having already stopped feeling the weight of the
+
+other person's pain.
+
+## The Crash-Out Trap and the 36.5-hour silences
+
+A "burst event" — ten or more consecutive messages from Dan without a reply
+
+— occurred 94 times in the record. Annie deployed these bursts as evidence
+
+of Dan's instability ("crash-outs"), but the honest framing in the
+
+analysis is sequential — the same [[wiki/mind/concepts/forensic-method|forensic
+
+insistence]] on establishing correct chronology over convenient narrative
+
+that runs throughout the rest of the corpus: every burst was preceded by a
+
+period of her silence; the burst is the end of a waiting period, not the
+
+beginning of a story. The longest documented silence ran 36.5 hours and was re-entered
+
+via a money request. The mechanism exploited his documented architecture —
+
+intolerance of open loops — guaranteeing hypervigilance until she chose to
+
+re-enter on her own terms ([[wiki/mind/concepts/conflict-architecture]]).
+
+## The eulogy and the gas-station re-entry (March 8–11)
+
+The night of March 8 reads in the analysis as a relationship eulogy — Dan
+
+explicitly releasing Annie with the specificity of someone who has stopped
+
+hoping. The morning of March 9 opened with Annie asking for a drug pickup
+
+as if the previous night had not occurred; the pre-closure record's final
+
+sent message that evening is Dan apologizing for having needs ("That last
+
+message is not your problem"), and its final received message is Annie's
+
+self-testimonial that she is "always completely understanding." After
+
+Dan's most definitive goodbye at 12:25 AM on March 11, her first contact
+
+17 hours later was: "So is there anything I can get for you or your mom at
+
+the gas station so I can get a line or two" — no acknowledgment of the
+
+goodbye, drug request as re-entry vehicle.
+
+## The bathroom incident (March 10)
+
+March 10 was the convergence of two simultaneous crises: Dan was running
+
+out of his Suboxone prescription (the dealer had refused to source more)
+
+while in acute relational distress — 37 consecutive unanswered messages
+
+between 6:26 and 8:25 PM asking one question: "JUST TELL ME IF SOMETHING
+
+CHANGED." Annie texted "Dan. Calm down. Please. I will be over." (7:37
+
+PM), arrived, told Dan she wanted to be together, went to the bathroom —
+
+and seconds later attempted to slip out the front door without a word. The
+
+log resumes at 8:01 PM in the same register of panic ("SERIOUSLY STOP
+
+MAKING ME CRASH OUT"). The analysis calls it the entire dynamic in a
+
+single physical action — affirmation, extraction attempt, disappearance,
+
+compressed into under five minutes: "The bathroom door is the most honest
+
+thing Annie did in seven months."
+
+## The confession and retraction (March 12–16)
+
+Asked directly whether "something has changed" in the relationship, Annie
+
+answered "YES DAN" — twice. She reversed it in person within the hour, and
+
+on March 16 formally retracted: "I misunderstood the conversation." Applied
+
+to a two-word screamed exchange, the dossiers rate this retraction
+
+"factually incompatible with any ordinary reading of language" and name it
+
+the terminal phase's most concentrated gaslighting event — the moment the
+
+honest conversation was most available and most actively prevented. This
+
+was the record's most-analyzed close point, but not its actual end — see
+
+[[wiki/timeline/events/april-may-2026-final-weeks]] for the documented
+
+final seven weeks (April 1 – May 6), which run worse than anything above
+
+before the June 1 closure.
+
+## Aftermath
+
+The June 1 group chat confirmed what March had already shown
+
+([[wiki/timeline/events/group-chat-closure]]). On June 5, 2026, Annie sent
+
+a final post-closure message: "Daniel, i just want to say that i am
+
+extremely sorry." It is the only unprompted acknowledgment in the record.
+
+---
+
+**Up:** [[wiki/timeline/index|Timeline]]

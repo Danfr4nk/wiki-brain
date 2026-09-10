@@ -1,0 +1,200 @@
+
+---
+domain: timeline
+page_type: event
+title: "The Fall of Fran (night of March 7–8, 2018)"
+aliases: ["The Fall of Fran", "the second fall", "Down Goes Frazier"]
+status: closed
+importance: high
+knowledge: mixed
+date_created: 2026-08-02
+date_modified: 2026-08-02
+date_range: ["2018-03-07", "2018-03-08"]
+sources:
+  - raw/self/captures/2026-08-02_031532_the-fall-of-fran-frank-s-fumes-force-four-fire.md
+  - raw/self/captures/2026-08-02_041331_fall-of-fran-alternate-version-ignore-glyph-fo.md
+  - raw/self/dox-scan/all_imessages_complete_dump.txt
+  - "raw/self/dox-md/_Photo Thread PT II_ Grand Finale Calibration .md"
+tags: [grief, relationships, family, uniontown-era]
+connections:
+  - page: wiki/people/suzanne-frank
+    type: co-occurs
+    claim: "Fran's keep-me-home directive was given to Suz and Dan jointly, which is what let Dan read the decision to let the evening proceed as honouring an instruction rather than making a private choice."
+  - page: wiki/work/nemacolin-caddying
+    type: co-occurs
+    claim: "Caddie-season opening day is a tag both April 2017 and April 2018 carry, which is the likeliest mechanism behind the operator's one-year misdating of this whole sequence."
+  - page: wiki/people/fran-coldren
+    type: causes
+    claim: "One night ended a fifty-year residency and, four weeks later, her life — and it happened while a plan Dan had been arranging for a year was executing in the same house, which is the fact her page had never carried."
+  - page: wiki/timeline/events/fran-death-vigil
+    type: precedes
+    claim: "This is the night the vigil begins from — the fall that put Fran in an ambulance and started the four-week sequence ending in the pediatric wing on April 4."
+  - page: wiki/places/117-belmont-circle
+    type: causes
+    claim: "The fall is what ended a fifty-year residency in a single night: Fran left the house on a stretcher and never re-entered it, so this event is the terminal cause of the property's occupancy, not the estate's later sale."
+  - page: wiki/people/danny-matthews
+    type: contains
+    claim: "Danny is the third party in the arrangement's opening night, and the corpus dates the negotiation precisely — his thread opens 2018-02-16, three weeks before this fall, which is what fixes the whole sequence in 2018 rather than the 2017 the operator's memory assigns it."
+  - page: wiki/people/annie-ulmer
+    type: contains
+    claim: "The first non-monogamous encounter of the decade-long relationship happened here, roughly two years and four months in, and it happened during a medical emergency neither party stopped it for."
+  - page: wiki/mind/psychosexual/arrangement-history
+    type: instantiates
+    claim: "This night, not the November 2018 Alexis reunion, is the earliest documented consummated instance of the arrangement — Dan's own February 2018 message to Danny ('you guys would be the first couple we were with') establishes it as the first, moving the arrangement's start date eight months earlier."
+  - page: wiki/mind/concepts/erotic-architecture
+    type: evidences
+    claim: "The operator's own account names the two-stage mechanism explicitly — a masochistic 'emotional pinch' satiated by exposure to the jealousy, then a cathartic stage of sex with the partner while the jealousy is still burning — which is the architecture's clearest first-person statement of its own procedure."
+  - page: wiki/mind/concepts/acquisition-drive
+    type: evidences
+    claim: "A plan a year in the making proceeded through a catastrophic injury to the person Dan was being paid to protect, because the plan was live and nothing that arrives mid-pursuit aborts a pursuit — this is the drive's costliest documented instance."
+  - page: wiki/timeline/events/uniontown-hospital-vape-alarm
+    type: precedes
+    claim: "The fall and the fire alarm bracket the same four weeks and share one structure: an urge executed on schedule inside a room where something catastrophic was already happening."
+---
+
+# The Fall of Fran (night of March 7–8, 2018)
+
+On the night of March 7–8, 2018, two things Dan Frank had been building
+toward for the better part of a year arrived in the same house within
+minutes of each other. The first was the opening encounter of the
+non-monogamy arrangement he and [[wiki/people/annie-ulmer|Annie]] had been
+discussing since roughly early 2017 — a third party, [[wiki/people/danny-matthews|Danny
+Matthews]], due at the door. The second was the fall that broke
+[[wiki/people/fran-coldren|Fran Coldren's]] hip, removed her from
+[[wiki/places/117-belmont-circle|117 Belmont Circle]] on a stretcher after
+more than fifty years, and started the four-week collapse that killed her.
+They did not merely coincide. Fran's first fall happened while Danny was en
+route; the encounter went ahead anyway; and the second, worse fall happened
+in the minutes after Dan closed the door behind him. This page is the
+night's own record. The four weeks that follow it are at
+[[wiki/timeline/events/fran-death-vigil]].
+
+## The arrangement, and why it was that night
+
+The plan had been "tossed around for almost a year" before it was executed.
+The choice of third party was deliberately unthreatening: Danny Matthews, a
+local residential realtor a grade above Dan at school and remembered from
+then as a dork — someone with no standing to displace anyone. The framing
+Dan gives it is logistical rather than romantic: "a real quick and low
+stakes romp," an in-and-out.
+
+The corpus preserves the negotiation itself, and it is unusually clean. The
+Danny Matthews thread opens on **February 16, 2018** with Dan proposing a
+Sunday, Danny answering with his and his girlfriend Nicole's own experience
+("you guys gotta be gentle though... like I said we're not pros... we've had
+our own experiences before we got together, and a few since, but it's always
+been a good time for everyone"), and Dan replying with the line that dates
+the whole architecture: **"you guys would be the first couple we were
+with."** Within twenty minutes of that first exchange Dan has also disclosed
+the camming operation ("we supplement income on chaturbate... we make like
+$150 an hour"). The arrangement was opened, negotiated and disclosed in a
+single evening, three weeks before it was consummated.
+
+That single sentence resettles a date the wiki had wrong by eight months.
+[[wiki/mind/psychosexual/arrangement-history]] had the November 2018 Alexis
+reunion as "the earliest well-documented instance"; it is not. This night is,
+and Dan says so himself in writing at the time.
+
+## What happened
+
+Fran had been put to bed several minutes earlier. The first impact came
+while Danny was still en route — loud enough that Dan's own retelling
+renders it as a detonation. He reached her and knew immediately that this
+one was different from the previous spills, including the keno morning with
+[[wiki/people/suzanne-frank|Suz]] that had ended with a manual lift and no
+ambulance. She was hurt. She said, characteristically, "No, I'm... I'm
+okay," and the doorbell rang on the same beat.
+
+The decision Dan made in that moment is the part of the night he defends
+rather than apologizes for, and he defends it with her own instruction. The
+standing directive Fran had given him and Suz was categorical: **keep me at
+home no matter what, do everything you can to not let me get taken from this
+house.** She said she wanted to go back to bed. Calling an ambulance meant
+overriding the one thing she had asked of both of them. He put her back to
+bed, and the evening went ahead.
+
+He does not remember the encounter. His account is explicit about the gap:
+"I don't remember any of it. It happened" — the next thing in memory is the
+door closing behind Danny and the walk back to the bedroom. What he does
+remember is the function it served, which he states in mechanical terms:
+the exposure filled "the masochistic emotional pinch I was looking for
+(satiating the jealousy by basking in jealousy)," with the intended payoff
+still to come — sex with Annie while the jealousy was live. This is the most
+direct first-person statement of the two-stage procedure that
+[[wiki/mind/concepts/erotic-architecture]] theorizes from the outside.
+
+The second impact came before that payoff. It was louder than the first, and
+this time Fran was screaming. Dan called 911 with the physical residue of
+the preceding hour still on him — a detail he keeps in every telling, because
+the juxtaposition is the point of the story to him. The next fixed image in
+his memory is Fran being carried out of her own house on a stretcher.
+
+## What it cost
+
+Her hip was broken. She was stabilized and moved to a rehabilitation nursing
+home — the precise outcome the standing directive existed to prevent, and
+the one she had predicted would finish her. It did. Her mind did not come
+back. What remained was a single fixed question that she asked without
+stopping: *when am I leaving?* Dan reads that fixation as being about three
+things at once and says so — the house, the autonomy, and a specific
+contempt for being absorbed into "the institutional sludge that defined
+'normalcy.'" She deteriorated, got sick, and was dead four weeks later.
+
+The stretcher is the hinge. She never re-entered 117 Belmont Circle. A
+fifty-year residency, the physical seat of everything on her page, ended on
+one night — not by sale, not by decision, but because a plan was in motion
+and a fall arrived in the middle of it.
+
+## The year: the operator says 2017, the corpus says 2018
+
+> **CONTRADICTION [2026-08-02] — RESOLVED in favour of 2018.** Both captures
+> behind this page date the sequence to March–April **2017**, and one opens by
+> asserting the date twice. Every independent record in the corpus dates it to
+> **2018**, and they do not depend on each other:
+
+| Evidence | Date | What it fixes |
+|---|---|---|
+| Ancestry GEDCOM death record | 2018-04-04 | Death |
+| [[wiki/people/marla]] caregiver thread ("she made it thru the nite," 7:23 AM) | 2018-04-03/04 | Death |
+| [[wiki/people/vicki]] gurney messages ("screaming so loud when they were putting her on the gurney") | 2018-03-08 | **This fall** |
+| Danny Matthews thread opens; "first couple we were with" | 2018-02-16 | The arrangement |
+| Eviction notice served at [[wiki/places/155-virginia-ave|155 Virginia Ave]] | 2018-03-29 | Mid-vigil |
+| [[wiki/people/davey-fitzpatrick]] condolence, unprompted | 2018-04-05 | Death |
+| [[wiki/people/ellen-ulmer]] condolence | April 2018 | Death |
+
+> The Danny Matthews row is the one that matters most for this page, because it
+> is internal to the story rather than to the death: in March 2017 the corpus
+> holds no contact with Danny at all. The arrangement could not have been
+> executed a year before it was negotiated.
+>
+> **Why the memory says 2017, as an inference and not a record.** April 2017 and
+> April 2018 shared their most distinctive tag: both were caddie-season opening
+> at Nemacolin. The corpus has Dan writing to his father on **April 11, 2017** —
+> "I got the first customer feedback of the year on my first loop! I'm trying to
+> position myself to get the big money loops on **the new course**" — which is
+> the Shepherd's Rock detail the capture attaches to the death, and it belongs to
+> 2017. April 2017 also contained a death Dan spent that week processing
+> ([[wiki/people/jay-lauer]], overdose, April 11, 2017). The likeliest reading is
+> that a true 2017 season-opening memory and a true 2017 death have been fused
+> onto the 2018 one. This paragraph is reasoning, not testimony; the dates in the
+> table are testimony.
+
+The corpus's own name for this fall, from Dan's contemporaneous telling, is
+**"Down Goes Frazier."**
+
+## Gaps
+
+Nobody has recorded what Danny Matthews knew. The corpus shows no message in
+which the medical emergency is mentioned to him before, during or after, and
+his thread continues afterward with no reference to the night at all — so
+whether he understood that a 97-year-old woman had fallen twice in the house
+he was in is unestablished, and only he could settle it. The exact clock time
+of each fall is unrecorded; the ambulance is dated to the morning of March 8
+by the caregiver threads, which places the 911 call in the small hours.
+Whether Annie knew about the first fall before the encounter, or only about
+the second, is not stated in either capture. The nursing home is still
+unnamed. And no record anywhere establishes whether the arrangement's opening
+night was ever discussed between Dan and Annie afterward in terms other than
+its own success.
+
+

@@ -1,0 +1,441 @@
+---
+
+domain: timeline
+
+page_type: period
+
+status: stable
+
+knowledge: mixed
+
+date_created: 2026-07-02
+
+date_modified: 2026-09-02
+
+date_range_start: 2010-02-28
+
+date_range_end: 2013-05-31
+
+sources:
+
+- raw/self/twitter/archive.jsonl
+
+- raw/self/context-core/CONTEXT_CORE_EXPANDED.md
+
+- raw/self/facebook/facebook-ihatedanfrank/
+
+- raw/self/dox-scan/Gemini-_58.txt
+
+- raw/self/dox-md/LIFE_EVENTS_CALENDAR.md
+
+- raw/self/captures/2026-07-19_operator-note-full-sail-mohler.md
+
+tags: [relationships, nyc-era, addiction-recovery]
+
+connections:
+
+- page: wiki/timeline/periods/full-sail-2008-2010
+
+type: follows
+
+claim: "NYC-1 opens directly off the Full Sail tail — Dan moved from Winter Park to Brooklyn in spring 2010, carrying the audio-engineering ambition and the just-begun Alexis relationship north with him."
+
+- page: wiki/timeline/periods/uniontown-return-2013-2015
+
+type: precedes
+
+claim: "NYC-1 ends with the May 2013 departure back to Uniontown — the single most-corrected fact in the timeline, since the alias development and Alexis endgame that follow happened in Pennsylvania, not New York."
+
+- page: wiki/people/alexis-armel
+
+type: contains
+
+claim: "Alexis was present the entire NYC-1 stretch (her Bridge Cafe job ran until Hurricane Sandy erased the Seaport outpost, Oct 2012) — the era is the first long cohabitation and the baseline the 2015 single-bond switch is measured against."
+
+- page: wiki/health/chemical-architecture
+
+type: contains
+
+claim: "The daily Suboxone maintenance chassis begins at the front edge of this period (~Jan 2010 [MEM] / Jan 2011 [legacy docs] — the one-year discrepancy is still unresolved), making NYC-1 the start of the fifteen-year regimen."
+
+- page: wiki/people/jamie-mohler
+
+type: contains
+
+claim: "Jamie, per the operator, shared the NYC-1 years with Dan and was present the day he first met Menore — the original introduction to the dealer who becomes the supply network's most reliable node, years before the documented 2018 reconnection."
+
+- page: wiki/places/424-bedford-ave
+
+type: contains
+
+claim: "This is the residence anchor of the NYC-1 period's first two years (of three); the third year moved to a Manhattan UES sublet, 90th between 3rd and Lexington."
+
+- page: wiki/people/jamie-mohler
+
+type: evidences
+
+claim: "A 2011 Gchat log confirms Jamie as a regular presence in the NYC-1 household during the Occupy Wall Street autumn — the period page's operator-attested 'who was there' gap now has a primary-source anchor."
+
+- page: wiki/people/charles-davenport
+
+type: instantiates
+
+claim: "One of the earliest-dated exchanges in the Facebook message corpus, sampling the graph-expansion phase immediately after Dan's Brooklyn relocation."
+
+- page: wiki/self/twitter
+
+type: evidenced-by
+
+claim: "764 dated originals fall inside this period, making the @danfrank archive the only contemporaneous first-party record NYC-1 has — it closes the move-date gap this page carried for six weeks and moves both apartment dates earlier."
+
+- page: wiki/self/twitter/2010
+
+type: evidenced-by
+
+claim: "The February-March 2010 tweets narrate the move itself in real time — the Williamsburg apartment hunt, the U-Haul, the departure from Florida and the first day at the ishlab address."
+
+- page: wiki/self/twitter/2012
+
+type: evidenced-by
+
+claim: "'Goodbye, Brooklyn!' and 'Hello, Manhattan.' on consecutive days date the Williamsburg-to-Upper-East-Side move to 29-30 March 2012, a month earlier than the residence table had it."
+
+---
+
+# NYC Round One (2010–2013)
+
+Dan's first New York City period ran **March 2010 to May 2013** — three
+
+years, two apartments, the audio-engineering career attempt, and the
+
+first long cohabitation of his adult life, with [[wiki/people/alexis-armel|Alexis]].
+
+It opens off the [[wiki/timeline/periods/full-sail-2008-2010|Full Sail]]
+
+tail — he left Florida on **28 February 2010**, not "through March" — and
+
+closes not with a New York event but with a **departure**: the May 2013
+
+return to Uniontown that context-core flags as the timeline's most
+
+load-bearing correction.
+
+Until 2026-09-02 this page said it rested on "context-core, the Facebook
+
+record, and the Gemini-_58 reconstruction, not on primary message data,"
+
+because no message export reaches back this far. That is no longer true.
+
+The [[wiki/self/twitter|@danfrank archive]] holds **764 dated originals
+
+inside this period** — 265 from the February 2010 departure to year end,
+
+225 in 2011, 205 in 2012, 69 in January–May 2013 — written contemporaneously
+
+by Dan, in public, with timestamps. It is the only first-party record NYC-1
+
+has, and reading it moves three dates and closes the gap this page
+
+declared.
+
+> **REVISED [2026-07-18]:** an earlier version of this page framed
+
+> "NYC Round One" as 2010–2014 and described Alexis as "met through
+
+> webcam work." Both are corrected against the canonical context-core §4
+
+> residence timeline. NYC-1 ended **May 2013**, not 2014 — the 2013–2015
+
+> stretch (producer aliases, the Alexis endgame, the move to 155
+
+> Virginia) happened in **Uniontown**, and now has its own page,
+
+> [[wiki/timeline/periods/uniontown-return-2013-2015]]. Alexis was
+
+> in-network from the Full Sail era (@alexisarmel, 2009–2010), not met
+
+> later through camming; the prior "NYC-1 2010–2016" framing was an
+
+> inference error from undated Twitter content.
+
+## The move, dated to the day
+
+The archive narrates the relocation in real time, and the sequence is
+
+tight enough to date every step. It begins with a credential, not a plan:
+
+| When (UTC) | The tweet | What it fixes |
+
+|---|---|---|
+
+| 2010-01-25 18:41 | "ughhhhhhhhhhh missed my 210m by 3 questions." | The Pro Tools exam is failed once, on the 25th |
+
+| 2010-01-26 19:40 | "EAT UR HEART OUT BITCH IM PRO TOOLS CERTIFIED" | The retake passes — the certification is **26 January 2010** |
+
+| 2010-01-26 19:51 | "Brooklyn here we come!!" | **Eleven minutes later.** The credential and the decision to move are one moment |
+
+| 2010-02-17 13:32 | "off to Williamsburg" | The apartment hunt — a scouting trip, not the move |
+
+| 2010-02-17 20:07 | "this is the most stressful day/decision of my life" | Same day, seven hours on |
+
+| 2010-02-19 04:38 | "COME STAY. be moved in by march 1." | The target date, stated to a friend |
+
+| 2010-02-20 03:15 | "moving to brooklyn in 9 days." | Counts to 1 March independently |
+
+| 2010-02-27 19:02 | "last day in errrlando…spending it how I always imagined: hangin in a u-haul store." | The last Florida day |
+
+| 2010-02-28 20:30 | "peace out, florida. it's been real." | **The departure** |
+
+| 2010-03-24 18:35 | "a new work email address. big day. update your contacts: dan@ishlab.com" | First day on the ishlab address |
+
+> **GAP CLOSED [2026-09-02]:** the gap, as this page stated it — *"the
+
+> exact 2010 move date is unresolved (context-core's residence table
+
+> starts Brooklyn in April 2010, while an earlier note claimed a January
+
+> 3 move — the Florida tail through March 2010 favors the April date)."*
+
+> Neither candidate is right. Dan left Florida on **28 February 2010**
+
+> and was living and working in Brooklyn by the third week of March. The
+
+> April date in context-core's residence table is a month late; the
+
+> "January 3, 2010" date is [[wiki/self/facebook|Facebook's
+
+> `places lived` field]], which is a value Dan typed into a form at an
+
+> unknown later time, and it is wrong by eight weeks — on 20 February
+
+> 2010 he was still counting down nine days to a move that had not
+
+> happened. The tweets are contemporaneous, dated by the platform rather
+
+> than by memory, and they agree with the one independent record that
+
+> exists: Facebook's own **work** history starts ishlab in **March 2010**,
+
+> which is exactly when `dan@ishlab.com` first appears.
+
+The corroboration matters more than the correction. Facebook's work
+
+history and the tweet record were produced years apart by different
+
+mechanisms, and they agree on March 2010 against Facebook's own
+
+self-entered residence field. Where a self-reported field and a
+
+timestamped one disagree here, the timestamp has won — worth remembering
+
+the next time a `places lived` date is the only source for something.
+
+## The two apartments and the work
+
+The residence timeline is **[[wiki/places/424-bedford-ave|424 Bedford Ave]] (Williamsburg, Brooklyn),
+
+March 2010 – March 2012**, then **Manhattan Upper East Side, 90th between
+
+3rd and Lexington, March 2012 – May 2013**. Both ends move a month
+
+earlier than the residence table had them, and the second move is dated
+
+by two consecutive tweets that need no interpretation:
+
+> **2012-03-29 19:40** — "Goodbye, Brooklyn!"
+
+> **2012-03-30 19:55** — "Hello, Manhattan."
+
+The check-ins follow immediately and confirm the neighbourhood: Osso Buco
+
+UES on 31 March, then New York Sports Club, Josie's West and Le Pain
+
+Quotidien through the first ten days of April, all Manhattan, after two
+
+years in which every check-in had been Brooklyn.
+
+The Williamsburg years have a geography of their own, and it is precise
+
+because Dan was posting Foursquare check-ins with street addresses
+
+between March 2010 and January 2011 — fifteen of them, the only
+
+address-level location data the corpus holds for any year before the
+
+Google Timeline export begins in April 2014. They cluster in a few
+
+blocks of south Williamsburg: the Bedford Ave deli at S. 2nd, the c-town
+
+at South 1st and Havemeyer, the Walgreens at 210 Union Ave, the Marcy
+
+Ave J/M/Z platform. Ako Japanese at 205 Bedford and Peter Luger on
+
+Broadway are the neighbourhood's restaurants; DuMont Burger recurs as
+
+the one he names before arriving ("zomg i can taste the dumont burger
+
+already", 11 March 2010, written from a studio session in Florida three
+
+days before the train north). Beyond Williamsburg the pins are Brooklyn
+
+Bridge Park, Grimaldi's in DUMBO, Electric Zoo on Randall's Island
+
+(5 September 2010, "w/ 115 others") and Hibernia on W 50th.
+
+Professionally
+
+this is the studio-work era — the audio-engineering attempt the Full
+
+Sail degree pointed at, running through **ishlab** (2010–11) and
+
+**[[wiki/work/creative-license|Creative License]]** (2010–2012). It is the one window in Dan's life
+
+where the recording-arts training was actually the job, and it did not
+
+convert into a durable career: the thread simply ends with the 2013
+
+departure, and no audio work of comparable seriousness recurs until the
+
+much later GRIPNOTIC production reactivation.
+
+Alexis was there for all of it — "with me the whole time we were in
+
+nyc," per the Gemini-_58 reconstruction — working at the historic
+
+**Bridge Cafe** (279 Water St, the oldest tavern in the city) until
+
+**Hurricane Sandy** wiped out the Seaport in October 2012, a documented
+
+structural shock to the household economy. A brief 2013 blip with
+
+[[wiki/people/franki-faris|Franki]] ("I really didn't have the romantic
+
+feelings for franki that i said i did at the time") resolved back to
+
+Alexis, foreshadowing the switch-slot mechanics the
+
+[[wiki/mind/synthesis/bond-switch-2015|2015 single-bond analysis]] makes
+
+explicit.
+
+## The two things that started here and did not stop
+
+Two throughlines of the whole corpus originate in this window. The
+
+**Suboxone regimen** begins at its front edge (~January 2010, with a
+
+one-year discrepancy against legacy docs that context-core flags as
+
+resolvable from the first strips reference) — the fifteen-year daily
+
+chassis documented in [[wiki/health/chemical-architecture]] starts here.
+
+And the **Twitter voice** — the weaponized irony and aesthetic
+
+signaling that becomes the linguistic fingerprint — takes its mature
+
+shape in these years, the same online persona that seeds the
+
+"ihatedanfrank" identity later archived in [[wiki/self/facebook]].
+
+Cultural markers of the era are dense in the Facebook likes record: the
+
+chiptune-to-EDM progression (Anamanaguchi → Flying Lotus →
+
+ODESZA/JAUZ), and the **LCD Soundsystem MSG farewell (April 2011)** as a
+
+dated attendance anchor.
+
+## Key contacts within the period
+
+- [[wiki/people/alexis-armel]] — the defining relationship of the era;
+
+the whole-NYC-1 cohabitation.
+
+- [[wiki/people/jamie-mohler]] — Full Sail friend confirmed by a 2011
+
+Gchat log as a regular presence in the Brooklyn household during
+
+Occupy Wall Street; per the operator, also present the day Dan first
+
+met [[wiki/people/menore|Menore]] (that specific claim remains
+
+operator-attested — no message thread documents the meeting itself).
+
+- [[wiki/people/ally-lubin]] — 2013 message burst.
+
+- [[wiki/people/charles-davenport]] — early NYC-move contact (2010).
+
+- [[wiki/people/marc-charles]], [[wiki/people/sean-teets]],
+
+[[wiki/people/katie-fletcher]] — peripheral threads dating their only
+
+real activity to this window.
+
+## Transition
+
+The period closes with the **May 2013 departure to Uniontown** — the
+
+return that the Twitter record's "2013 systemic rupture" actually marks
+
+(the rupture was the leaving, not a New York event). Everything the old
+
+framing filed under "later NYC" — SLOPPP and MOGZART, the Alexis
+
+collapse, the move to 155 Virginia, the pivot to Annie — belongs to
+
+[[wiki/timeline/periods/uniontown-return-2013-2015]].
+
+**Gaps:** the Suboxone start year (~2010 vs 2011) is still pinned only
+
+from memory, not from a first-strips corpus row, and the tweets do not
+
+settle it — the archive names no medication in this window at all.
+
+No *message* corpus survives from this period; the earliest real-text
+
+rows in any on-disk export begin November 12, 2015. That limit is real
+
+and unchanged. What changed on 2026-09-02 is that it is no longer the
+
+same thing as having no primary source: 764 dated public originals cover
+
+these three years, and the page now rests on them for the move, the two
+
+apartments, the Williamsburg geography and the ishlab start.
+
+Two limits on that evidence, which the archive states about itself and
+
+this page repeats rather than quietly benefiting from. **2010 through
+
+2012 are live-scrape reconstructions, not a complete export** — the
+
+operator spreadsheet does not begin until 2013-08-17, so the 265/225/205
+
+yearly counts are what has been recovered from X search, and are floors
+
+rather than totals. And the archive is originals-only: pure reposts are
+
+excluded by its inclusion rule, so a quiet stretch here means quiet in
+
+things Dan wrote, not silence on the account.
+
+**The departure is the one date the tweets do not fix.** They corroborate
+
+it without pinning it: New York references run 8.8%, 8.9% and 10.2% of
+
+originals across 2010, 2011 and 2012 and then fall to 0.3% in 2013, the
+
+last tweet placing him in the city being the 18 November 2012 internship
+
+pitch ("living in NYC"). That is the right shape for a spring 2013
+
+departure and it is not a date. May 2013 continues to rest on
+
+context-core, and on the July 2013 line to [[wiki/people/ej-rags]] — "i
+
+just moved back.
+
+---
+
+**Up:** [[wiki/timeline/index|Timeline]]

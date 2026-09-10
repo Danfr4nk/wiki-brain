@@ -1,0 +1,149 @@
+---
+
+domain: people
+
+page_type: entity
+
+status: active
+
+date_created: 2026-06-23
+
+date_modified: 2026-07-20
+
+sources:
+
+- raw/self/dox-md/BFS_BOOTLOADER_v2.md
+
+- raw/self/message-csv/imessage_7243228715_both_all_now.csv
+
+- raw/self/message-csv/imessage_2124702449_both_2026-05-01_now.csv
+
+- raw/self/message-csv/imessage_7243228715_both_2025-06-03_now.csv
+
+- raw/self/dox-md/BFS Anita Quagmire strategy and legal exposure.md
+
+- raw/self/chats/Drawer shortage dispute with assistant manager (1).md
+
+tags: [digital-footprint, addiction-recovery]
+
+infobox:
+
+name: "Marty Martin"
+
+relationship_to_dan: unknown
+
+known_for: "BFS Foods coworker and Dan's most trusted source on the store's off-books culture during the 2026 drawer-shortage dispute"
+
+connections:
+
+- page: wiki/work/bfs-foods
+
+type: evidenced-by
+
+claim: "Marty's framing of the store's off-books culture ('make the store whole to keep your job') is the primary evidence for reading the $50 drawer-shortage demand as structural rather than an isolated shakedown."
+
+- page: wiki/people/suzanne-frank
+
+type: co-occurs
+
+claim: "Nearly all documented post-incident contact with Marty runs through Suz as relay, not directly with Dan — including a later job-lead message."
+
+---
+
+# Marty Martin
+
+Marty Martin is a BFS Foods gas-station coworker, roughly six months
+
+into the job by May 2026, whom the bootloader synthesis names Dan's
+
+primary trusted source inside the store — an intelligence asset, not a
+
+recruit for anything active. His most consequential contribution is a
+
+single piece of framing that reframes the entire drawer-shortage dispute
+
+documented on [[wiki/work/bfs-foods]]: "make the store whole to keep
+
+your job," his own description of the store's off-books culture around
+
+cash shortages, offered as established practice rather than a one-off.
+
+That framing is treated as evidence the culture predates Dan and is
+
+structural, not a targeted setup — though it also collapses the moment
+
+Dan's hours get cut to nothing, at which point the logic of quietly
+
+eating a loss to protect a job stops applying.
+
+## Around the dispute
+
+Marty appears as a participant in a group text alongside
+
+[[wiki/people/anita|Anita]], [[wiki/people/brandon-hill|Brandon Hill]],
+
+and an unidentified fifth number in the days before the incident,
+
+including a May 16 message pushing back on overtime and clocked hours
+
+("Time is tight and going over allotted hours and corporate is not
+
+liking the over time"). He is invoked, but not present, the day after
+
+the $50 demand starts: Brandon tells Dan "and I heard you owe Marty
+
+money" while pressing the debt claim. He was not present for the May 21
+
+sidewalk recording where [[wiki/people/maddox|Maddox]] gave a fuller
+
+account of the same period's blame-pivot pattern; the bootloader treats
+
+a check-in with Marty on the group text as the practical way to tell
+
+whether Dan has been quietly removed from it.
+
+## The Suz relay channel
+
+Nearly all of Marty's contact with Dan after the incident is relayed
+
+through Dan's mother, [[wiki/people/suzanne-frank|Suz]], rather than
+
+direct. On May 23 she asks Dan what Marty called the food he'd sent
+
+home ("chili" or "Goulash"), and on June 7 she passes on a message from
+
+Marty about a job lead paying $13+/hour — adding, unprompted, that
+
+Anita had hired a friend who then failed to show up for her first
+
+shift. Separately, in a message to Annie, Dan gives his own account of
+
+a specific instance of Marty's reliability: covering a shift Marty
+
+asked him to take because Marty's wife was sick, on a day Dan wasn't
+
+even scheduled — offered as evidence he "didn't walk out and didn't
+
+quit" of the job.
+
+## Corpus record
+
+| Metric | Value |
+
+|---|---|
+
+| Direct contact with Dan | None documented (group text + Suz relay only) |
+
+| Key framing | "Make the store whole to keep your job" |
+
+| Post-incident contact | Chili/goulash relay (May 23); job-lead relay (June 7) |
+
+**Gaps:** no primary Facebook or standalone iMessage thread with Dan;
+
+how the two originally became close enough for Marty to be the trusted
+
+source; whether Dan followed up on the job lead.
+
+---
+
+**Up:** [[wiki/people/index|People]]

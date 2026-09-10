@@ -1,0 +1,33 @@
+---
+
+domain: interests
+
+page_type: synthesis
+
+status: archived
+
+date_created: 2026-06-22
+
+date_modified: 2026-06-22
+
+sources: ["raw/self/favorites/FAVS MASTERLIST.csv"]
+
+synthesizes:
+
+- wiki/interests/favorites/books
+
+- wiki/self/context-core
+
+related: ["wiki/interests/favorites/books", "wiki/self/context-core"]
+
+---
+
+# Ancient History (Book Favorites)
+
+## Reflection
+
+Interest in foundational power dynamics, empires, and leaders (Caesar, Plutarch). Provides long-view context for modern politics.
+
+---
+
+**Up:** [[wiki/interests/index|Interests]] › [[wiki/interests/favorites/index|Favorites]] › [[wiki/interests/favorites/books|Books]]

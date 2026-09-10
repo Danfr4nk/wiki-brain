@@ -1,0 +1,347 @@
+
+---
+domain: mind
+page_type: concept
+title: "Arrangement History"
+status: active
+date_created: 2026-07-14
+date_modified: 2026-08-26
+knowledge: mixed
+sources:
+  - raw/self/captures/2026-08-02_031532_the-fall-of-fran-frank-s-fumes-force-four-fire.md
+  - raw/self/captures/2026-08-02_041331_fall-of-fran-alternate-version-ignore-glyph-fo.md
+  - raw/self/message-csv/MASTER_MESSAGES_DB_DUMP.csv
+  - raw/self/dox-scan/all_imessages_complete_dump.txt
+  - raw/self/captures/2026-07-19_operator-note-oct2019-mmf-video.md
+  - raw/self/message-csv/imessage_export_7248123683_20260624.csv
+  - raw/self/facebook/facebook-ihatedanfrank/messages/inbox/jennlynn_dhrmxxpvhq/message_1.html
+  - raw/self/dox-md/OMNI_FORENSIC_DOSSIER.md
+  - raw/self/audio/2026-08-16_Morgantown_St_call-recording.m4a
+  - raw/self/analysis/2026-08-18_forensic-analysis-morgantown-call.md
+  - raw/self/message-csv/imessage_export_2124702449_20260820.csv
+tags: [relationships, digital-footprint]
+connections:
+  - page: wiki/mind/synthesis/august-grievance-verdict
+    type: instantiates
+    claim: "This table's adjudication is what lets the humiliation grievance be scored as fully justified rather than as one contested claim against another: the accusation Dan was publicly named under fails on all three limbs against the primary record, so being named under it is a wrong done to him rather than a dispute between two accounts."
+  - page: wiki/timeline/events/august-2026-morgantown-call
+    type: evidences
+    claim: "This table is what makes Coles's on-tape accusation testable rather than a word against a word, and the accusation fails on its economic limb: money runs Dan to third party in all seven documented instances, no encounter in eleven years has drugs as its consideration, and the estate money it invokes distributed eighteen months after the expensive encounters it is offered to explain."
+  - page: wiki/people/lauryn-ashly
+    type: co-occurs
+    claim: "The September 2020 solicitation to Lauryn — apologetic, self-conscious, and simply declined — is a rare documented instance of the arrangement being pitched outside the established circle, showing the pattern was not universally successful."
+  - page: wiki/people/annie-ulmer
+    type: contains
+    claim: "Annie is the constant across every documented instance — partner in the jealousy-kink baseline, co-operator of smashonista, co-participant in the paid and unpaid encounters — the arrangement is structurally a property of the Annie relationship."
+  - page: wiki/timeline/events/the-fall-of-fran
+    type: instance-of
+    claim: "The arrangement's first executed encounter is dated to the night of March 7–8 2018 and to a single room — and it ran to completion through a catastrophic injury to the woman Dan was being paid to keep at home, which is the strongest single piece of evidence that this architecture does not yield to circumstance."
+  - page: wiki/people/danny-matthews
+    type: contains
+    claim: "Danny and Nicole are the arrangement's first outside participants: Dan's own message of 2018-02-16, 'you guys would be the first couple we were with,' establishes the start date and predates the Alexis reunion by eight months."
+  - page: wiki/people/alexis-armel
+    type: contains
+    claim: "The Nov–Dec 2018 reunion arrangement — opened with a $3,000 cash offer to Dan's own ex days after her prison release — is the earliest documented instance of the arrangement running on a woman from Dan's romantic history, though no longer the earliest instance overall."
+  - page: wiki/people/kelly-johansson
+    type: contains
+    claim: "The Sep–Oct 2019 Kelly run is the arrangement at its most professionalized — a repeat working relationship in which the escort treated Annie as a peer and pitched the couple as co-providers."
+  - page: wiki/people/bryan-5088682461
+    type: contains
+    claim: "Bryan is the third participant of the October 20, 2019 filmed MMF — the encounter that is both Dan's sole bisexual experience and Bryan's first with a woman."
+  - page: wiki/people/jenn-lynn
+    type: contains
+    claim: "Three separate windows (Feb 2019, Oct 2019, Sep 2020) soliciting a two-couple swap with a local friend and her boyfriend, each ending in mutual readiness but no confirmed follow-through — the arrangement's least-resolved documented instance."
+  - page: wiki/people/kristin
+    type: contains
+    claim: "The 2025 Kristin relationship is the arrangement's inversion — total-exclusivity demands and purity tests where the Annie structure practiced authored openness — proving the architecture is about authorship, not openness itself."
+  - page: wiki/mind/psychosexual/developmental-origins
+    type: follows
+    claim: "Every documented instance postdates the 2005 axiom and the imprinting era by roughly a decade — this page is the after of the origins page's before."
+  - page: wiki/mind/psychosexual/orchestration-and-voyeurism
+    type: evidences
+    claim: "The instances tabled here are the practice-side record of the director stance the orchestration page theorizes — arranged conditions, controlled access, Dan as architect rather than participant."
+  - page: wiki/timeline/events/annie-alexis-reunion-november-2018
+    type: evidenced-by
+    claim: "The November 2018 reunion is the first well-documented instance of Dan's 'consensual voyeurism' mechanism in full operation — he explicitly requests a camera for the birthday-night event, shows religious elation at watching, and frames it as 'the best thing that's ever happened to me.' This prefigures the later $3000 offer to Alexis and the 'Dan-architected' framework's formal description in the dossiers."
+  - page: wiki/people/shelbie-breakiron
+    type: instantiates
+    claim: "An explicit financial-for-attention/access dynamic ('sugar dad,' recurring cash transfers, 'baby needs spoiled') layered onto a relationship Dan otherwise describes in affectionate terms."
+  - page: wiki/people/tuquick-17248123683
+    type: evidenced-by
+    claim: "Tuquick's closure-night taunts prove the October 2019 MMF video circulated to Annie's next partner and was repurposed as humiliation — the arrangement era's intimate media outliving the arrangement as a weapon."
+  - page: wiki/people/trinity-st-clair
+    type: instance-of
+    claim: "A paid, professional booking with an agreed $1,500 fee is the arrangement in its most explicitly commercial form — the version where the third party is contracted rather than courted."
+  - page: wiki/people/ally-lubin
+    type: instance-of
+    claim: "The arrangement pitched to a non-partner inside ninety minutes of her losing her income — the fastest-onset instance in the corpus, and the one that shows speed-of-onset is a property worth measuring for the rest of the table."
+  - page: wiki/mind/synthesis/no-platonic-channel
+    type: component-of
+    claim: "The Jenn Lynn row (three arrangement solicitations across three years, layered onto an intact drug-sourcing friendship) and the ninety-minute Ally onset together establish that an unprompted romantic or sexual pitch is the modal event inside a trusted female friendship in this corpus, not an occasional escalation."
+  - page: wiki/mind/synthesis/the-serial-monogamist
+    type: component-of
+    claim: "The 'serial monogamist... a very specific type' self-description, checked against a corpus where commitment vocabulary is nearly absent and arrangement vocabulary is abundant, does not describe sexual exclusivity — it describes the single-slot occupancy pattern; 'openness was never the requirement here — authorship was' is the finding this page's self-theory claim rests on."
+  - page: wiki/self/twitter/2019
+    type: evidenced-by
+    claim: "A 2019 retrospective on the 2010 move to New York lists four reasons and then inverts the ordering — '^sort by( importance: low to high)' — which places 'availability of sex workers' first. Told nine years after the fact, in public, by somebody who chose to tell it."
+---
+
+# Arrangement History
+
+Where the rest of this cluster synthesizes AI-authored theory, this page
+is the primary-source backbone: a chronological index of every
+independently-documented instance of Dan's non-monogamous arrangement,
+commercial sexual involvement, or comparable structure, with dates and
+links to the full account on each event or people page. Nothing on this
+page is AI interpretation — every row is grounded in message threads with
+named people and dates, most of it synthesized this session (2026-07-14)
+from raw iMessage/SMS data that had not previously been mined.
+
+## Timeline
+
+| Period | What | Full account |
+|--------|------|---------------|
+| Feb 2016 | The "jealousy kink" is first named in the Annie relationship — the earliest dated reference to the dynamic that the rest of this table documents in practice | [[wiki/people/annie-ulmer]] |
+| Feb 16, 2018 | **The arrangement is opened.** A single twenty-minute exchange with [[wiki/people/danny-matthews|Danny Matthews]] negotiates the first outside encounter, discloses the smashonista camming operation unprompted, and contains the sentence that fixes the chronology — "you guys would be the first couple we were with." | [[wiki/people/danny-matthews]] |
+| Mar 7–8, 2018 | **The first executed encounter, and the earliest instance in this table.** Annie with Danny Matthews inside [[wiki/places/117-belmont-circle|117 Belmont Circle]], arranged by Dan, who watched — and which proceeded between the two falls that broke [[wiki/people/fran-coldren|Fran's]] hip and ended her residency that night. Dan reports no memory of the encounter itself and a precise memory of its function: the "masochistic emotional pinch" satiated by exposure, with the cathartic stage cut short by the second fall. | [[wiki/timeline/events/the-fall-of-fran]] |
+| Nov 3 – Dec 2018 | **Annie/Alexis reunion.** A six-week recurring arrangement between Annie and Dan's ex, [[wiki/people/alexis-armel|Alexis]], days after Alexis's release from a year in prison. Opens with a skeptical, explicitly transactional framing (Dan describes Alexis as "a really useful tool"), escalates through a birthday-night culmination (Nov 5) with a hidden-camera request, recurs through late November, and is retrospectively explained to a confidant as having started with a **$3,000 cash offer** — "initially I offered her $3000 to be a plaything for Annie." The earliest instance running with a woman from Dan's own romantic history — though no longer, as this table long had it, the earliest instance overall. | [[wiki/timeline/events/annie-alexis-reunion-november-2018]] |
+| ~2018–present | **smashonista** — Dan and Annie's joint camming operation (Chaturbate and other platforms), confirmed by August 2018, with a Patreon added October 2019. Annie separately worked under paid-companion aliases **"Hazel"** and **"Lily Lush"** (joint handles "smashonistaa"/"sofvded"), a commercial thread distinct from but adjacent to the couple's own camming. | [[wiki/people/annie-ulmer]] |
+| **Apr 14 + 17, 2019** | **Shelbie/Annie threesomes — the row that runs backwards.** Two encounters with [[wiki/people/shelbie-breakiron|Shelbie Breakiron]], a stripper and aspiring cam model, on nights now fixed to the minute from Annie's thread. **Neither was arranged by Dan.** He bought a one-on-one ($31 + $700 by Cash App on the 14th; *"$3700 and one amazon prime'd laptop"* by the 19th); Annie, locked out of the house, sent 79 messages between 9pm and 4am demanding to be let *in* — *"She can stay as long as she pleases I don't care. I just wanna play a little too"* — Shelbie left, Dan sent Annie her contact card at 22:56, and Annie brought her back (*"She here. Everything is cool 😎 we hugged"*). Within four hours Dan is pricing a rivalry over her (*"if you date her i get her once a week"*). Two weeks later Annie is calling her *"a fucking low life Fayette County stripper."* Recurs as a two-person Annie/Shelbie dynamic by June 8, 2019. | [[wiki/timeline/events/shelbie-annie-threesome-april-2019]], [[wiki/people/shelbie-breakiron]] |
+| Mar 2019 | **Trinity St. Clair** — a $1,500/hour paid encounter with the adult-film performer of that name, booked days after Dan's move back to NYC ("the first thing I did"), addressed to both Dan and Annie directly. The direct thread shows two cancellations (illness, oversleeping) and ends ambiguously, but a separately-dated message confirms the visit completed around March 28 – April 1; Trinity went on to function as a credibility reference in at least one later booking inquiry (July 2019). | [[wiki/people/trinity-st-clair]] |
+| Sep–Oct 2019 | **Kelly Johansson** — a five-week run of paid sessions with a New York escort, the most professionalized instance in the corpus: not a one-off booking but a repeat working relationship, with Kelly treating Annie as a working peer rather than a client's girlfriend and pitching bringing both of them in as co-providers for one of her own regular clients. | [[wiki/people/kelly-johansson]] |
+| Oct 20, 2019 | **The filmed MMF — Dan's sole bisexual experience.** An NYC threesome with Annie and [[wiki/people/bryan-5088682461|Bryan]] — a gay man whose first encounter with a woman was that same night, making the crossing symmetric — filmed, in which Dan participated orally — per the operator "the one and only bisexual experience i've ever had (only oral)." Date is operator-attested (Oct 20); the corpus corroborates the event two days later — "last night we had to film mmf (my first time doing that) so i thought i should treat myself to some fun to wash the bad taste out of my mouth......literally" (Sent, 2019-10-22), whose "last night" phrasing reads one day later than the operator's date; the operator's date governs — and is independently corroborated by a same-morning 2:52 AM, Oct 21, 2019 disclosure to [[wiki/people/dan-polyak|Dan Polyak]] ("i had my first experience with another guy"), which reads as the night just past and lines up with the operator's Oct 20 date rather than the Oct 22 message. The plan develops inside the same autumn-2019 professionalized window (an Oct 3–6 thread negotiates "a 3some… Love if Annie can join" and "I can lead a bit of the mmf stuff since I have more experience"). The video resurfaced six and a half years later as a weapon: shared to Annie's next boyfriend and thrown at Dan during the June 2026 closure — see [[wiki/people/tuquick-17248123683]]. | [[wiki/people/tuquick-17248123683]], [[wiki/people/kelly-johansson]] |
+| Feb 2019 – Sep 2020 | **Jenn Lynn — the local two-couple swap that never quite resolves.** A three-year Uniontown-area friendship in which Dan and Annie repeatedly propose a paid or swap arrangement with Jenn and her boyfriend Brad, across three separate windows (Feb 2019, Oct 2019, Sep 2020); each time both sides confirm readiness but the thread never shows an after-the-fact confirmation the encounter occurred. Runs parallel to an ordinary, more consistently-followed-through drug-sourcing friendship. | [[wiki/people/jenn-lynn]] |
+| Sep–Dec 2025 | **Kristin — the mirror structure.** A fourteen-week relationship built, within its first 48–72 hours, around a demand for total sexual exclusivity from Kristin ("That is my cum. Mine") — the inverse of the openness practiced with Annie during the same broad period. An AI analysis Dan commissioned of this specific relationship (the Chimera addendum) frames it as a "hyper-accelerated trauma bond" gated by escalating "purity tests," ending in a hostile blockade in December 2025. | [[wiki/people/kristin]] |
+
+## What the pattern shows
+
+> **REVISED [2026-08-16] — one row runs the other way, and it was the most
+> detailed one.** April 2019 was tabled here as an instance of the arrangement
+> operating. Minute-level reconstruction from Annie's thread shows the opposite:
+> Dan paid for a one-on-one and Annie converted it into a threesome from outside
+> a locked door, against his live objection (*"just say fucking no next time"*).
+> That does not overturn the table — Feb 2018, Mar 2018 and Oct 2019 remain
+> Dan-arranged on their own evidence — but it does break the claim that every
+> instance shares one author, and it is the only row where the corpus captures
+> the arrangement being *initiated* rather than reported afterwards. **The
+> asymmetry to test against the other rows: the instances the wiki reads as
+> Dan-architected are mostly reconstructed from negotiation threads with the
+> third party, where Dan is by definition the correspondent. April 2019 is the
+> one reconstructed from the couple's own thread during the event.** That is a
+> sampling artefact large enough to have manufactured the pattern, and it is now
+> the first thing to check on this page rather than a footnote to it. See
+> [[wiki/timeline/events/shelbie-annie-threesome-april-2019]].
+
+> **REVISED [2026-08-02] — the start date moved back eight months.** Until
+> now this table opened its practice record with the November 2018 Alexis
+> reunion and described it as "the earliest well-documented instance." Two
+> operator captures and the message corpus together place the first executed
+> encounter on the night of **March 7–8, 2018**, with Danny Matthews, and Dan
+> states its priority himself in writing three weeks beforehand: "you guys
+> would be the first couple we were with." The correction matters beyond
+> chronology. The arrangement's opening night was not a considered
+> experiment in a controlled setting — it ran inside a house where a
+> 97-year-old with dementia was in Dan's paid care, and it did not stop when
+> she fell. Whatever else the architecture is, it was load-bearing enough on
+> its first outing to outrank a medical emergency.
+
+Read together rather than page by page, three things stand out that no
+single page states on its own. First, **the arrangement is not confined to
+Annie** — it recurs, in modified form, in at least one relationship
+(Kristin) run largely in parallel with or after Annie, but inverted:
+demanding exclusivity rather than practicing openness. Second, **the
+commercial and the personal are not separate tracks** — paid bookings
+(Trinity, Kelly Johansson), a cash offer to an ex-partner (Alexis), and
+uncompensated arrangements with friends-of-friends (Shelbie) all draw on
+the same underlying structure and, in Kelly Johansson's case, the escort
+herself explicitly tried to convert the paid relationship into something
+closer to friendship/co-provider status — the boundary between commercial
+and personal was porous from multiple directions, not just Dan's. Third,
+**the documented instances cluster in bursts** (late 2018; spring–fall
+2019; the Kristin inversion in 2025) rather than running as a continuous
+background practice — consistent with the "burst event" pattern already
+documented in the Annie relationship's conflict architecture, though no
+source in the corpus explicitly connects the two.
+
+Two further properties emerge from a full-corpus word-frequency check rather
+than from the event table. **He described himself, at the height of this
+era, as a monogamist.** *"i'm a serial monogamist so i've only been with a
+few girls, and they all fit a very specific type"* (Sent, 2019-08-17 22:26)
+— six weeks before the Kelly Johansson run and two months before the filmed
+MMF — is the only instance of the phrase anywhere in the corpus.
+Corroborating counts across all 217,573 records: `monogam` 7, `faithful` 3,
+`exclusive` 15, against this page's own 304 camming-signal tokens and 107
+non-monogamy tokens. The vocabulary of *commitment* is nearly absent from a
+corpus in which the vocabulary of *arrangement* is abundant. **Openness was
+never the requirement here — authorship was**, the same reading the Kristin
+inversion already licenses, and he did not experience the open period as
+non-monogamy in the identity sense at all. And in eleven years the corpus
+shows no instance of an outside encounter concealed from Annie: every
+documented instance is disclosed, and usually she is present — the property
+that most distinguishes this record from ordinary infidelity.
+
+A sixth property, from the [[wiki/people/ally-lubin|Ally Lubin]] channel:
+the arrangement was pitched to a non-partner inside ninety minutes of her
+losing her income (2019-08-17) — *"how do i try to sell you on letting me
+pay for your noodz while you're in bummer island?"* — a faster trigger than
+any instance in the table above. Speed-of-onset is not currently a property
+this page measures for the others, and this is the instance that shows it
+is worth measuring.
+
+## The 2026 accusation, tested against this table
+
+On the recording of **2026-08-16** ([[wiki/timeline/events/august-2026-morgantown-call]]),
+[[wiki/people/jerel-coles|Coles]] puts a specific charge to Annie, on tape,
+more than a dozen times across four minutes, and texts a compressed version of
+it to Dan from her phone at 23:45:10:
+
+> *"You made Annie fuck guys for money because you didn't have money for drugs.
+> Because you spent your dead grandma's money."*
+> *"You made me fuck guys for money"*
+
+This page is the corpus's primary-source backbone for exactly that question, so
+the charge is testable here rather than anywhere else. It has three separable
+limbs — **coercion**, **direction of payment**, and **drugs as the
+consideration** — and they do not fail together.
+
+### Limb 2 first: the money runs the other way, in every instance
+
+This is the limb the record settles, and it settles it flatly. Across every
+documented encounter, **Dan is the payer and a third party is the payee.** No
+instance in the corpus shows a third party paying Annie for sex with money that
+then reached Dan.
+
+| Date | Payment | Direction |
+|---|---|---|
+| 2018-06-27 | *"I said seriously that I would spend money to get you an escort"* | Dan → for Annie |
+| 2018-10-18 | *"Find two escorts that you would be into and I'll set it up"* | Dan → third party |
+| 2018-10-25 | Outreach to a NYC provider: *"we'll pay above rate"*, signed **Annie** | couple → third party |
+| 2018-11-28 | *"Initially I offered her $3000 to be a plaything for Annie"* ([[wiki/people/alexis-armel]]) | Dan → third party |
+| 2019-03 | [[wiki/people/trinity-st-clair]], **$1,500/hour** | Dan → third party |
+| 2019-04-14/17 | [[wiki/people/shelbie-breakiron]] — *$31 + $700* by Cash App, later *"$3700 and one amazon prime'd laptop"* | Dan → third party |
+| 2019-09/10 | [[wiki/people/kelly-johansson]], five weeks of paid sessions | Dan → third party |
+
+The only earnings in the table are **smashonista** — the couple's *joint*
+camming operation, which Dan describes in 2018 as generating *"most of our
+income"* — plus Annie's separate paid-companion aliases. That is a business
+both of them ran, not a third party paying for access to her.
+
+**On the specific sub-claim about the estate:** the expensive instances
+(Trinity March 2019, Kelly autumn 2019) predate the September 2020 estate
+distribution entirely ([[wiki/mind/synthesis/estate-money-spine]]). *"You spent
+your dead grandma's money"* is chronologically backwards for the encounters it
+is offered to explain.
+
+### Limb 3: no encounter in the corpus has drugs as its consideration
+
+Term searches across the full dump return **zero** matches for the accusation's
+own phrasings — *made you fuck*, *made her fuck*, *fuck guys for*, *fuck for
+drugs*, *sell yourself*, *trade sex* — in either direction, in eleven years.
+Every documented consideration is cash, or nothing.
+
+The nearest adjacent thing in the corpus is not about Annie at all. On
+**2019-01-27** a confidant who had earlier received the *"$3000 plaything"*
+disclosure writes to Dan:
+
+> *"no one cares about your money, or all the drugs in the world you can shove
+> down their throats in exchange for something of no real purpose. I hope you
+> have enough cash in your accounts to buy the people you need."*
+
+That is a third party, hostile, characterising Dan's dealings **with her**. It
+is the only independent statement in the corpus that money-and-drugs-for-access
+is a thing Dan does, and it is worth recording precisely because it is
+uncomfortable and does not come from him. It still does not describe Annie
+being sold; it describes Dan buying.
+
+### Limb 1: coercion — the one place the record captures initiation, it runs backwards
+
+Every other row in this table is reconstructed from a negotiation thread with
+the third party, where Dan is by definition the correspondent — a sampling
+artefact this page already flags. **April 2019 is the single instance
+reconstructed from inside the couple's own thread as it happened**, and there
+Dan paid for a one-on-one and Annie converted it into a threesome from outside a
+locked door, over his live objection (*"just say fucking no next time"*). The
+one time the corpus can see who was pushing, it was not him.
+
+Against that: **2018-04-10**, Dan complaining — *"give me a break after
+arranging a hookup for you and then having you flake because you wanted to
+sleep."* He arranges, he presses, and he keeps a ledger of it. That is real and
+is not coercion, and the distinction matters more than either party's rhetoric.
+
+And on the recording itself: Coles asks Annie to affirm the charge upwards of a
+dozen times, escalating, while holding her phone. **She never freely says yes.**
+
+> **CORRECTED [2026-08-20]:** this read *"She never says yes."* Against the primary transcript she does, once — *"Yes, save it"* at 04:43, which Coles immediately reports to Dan as assent. It is ambiguous on its face, it is extracted while he is withholding her phone and threatening to call her mother, and it concerns 2019, so it carries no evidential weight about the arrangement itself. But the flat claim was wrong. See [[wiki/mind/synthesis/august-grievance-verdict]].
+ Dan's
+own answer on the call is *"I really didn't need the money at that time when
+that was all going on"* — and the table above is what makes that checkable
+rather than self-serving.
+
+### The verdict, and what it concedes
+
+> **The accusation as stated is false, and it is a compression of something
+> real.** *Annie was sold for drug money* is contradicted by the direction of
+> payment in every documented instance, has no supporting instance for the
+> drugs limb anywhere in eleven years, is chronologically wrong about the
+> estate, and inverts the one case where initiation is directly observable.
+> What the record does show is **purchased access, with Dan as the buyer and
+> the architect** — repeatedly, expensively, and with a documented grievance
+> when Annie did not follow through on one he had arranged. The accusation
+> keeps the transaction and reverses who was bought.
+
+**What would change this.** Any of: a message showing a third party paying
+Annie for sex with funds that reached Dan; any encounter in which drugs are the
+stated consideration; an Annie-side account of being pressured into an encounter
+she did not want. The third is the live one — this table's evidence base is
+overwhelmingly Dan-side correspondence, and **the corpus contains almost no
+account of the arrangement in Annie's own voice**, which is a gap this page has
+carried since it was written and which no amount of Dan-side volume closes.
+
+## Whole-corpus word-frequency signal
+
+A separate corpus-wide forensic pass (OMNI_FORENSIC_DOSSIER.md, sent
+messages only, 88,988 total, 2015–2026) counts raw token frequency for
+camming and non-monogamy vocabulary across Dan's *entire* outgoing message
+history, not any single relationship thread — a different cut than the
+event-level table above, and one no other page carries:
+
+| Camming/sex-work token | Sent count | | Non-monogamy/kink token | Sent count |
+|---|---|---|---|---|
+| cam | 94 | | threesome | 39 |
+| tip / tipped | 68 | | kink / kinky | 20 |
+| onlyfans | 26 | | hookup | 16 |
+| stream / streaming | 26 | | open relationship | 10 |
+| chaturbate | 23 | | cuck / cuckold | 8 |
+| camming | 23 | | poly / polyamory | 5 |
+| webcam | 12 | | bull | 5 |
+| tokens | 8 | | fetish | 3 |
+| mfc | 4 | | bdsm | 1 |
+| broadcast | 3 | | | |
+
+Total camming-signal tokens: 304. The camming vocabulary alone (304
+tokens) outweighs every other non-monogamy category combined (107 tokens
+across threesome/kink/hookup/open-relationship/cuck/poly/bull/fetish/bdsm)
+by roughly 3:1 — consistent with the timeline table above, where the
+smashonista camming operation with Annie is the single longest-running,
+most-referenced arrangement, against a longer tail of lower-frequency
+one-off paid or unpaid encounters. The low bdsm (1) and fetish (3) counts
+read as absence-of-evidence rather than evidence-of-absence given the
+corpus is sent-message text, not a structured survey.
+
+## Gaps
+
+This table is built from what has been mined from the message corpus so
+far, not a claim of completeness — the 184k-row master CSV and the
+platform-specific message exports (Facebook Messenger threads,
+smashonista/Chaturbate-adjacent accounts) are not exhaustively searched,
+and further instances may exist undiscovered. No entry on this page has a
+first-person account from Dan explaining motivation in his own words
+outside of AI-collaborative analysis sessions — see
+[[wiki/mind/psychosexual/orchestration-and-voyeurism]] for that gap in the
+theoretical layer. Whether the Kristin relationship's inverted structure
+represents a genuine shift in preference, a reaction to the [[wiki/people/eli|Eli]]
+betrayal's timing, or simply what that particular partner required is not
+established anywhere in the corpus.
+
+
+

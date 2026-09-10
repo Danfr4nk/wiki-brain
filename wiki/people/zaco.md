@@ -1,0 +1,113 @@
+
+---
+domain: people
+page_type: entity
+title: "Zaco"
+aliases: ["zaco"]
+status: closed
+knowledge: mixed
+date_created: 2026-08-20
+date_modified: 2026-08-20
+date_range_start: 2018-03-12
+date_range_end: 2018-11-26
+tags: [addiction-recovery, uniontown-era, digital-footprint]
+sources:
+  - raw/self/dox-scan/all_imessages_complete_dump.txt
+  - raw/self/message-csv/MASTER_MESSAGES_DB_DUMP.csv
+infobox:
+  name: "Zaco"
+  sex: unknown
+  location: uniontown
+  relationship_to_dan: dealer
+  handles: ["+17249123381"]
+  first_contact: 2018-03-12
+  known_for: "The supply network's only push-marketing node — 58 of 65 messages are his, almost all unsolicited inventory advertisements"
+connections:
+  - page: wiki/mind/synthesis/supply-network
+    type: component-of
+    claim: "Zaco is the network's 2018 Suboxone-strip secondary and its only inbound-marketing node: he advertises inventory unprompted rather than being asked, which is the inverse of every other supplier relationship in the corpus."
+  - page: wiki/timeline/periods/2018-deep-cycle
+    type: component-of
+    claim: "The thread runs March–June 2018 inside the deep cycle and shares its economics — $50 for three strips, $75 for three, $70 for three subs — small cash amounts in the months of daily Cash App limits and declined payments."
+  - page: wiki/people/johnny-dealer
+    type: parallels
+    claim: "Concurrent 2018 Uniontown nodes in the same market with opposite postures: Johnny is the high-volume primary Dan pursues, Zaco the low-volume secondary who pursues Dan."
+---
+
+# Zaco
+
+Zaco is a 2018 Uniontown-area supplier known to the corpus only by the name he
+gives himself in his first message — *"Yo it's zaco"* — and by the handle
+`+17249123381`. He is a minor node by volume and a distinctive one by shape:
+**the only supplier in the corpus who does the selling.**
+
+Across 65 messages he sends 58 and Dan sends 7. Almost all of his are
+unsolicited advertisements of current stock — *"I got strips,"* *"Got 4
+strips,"* *"3 strip for 50,"* *"Strips on sale,"* *"Got tex n coming town,"*
+*"I'm in town I got 3 subs for 70 lmk if u want em"* — pushed out over eight
+months whether or not Dan answers. Every other supply relationship in the
+corpus runs the other way, with Dan chasing availability;
+[[wiki/mind/synthesis/supply-network|the supply network]] is built around
+sourcing panics that happen when a node goes quiet. Zaco never goes quiet, and
+Dan mostly does not reply.
+
+## What he sold, and the two eras of the thread
+
+The thread has a clean break in the middle and the two halves are different
+trades.
+
+**March–June 2018 — Suboxone.** "Strips" throughout, priced in small lots:
+*"3 strip for 50"* (May 2), *"Well for 3 I can do 75"* (June 28), *"3 subs for
+70"* (June 29). This is the buprenorphine Dan has been prescribed daily since
+2011 ([[wiki/mind/synthesis/supply-network]]), bought here off-script and by
+the strip. Logistics are suburban and specific — meets at a CVS, a Giant
+Eagle, *"grn truck nd trailer,"* Walnut Hill, "CV downtown."
+
+**One night in November 2018 — cocaine, and Dan initiates.** After five months
+of silence the thread reopens on November 26 with the only sustained outbound
+run in it: *"Hey dude / Hit me up if you're around. Needed some girl / 100? /
+If it's good I'll buy a lot more / I've got the paper on me and I'm at my
+house."* Zaco asks *"How much"* and then *"U would have to come out me"*; Dan
+answers *"Ah shit I'm stuck at home / No ride right now."* The thread ends
+there and never resumes.
+
+That last exchange is the whole relationship in miniature and it is worth
+keeping for a reason beyond this page: the transaction fails on **transport,
+not money or supply.** Dan has the cash in hand and a willing seller, and the
+blocker is that he cannot get across town. It is a small, dated, concrete
+instance of the immobility that the 2018 material documents in the aggregate.
+
+A third product, *"Tex,"* recurs across both halves (*"Got tex,"* *"Yea I got
+Tex to"*) and is not identified anywhere in the corpus.
+
+## Corpus dimensions
+
+| Metric | Value |
+|---|---|
+| Messages | **65** — 7 sent (Dan), 58 received |
+| Date range | 2018-03-12 → 2018-11-26 |
+| Active window | 2018-03-12 → 2018-06-29, then one night in November |
+| Handle | `+17249123381` |
+| Source of direction | `all_imessages_complete_dump.txt` |
+
+The direction split is the finding here, not a caveat: a 58:7 inbound ratio is
+unique among supply contacts and is what makes this a marketing channel rather
+than a sourcing one.
+
+## Gaps
+
+Each answerable by the operator in a paragraph.
+
+- **Who is Zaco?** The name is self-given in a single SMS and appears nowhere
+  else in the corpus — not in contacts, the Facebook archive, or any other
+  thread. A real name would let this page be checked against the rest of the
+  Uniontown network.
+- **What is "Tex"?** Advertised repeatedly alongside strips and never
+  explained.
+- **Did the November 26 purchase ever happen?** The thread ends with Dan
+  unable to travel. Nothing later in the corpus refers to him.
+- **Was he a Johnny substitute or an independent?** Both are active in
+  Uniontown in 2018; nothing links them, and the question is whether the
+  push-marketing posture reflects a lower position in the same chain.
+
+

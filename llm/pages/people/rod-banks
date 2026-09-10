@@ -1,0 +1,275 @@
+---
+
+domain: people
+
+page_type: entity
+
+status: active
+
+date_created: 2026-06-23
+
+date_modified: 2026-09-04
+
+date_range_start: 2017-04-19
+
+date_range_end: 2020-07-31
+
+sources: ["raw/self/message-csv/MASTER_MESSAGES_DB_DUMP.csv", "raw/self/dox-scan/all_imessages_complete_dump.txt"]
+
+tags: [digital-footprint, uniontown-era, family]
+
+knowledge: derived
+
+infobox:
+
+name: "Rod Banks"
+
+relationship_to_dan: unknown
+
+handles: ["+17243660816"]
+
+location: Fayette County, PA (724 area code)
+
+first_contact: 2017-04-19
+
+known_for: "Fayette County contact with authority over Fran Coldren's property"
+
+connections:
+
+- page: wiki/people/fran-coldren
+
+type: co-occurs
+
+claim: "The preserved messages reference 'Fran's house' and 'Fran's door' with a directive tone, placing Banks in a caretaker, family, or estate-management role relative to Fran Coldren's property."
+
+- page: wiki/places/117-belmont-circle
+
+type: co-occurs
+
+claim: "'Fran's house' in the messages likely refers to 117 Belmont Circle, Fran's longtime residence adjacent to the Uniontown Country Club."
+
+- page: wiki/mind/synthesis/estate-money-spine
+
+type: evidences
+
+claim: "The estate's disbursing hand, and an itemised advance schedule the spine does not carry: five checks between 2019-10-12 and 2020-04-17 totalling $32,500 ($5,000 / $10,000 / $7,000 / $3,000 / $7,500), each one authorised by Jason Adams and written by Banks. The spine's timeline holds a single '2020-06-23 estate advance, $10,000' for the same period, and the $10,000 here is dated 2020-02-04."
+
+- page: wiki/people/fred-adams
+
+type: co-occurs
+
+claim: "Rick names the two of them in one breath on 2018-01-06 as the men Dan takes counsel from instead of his father, and the estate machinery bears the pairing out from the other side: Banks writes the checks, an Adams authorises them, and Dan's register with both is a person applying to a process."
+
+- page: wiki/mind/concepts/contact-gini
+
+type: instance-of
+
+claim: "A mid-volume contact concentrated in the Fran caregiving and post-death estate period."
+
+---
+
+# Rod Banks
+
+Rod Banks is a Fayette County contact (724 area code) who appears in the iMessage corpus across a three-year window, April 2017 to July 2020 — spanning [[wiki/people/fran-coldren|Fran Coldren]]'s final caregiving years through the post-death period. The preserved sample message — "Fran's door to the room in the basement is unlocked. Please get your stuff out of Fran's house tonight!" — places Banks in a position of authority over Fran's property at [[wiki/places/117-belmont-circle|117 Belmont Circle]], speaking with a directive tone that suggests either a family role, an estate-management capacity, or a property caretaker arrangement.
+
+The message range (2017–2020) brackets Fran's death on April 4, 2018, and extends two years past it — consistent with someone involved in the disposition of her household or estate rather than a purely social contact.
+
+## Corpus Dimensions
+
+| Metric | Value |
+
+|--------|-------|
+
+| Messages | **92** (41 in the CSV export this page was written from) |
+
+| Date range | 2017-04-19 – 2020-07-31 |
+
+| Handle | +17243660816 |
+
+| Direction | **51 Sent / 41 Received** — the "all received (export artifact)" reading was an artefact of reading one corpus |
+
+| By year | 2017: 27 · 2018: 11 · 2019: 18 · 2020: 36 |
+
+## The other half of the thread, and what it makes him
+
+> **CORRECTED [2026-09-04] — "Direction: All received (export artifact)" was
+
+> wrong, and the whole reading above was built on one side of a conversation.**
+
+> This page was written from 41 messages in the CSV export and attributed their
+
+> one-sidedness to the export. The dox-scan dump holds the same thread at **92
+
+> messages — 51 Sent, 41 Received.** Dan's half exists. It was never missing;
+
+> it was in a corpus this page did not cite.
+
+The Sent half changes what he is. On the received-only reading he is a man
+
+issuing directives about Fran's property — *"Please get your stuff out of
+
+Fran's house tonight!"* — and the page could not say whether that was a
+
+family, caretaker or estate role. With both halves the answer is plain, and it
+
+is none of those three: **Rod Banks is the disbursing agent for the Coldren
+
+estate.** He does not own the authority; he executes it.
+
+What he does, dated:
+
+| Date | What he does |
+
+|---|---|
+
+| 2017-05-23 | Authorises a title transfer — *"Yes, it is OK to have Fran transfer the title this afternoon"* |
+
+| 2017-05-30 | *"I will be canceling Fran's Insurance."* |
+
+| 2017-06-12 | Routes a reimbursement and checks it against a prior payment — *"I think Amy was already reimbursed for this. Vicky can show you a copy of the check."* |
+
+| 2017-11-10 | Audits a utility notice — *"This notice is dated 5/2/17 what's up?"* |
+
+| 2017-12-22 | *"If you turn in Timeslips through yesterday and give them to Vicki I will pay those."* |
+
+| 2018-05 | Collects Fran's mail weekly from the house |
+
+And Dan writes to him the way you write to somebody who controls a budget:
+
+*"Hi rod! What is the appropriate way to be reimbursed for a dinner for gram?
+
+She didn't have enough cash on hand when we went to th[e]..."*, then chases it
+
+three weeks later with an offer to scan the receipt. The register is a person
+
+applying to a process, and it is the same register the corpus records him using
+
+with [[wiki/people/fred-adams|Judge Fred Adams]].
+
+## The estate advances, itemised — five checks nobody had counted
+
+**This is the find.** Between October 2019 and April 2020, Banks writes Dan a
+
+series of checks against the undistributed Fran estate, and the thread records
+
+each one with its amount, its date and **who authorised it**:
+
+| Date | Amount | The authorisation, in his words |
+
+|---|---|---|
+
+| 2019-10-12 | **$5,000** | *"I got in touch with Jason. I will write a check payable to you for $5000."* |
+
+| 2020-02-04 | **$10,000** | *"Yes, he contacted me yesterday. I will prepare a check for $10,000."* |
+
+| 2020-03-06 | **$7,000** | *"Jason contacted me about a check for you. I will prepare a check for $7000."* |
+
+| 2020-03-27 | **$3,000** | *"Jason has approved a $3000 check for you."* |
+
+| 2020-04-17 | **$7,500** | *"Jason has authorized me to issue another check to you for $7,500."* |
+
+| | **$32,500** | |
+
+**The chain is two-step and both steps are named.** *Jason* — **Jason Adams**,
+
+the estate attorney identified on [[wiki/people/fred-adams]] — approves; Rod
+
+Banks writes. Banks says so four times in six months and never once claims the
+
+decision. On 2020-01-10 he says it outright: *"I've been getting my information
+
+from Jason. He says things should be wrapping up this month or next month. He
+
+is waiting on approval of so[mething]."*
+
+> **CONTRADICTION with [[wiki/mind/synthesis/estate-money-spine]], and it is
+
+> not small.** That page's timeline carries one line for this period —
+
+> *"2020-06-23 · Estate advance issued · $10,000"*. The thread here holds
+
+> **five** advances totalling **$32,500**, none of them dated 2020-06-23, and
+
+> the $10,000 in it is dated **2020-02-04**. Either there were two $10,000
+
+> advances four months apart, or the spine's date belongs to one of these
+
+> checks and drifted. **This page does not resolve it** — the spine is a
+
+> synthesis with its own derivation and re-running it is a separate pass — but
+
+> the spine's headline framing of the 2020 distribution as the single capital
+
+> event now has $32,500 of dated, itemised, authorised flow in front of it that
+
+> it does not count.
+
+> **The payees are withheld under the standing directive in `CLAUDE.md`.** Dan
+
+> nominates a payee for each of these checks and Banks asks each time. Naming
+
+> them here would be a new dated line about a person that directive closes. The
+
+> amounts, the dates and the authorisation chain are the finding and are
+
+> complete without it.
+
+**And a phone number is deliberately not reproduced.** On 2019-05-30 Banks
+
+sends Jason's office line in response to *"can you send me a number for jason
+
+please?"*. This repository is public; the number is in `raw/` and stays there.
+
+## What this does to the Fran caregiving picture
+
+The page above reads the 2017-04-19 message — *"Please get your stuff out of
+
+Fran's house tonight! It does not belong there"* — as a directive of unclear
+
+provenance. In the light of the rest of the thread it is an estate agent
+
+clearing a property, six days before the same man is arranging Dan's direct
+
+deposit and eleven months before Fran dies. The tone was never personal. It was
+
+administrative, and Dan was on the receiving end of an administration he was
+
+also inside of, which is the same double position
+
+[[wiki/timeline/events/fran-death-vigil]] records at the bedside.
+
+## Gaps
+
+> **GAP CLOSED [2026-09-04] — he is the estate's disbursing agent.** This
+
+> section read: *"Exact relationship to Fran (family member, estate
+
+> representative, or property caretaker) is unresolved."* The Sent half of the
+
+> thread settles it. He authorises a title transfer, cancels Fran's insurance,
+
+> pays Timeslips, audits a utility notice, routes reimbursements against prior
+
+> payments, and writes five estate checks totalling $32,500 on another man's
+
+> authorisation. He is not family, not a caretaker, and not the decision-maker
+
+> — he is the hand the estate's money passes through.
+
+Still open: whether "Banks" connects to the Coldren/Whyel/Shrum maternal
+
+network; his formal title, if he had one; and whether he was compensated. No
+
+Facebook or other corpus cross-references found. **The unresolved question is
+
+now upstream of him rather than about him** — the relationship between Jason
+
+Adams, [[wiki/people/fred-adams|Fred Adams]] and Adams & Adams, and which of
+
+them held what authority when, is not established anywhere in the corpus and is
+
+answerable only from the estate docket.
+
+---
+
+**Up:** [[wiki/people/index|People]]

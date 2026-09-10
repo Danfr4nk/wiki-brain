@@ -1,0 +1,123 @@
+
+---
+domain: people
+page_type: entity
+title: "RJ Ritchey"
+aliases: ["RJ"]
+status: stable
+date_created: 2026-06-23
+date_modified: 2026-07-14
+date_range_start: 2019-02-12
+date_range_end: 2020-05-19
+sources:
+  - raw/self/message-csv/MASTER_MESSAGES_DB_DUMP.csv
+  - raw/self/facebook/facebook-ihatedanfrank/messages/inbox/rjritchey_1zdzzhrtsw/message_1.html
+  - raw/self/dox-md/operating_manual.md
+related:
+  - wiki/people/annie-ulmer
+  - wiki/people/teddy
+  - wiki/people/jack-rusko
+  - wiki/self/facebook
+  - wiki/self/message-corpora/master-message-dump
+  - wiki/timeline/periods/2018-deep-cycle
+  - wiki/mind/concepts/contact-gini
+tags: [uniontown-era, addiction-recovery, politics, digital-footprint]
+knowledge: mixed
+infobox:
+  name: "RJ Ritchey"
+  relationship_to_dan: unknown
+  sex: male
+  location: nyc
+  first_contact: 2019-02-12
+  known_for: "RJ Ritchey was a real Uniontown-golf-circle friend, not the separate"
+connections:
+  - page: wiki/people/marc-charles
+    type: co-occurs
+    claim: "Marc Charles is part of the same PA golf/caddie leisure network as RJ Ritchey, contrasting with Dan's higher-volume core attachment threads."
+---
+
+# RJ Ritchey
+
+RJ Ritchey was a real Uniontown-golf-circle friend, not the separate
+unidentified "RJ" suggested by the old contact stub. The 518-row iMessage
+thread at `+17249844280` matches the Facebook record: he knew Dan, Annie,
+[[wiki/people/teddy|Teddy]], and [[wiki/people/jack-rusko|Jack Rusko]]; followed
+the caddying world; and visited Dan and Annie in Manhattan in July 2019. He
+was a willing but anxious participant in their social and sexual orbit, a
+guest for whom Dan paid travel, and later a recurring conversation partner on
+golf, drugs, media, and politics. The relationship is best understood as a
+peripheral friendship with unusual access to the couple's New York life, not
+as a core attachment.
+
+## February 2019: the boundary
+
+The thread opens with an attempted sexual encounter involving Dan and Annie.
+RJ repeatedly said that he did not want to betray Dan, did not want to offend
+either member of the couple, and discovered that he was not comfortable with
+the situation once it became real. He was particularly alarmed by the idea
+that he had been recorded and asked Dan not to put any video online. The
+messages do not establish a complete account of the encounter, but they do
+establish an important boundary: RJ was curious and initially willing to come
+over, then withdrew rather than perform enthusiasm he did not feel.
+
+That withdrawal did not end the friendship. In the weeks after it, he talked
+about visiting the city, asked for pictures, discussed golf and work, and
+reacted to the couple's paid-companion plans with concern about cost and
+pressure. He described the couple's life from outside it—interested, sometimes
+teasing, and more risk-averse than the people living it.
+
+## The July 2019 New York visit
+
+RJ made the planned trip on July 5, 2019. The record shows the practical work
+behind it: he had reduced hours at the Maywood while waiting to hear from
+Nemacolin HR, needed to coordinate a ride to Pittsburgh, and asked Dan to
+book rather than merely reimburse the bus ticket. Teddy became a point of
+contact around the travel and supplies. RJ worried that the ticket might be
+one-way, apologized after becoming combative over it, then boarded from
+Pittsburgh and sent live updates as the bus approached Manhattan.
+
+The visit was a genuine introduction to the city rather than a symbolic
+reference. RJ described seeing the skyline through clouds, being confused by
+the bus route, wanted video from a night of skating to show his mother, and
+left for Fayette County on July 8. His messages frame Dan as the person who
+could show him a place he had never seen, while Dan and Annie appear as a
+couple whose plans and resources he had to trust from a distance.
+
+## Golf, work, and conversation
+
+RJ's baseline world was Fayette County golf and contingent work. He discussed
+his father, country-club rounds and footage, the possibility of returning to
+caddying, and later reports that a Nemacolin manager had been fired amid a
+narcotics rumor. He also described limited work hours and the importance of
+keeping them while he waited for caddying to resume. The Facebook thread
+extends the same relationship into later golf and Laurel Valley talk; it is
+the key cross-check that resolves the old duplicate pages as one person.
+
+The thread ranges widely—videos, bodybuilding, gaming, comedy, conspiracy
+material, the 2020 election, and drug access. RJ asked Dan for dealer contacts
+and spoke openly about wanting pills or other "party supplies" for the trip;
+in May 2020 he worried that Teddy's absence would leave him without access.
+These are contextual messages, not evidence that every named substance was
+obtained or used. Politically, he expressed conspiratorial and socially
+conservative views that often diverged from Dan's; the conversation survived
+the disagreement because both treated media skepticism and speculative
+discussion as a shared pastime.
+
+## Record limits
+
+The master CSV's `direction` field is unreliable, so its uniform labeling
+cannot establish speaker identity by itself. Here, identity is supported by
+the named Facebook export and by the thread's cross-references to Teddy,
+Annie, caddying, and the July trip. The record does not establish RJ's current
+location, employment, or whether contact continued after May 2020.
+
+## Corpus record
+
+| Metric | Value |
+|---|---|
+| iMessage rows in master export | 518 |
+| iMessage range | 2019-02-12 – 2020-05-19 |
+| Key event | Manhattan visit, 2019-07-05 – 2019-07-08 |
+| Identity resolution | `+17249844280` = RJ Ritchey |
+
+

@@ -1,0 +1,93 @@
+
+---
+domain: people
+page_type: entity
+status: closed
+knowledge: mixed
+date_created: 2026-07-19
+date_modified: 2026-07-19
+date_range_start: 2017-09-24
+date_range_end: 2018-06-28
+sources:
+  - "raw/self/facebook/facebook-ihatedanfrank/messages/inbox/christocoan_2cxo0swo3g/message_1.html"
+tags: [uniontown-era, career, legal, digital-footprint]
+infobox:
+  name: "Christo Coan"
+  sex: male
+  location: uniontown
+  relationship_to_dan: coworker
+  handles: ["510-506-3276"]
+  known_for: "Nemacolin-era golf-course coworker who co-organized Dan's Halloween/birthday party, Oct 31 2017; recipient of a passing reference to a prior, otherwise undocumented DUI"
+connections:
+  - page: wiki/work/nemacolin-caddying
+    type: co-occurs
+    claim: "The Oct 31, 2017 party invite — open to 'every caddie, staging, and pro shop employee' — is a direct social artifact of the caddie-yard cohort, thrown at Dan's own house."
+  - page: wiki/legal/2015-possession-arrest
+    type: contradicts
+    claim: "Dan's Oct 19, 2017 aside — 'hell yeah I already got a DUI I'm not getting any more of those' — references a separate, otherwise undocumented DUI, contradicting the retail-theft page's 'No DUI resulted' framing and the legal index's 'only documented arrest' claim."
+  - page: wiki/places/117-belmont-circle
+    type: evidences
+    claim: "Dan's own description — living on the golf course, next door to both his own grandparents and his girlfriend's grandparents, 'so noise isn't a problem' — is a first-person confirmation of the Belmont Circle/Ulmer neighbor geography from October 2017."
+---
+
+# Christo Coan
+
+Christo Coan was a Nemacolin-era golf-course coworker and DJ
+acquaintance whose short Facebook Messenger thread (September 2017 –
+June 2018) exists almost entirely to plan one event: Dan's Halloween
+birthday party on October 31, 2017 — but carries, along the way, two
+details worth more than the party itself.
+
+## The party
+
+Starting October 18, 2017, the two co-organize an open-invite party at
+Dan's house, explicitly "for everyone who works in golf up there" —
+"literally every caddie, staging, and pro shop employee." Christo
+recruits attendees ("Brad and Zach to both endorse it"), handles the
+DJ set ("Remember that I'm a DJ... so I might spin a lil"), and the two
+negotiate alcohol logistics (Dan: "I don't drink at all so I've got no
+idea what to get... I'll donate a 30 pack"). It lands on Dan's actual
+birthday, November 1 — the invite frames it as "lots of justification
+to get just wrecked" — and the thread's last party-planning message
+confirms a 9 PM start with early arrivals welcome from 7.
+
+## The house, described first-hand
+
+Explaining the venue, Dan gives a first-person description that
+independently confirms the [[wiki/places/117-belmont-circle|Belmont
+Circle]] neighbor geography documented elsewhere: "I live on the golf
+course... my next door neighbors are my grandparents and my
+girlfriend's grandparents... so noise isn't a problem." This is Dan
+himself, in October 2017, describing the household's proximity to
+[[wiki/people/fran-coldren|Fran]] and the Ulmer family — the same
+adjacency the [[wiki/timeline/events/fran-death-vigil|Fran vigil]]
+depends on five months later.
+
+## The DUI reference
+
+In the same conversation, declining a beer-pong-related mishap story
+with his own, Dan writes: "hell yeah I already got a DUI I'm not
+getting any more of those :D thanks bro." No other detail follows, and
+nothing elsewhere in the corpus names a Dan-side DUI — the
+[[wiki/legal/2015-possession-arrest|2015 possession arrest]] page
+explicitly states no DUI resulted from that stop, and the legal
+domain's only other DUI material belongs to
+[[wiki/people/annie-ulmer|Annie]]. This is therefore the corpus's only
+reference to a separate, undated, otherwise undocumented DUI on Dan's
+own record — flagged as a contradiction on the retail-theft page
+rather than treated as a confirmed standalone event.
+
+## Corpus record
+
+| Metric | Value |
+|---|---|
+| Messages | ~50 (Facebook Messenger, both directions) |
+| Date range | 2017-09-24 – 2018-06-28 |
+| Defining event | Halloween/birthday party co-organization, Oct 2017 |
+
+**Gaps:** the DUI's date, location, and disposition; whether the party
+happened as planned; Christo's current circumstances (a June 2018
+message places him back in California, referencing an Oakland-area
+weed-club past).
+
+

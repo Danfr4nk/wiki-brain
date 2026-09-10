@@ -1,0 +1,100 @@
+
+---
+domain: timeline
+page_type: period
+title: "The COVID Era (2020)"
+status: stable
+date_created: 2026-07-13
+date_modified: 2026-07-19
+date_range_start: 2020-03-01
+date_range_end: 2021-03-01
+sources:
+  - raw/self/dox-scan/Dan Profile.txt
+  - raw/self/dox-md/Honest assessment and value judgment analysis.md
+  - raw/self/context-core/CONTEXT_CORE_EXPANDED.md
+related:
+  - wiki/self/location-history
+  - wiki/timeline/periods/2020-2021-market-era
+  - wiki/people/annie-ulmer
+  - wiki/interests/favorites/books
+tags: [relationships]
+connections:
+  - page: wiki/mind/synthesis/2020-left-turn
+    type: causes
+    claim: "The lockdown's micro-radius siege is the documented condition of the August 2020 socialist conversion — the reading and media binge are self-dated to being stuck inside."
+  - page: wiki/people/sam
+    type: co-occurs
+    claim: "The Sam thread's May–September 2020 resumption is street-level documentation of the siege months: deliveries negotiated around rides, breakdowns, and a dealer reduced to asking 'You still in ny.'"
+  - page: wiki/people/seth-ledonne
+    type: evidenced-by
+    claim: "Dan's June 7, 2020 real-time account — '8pm curfew... it's been like living in beirut' — documents the George Floyd-protest curfew period in Manhattan from inside the lockdown year, alongside a still-undecided 2020 vote (unwilling to back Biden as of April)."
+---
+
+
+# The COVID Era (2020)
+
+The pandemic year lands in the middle of the first NYC chapter's later
+stretch and directly overlaps the documented [[wiki/timeline/periods/2020-2021-market-era|2020–2021 market era]]
+— the same lockdown conditions that emptied the GPS mobility
+record also produced the free time and financial anxiety that fed the
+Robinhood/meme-stock run. The two were previously synthesized as separate
+threads (mobility statistics in one page, trading history in another);
+this page is the connective narrative between them.
+
+## The "micro-radius siege"
+
+The self-profile frames 2020 as a stress test of the "Metropolitan
+Experiment" — Dan's systematic, routine-based approach to inhabiting New
+York — describing the pandemic as forcing him "into a micro-radius siege."
+The quantified version of that siege is already on record: GPS visit
+counts collapse to 121 for 2020, a sharp drop against the surrounding
+years' baseline, the single steepest year-over-year decline in the full
+location history ([[wiki/self/location-history]]).
+
+## The Train Plan (September 2020)
+
+The largest documented pre-2025 relationship crisis with Annie falls
+squarely inside this period, and the lockdown context is explicit in the
+record: the two were staying at Annie's parents' home during COVID
+lockdown when Dan discovered she had been telling another man "terrible,
+unforgivable, untrue things" about him, and that man had made plans to
+pick her up from the train station. Dan took seven Xanax bars, threatened
+to leave permanently, and sent 200+ messages over multiple days; Annie's
+own words afterward: "I know what I said and I fucking regret it… I have
+messed shit up. Multiple times." The word "cheated" appears in Dan's
+characterization of the cumulative pattern and she does not contest it.
+This incident was effectively invisible in earlier passes over the
+corpus because 2020 itself was a near-absent year in some of the message
+exports — see [[wiki/people/annie-ulmer]] for the relationship-side
+detail.
+
+## The market channel
+
+Confined to a small radius with reduced routine structure, the same year
+produced the [[wiki/timeline/periods/2020-2021-market-era|market era]]:
+the FSLY tip from [[wiki/people/jerad-friedline|Jerad Friedline]] (September 2020), the Robinhood account
+that would peak near $25k by January 2021, and the meme-stock eruption
+that gave the isolated, routine-starved system a new object to apply its
+pattern-recognition engine to. The timing is not incidental — the market
+era's own page already frames it as a place his forensic instincts found
+a new target; this page adds that the target was needed specifically
+*because* the pandemic had removed his normal environmental inputs.
+
+## Reading during isolation
+
+Slavoj Žižek's *Pandemic!: COVID-19 Shakes the World* appears in the
+reading record at four stars, tagged leftist/politics — contemporaneous
+engagement with the pandemic as a political-philosophical object rather
+than only a lived disruption ([[wiki/interests/favorites/books]]).
+
+The period's most durable ideological product is the documented socialist conversion of August 2020: a self-narrated, media-driven radicalization (Chapo, Hasan Piker, ContraPoints) cemented by lockdown reading of the primary texts — argued in full at [[wiki/mind/synthesis/2020-left-turn]].
+
+## Gaps
+
+No primary source narrates the lockdown period day-to-day beyond the
+Train Plan incident and the trading record — there is no documented
+account of remote work, isolation's effect on the relationship outside
+that one crisis, or health precautions taken. The exact months of
+sharpest isolation within 2020 are not pinned beyond the GPS year-total.
+
+

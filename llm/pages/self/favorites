@@ -1,0 +1,261 @@
+---
+
+domain: self
+
+page_type: synthesis
+
+status: archived
+
+date_created: 2026-06-22
+
+date_modified: 2026-06-23
+
+sources: ["raw/self/favorites/FAVS MASTERLIST.csv"]
+
+synthesizes:
+
+- wiki/interests/music/concepts/sub-bass-signature
+
+- wiki/interests/favorites/index
+
+- wiki/mind/synthesis/totality-themes
+
+related:
+
+- wiki/interests/music/concepts/sub-bass-signature
+
+- wiki/interests/music/aliases/gripnotic
+
+- wiki/interests/music/aliases/mogzart
+
+- wiki/mind/concepts/conflict-architecture
+
+- wiki/mind/concepts/attachment-model
+
+- wiki/mind/concepts/contact-gini
+
+- wiki/interests/favorites/index
+
+- wiki/self/facebook
+
+- wiki/mind/synthesis/totality-themes
+
+tags: [music-production, politics, forensic-analysis]
+
+---
+
+# Favorites Masterlist (Legacy)
+
+**Note:** Favorites now have a dedicated top-level category at [[wiki/interests/favorites/index]].
+
+This page is the original synthesis. For expanded version with dozens of sub-pages, see the new structure.
+
+## Corpus Dimensions
+
+| Category | Count | % of Total | Primary Origin(s) |
+
+|----------|-------|------------|-------------------|
+
+| Music    | 1,860 | 92.3%     | SPOTIFY LIKED 2025-2026 (1,384), MUSIC LIST (start-2024) (463) |
+
+| Book     | 120   | 6.0%      | BOOKS.csv |
+
+| Art      | 25    | 1.2%      | ART MATRIX |
+
+| Movie    | 11    | 0.5%      | — |
+
+| **Total** | **2,016** | **100%** | — |
+
+High music concentration. Books and art provide secondary intellectual/cultural signals.
+
+## Music Favorites
+
+### Dimensions
+
+- Total tracks: 1,860
+
+- Unique artists: 1,477 (average ~1.26 tracks per artist — high eclecticism)
+
+- Primary sources: Recent Spotify likes (2025-2026) dominate; older curated list (pre-2024) as secondary.
+
+### Top Artists by Count
+
+| Artist              | Count |
+
+|---------------------|-------|
+
+| JPEGMAFIA           | 13    |
+
+| [[wiki/interests/favorites/music/artists/kanye-west|Kanye West]]          | 11    |
+
+| [[wiki/interests/favorites/music/artists/my-chemical-romance|My Chemical Romance]] | 9     |
+
+| [[wiki/interests/favorites/music/artists/new-found-glory|New Found Glory]]     | 8     |
+
+| [[wiki/interests/favorites/music/artists/elliott-smith|Elliott Smith]]       | 7     |
+
+| rSUN                | 7     |
+
+| LYNY                | 7     |
+
+| Taking Back Sunday  | 6     |
+
+| Fall Out Boy        | 6     |
+
+| Say Anything        | 6     |
+
+| Knock2              | 6     |
+
+| Effin               | 6     |
+
+| Mau P               | 6     |
+
+| A$AP Rocky          | 5     |
+
+| [[wiki/interests/favorites/music/artists/bloc-party|Bloc Party]]          | 5     |
+
+### Source Breakdown
+
+| Origin                              | Count |
+
+|-------------------------------------|-------|
+
+| SPOTIFY LIKED 2025-2026             | 1,384 |
+
+| MUSIC LIST (start-2024)             | 463   |
+
+| Combined / overlapping              | 13    |
+
+### Taste Profile
+
+Data shows strong clusters in:
+
+- Experimental / abrasive hip-hop and rap (JPEGMAFIA, Kanye West, A$AP Rocky)
+
+- Emo, pop-punk, and 2000s rock (My Chemical Romance, New Found Glory, Taking Back Sunday, Fall Out Boy, Say Anything, Elliott Smith)
+
+- Modern electronic / bass music (LYNY, Knock2, Effin, Mau P)
+
+This distribution aligns with production identity (electronic/bass presence) and earlier self-corpus sub-bass signature confirmation. High artist count relative to library size indicates deliberate eclecticism rather than narrow genre loyalty.
+
+## Book Favorites
+
+### Dimensions
+
+- Total books: 120
+
+- Unique authors: 98
+
+- Heavily non-fiction / political / historical focus.
+
+### Top Authors by Count
+
+| Author                | Count |
+
+|-----------------------|-------|
+
+| Woodward, Bob         | 5     |
+
+| Wolff, Michael        | 5     |
+
+| Goldsworthy, Adrian   | 4     |
+
+| Karl, Jonathan        | 3     |
+
+| Carlin, Dan           | 2     |
+
+| Webb, Whitney Alyse   | 2     |
+
+| Plutarch              | 2     |
+
+| Shirer, William L.    | 2     |
+
+| Swanson, James L.     | 2     |
+
+| Sanders, Bernie       | 2     |
+
+### My Rating Distribution
+
+| My Rating | Count |
+
+|-----------|-------|
+
+| 5         | 29    |
+
+| 4         | 42    |
+
+| 3         | 32    |
+
+| 2         | 7     |
+
+| 1         | 1     |
+
+| 0         | 9     |
+
+71 books rated 4 or 5 (high approval rate on completed reads).
+
+### Topic Profile (from Tags)
+
+Top recurring tags across the 120 books:
+
+- politics: 79
+
+- history: 69
+
+- non-fiction: 106
+
+- american-history: 53
+
+- recent-history: 55
+
+- trump: 40
+
+- president: 35
+
+- journalism: 31
+
+- jan-6 (inferred from titles like Cheney, Schiff, and tag patterns)
+
+- war, ancient-history, roman-republic (via Hardcore History, Goldsworthy, Plutarch)
+
+Heavy emphasis on American political history, recent events (Trump era, Jan 6), and institutional critique. Aligns with broader self-corpus themes of skepticism toward power, narrative construction, and [[wiki/mind/concepts/forensic-method|forensic analysis]] of events.
+
+## Minor Categories
+
+- **Art**: 25 entries (ART MATRIX source). Limited metadata in this extract.
+
+- **Movie**: 11 entries. Sparse data.
+
+## Relation to Self Model & Music Identity
+
+This favorites data functions as a behavioral and cultural fingerprint:
+
+- **Music portion** directly supports and can be used to refine [[wiki/interests/music/concepts/sub-bass-signature]] and production aliases. Presence of LYNY, Knock2, Effin, Mau P in top tier is consistent with bass-heavy, maximalist electronic interests.
+
+- **Book portion** provides quantitative backing for political and historical dimensions of [[wiki/mind/concepts/conflict-architecture]] (institutional distrust, justice narratives) and attachment to detailed, evidence-driven analysis of power.
+
+- Overall eclecticism and intensity of engagement (high artist diversity in music + deep political reading) is consistent with his systems-building profile and high Intellect / high Impulsiveness metrics.
+
+Cross-references:
+
+- [[wiki/self/overview]]
+
+- [[wiki/interests/music/aliases/gripnotic]] (current production identity)
+
+- [[wiki/self/twitter]] (public rhetoric often references similar cultural touchpoints)
+
+- Previous raw/self/dox-scan/ FAVORITES DATA.txt analysis
+
+## Notes
+
+Source was provided in `ingest/FAVS MASTERLIST.csv` (new default staging location per user). Copied to `raw/self/favorites/FAVS MASTERLIST.csv` as immutable record.
+
+No individual My Ratings for music entries in this export. Music data is primarily consumption / "liked" signal rather than rated. Books have richer metadata.
+
+**2026-06-23 Re-analysis Update:** Confirmed 1,477 unique artists, 3 balanced clusters (~90+ tracks indicative each: exp hip-hop, emo/rock, bass/electronic), heavy 2025-2026 releases (aligns [[wiki/timeline/periods/2025-collapse]] reactivation), FB music likes overlaps (Elliott Smith, FOB, Say Anything, [[wiki/interests/favorites/music/artists/lil-wayne|Lil Wayne]] + 2007-14 continuity). See [[wiki/interests/favorites/index]], [[wiki/interests/favorites/music]], [[wiki/interests/favorites/books]], [[wiki/interests/favorites/art-and-movies]] for expanded tables + [[wiki/mind/synthesis/totality-themes]].
+
+This page should be updated on future masterlist exports.
+
+---
+
+**Up:** [[wiki/self/index|Self]]

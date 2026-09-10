@@ -1,0 +1,107 @@
+---
+
+domain: people
+
+page_type: entity
+
+status: active
+
+date_created: 2026-06-23
+
+date_modified: 2026-07-20
+
+sources:
+
+- raw/self/facebook/facebook-ihatedanfrank/messages/inbox/marccharles_f3gfexyecg/message_1.html
+
+tags: [addiction-recovery, music-production]
+
+infobox:
+
+name: "Marc Charles"
+
+relationship_to_dan: unknown
+
+known_for: "Golf friend and past music-recording collaborator; a 2018 thread on golf and a 2017 sobriety-milestone check-in"
+
+connections:
+
+- page: wiki/people/rj-ritchey
+
+type: co-occurs
+
+claim: "Marc Charles is part of the same PA golf/caddie leisure network as RJ Ritchey, contrasting with Dan's higher-volume core attachment threads."
+
+- page: wiki/mind/concepts/contact-gini
+
+type: instance-of
+
+claim: "An 85-message, multi-year, low-intensity thread typical of the wide, shallow periphery documented on the contact-gini page."
+
+---
+
+# Marc Charles
+
+Marc Charles is a longtime, low-intensity Facebook contact who spans two
+
+distinct registers: casual golf talk in 2018 and a warmer, more personal
+
+2017 exchange touching on shared recovery and old music collaboration.
+
+## Golf, September 2018
+
+The bulk of the 85-message thread is a single September 23, 2018
+
+conversation about golf — equipment upgrades ("nothing worse than an
+
+aggressively competitive amateur golfer... yeah i mean as long as
+
+you're having fun then there's really no need to sweat the numbers"),
+
+scores creeping down from the 90s to the 80s with new clubs, and local
+
+gossip about a nearby course, Springdale, possibly selling for $2.2
+
+million. The exchange also captures a small real-time moment: Marc
+
+flying a drone over the country club while golfing, with Dan spotting
+
+the footage and the two identifying each other in it.
+
+## Recovery and old music, 2017
+
+Two 2017 exchanges carry more weight. In May, the two acknowledge
+
+sobriety milestones directly — "I'm 7 years clean from opiates,"
+
+Dan writes; "Thanks bud. 4 years in august," Marc replies — immediately
+
+followed by a shared memory of using together ("I remember being so
+
+faded in your basement") and Dan mentioning he'd just found a CD of
+
+music the two had recorded together. In August, Dan follows up on a
+
+mutual friend, "Mike Z" ([[wiki/people/mike-zollinger|Mike Zollinger]]), after learning Marc is
+
+sponsoring him.
+
+## Corpus record
+
+| Metric | Value |
+
+|---|---|
+
+| Messages | 85 (Facebook) |
+
+| Date range | 2017-05 – 2018-09 |
+
+| Defining content | The mutual 7-year/4-year sobriety acknowledgment |
+
+**Gaps:** how Dan and Marc originally met; what the recorded music
+
+collaboration was; no contact after September 2018.
+
+---
+
+**Up:** [[wiki/people/index|People]]

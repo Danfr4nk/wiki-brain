@@ -1,0 +1,506 @@
+
+---
+domain: timeline
+page_type: note
+status: active
+knowledge: earned
+date_created: 2026-08-15
+date_modified: 2026-08-18
+sources:
+  - exports/annie-corpus.csv (built by bin/annie-corpus)
+  - raw/people/captures/2026-08-15_annie-handle-confirmation-and-notes-directive.md
+tags: [relationships, forensic-analysis, uniontown-era]
+connections:
+  - page: wiki/timeline/annie-record
+    type: component-of
+    claim: "The second output of the same read pass: the chronology records what happened, this records everything else the window established — entities, leads, motifs and corrections — so that reading 97,768 messages is paid for once rather than once per question."
+---
+
+# The Annie Read — working notes
+
+Companion to [[wiki/timeline/annie-record]]. Same read, second output.
+
+**Why this page exists.** Reading is the expensive step and it is paid once.
+Pulling a second kind of finding out of a window I have already read costs
+almost nothing; re-reading 97,768 messages to recover something I noticed and
+did not write down costs the entire pass again. A read that records only
+*events* therefore throws away, at the moment of maximum information,
+everything that is not an event — which is `CLAUDE.md` rule 1's failure mode
+applied to the most expensive extraction in the repository. Adopted at the
+operator's suggestion, 2026-08-15.
+
+The chronology answers **"what happened."** This page answers **"what did this
+window establish that isn't a dated event, and what should someone look at
+next."**
+
+---
+
+## 1. Entity ledger
+
+Every named person, place or thing as it first appears, with what the corpus
+itself says about it. `→` marks an existing wiki page; **no page** marks a
+candidate.
+
+| First seen | Entity | What the corpus establishes | Status |
+|---|---|---|---|
+| 2015-11-28 | **Annie Ulmer** | birthday **Nov 28**; Twitter `@Lo_weez`; a pre-Dan nude leak forced the handle change | → `wiki/people/annie-ulmer` |
+| 2015-11-28 | **Alexis Armel** | living at 155 Virginia; volatile (phone-breaking feared); leaves ~Dec 1 with her parents collecting her | → `wiki/people/alexis-armel` |
+| 2015-11-28 | **Gabe** (cat) | in the household; Annie claims him immediately (*"gabes my babe"*) | → `wiki/people/gabe` |
+| 2015-11-29 | **"turd boy" / "dude" = Emilio** | **Annie's own partner at the time**, present with her family on Nov 29; she says she will *"get rid of him"*. **Identified by the operator, 2026-08-17** — the corpus never names him in this window, so the identification is T0 testimony, not a corpus derivation. Same man as the Dec 2 and Dec 13 Emilio. | → `wiki/people/emilio` |
+| 2015-11-29 | **Zachariah Harshman** | physically present through the first night; the cover story for leaving the house; later negotiates the laptop question with Alexis | → `wiki/people/zachariah-harshman` |
+| 2015-11-29 | **Shu** | rearranged Dan's living room *"more dab friendly"*; leaves for Philadelphia Nov 29 | **no page — recurring, likely supply** |
+| 2015-11-29 | **Ellen Ulmer** | throws Annie's family birthday dinner, Nov 29 | → `wiki/people/ellen-ulmer` |
+| 2015-11-29 | **Andre** | at the bar on Annie's birthday; later floated as Alexis's possible alternate drug source | **no page** |
+| 2015-11-29 | **Suz (Suzanne Frank)** | see motif M4 — actively promoting the switch | → `wiki/people/suzanne-frank` |
+| 2015-11-29 | **117 Belmont Circle / Fran's** | proposed affair venue in week one; key held by Suz | → `wiki/places/117-belmont-circle` |
+| 2015-11-29 | **Uniontown CC golf course, 3rd tee** | the meeting location, precisely | → `wiki/interests/golf` |
+| 2015-11-30 | **Casey Bondarenka** | *"just started hanging out with us last week"* — joins the friend group **~3rd week Nov 2015**; buys beer for Alexis; drives Dan around; subject of an unresolved *"Casey saga"* | → `wiki/people/casey-bondarenka` |
+| 2015-11-30 | **"Morgantown homeboy"** | drug source in Morgantown WV; joint $100 buy Nov 30, with a birthday bonus for Annie | **no page — named supply node** |
+| 2015-11-30 | **Dan's laptop** | missing during Alexis's move-out; Harshman intercedes | thread, not entity |
+| 2015-11-30 | **Diane / Van** | named in Suz's family-name list (*"Anne Dan Suzanne Fran Diane Van"*) | → `wiki/people/diane-moore` |
+| 2015-12-01 | **Donna** | Annie's manager at the bar; knows about the Alexis situation; tells Annie "don't go to Bruce about the schedule" | **no page — recurring** |
+| 2015-12-01 | **Bruce** | Annie's employer (bar); called to ask about the schedule; connected to Annie's dad ("besties from high school") | **no page — employer** |
+| 2015-12-01 | **Rick Frank** | Dan's father; Annie reports that he *"already wikes me"*; Dan is nervous to call him | → `wiki/people/rick-frank` |
+| 2015-12-02 | **Claire Ulmer** | Annie's sister; jumps on Annie when Ellen finds out about Dan; involved in the confrontation | → `wiki/people/claire-ulmer` |
+| 2015-12-02 | **Emilio** | *(same person as the 2015-11-29 "turd boy" row above — merged 2026-08-17 on the operator's identification)* Annie's partner until ~Nov 29; texts Claire about Annie when he finds out about Dan, pulling Claire into the Dec 2 confrontation; still contacting Annie on Dec 13. | → `wiki/people/emilio` |
+| 2015-12-03 | **RT** | messages Dan about Alexis working at the bar; source of information about Alexis's schedule | **no page** |
+| 2015-12-03 | **Scott** | hits on Alexis at the bar the same night; friend of the family | **no page** |
+| 2015-12-03 | **Sean** | "the hallway bully" from Alexis's past; referenced in story told at the bar | **no page** |
+| 2015-12-08 | **Jill** | Annie's friend; having a birthday girls' night on Dec 8; her boyfriend is invited to the NYE party | **no page — friend** |
+| 2015-12-08 | **Dave** | from CT's; calls Dan looking for Alexis on Dec 8 | **no page — CT's employee** |
+| 2015-12-08 | **Chuck** | drug supplier; has $100 of cocaine for Annie on Dec 8 | **no page — supply node** |
+| 2015-12-08 | **Caribou** | Dan's friend; in the studio with Dan on Dec 8; starting a collective called "dat noise" | **no page — friend** |
+| 2015-12-08 | **Zach Clingan** | texts Annie *"I have to talk to you"* on Dec 9 and warns her off Dan; **named by Dan the same day as the origin of his drug use** (*"THAT is who introduced me to drugs"*). Not to be confused with Zachariah Harshman. | → `wiki/people/zach-clingan` |
+| 2015-12-09 | **Nguyen's** | restaurant; Annie's dad eats there; they offer Annie a job starting Jan 1 | **no page — employer** |
+| 2015-12-09 | **Dar** | Annie's friend; does her hair on Dec 9; jealous of Annie's happiness | **no page — friend** |
+| 2015-12-10 | **Lucy** | Suz's cat; Dan is taking care of her while Suz is on vacation | **no page — pet** |
+| 2015-12-10 | **Eddie's** | restaurant; Annie is rumored to be working there; Annie's dad forbids it | **no page — employer** |
+| 2015-12-11 | **Louis CK** | comedian; Dan asks Annie if she knows who he is | **no page — comedian** |
+
+## 2. Open leads
+
+Chaseable questions this read raised. Each is a specific thing to look for, not
+a topic.
+
+1. ~~**Who is "turd boy"?**~~ **CLOSED [2026-08-17] — he is Emilio**, per the
+   operator. The corpus never names him in the Nov 29 window, so this is
+   answered by testimony rather than by the record; anything built on it should
+   say so. Closing it collapses three separate incidents into one arc — see
+   motif M6, which is now the strongest pattern in the window. **Still open
+   underneath it:** Emilio's surname, his own channel (nothing of his traffic is
+   in any export), and whether he is the unnamed person who told Ellen about
+   the car on Dec 2 — he is *not* currently that person, and Casey is the one
+   both parties blame.
+2. **The "Casey saga," Nov 30, 23:00** — *"the worst part of the Casey saga /
+   It is bombastic"* — moves to a phone call and is never restated in text.
+   Look: Dec 1–3 for a retelling, and Casey's own channel.
+3. **The missing laptop (Nov 30)** — disappears during Alexis's move-out;
+   Harshman reports Dan *"shouldn't worry"* about it. Resolution unrecorded.
+4. **Dan's "love letters" are sent to an inbox, not by text** (Nov 30, 06:51 /
+   13:20 — Annie initially cannot find them, Dan resends). **There is an email
+   channel carrying the most deliberate writing of the relationship's first
+   week, and none of it is in the message corpus.** Look: `gmail_bodies.txt`
+   and any Gmail export, late Nov 2015.
+5. **What was "the story" both parties stuck to?** (Nov 30, 22:21 — *"I have
+   stuck to the story 100% so you don't need to worry about saying something
+   wrong"*). A jointly maintained cover narrative existed; its content is not
+   in the text.
+6. **Annie's pre-Dan nude leak** (2015-11-29, 03:17) — distinct from the
+   MyFreeCams history and from the 2018 blackmail episode already on her page.
+   Three separate incidents may be being conflated somewhere.
+7. **Does the email handle `alulmer28@gmail.com` carry anything outside
+   2020-07→10?** It is the only source for autumn 2020; worth checking whether
+   other exports hold more of it.
+8. **Who told Ellen Ulmer that Annie's car was at Dan's?** (Dec 2, ~18:44 —
+   *"someone told me your car was at Dan Frank's this morning"*). The informant
+   is unnamed; Casey is blamed by both parties. Resolution unrecorded.
+9. **What does Rick Frank say to Annie's dad?** (Dec 2, 23:56 — *"Rick said
+   Call me tomorrow. I will help you fix this"* / *"He and my dad are buds"*).
+   Rick's intervention is the turning point of the Dec 2 crisis; its content
+   is not in the text.
+10. **What is Zach Clingan's threat?** (Dec 9, ~15:17 — *"I have to talk to
+    you"* / *"have you lost your damn mind"* / *"keep my eyes open"* / *"he had
+    his ex move out and you were there the next day. That makes you look like shit
+    and he's going to treat you like it"*). Zach's confrontation with Dan and
+    Annie is the first post-breakup escalation; its full content is not in the
+    text.
+11. **What is in the "large package"?** (Dec 11, ~11:30 — Dan signs for a
+    "certain large package" and tells Annie there's an "even BIGGER package"
+    for her). The Christmas present is never described; its identity is a gap.
+12. **What happens on Dec 12?** The Dec 12 window ends with Annie coming over
+    and the promise of "the BEST night"; the rest of the day is unread.
+13. **Who is "bimel"?** (Jan 21, ~00:27 — Annie tells Dan that "bimel" is
+    bringing her drugs "more addictive than the ones we're already dealing with."
+    Dan asks if it's someone in Annie's family. Not in any contact list.
+14. **Who is "j"?** (Dec 29, 17:43; Jan 4, 18:22 — The needle/ice incident.
+    Annie says "j" got her started on drugs and "the one who had to do brown."
+    Not in any contact list.
+15. **Who is Lukyan?** (Dec 30, 01:29 — Drops off "greens" for the "stay away
+    from coca" plan. Not in any contact list.
+16. **Who is Gina?** (Jan 1, 17:30 — Sends Annie a friend request. Annie is
+    annoyed.
+
+## 3. Motif tracker
+
+Patterns with dated instances, recorded now so a later climb can count them
+instead of re-reading.
+
+- **M1 — concealment framed as reassurance.** 2015-11-28 19:01 (*"Alexis
+  doesn't know that you have any part in this... So you don't need to worry"*);
+  2015-11-30 22:21 (*"I have stuck to the story 100%"*). Deception of a third
+  party is presented to Annie as protection **of her**. Earliest instances of a
+  shape the terminal-phase record makes central.
+- **M2 — total-merger idiom, fully formed on day one.** *"You own me"*,
+  *"I'm you in girl form"*, *"We see life the same"* (11-28); *"You are my full
+  life"*, *"YOU ARE MY EVERYTHING"* (11-29). **This does not develop — it is
+  present in the first hour.** Relevant to `the-unbroken-bond` and
+  `enneagram-5w4`'s sx-dominant reading.
+- **M3 — drugs as shared idiom, and one refusal.** *"Dan & Annie + Drugs = Heart
+  attack"* (11-28); Dan's *"we can ALWAYSALWAYS not do drugs"* (11-29 19:13);
+  joint $100 Morgantown buy (11-30 14:23). The boundary is offered on day two
+  and gone by day three.
+- **M4 — the family actively brokered the switch.** Suz phones Dan the night of
+  Nov 29 to say he *"should date"* Annie because the **name** fits the family
+  (*"Anne Dan Suzanne Fran Diane Van"*); on Nov 30 at 05:02 she *"brought me a
+  line, and told me she'd get me a car this week if I get Alexis out."*
+  **Cocaine and a car, from the mother, as consideration for completing the
+  eviction.** This is the earliest and bluntest instance of the maternal
+  leverage `estate-money-spine` and `supply-network` document later.
+- **M5 — escalation logged as procedure.** Key confiscated (11-28); property
+  removed from the guest bedroom *"so she knows I could actually call the
+  cops"* (11-30 00:35); parents summoned (11-30 13:42). The eviction is run as
+  a sequence of reversible pressure steps, not a confrontation.
+- **M6 — the displaced partner retaliates through the family, inside 72 hours.**
+  **Strengthened 2026-08-17** once the operator identified "turd boy" as Emilio:
+  the man Annie says she will *"get rid of him just like you just did"* (11-29
+  02:52) is the same man who *"texted her about me"* — her sister — on 12-02
+  18:45, pulling [[wiki/people/claire-ulmer|Claire]] into the confrontation that
+  nearly ends the relationship; and the same man still contacting her on 12-13
+  after *"throwing shit at me the other night"*, closing with *"Honestly I just
+  miss having fun with you!"* Three incidents previously filed separately are
+  one sequence: **displacement on Nov 29, retaliation through her family within
+  three days, and persistence for at least a fortnight.** The ex's re-entry is
+  treated as a structural threat rather than a personal one — the pre-history
+  `block-unblock-loop` reasons about, now dated to the switch itself.
+- **M7 — Dan's reputation as a named obstacle.** Annie's parents: *"he has a
+  bad past do you know what he's done to his family"* (Dec 2, 18:47). Dan: *"I
+  took $500 from my grandma one time and got caught / But that's the worst thing
+  I've ever done in my life"* (Dec 2, 19:17–19:18). The gap between the
+  reputation and the self-assessment is the relationship's first structural
+  problem, stated explicitly on day five.
+- **M8 — the "first night" as mythology.** On Dec 10 Dan tells Annie about the
+  first night: *"when you messaged me the next morning about driving to va, do
+  you remember that lex texted you / And I grabbed the phone / And pretended
+  like it was me / And that I was kidding"* (19:57–19:58). The story is told
+  as a revelation — Dan actively concealed Alexis's text from Annie in real
+  time. This is the earliest instance of Dan managing Annie's perception of
+  Alexis post-breakup.
+
+## 4. Corrections queue
+
+Wiki claims this read contradicts or sharpens. Not yet applied except where
+noted.
+
+| Page | Standing claim | What the read shows |
+|---|---|---|
+| `mind/synthesis/bond-switch-2015` | the switch is Dan leaving Alexis for an unattached Annie | **Annie had her own partner and ended it in the same week.** The switch was mutual. **Not yet applied — biggest open correction.** |
+| `people/annie-ulmer` | *"I met someone that instantly changed my life"* quoted without address | said **to Annie**, 2015-11-29 03:28, an hour after the meeting |
+| `timeline/periods/2015-2016-...` | *"YOU ARE MY EVERYTHING"* on "day two/three" | 2015-11-29 **03:24**, hours after the first in-person meeting |
+| `people/casey-bondarenka` | (check) longstanding friend | *"just started hanging out with us last week"* — joins ~3rd week Nov 2015 |
+| `people/suzanne-frank` | supportive maternal figure, financier | on 11-29/11-30 she supplies cocaine and offers a car **conditional on evicting Alexis** |
+| `mind/synthesis/supply-network` | supply as a binding mechanism, documented late | Dan names it in real time on 2015-11-29 about **Alexis** (*"she doesn't have another drug source"*) |
+| `people/claire-ulmer` | (check) sister | **active participant in the Dec 2 confrontation** — jumps on Annie when Ellen finds out; Emilio texts her as his channel to the family |
+| `people/rick-frank` | (check) father | **intervenes in the Dec 2 crisis** — *"Call me tomorrow. I will help you fix this"*; knows Annie's dad; positioned as the family mediator |
+| `people/zachariah-harshman` | (check) cover story for the first night | **active threat post-breakup** — texts Annie "I have to talk to you" on Dec 9; tells her she looks like shit; the "cover story" reading is incomplete |
+| `wiki/places/155-virginia-ave` | Dan's house | **the Annie box exists** — a box of mementos (notes, pen straws, snowflakes) from the first week, referenced on Dec 3 and Dec 10 |
+| `people/jill` | (check) friend | **Annie's closest friend** — referenced repeatedly; her birthday is Dec 8; her boyfriend is invited to the NYE party |
+
+## 5. Quantitative markers
+
+Things worth counting once the read is further along, noted so the count is
+cheap later.
+
+- **Message volume is not evenly informative.** 2015-11-29 carries 1,026
+  messages and roughly 12 events; 2015-11-28 carries 110 and roughly 9. Volume
+  tracks affect, not incident — a warning against any future attempt to
+  prioritise reading by daily count.
+- **Annie initiates the record** (first surviving message is hers, 18:47).
+- Both parties' "I love you" appears **within 32 hours of the first in-person
+  meeting** (Dan 03:14, Annie 03:14, 2015-11-29) — a hard date for any later
+  claim about escalation speed.
+- Dan's sleep inversion is present from day one (asleep ~09:00, up 13:14–14:26
+  on both 11-29 and 11-30), relevant to `message-circadian-latency`.
+- **December 1, 2015: 663 messages.** Alexis leaves; open-door policy established.
+- **December 2, 2015: ~1,617 messages.** The crisis day — parents find out,
+  confrontation, Rick intervenes.
+- **December 3, 2015: ~819 messages.** Alexis at Annie's work; Dan texts her.
+- **December 4-7, 2015: 0 messages.** Data gap or genuine no-contact period.
+- **December 8, 2015: 944 messages.** Annie sick (withdrawal); Dan takes care of
+  her; quit-cocaine pact.
+- **December 9, 2015: 935 messages.** Presents; CMU art show; Zach threatens;
+  Annie quits CT's.
+- **December 10, 2015: ~1,274 messages.** The "first night" story; marriage talk;
+  memento box.
+- **December 11, 2015: ~1,202 messages.** First full no-problems day; package
+  arrives.
+- **December 12, 2015: ~653 messages.** The "best night" plan.
+
+---
+
+## Method note for the next session
+
+Read a window with `bin/annie-corpus read FROM TO`. Write events to
+[[wiki/timeline/annie-record]] **and** update all five sections here in the
+same pass — the ledger and the leads are worthless if they lag the read,
+because their whole value is that they were captured while the material was in
+front of someone.
+## Reading progress update — 2015-12-16
+
+| Read through | Messages read | Of 97,768 | Events recorded |
+|---|---|---|---|
+| **2015-12-16** | 11,922 | 12.2% | ~120 |
+
+## New entities (Dec 13-16)
+
+| Entity | First appearance | What the corpus establishes | Wiki page |
+|---|---|---|---|
+| Will (Annie's brother) | Dec 13, 10:51 | Annie's brother, coming home for a few days during Christmas | no page |
+| Claire (Annie's sister) | Dec 13, 10:10 | Met Dan the night before (Dec 12), already friendly | no page |
+| Koral | Dec 14, 18:55 | New hire at CT's, Suz's guy's girlfriend's daughter, took Annie's shift | no page |
+| Emilio (Annie's ex) | Dec 13, 21:07 (re-encounter) | Same man from Dec 2, threw gum wrappers at Annie, keeps texting her | no page |
+| Chris (CT's manager) | Dec 13, 21:47 | Manager at CT's, tired of Alexis, giving Annie shifts | no page |
+| Bruce (CT's staff) | Dec 13, 21:47 | Staff at CT's, called Alexis "a bitch," supportive of Annie | no page |
+| "Lukeyan" | Dec 15, 03:43 | Dan debriefed him (about the switch?) | no page |
+| Motown boy | Dec 14, 17:53 | Annie's contact who might hook her up with cocaine | no page |
+
+## New open leads
+
+1. **What did Alexis ask Dan for on Dec 13?** Annie says "I can't believe she asked you that last night" — the content is never stated. Worth a targeted read of the Alexis export around Dec 12-13.
+2. **Who is "Lukeyan"?** Dan debriefed him at 3:43am on Dec 15. Not in any existing contact list. Identity question.
+3. **What is Annie'scam history?** She references "doing all the shit I did before" (Dec 13, 11:13) and "I wouldn't go as far as I did before" — this predates the MyFreeCams history on her wiki page.
+4. **Did Annie take a pregnancy test?** The Dec 16 scare is unresolved in this window. The next export (Dec 17+) should address it.
+
+## New motif instances
+
+| Motif | Date | Instance |
+|---|---|---|
+| Merger idiom | Dec 13, 11:51 | Dan: "Your tweet is why we are getting married" |
+| Merger idiom | Dec 14, 11:53 | "My dick is property of Anne Ulmer" / "My pussy is property of Dan Frank" |
+| Cocaine pact | Dec 14, 17:43 | Annie: "Day two no coca for me" |
+| Cocaine pact | Dec 14, 17:48 | Dan offers, Annie talks him down |
+| Concealment as care | Dec 13, 17:43 | Annie tries to lie about seeing Zac, Dan tells her not to |
+| Family approval | Dec 16, 16:41 | Suz calls Annie "your girlfriend" |
+| "Official" markers | Dec 13, 22:49 | Dan asks "are we official?" |
+| "Official" markers | Dec 15, 22:21 | Annie: "CAUSE WE ARE BOYFRIEND/GIRLFRIEND" (Netflix) |
+| Sex drive | Dec 14, 11:49 | Dan: "I love your nymph kitty" |
+| "Everything led up to this" | Dec 15, ~21:19 | Annie: "I am yours for all of time" |
+| "November 24" date | Dec 15, 20:35 | Dan: "I had no idea what love was until November 24, 2015" |
+| "Love of my life" | Dec 16, 21:21 | Dan: "You are the LOVE OF MY LIFE" |
+| Trust issues | Dec 16, 22:43 | "Both had trust issues in the past" |
+| Pregnancy scare | Dec 16, 20:54 | Annie two weeks late |
+
+## Corrections queue
+
+| Page | Standing claim | What the read shows | Applied? |
+|---|---|---|---|
+| Annie Ulmer | Pre-Dan nude leak from MyFreeCams | Dec 13, 11:11: Annie references "doing all the shit I did before" — this predates the MyFreeCams history and is a distinct earlier episode. The MyFreeCams history on her page may be a later development, not the first. | queued |
+| Annie Ulmer | Birthday not fixed | Dec 13 entries corroborate Nov 24 introduction and Nov 28 birthday — no contradiction. | n/a |
+| Bond Switch 2015 | Annie was unattached | Dec 13, 21:07: Emilio texts Annie on Dec 13 — she tells him off and says she has a boyfriend. Consistent with the "Annie was leaving someone too" finding from Nov 29. ~~The man (Emilio) is now named.~~ **RETRACTED [2026-08-17]: he is not.** Emilio first appears 2015-12-02; the Nov 29 partner is "turd boy" and is never named. Being an ex who resurfaces later is not evidence of being *that* ex. Open lead #1 stays open. | **applied 2026-08-17** (mutual-exit correction landed on `bond-switch-2015`, without the identification) |
+
+## Quantitative markers (Dec 13-16)
+
+| Day | Messages | Sent | Received | Notable |
+|---|---|---|---|---|
+| Dec 13 | 1,242 | ~680 | ~562 | Tri party day |
+| Dec 14 | 696 | ~380 | ~316 | Doctor + errands |
+| Dec 15 | 662 | ~350 | ~312 | Quiet domestic day |
+| Dec 16 | 504 | ~270 | ~234 | Pregnancy scare |
+| **Total** | **3,104** | **~1,681** | **~1,423** | |
+
+## Reading progress update — 2015-12-31
+
+| Read through | Messages read | Of 97,768 | Events recorded |
+|---|---|---|---|
+| **2015-12-31** | 13,635 | 13.9% | ~160 |
+
+## New entities (Jan 1-24, 2016)
+
+| Entity | First appearance | What the corpus establishes | Wiki page |
+|---|---|---|---|
+| "bimel" | Jan 21, 00:27 | Bringing Annie drugs "more addictive than the ones we're already dealing with." Dan asks if it's someone in Annie's family. | no page |
+| Gina | Jan 1, 17:30 | Sends Annie a friend request. Annie is annoyed. | no page |
+| Jimmy Shaffer | Jan 3, 02:19 | At Suz's house with Dan's mom, acting weird on molly. | no page |
+| Caitlin | Jan 3, 12:26 | Annie's cousin from high school. Remembers Dan. | no page |
+
+| Entity | First appearance | What the corpus establishes | Wiki page |
+|---|---|---|---|
+| Lukyan | Dec 30, 01:29 | Drops off "greens" (marijuana) for the "stay away from coca" plan | no page |
+| Chuck | Dec 30, 17:16 | Contact who might hook up with cocaine, but flakes | no page |
+| Becca | Dec 29, 13:36 | Ex (Emilio's?) new girlfriend, drama | no page |
+| Russ | Dec 31, 20:09 | Yells at Annie at CT's, says she won't make tips | no page |
+| Robyn | Dec 31, 22:10 | Waitress at CT's, Annie asked to wait on her | no page |
+| Marika | Dec 25, 18:16 | Sugie's daughter, talks about Fran | no page |
+| **`zgurd`** (term, not entity) | Dec 25 onward | **Meaning unresolved — do not gloss.** Bought from Suz in quantity (*"She only had 300 total so I got like 120"*, Dec 31), and the *"stay away from coca"* plan is organised around avoiding it, which reads as cocaine. But the Dec 25 entry glosses it *"(whiskey)"* on Fran's nosebleed. The two uses are incompatible and the corpus has not been read closely enough to settle it. Any page citing a `zgurd` event must say which reading it assumes. | term |
+| Will (brother) | Dec 17, 17:24 | Annie's brother, coming home for Christmas | no page |
+
+## New open leads
+
+1. **Who is Lukyan?** He drops off marijuana for the "stay away from coca" plan. Not in any existing contact list. Identity question.
+2. **What happened at j's?** Annie references "one of the last times I was over at j's" — a needle/ice incident. Who is j?
+3. **Did Annie take a pregnancy test?** The Dec 16 scare is unresolved. The next export (Jan 1+) should address it.
+4. **What happened with the CT's job?** Annie was told she'd be bartending NYE but was forced to serve. She's furious. Next shift unknown.
+
+## New motif instances
+
+| Motif | Date | Instance |
+|---|---|---|
+| "Magic" | Dec 29, 18:23 | Dan: "You're the only thing that makes life seem like magic again" |
+| "Cut back" | Dec 29, 23:24 | Annie: "We gotta really cut back for real this time" |
+| "Cut this shit out" | Dec 29, 23:44 | Dan: "Let's cut this shit out so we can be really happy" |
+| "Stability" | Dec 29, 23:25 | Annie: "I want stability. Jobs. Our own money" |
+| "House wife" | Dec 17, 17:14 | Annie: "I can't wait to be your house wife" |
+| "Best friend" | Dec 30, 00:18 | Dan: "Thank you for being the best friend and best girlfriend imaginable" |
+| "I love you more than life itself" | Dec 31, 17:35 | Dan: "Annie I love you more than life itself" |
+| "First time in my whole life" | Dec 31, 09:52 | Annie: "This is the first time in my whole life that I am happy to leave this past year behind" |
+| "Lucky" | Dec 30, 22:33 | Dan: "I feel like the luckiest guy ever" |
+| "Slayed it" | Dec 30, 22:33 | Dan: "You slayed it on my haircut" |
+| Flowers | Dec 30, 22:32 | Dan gives Annie flowers (first documented) |
+| "Peep" | Dec 29, 13:48 | Annie caught peeping at Dan's house |
+| "Detective Dan" | Dec 29, 13:48 | Dan catches Annie peeping, calls himself "detective dan" |
+| "Sponge" | Dec 29, 18:08 | Annie: "I'm a sponge when it comes to peer pressure" |
+| "Goddess" | Dec 29, 18:11 | Dan: "Someone who looks at you like a goddess" |
+| "Cloud of 'bad'" | Dec 29, 18:23 | Dan: "The cloud of 'bad' that I lived in for over a decade, has been lifted" |
+| "Best boyfriend ever" | Dec 30, 00:18 | Annie: "You're my best friend / And the best boyfriend ever" |
+| "Best girlfriend ever" | Dec 31, 17:59 | Dan: "My girlfriend is literally the best and most beautiful girlfriend ever" |
+
+## Corrections queue
+
+| Page | Standing claim | What the read shows | Applied? |
+|---|---|---|---|
+| Annie Ulmer | Pre-Dan nude leak from MyFreeCams | Dec 29, 17:43: Annie references a needle/ice incident at "j's" — this predates the MyFreeCams history and is a distinct earlier episode. The MyFreeCams history on her page may be a later development, not the first. | queued |
+| Bond Switch 2015 | Annie was unattached | Dec 29, 17:43: Annie references "one of the last times I was over at j's" — she had her own life/partners. Consistent with the "Annie was leaving someone too" finding from Nov 29. | queued |
+| Suzanne Frank | Supportive maternal figure | ~~Dec 29, 19:08: Suz gives Dan $200 worth of cocaine.~~ **RETRACTED [2026-08-17]: the record contradicts this** — Annie says *"that $200 wasn't even your own"* (23:48) and Dan answers *"It was my money"* (23:50). The two lines conflict and the corpus does not settle them; recorded on her page as an open contradiction, not as a supply event. The Dec 31 ~$120 (*"She only had 300 total so I got like 120"*) **is** hers and stands. | **applied 2026-08-17** (Nov 29–30 brokering + Dec 31 supply; $200 flagged as contradiction) |
+| Supply Network | Supply as a binding mechanism, documented late | Dan names the mechanism in real time on **2015-11-29 14:54** — *"she doesn't have another drug source"* — about the **departing** partner, roughly three years earlier than any node the page tracked. Suz enters as an earlier node than any in the succession table. | **applied 2026-08-17** |
+| Zachariah Harshman | Cover story for the first night | Dec 30, 19:30: *"he already called Zach to arrange for more"* — **the referent is not established.** "He" is ambiguous and the record does not say which Zach. Harshman's documented role in this window is cover story (Nov 29) and laptop negotiation (Nov 30). | **applied 2026-08-17** as the cover-story expansion only; the supply inference is **not** applied |
+| Zach Clingan | (no 2015 record) | **Dec 9, 15:17–15:39 belongs to Zach Clingan, not Zachariah Harshman** — *"Zach clingan just texted me"*. Dan names him as the origin of his drug use: *"THAT is who introduced me to drugs"* (15:20). Clingan's warning to Annie is the first documented use of the switch against her by a third party. | **applied 2026-08-17** |
+
+## Quantitative markers (Dec 17-31)
+
+| Day | Messages | Sent | Received | Notable |
+|---|---|---|---|---|
+| Dec 17 | 56 | ~30 | ~26 | House wife discussion |
+| Dec 18 | 0 | 0 | 0 | Data gap |
+| Dec 19 | 16 | ~8 | ~8 | Email confusion |
+| Dec 20-24 | 0 | 0 | 0 | Data gap (5 days) |
+| Dec 25 | 356 | ~180 | ~176 | Christmas |
+| Dec 29 | 371 | ~190 | ~181 | Needle discussion, $200 spend |
+| Dec 30 | 577 | ~290 | ~287 | NYE prep, ceiling leak, cooking |
+| Dec 31 | 337 | ~170 | ~167 | NYE at CT's |
+| **Total** | **1,713** | **~868** | **~845** | |
+
+## Quantitative markers (Jan 1-24, 2016)
+
+| Day | Messages | Sent | Received | Notable |
+|---|---|---|---|---|
+| Jan 1 | 332 | ~170 | ~162 | New Year's morning, trust deficit, vaginal tears, $100 purchase |
+| Jan 2 | 189 | ~95 | ~94 | Annie pricked herself, "throw away my last needles" |
+| Jan 3 | 320 | ~160 | ~160 | "typical of my entire life," marriage talk, Sunoco run |
+| Jan 4 | 460 | ~230 | ~230 | Drug use confrontation, "I've never trusted anyone before" |
+| Jan 5 | 272 | ~140 | ~132 | Annie tried to shoot up, quits CT's |
+| Jan 6 | 215 | ~110 | ~105 | Dan still sick, Apple TV, Valentine's Day plan |
+| Jan 7 | 373 | ~190 | ~183 | Dan slept 18 hours, work fight |
+| Jan 8 | 206 | ~105 | ~101 | Work fight continues, reconciliation |
+| Jan 9 | 280 | ~140 | ~140 | Period done, sex again, JPaul's |
+| Jan 10 | 220 | ~110 | ~110 | Annie at CT's, Golden Globes |
+| Jan 11 | 406 | ~200 | ~206 | Annie's doctor lowered pill prescription |
+| Jan 12 | 218 | ~110 | ~108 | "Don't be mad at me" |
+| Jan 13 | 256 | ~130 | ~126 | Annie's mom drags her to Cosmo Prof, "I need some drugs" |
+| Jan 14 | 157 | ~80 | ~77 | Annie had a dream about having a baby, Alan Rickman died |
+| Jan 15 | 155 | ~80 | ~75 | "Home love bug" |
+| Jan 16 | 145 | ~75 | ~70 | Annie's long love letter |
+| Jan 17 | 149 | ~75 | ~74 | Dan took Xanax, "You're absolutely everything to me" |
+| Jan 18 | 195 | ~100 | ~95 | "Everything is fine" |
+| Jan 19 | 147 | ~75 | ~72 | Annie's jaw clenched, dad puts air in tire |
+| Jan 20 | 356 | ~180 | ~176 | "I love kissing you," save cocaine for work |
+| Jan 21 | 88 | ~45 | ~43 | Major drug fight, "bimel" bringing more addictive drugs |
+| Jan 22 | 273 | ~140 | ~133 | Checking out of hotel/motel |
+| Jan 23 | 278 | ~140 | ~139 | Annie covered in snow, weed and granola |
+| Jan 24 | 114 | ~60 | ~54 | "I'll be with you forever and ever" |
+| **Total** | **4,877** | **~2,455** | **~2,422** | |
+
+---
+
+## Synthesis pass — 2026-08-18 (window 2016-01-01 → 2016-01-24)
+
+Second run of the spread step on this read. Every claim below was gated on a verbatim quote pasted from [[wiki/timeline/annie-record]]; the working evidence table carried 12 rows and **two were cut**, listed under "Not applied."
+
+**Applied — 1 page carries the read now.**
+
+| Page | What landed |
+|---|---|
+| [[wiki/people/annie-ulmer]] | New section "The first year (January 2016)" — Dan's trust deficit, Annie's drug use escalation to intravenous, marriage frame revisited, abandonment anxiety named, work fight, Dan's illness and Annie's care, Annie quits CT's, "bimel" lead. 94 lines of prose with 12 dated quotes. |
+
+**Cross-links added — 8 entries in [[wiki/timeline/annie-record]] now carry `[[wiki/…]]` links** to annie-ulmer, supply-network, and bond-switch-2015.
+
+**Not applied — cut at the evidence gate.**
+
+1. **"Dan's trust deficit is the root cause of the 2026 rupture."** The Jan 1 quote establishes the deficit exists, but the causal chain to the 2026 rupture is inference, not evidence. The attachment model already documents the mechanism; this would be restating.
+2. **"Annie's drug use escalation in January 2016 predicts the terminal phase."** Real, quotable, but its meaning depends on a comparison to the terminal phase that this pass didn't do. Would need to verify against the 2025-26 corpus to assert.
+
+**No climb was written**, deliberately. The January 2016 material is dense but it all belongs to existing pages — annie-ulmer for the relationship narrative, supply-network for the drug escalation, bond-switch-2015 for the marriage frame. No new synthesis page is warranted.
+
+**Next on this page.** [[wiki/timeline/annie-record]] still carries **zero `[[wiki/…]]` links across its December entries** against 13 in the Nov 28–30 block. Cross-linking Dec 1–31 remains mechanical, high-value and not done.
+
+---
+
+## Synthesis pass — 2026-08-17 (window 2015-11-28 → 2015-12-31)
+
+First run of the spread step on this read. Every claim below was gated on a
+verbatim quote pasted from [[wiki/timeline/annie-record]]; the working evidence
+table carried 26 rows and **five were cut**, listed under "Not applied."
+
+**Applied — 10 pages carry the read now.**
+
+| Page | What landed |
+|---|---|
+| [[wiki/mind/synthesis/bond-switch-2015]] | `CORRECTED` block: the switch was **mutual** — Annie ending her own relationship in the same 72 hours. New section: the switch was **brokered and paid for** (Suz's cocaine + car conditional on the eviction), the eviction run as reversible pressure steps, and Alexis physically in the house on 11-28. Plus the Dec 23 channel reconciliation. |
+| [[wiki/people/suzanne-frank]] | New section "Brokering the switch"; the $200 held open as a flagged contradiction. |
+| [[wiki/mind/synthesis/supply-network]] | New section: the mechanism named in real time on 2015-11-29, about the **departing** partner — earliest instance by ~3 years. |
+| [[wiki/people/annie-ulmer]] | Mutual-switch finding; the Dec 2 crisis from her side. |
+| [[wiki/people/ellen-ulmer]] | New section covering Dec 2 2015, fifteen months before her own thread opens, with relay attribution made explicit. |
+| [[wiki/people/zach-clingan]] | New section: *"THAT is who introduced me to drugs"* — an origin fact the page did not have. |
+| [[wiki/people/zachariah-harshman]] | Annie-side role before the rupture; `ATTRIBUTION` block de-crediting the Dec 9 texts. |
+| [[wiki/people/casey-bondarenka]] | `CORRECTED`: ~1 week in the friend group, not a longstanding friend; retrofitted to `connections:`. |
+| [[wiki/people/alexis-armel]] | Timeline rows corrected and extended. |
+| [[wiki/timeline/periods/2015-2016-annie-relationship-start]] | "day two" corrected to ~90 minutes; Dec 2 crisis expanded. |
+
+**Not applied — cut at the evidence gate.**
+
+1. ~~**"turd boy" = Emilio.**~~ **REVERSED [2026-08-17]:** cut at the gate
+   because the quote names no one — correctly, on the corpus alone — and then
+   **supplied by the operator**, which outranks a corpus silence. Applied, with
+   the provenance recorded everywhere it lands. The gate did its job: it stopped
+   an *inference* from being written as a derivation, and the claim arrived by
+   the route that can actually carry it.
+2. **"Suz gives Dan $200 worth of cocaine."** Dan says *"It was my money."*
+   Recorded as a contradiction instead.
+3. **Dec 9 texts as Zachariah Harshman's.** They are Zach Clingan's.
+4. **`zgurd` = whiskey.** Unresolved; now in the ledger as a term.
+5. **"Annie quit CT's voluntarily (Dec 9)."** No supporting quote anywhere, and
+   she is bartending on Dec 16 and working Dec 30–31.
+
+**No climb was written**, deliberately. The strongest candidate — that the
+first month contains a dated rehearsal of mechanisms the wiki documents a
+decade later — is close to the umbrella anti-pattern in `SYNTHESIS_SPEC.md`,
+and the two patterns with real support (family capital underwriting the switch;
+Dan managing Annie's information about Alexis) both belong to existing
+synthesis pages rather than to a new one. Queued with reasoning in
+`synthesis-queue.md`.
+
+**Next on this page.** [[wiki/timeline/annie-record]] still carries **zero
+`[[wiki/…]]` links across its December entries** against 13 in the Nov 28–30
+block. Cross-linking Dec 1–31 is mechanical, high-value and not done — the page
+is described in its own frontmatter as the evidentiary floor, and an entry with
+no outbound link cannot be reached from the pages it supports.
+
+

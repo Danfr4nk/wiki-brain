@@ -1,0 +1,419 @@
+---
+
+domain: people
+
+page_type: entity
+
+title: "Franki Faris"
+
+status: closed
+
+date_created: 2026-07-13
+
+date_modified: 2026-09-04
+
+sources:
+
+- raw/self/dox-scan/Gemini-_58.txt
+
+- raw/self/dansynth/dansynth-scrape-phases-2-7.md
+
+- raw/self/dansynth/DANSYNTH.txt
+
+- raw/self/dox-md/CATO_BOOTLOADER_DANFRANK.md
+
+- raw/self/dox-scan/all_imessages_complete_dump.txt
+
+- raw/people/captures/2026-08-02_004832_franki-and-the-fireworks.md
+
+- raw/people/captures/2026-08-27_223406_gap-alexis-armel.md
+
+related:
+
+- wiki/people/alexis-armel
+
+- wiki/people/katie-fletcher
+
+- wiki/people/annie-ulmer
+
+- wiki/timeline/periods/2015-2016-annie-relationship-start
+
+tags: [relationships, ai-collaboration, digital-footprint, forensic-analysis]
+
+infobox:
+
+name: "Franki Faris"
+
+relationship_to_dan: unknown
+
+location: nyc
+
+known_for: "The July 2013 interlude that ended the six-year Alexis relationship; known from junior high and high school, later a ropes-course attendant at Seven Springs."
+
+connections:
+
+- page: wiki/timeline/events/franki-fireworks-day-2013
+
+type: contains
+
+claim: "One documented day carries effectively the whole relationship — the pickup at 15 Holly Lane, Alexis's discovery ten minutes in, the cocaine, the fireworks, and the collapse within days — which is why the tenure figure this page rests on is now in question."
+
+- page: wiki/mind/synthesis/dormancy-not-exit
+
+type: evidences
+
+claim: "An occupancy resolved 2026-08-28 to be effectively immediate rather than five days (the five-day figure belongs to Alexis's displacement, not to Franki's own tenure) left no corpus and no later trace regardless — the control bounding the retention rule to relationships that clear a tenure floor is, if anything, sharper now that the tenure is shorter than previously stated."
+
+- page: wiki/people/alexis-armel
+
+type: co-occurs
+
+claim: "The same July 9-31, 2013 self-typology batch typed both women — Franki ESFP, Alexis INFP/ISFP 'Idealist' — and the Alexis reading sat only on this page until 2026-09-03, which is what let two independent 2026-08-21 passes conclude the six-year partner had no recorded type at all. A datum filed on the five-day rebound's page and not on the six-year partner's is a datum the six-year partner's page has no way to discover."
+
+- page: wiki/mind/synthesis/the-commissioned-self
+
+type: precedes
+
+claim: "The July 9-31, 2013 self-typology batch that typed Franki and Alexis also carries Dan's own earliest documented INTP self-identification, a decade before the AI instrumentation the commissioned-self pattern is mostly built on."
+
+---
+
+# Franki Faris
+
+Franki Faris was a rebound, collapsing within days, during a brief split
+
+from [[wiki/people/alexis-armel|Alexis Armel]] in the summer of 2013 — a
+
+real, named person, but one who appears in the record almost entirely as a
+
+retrospective data point rather than through any surviving direct
+
+correspondence. (Two independent operator statements, 2026-08-02 and
+
+2026-08-27, corrected the standing "five-day rebound" framing: the five
+
+days belong to Alexis's displacement to [[wiki/places/155-virginia-ave|155 Virginia Ave]] in the same
+
+episode, not to Franki's own tenure, which collapsed faster than that.) She
+
+has no message corpus of her own; everything known
+
+about her comes from Dan's later AI-assisted self-narration (the
+
+Gemini-58 and DANSYNTH chats) and from a handful of contemporaneous
+
+messages to and about her in the iMessage archive.
+
+## The five days (summer 2013)
+
+Dan and Alexis had split, and within days he was involved with Franki —
+
+in his own later description, an attempt to "reboot" his identity around
+
+someone he typed up as her opposite: an ESFP/"Performer" ("magic pixie
+
+dream girl") against Alexis's INFP/ISFP "Idealist," in a batch of
+
+self-typology emails he sent himself between July 9 and July 31, 2013 — a
+
+batch that also carries his own earliest documented INTP self-identification
+
+([[wiki/people/elizabeth-eleanor]], July 10–11, 2013) and is the origin
+
+point of [[wiki/mind/synthesis/the-commissioned-self]]'s pattern, a decade
+
+before the AI instrumentation that page is mostly built on. Alexis's own
+
+typing is now carried on [[wiki/people/alexis-armel]] as well as here, since
+
+the datum being filed only on a five-day rebound's page is what let two
+
+independent 2026-08-21 passes conclude she had no type at all.
+
+> **RESOLVED [2026-08-28] — the five-day figure belongs to this page's
+
+> title, but only barely, and Franki's own tenure is now separately
+
+> attested.** The CONTRADICTION below (2026-08-02) held two five-day spans
+
+> open against each other rather than pick one. A second, independent
+
+> operator capture (2026-08-27,
+
+> `raw/people/captures/2026-08-27_223406_gap-alexis-armel.md`) states again,
+
+> unprompted and without reference to the first: *"She [Alexis] spent 5 days
+
+> at Virginia ave and then went to her moms."* Two independent T0 statements
+
+> now agree the five days belong to **Alexis's** displacement to 155
+
+> Virginia Ave, not to Franki's own tenure — which the same family of
+
+> captures describes only as ending immediately ("got sick of me basically
+
+> immediately and it went nowhere"). This page's title phrase — "a five-day
+
+> rebound" — is retired as imprecise: the rebound itself had no measured
+
+> duration; five days is how long it took Alexis to leave the address she
+
+> was displaced to.
+
+The Franki interlude's own length is undocumented — Dan's own framing was
+
+that a PA rebound couldn't replace a years-deep NYC relationship, and he
+
+went back to Alexis — but the return took considerably longer than "within
+
+days" implies for the underlying relationship. The 2026-08-27 capture
+
+supplies the fuller sequence: Alexis, after her five days at 155 Virginia
+
+Ave, went to her mother's in Carmichaels, began dating a man named **Chris
+
+Tressler**, and moved with him to New York. One week later she came home to
+
+Pennsylvania to see Dan; he convinced her to stay, and the actual
+
+reconciliation landed in **October 2013**, roughly three months after the
+
+fireworks day, not "within weeks." Full account and the CT's/Annie timeline
+
+this cascades into: [[wiki/people/alexis-armel]].
+
+The reconciliation wasn't clean, and the interim it spanned was real.
+
+Alexis had, in the interim, confronted
+
+him — the source material points to a (not yet located verbatim) message
+
+along the lines of "I know you're with Franki" in the early-July window —
+
+and by the time Dan tried to return, she had already moved on to another
+
+man, described as "fully invested" (the 2026-08-27 capture now names him:
+
+Chris Tressler). The clearest primary anchor for the
+
+whole episode is an August 14, 2013 email in which Dan performs a
+
+point-by-point post-mortem of the previous two months and admits: "I
+
+really didn't have the romantic feelings for franki that i said i did at
+
+the time... I wasn't even able to kiss anyone." Between the Franki
+
+collapse and the actual reconciliation with Alexis, [[wiki/people/katie-fletcher|Katie Fletcher]]
+
+filled the gap as what Dan later called an "interim frequency"
+
+— including the August 30, 2013 Oddball Festival / Chappelle-meltdown
+
+night that closes out her own page, itself falling inside the July–October
+
+window the reconciliation now spans rather than after it closed.
+
+## Resolving the dating contradiction
+
+Three sources disagreed on when this happened, and [[wiki/people/katie-fletcher]]
+
+carried a standing gap note about it. Weighing the evidence:
+
+- **Summer 2013 (specifically ~June–August):** supported by the strongest
+
+primary evidence — the July 9–31, 2013 self-typology emails and the
+
+August 14, 2013 post-mortem email, both dated within the corpus itself.
+
+- **"2014":** the framing used in `raw/self/dox-md/CATO_BOOTLOADER_DANFRANK.md`,
+
+which is itself a later AI-assisted reconstruction rather than a
+
+contemporaneous record, and is contradicted by the dated emails above.
+
+- **Node ordering in the DANSYNTH scrape** (Node 34 "Franki Incident" →
+
+Node 35 "Katie Fletcher, 2013") is consistent with the 2013 dating,
+
+not 2014.
+
+> **REVISED [2026-07-13]:** the Franki incident dates to **summer 2013**,
+
+> not 2014. The CATO bootloader's "2014" is an artifact of later
+
+> AI-assisted reconstruction and is superseded here by the dated primary
+
+> emails. This resolves the gap flagged on [[wiki/people/katie-fletcher]].
+
+No source anywhere in the raw archive ties a specific "July 4" event to
+
+Franki. The closest documented anchors are the July 9–31 typology emails
+
+and the August 14 post-mortem — all mid-to-late summer, none pinned to
+
+Independence Day specifically. The "July 4" framing does not currently
+
+have a source; it is flagged here rather than invented into a narrative
+
+the record doesn't support.
+
+## Echoes in the Annie record
+
+The Franki incident became Dan's own shorthand for a specific pattern —
+
+leaving a long-term partner abruptly for someone new during a moment of
+
+crisis — and he explicitly invoked it while the [[wiki/people/annie-ulmer|Annie]] relationship was
+
+being born. On December 2, 2015, four days into things with Annie, he
+
+texted a friend: "I had a Franki Faris 2.0 situation earlier today... As
+
+in - I left Alexis and had an existential meltdown with another girl.
+
+Annie Ulmer was playing the role of Franki this time." Nine days later,
+
+talking to Annie about a mutual acquaintance, he wrote "after the whole
+
+thing with Alexis and Franki I stay away" — using the incident as
+
+established shorthand between them. By 2018, "Franki" had also drifted
+
+into a casual pet-nickname he used for Annie herself in a handful of
+
+messages, unrelated to the original person.
+
+This makes Franki the control case for
+
+[[wiki/mind/synthesis/dormancy-not-exit]], and a sharper one than a plain
+
+absence would be. An occupancy that collapsed **immediately** — not the
+
+five days once attributed to it here, now resolved to Alexis's displacement
+
+instead — left **no person** in the graph — no
+
+corpus, no contact, nothing after 2013 — while leaving **the name** behind as
+
+working vocabulary, first as shorthand for the abrupt-switch pattern and by 2018
+
+as a pet nickname for Annie. What survives below the tenure floor is the label,
+
+not the tie, and the floor itself is now known to sit even closer to zero
+
+than the page previously stated.
+
+## The day itself, and what a 2026 capture settled
+
+A first-person operator capture written on 2026-08-02 supplies the day this
+
+relationship consists of, documented in full at
+
+[[wiki/timeline/events/franki-fireworks-day-2013]]. It closes three of the four
+
+gaps this page had been carrying, and opens a fourth that matters more than any
+
+of them.
+
+**Closed — the confrontation, verbatim.** Alexis's challenge is no longer
+
+referenced-only. Roughly ten minutes after Dan picked Franki up, the text
+
+arrived: *"I saw your messages. I know you're with Franki."* The mechanism is
+
+now specific too — she had been reading his messages, prompted by something in
+
+his behaviour. The discovery was detection, not chance.
+
+**Closed — how they knew each other, and who she was.** Franki was not a
+
+stranger or a rebound found after the split: Dan knew her *"from highschool and
+
+junior high."* Her parents' house was 15 Holly Lane, Uniontown; she had her own
+
+apartment in Somerset, near [[wiki/places/seven-springs|Seven Springs]], where she worked as a **ropes-course
+
+attendant at the resort**. That places her inside the Seven Springs orbit that
+
+[[wiki/timeline/events/bald-eagle-cummings]] establishes as the source of most of
+
+Dan's non-school friendships.
+
+**Closed, partially — the "July 4" framing.** This page previously recorded that
+
+no source anywhere tied a July 4 event to Franki, and declined to invent one.
+
+The capture describes driving under a municipal fireworks display staged at the
+
+mall, seen from the Rt 119 bypass near the Main Street exit. It does not name the
+
+date. The framing is now **supported rather than unsourced**, and still not
+
+fixed.
+
+> **RESOLVED [2026-08-28] — was CONTRADICTION [2026-08-02]: the "five days"
+
+> belongs to Alexis, not Franki.** This page carried *"a five-day rebound"*
+
+> and *"the Franki interlude lasted five days before collapsing,"* sourced to
+
+> the Gemini-58 and DANSYNTH self-narrations, and
+
+> [[wiki/mind/synthesis/dormancy-not-exit]] used that figure as its
+
+> tenure-floor control. A 2026-08-02 capture first attached five days to a
+
+> different thing entirely: **Alexis** stayed at 155 Virginia Avenue *"for 5
+
+> days before returning to carmichaels to her parents."* Of Franki's own
+
+> tenure it said only that she *"got sick of me basically immediately and it
+
+> went nowhere."* At the time, neither reading was adopted — two five-day
+
+> spans in the same episode, one week apart, and the earlier sources were
+
+> later AI-assisted reconstructions exactly the class of material most likely
+
+> to have conflated them.
+
+>
+
+> **A second, independent operator capture (2026-08-27) resolves it.**
+
+> Volunteered separately, with no reference to the first, it states again:
+
+> *"She [Alexis] spent 5 days at Virginia ave and then went to her moms."*
+
+> Two independent T0 statements now agree. The five days belong to Alexis's
+
+> displacement to 155 Virginia Ave; Franki's own tenure is separately and
+
+> consistently described, across both captures, as collapsing immediately.
+
+> The Gemini-58/DANSYNTH reconstructions did conflate the two spans, exactly
+
+> as suspected. **The control case on `dormancy-not-exit` is corrected
+
+> accordingly** — Franki's own occupancy is now the shorter, sharper control
+
+> the page had been reaching for all along, and this page's title phrase "a
+
+> five-day rebound" is retired.
+
+**Gaps:** no primary chat log with Franki survives in the archive; nothing is
+
+known about her life after 2013; the exact date of the fireworks day is unfixed;
+
+and the tenure figure is now resolved rather than contested (see above). Her presence in the
+
+Seven Springs orbit raises an unasked question the corpus can probably answer —
+
+whether she was already known to Dan through skiing rather than only through
+
+school.
+
+---
+
+**Up:** [[wiki/people/index|People]]

@@ -1,0 +1,223 @@
+---
+
+domain: people
+
+page_type: entity
+
+title: "Alice"
+
+aliases: []
+
+status: active
+
+knowledge: earned
+
+importance: normal
+
+date_created: 2026-08-23
+
+date_modified: 2026-08-23
+
+date_range_start: 2023-10-28
+
+date_range_end: 2025-07-10
+
+tags: [family, relationships, uniontown-era]
+
+infobox:
+
+name: Alice
+
+type: Annie's niece — daughter of Claire and Garrett
+
+relationship_to_dan: partner's niece; never met in the documented record
+
+first_contact: 2023-10-28
+
+location: Uniontown area
+
+notes: "Surname unrecorded; Claire's married name is not in the corpus"
+
+sources:
+
+- raw/self/dox-scan/all_imessages_complete_dump.txt
+
+- raw/self/message-csv/imessage_2124702449_both_all_now.csv
+
+connections:
+
+- page: wiki/people/claire-ulmer
+
+type: component-of
+
+claim: "Closes that page's stated gap: the 'unnamed niece and nephew' are Alice and Otto, named 97 times between them across 2023-2025, with a third child, Waylon, appearing twice."
+
+- page: wiki/people/annie-ulmer
+
+type: evidences
+
+claim: "Childcare for Alice is the largest sustained unpaid commitment in Annie's documented life and the one she names as unpaid on the record — 'which of course I wasn't paid for... should we tip annie?'"
+
+---
+
+# Alice
+
+Alice is [[wiki/people/annie-ulmer|Annie]]'s niece — the elder child of Annie's
+
+sister [[wiki/people/claire-ulmer|Claire]] and Claire's husband
+
+[[wiki/people/garrett]]. She appears **66 times** in the corpus between October
+
+2023 and July 2025, which makes her the most-mentioned child in the archive and
+
+the single largest recurring commitment in Annie's week during the last two years
+
+of the relationship.
+
+She matters to this wiki for a reason that has nothing to do with her: **she
+
+closes a stated gap and falsifies a standing speculation.**
+
+[[wiki/people/claire-ulmer]] has recorded, since it was written, that *"Claire has
+
+children — an unnamed niece and nephew."* They are named here.
+
+## What the record holds
+
+The relationship is ordinary and it is documented in unusual density, because
+
+Annie narrated her days to Dan continuously. Alice is at a Halloween party in an
+
+Elsa outfit Annie bought her (2023-10-28) and wakes Annie up the next morning.
+
+She is collected early from school, taken to an art show, to Goodwill and Target,
+
+to McDonald's, to a soccer practice, to an American Girl doll event at the Heinz
+
+History Center with Annie's own childhood dolls retrieved for the occasion
+
+(2025-03-06). Annie makes cupcakes with her, cuts her hair, teaches her to ride a
+
+bike (2025-07-10), lies with her for over an hour to get her to sleep and ends up
+
+staying the night because *"she will not fall asleep unless I am in bed with her"*
+
+(2025-06-14).
+
+Two dated details fix her age. On **2025-06-19** Annie writes *"I missed the first
+
+four years of Alice's fucking life"* — a reference to the NYC years — which places
+
+her birth around **2019–2020**. By March 2025 she is in school, has a class, a
+
+teacher, and a building that closes for repairs.
+
+## What it establishes about Annie
+
+**This is the largest sustained unpaid commitment anywhere in Annie's documented
+
+life, and she says so.** The clearest statement is 2025-03-31, in a message
+
+listing everything that had gone wrong in one day:
+
+> *"Then the kids came over. And Claire wanted me to cut Alice's hair. (Which of
+
+> course I wasn't paid for) she even jokingly said 'should we tip annie?' And then
+
+> laughed."*
+
+The same message contains *"I got the letter I was denied unemployment"* — which
+
+is the only record in the corpus of Annie applying for unemployment, and it dates
+
+her income collapse to **March 2025**, a year after the [[wiki/people/libby]]
+
+work. Read together, the two pages give Annie's 2024–25 economics a shape the
+
+wiki has not had: paid caring work for a stranger in 2024, unpaid caring work for
+
+family in 2025, and nothing else in between.
+
+She is also, on this record, good at it and attached to it. *"Alice colored me a
+
+really nice paw patrol picture"*; the pedicures from *"aunt Annie"* (2025-05-17);
+
+*"I showed Alice Milo's pic"* (2025-03-18). Almost nothing else in the corpus
+
+records Annie doing something for another person, repeatedly, over years, with no
+
+audience — the other instance is Libby.
+
+## The Wednesday-alibi speculation, tested and rejected
+
+[[wiki/people/claire-ulmer]] carries a flagged reading from an AI-authored
+
+dossier: that *"Wednesday visits to help with Claire's kids functioned as a
+
+recurring alibi pattern during the relationship's suspicious period,"* recorded
+
+there as unverified interpretation. **It has now been tested against the full
+
+217,573-record dump and it fails.**
+
+| Term | n | Wednesday share |
+
+|---|---:|---:|
+
+| Corpus baseline, all messages | 217,573 | **15.1%** |
+
+| Alice | 66 | **6.1%** |
+
+| Claire | 257 | **9.7%** |
+
+| "my niece" / "my nephew" / "Claire's kids" | 4 | **0%** |
+
+| Otto | 31 | 16.1% |
+
+**Wednesday is the least likely day for Alice and well below baseline for
+
+Claire.** Claire's mentions concentrate on Friday and Saturday (100 of 257, 39%).
+
+Whatever else was happening in the suspicious period, a Wednesday childcare
+
+pattern is not in the record, and the dossier's reading should be treated as
+
+retired rather than merely unverified. The falsifier is recorded on
+
+[[wiki/people/claire-ulmer]].
+
+**This is not a finding about the affair.** It rules out one specific proposed
+
+mechanism, on one specific axis, and nothing more. The
+
+[[wiki/timeline/events/eli-incident|Eli]] record is untouched by it.
+
+## Gaps
+
+1. **Surname.** Claire's married name is nowhere in the corpus, so this page is
+
+filed under a single name. One sentence from the operator resolves Alice,
+
+Otto, Waylon and Claire together.
+
+2. **Exact birth date.** Inferred as ~2019–2020 from a single retrospective
+
+remark. A birthday message would fix it.
+
+3. **Whether Dan ever met her.** The record has Annie showing Alice a photograph
+
+of [[wiki/people/milo|Milo]] and Alice asking *"who are you talking to?"*
+
+during a call (2024-02-23), and Dan writing *"alice wouldn't be so unfamiliar
+
+with my name that she literally can't understand what you're saying when you
+
+use it"* (2025-05-02) — which reads as evidence he had **not** met her, and is
+
+the sharpest single line in the corpus about how separate the two families
+
+stayed. Not established either way.
+
+---
+
+**Up:** [[wiki/people/index|People]]

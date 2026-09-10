@@ -1,0 +1,408 @@
+#!/usr/bin/env python3
+"""source-index — coverage index for the message-source archive.
+
+Pure stdlib, no dependencies, per repo convention.
+
+Subcommands:
+  scan                Profile every message source under raw/self/message-csv/
+                      and raw/self/dox-scan/ and rewrite
+                      wiki/self/message-corpora/source-coverage-index.md.
+  check               Re-profile and report sources whose filename overstates
+                      their coverage, sources with no handle column, and
+                      sources with no parseable dates. Exit 1 on none — this
+                      is a reporting gate, not a blocking one.
+  pick DATE [HANDLE]  Answer the operational question directly: which file
+                      should I open for this date, and this person? Reads the
+                      committed index rather than re-profiling.
+
+Why this exists. `raw/` is immutable and deliberately redundant: the same
+messages appear across dozens of exports that disagree, and those
+disagreements are the only error-detection the corpus has. The Rick
+correction (2026-08-11) and the `sic semper` inversion (2026-08-13) were
+both found by one export contradicting another. Consolidating them would
+destroy the instrument.
+
+But redundancy is only useful if you know which file answers which
+question. Every documented failure in this repo traces to opening the
+wrong one: a file named `_all_now` that held 43 of 1,600 messages, a
+three-column export with no handle column used to settle an attribution.
+
+So: never merge the sources, index them. The rule this enforces is the
+`file` and `handle set` fields of the provenance preflight in
+EXTRACTION_SPEC.md — a count may not enter a page until you can name the
+export it came from and confirm that export could have seen the rows.
+"""
+import os, re, sys, csv, datetime
+
+csv.field_size_limit(10 ** 9)
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MSG_DIR = os.path.join(ROOT, "raw", "self", "message-csv")
+# raw/self/dox-scan/ is overwhelmingly AI-analysis prose, résumés and RTF/PDF
+# text — not message data. Only the whole-device dumps living there are
+# indexed, by name, so the index does not fill with documents it would
+# misdescribe as message sources.
+DOX_DIR = os.path.join(ROOT, "raw", "self", "dox-scan")
+DOX_ALLOW = {
+    "all_imessages_complete_dump.txt",
+    "dan tom 2010 2022.txt",
+    "gmail_bodies.txt",
+}
+PAGE = os.path.join(ROOT, "wiki", "self", "message-corpora", "source-coverage-index.md")
+
+DATE_RE = re.compile(r"(20\d{2})[-/](\d{2})[-/](\d{2})")
+
+# Timezone is asserted, not detected. Only entries validated against another
+# source are marked as such; everything else is the repo default.
+TZ = {
+    "imessage_export_deep_20260813.csv": "UTC (validated, see README_20260813_exports.md)",
+    "imessage_export_flat_20260813.csv": "UTC (same extract as deep)",
+}
+TZ_DEFAULT = "America/New_York (assumed)"
+
+DATE_COLS = {"date/time", "datetime_local", "datetime", "date", "timestamp",
+             "message_date", "local_datetime", "date_time", "sent_at"}
+DIR_COLS = {"sent or received", "direction", "is_from_me", "type", "sent/received"}
+HANDLE_COLS = {"handle", "contact", "sender", "phone", "number", "handle_id",
+               "chat_name", "counterparty"}
+
+
+def sniff(path):
+    """Return (columns, column-role map, header line)."""
+    with open(path, newline="", encoding="utf-8", errors="replace") as fh:
+        first = fh.readline()
+    cols = [c.strip().strip('"') for c in first.split(",")]
+    roles = {}
+    for i, c in enumerate(cols):
+        c = c.lower()
+        if c in DATE_COLS:
+            roles.setdefault("date", i)
+        if c in DIR_COLS:
+            roles.setdefault("dir", i)
+        if c in HANDLE_COLS:
+            roles.setdefault("handle", i)
+    return cols, roles, first.rstrip("\n")
+
+
+def profile(path):
+    cols, roles, _ = sniff(path)
+    has_header = "date" in roles
+    rows = 0
+    dmin = dmax = None
+    handles = set()
+    dirs = set()
+    with open(path, newline="", encoding="utf-8", errors="replace") as fh:
+        reader = csv.reader(fh)
+        if has_header:
+            next(reader, None)
+        for row in reader:
+            if not row:
+                continue
+            rows += 1
+            idx = roles.get("date", 0)
+            cell = row[idx] if idx < len(row) else ""
+            m = DATE_RE.search(cell or "")
+            if not m:
+                for c in row[:3]:
+                    m = DATE_RE.search(c or "")
+                    if m:
+                        break
+            if m:
+                d = "%s-%s-%s" % (m.group(1), m.group(2), m.group(3))
+                if dmin is None or d < dmin:
+                    dmin = d
+                if dmax is None or d > dmax:
+                    dmax = d
+            if "handle" in roles and roles["handle"] < len(row):
+                h = (row[roles["handle"]] or "").strip()
+                if h:
+                    handles.add(h)
+            if "dir" in roles and roles["dir"] < len(row):
+                dv = (row[roles["dir"]] or "").strip().lower()
+                if dv:
+                    dirs.add(dv)
+    name = os.path.basename(path)
+    return {
+        "name": name,
+        "rel": os.path.relpath(path, ROOT),
+        "rows": rows,
+        "start": dmin,
+        "end": dmax,
+        "ncols": len(cols),
+        "has_handle": "handle" in roles,
+        "nhandles": len(handles),
+        "dirs": "/".join(sorted(dirs)[:3]) or "—",
+        "tz": TZ.get(name, TZ_DEFAULT),
+        "warn": warnings_for(name, dmin, dmax, "handle" in roles, rows,
+                             os.path.getsize(path)),
+    }
+
+
+def warnings_for(name, start, end, has_handle, rows, size):
+    """Flag the ways a source lies about itself."""
+    out = []
+    if rows == 0:
+        # A cited source with no rows is the most dangerous kind: it looks
+        # like provenance and supplies nothing. END_FIGHT_full.csv is cited
+        # by group-chat-closure.md and is header-only.
+        return ["EMPTY — header only, no data rows"]
+    if start is None:
+        out.append("NO PARSEABLE DATES" if size < 4096
+                   else "dates unparseable across %s bytes — schema not recognised" % "{:,}".format(size))
+    else:
+        if ("all_now" in name or "all_time" in name) and start > "2012":
+            out.append("name claims ALL, starts %s" % start)
+        m = re.search(r"last(\d+)months?", name, re.I)
+        if m and end:
+            span = ((int(end[:4]) * 12 + int(end[5:7])) -
+                    (int(start[:4]) * 12 + int(start[5:7])))
+            if span > int(m.group(1)) + 1:
+                out.append("name claims %sm, spans %dm" % (m.group(1), span))
+    if not has_handle:
+        out.append("no handle column — cannot attribute")
+    return out
+
+
+def collect():
+    found = []
+    if os.path.isdir(MSG_DIR):
+        for fn in sorted(os.listdir(MSG_DIR)):
+            if fn.lower().endswith((".csv", ".txt")):
+                found.append(os.path.join(MSG_DIR, fn))
+    if os.path.isdir(DOX_DIR):
+        for fn in sorted(os.listdir(DOX_DIR)):
+            if fn in DOX_ALLOW:
+                found.append(os.path.join(DOX_DIR, fn))
+    out = []
+    for p in found:
+        try:
+            out.append(profile(p))
+        except Exception as exc:  # a source that cannot be read is itself a finding
+            out.append({"name": os.path.basename(p), "rel": os.path.relpath(p, ROOT),
+                        "rows": 0, "start": None, "end": None, "ncols": 0,
+                        "has_handle": False, "nhandles": 0, "dirs": "—",
+                        "tz": TZ_DEFAULT, "warn": ["UNREADABLE: %s" % exc]})
+    out.sort(key=lambda x: -x["rows"])
+    return out
+
+
+def write_page(profs):
+    today = datetime.date.today().isoformat()
+    total = sum(p["rows"] for p in profs)
+    attributed = [p for p in profs if p["has_handle"]]
+    unattributed = [p for p in profs if not p["has_handle"]]
+    liars = [p for p in profs if any("name claims" in w for w in p["warn"])]
+    full = [p for p in attributed if p["rows"] > 100000]
+
+    L = []
+    L.append("---")
+    L.append("domain: self")
+    L.append("page_type: report")
+    L.append("status: closed")
+    L.append("knowledge: derived")
+    L.append("date_created: 2026-08-14")
+    L.append("date_modified: %s" % today)
+    L.append("sources:")
+    L.append("  - raw/self/message-csv/README_20260813_exports.md")
+    L.append('related: ["wiki/self/message-corpora/master-message-dump"]')
+    L.append("tags: [digital-footprint, forensic-analysis]")
+    L.append("infobox:")
+    L.append('  name: "Source Coverage Index"')
+    L.append('  generated_by: "bin/source-index scan"')
+    L.append('  sources_indexed: %d' % len(profs))
+    L.append('  known_for: "Which export answers which question — the lookup that '
+             'the file/handle-set fields of the provenance preflight require"')
+    L.append("---")
+    L.append("")
+    L.append("# Source Coverage Index")
+    L.append("")
+    L.append("**Generated by `bin/source-index scan` on %s. Do not hand-edit — "
+             "rerun the tool.**" % today)
+    L.append("")
+    L.append("%d message sources, %s total rows against roughly 187,000 unique "
+             "messages — the archive is about %.1fx duplicated. That duplication is "
+             "deliberate and load-bearing: every correction this repo has made was "
+             "found by one export contradicting another. The sources are never "
+             "merged. They are indexed." % (len(profs), "{:,}".format(total),
+                                            total / 187000.0))
+    L.append("")
+    L.append("## Reach for these first")
+    L.append("")
+    L.append("The only sources that are both full-range and attributed — the only "
+             "ones that can settle a question of *who said something* across the "
+             "whole corpus:")
+    L.append("")
+    L.append("| Source | Rows | Coverage | Handles | Timezone |")
+    L.append("|---|---:|---|---:|---|")
+    for p in full:
+        L.append("| `%s` | %s | %s → %s | %d | %s |" %
+                 (p["name"], "{:,}".format(p["rows"]), p["start"], p["end"],
+                  p["nhandles"], p["tz"]))
+    L.append("")
+    L.append("`raw/self/dox-scan/all_imessages_complete_dump.txt` is larger still "
+             "and is the better source for any window in 2019–2025 — 41.8% of its "
+             "records have no row in the 2026-08-13 deep export — but it carries no "
+             "handle column and so cannot attribute. Use it for presence and "
+             "volume, never for authorship.")
+    L.append("")
+    L.append("## Sources that cannot attribute")
+    L.append("")
+    L.append("**%d of %d indexed sources have no handle column.** They record that a "
+             "message exists and whether it was sent or received, but not who the "
+             "counterparty was. A count drawn from one of these cannot answer an "
+             "attribution question, and the `sic semper lupanis` inversion "
+             "(corrected 2026-08-13) is what happens when one is used for that "
+             "anyway." % (len(unattributed), len(profs)))
+    L.append("")
+    empties = [p for p in profs if p["rows"] == 0]
+    if empties:
+        L.append("## Empty sources — cited but carrying nothing")
+        L.append("")
+        L.append("**%d indexed sources contain a header row and no data.** These are "
+                 "the most dangerous entries in the archive, because a citation to "
+                 "one is indistinguishable from a real citation: the filename is "
+                 "plausible, the path resolves, and the file supplies nothing. "
+                 "Discovered 2026-08-14 by the first run of this tool." % len(empties))
+        L.append("")
+        L.append("| Source | Bytes | Cited by |")
+        L.append("|---|---:|---|")
+        for p in empties:
+            cited = []
+            for dirpath, _, files in os.walk(os.path.join(ROOT, "wiki")):
+                for fn in files:
+                    if not fn.endswith(".md"):
+                        continue
+                    fp = os.path.join(dirpath, fn)
+                    if os.path.abspath(fp) == os.path.abspath(PAGE):
+                        continue
+                    try:
+                        with open(fp, encoding="utf-8", errors="replace") as fh:
+                            if p["name"] in fh.read():
+                                cited.append(os.path.relpath(fp, ROOT))
+                    except OSError:
+                        pass
+            L.append("| `%s` | %d | %s |" % (
+                p["name"], os.path.getsize(os.path.join(ROOT, p["rel"])),
+                ", ".join("`%s`" % c for c in sorted(cited)) if cited else "— not cited"))
+        L.append("")
+
+    L.append("## Sources whose filename overstates their coverage")
+    L.append("")
+    L.append("**%d sources carry a name that claims more than the file holds.** "
+             "This is not an occasional slip — the `_all_now` / `_all_time` suffix "
+             "is unreliable as a class. The 2026-08-11 Rick correction was caused "
+             "by trusting one of these." % len(liars))
+    L.append("")
+    L.append("| Source | Name claims | Actually holds | Rows |")
+    L.append("|---|---|---|---:|")
+    for p in sorted(liars, key=lambda x: -x["rows"]):
+        claim = "all time" if ("all_now" in p["name"] or "all_time" in p["name"]) else "bounded window"
+        L.append("| `%s` | %s | %s → %s | %s |" %
+                 (p["name"], claim, p["start"], p["end"], "{:,}".format(p["rows"])))
+    L.append("")
+    L.append("## Full index")
+    L.append("")
+    L.append("Sorted by row count. `H` = has handle column. Timezone is asserted "
+             "from the archive's documented conventions, not detected, except where "
+             "marked validated.")
+    L.append("")
+    L.append("| Source | Rows | Start | End | Cols | H | Handles | Direction values | Notes |")
+    L.append("|---|---:|---|---|---:|:-:|---:|---|---|")
+    for p in profs:
+        L.append("| `%s` | %s | %s | %s | %d | %s | %d | %s | %s |" % (
+            p["name"], "{:,}".format(p["rows"]), p["start"] or "—", p["end"] or "—",
+            p["ncols"], "Y" if p["has_handle"] else "—", p["nhandles"], p["dirs"],
+            "; ".join(p["warn"]) or "—"))
+    L.append("")
+    L.append("## Gaps")
+    L.append("")
+    L.append("Timezone is recorded from documented convention rather than measured, "
+             "except for the two 2026-08-13 exports, which were validated against a "
+             "local-time source on 42,895 text-matched pairs. Every other row in the "
+             "Timezone column is an assumption inherited from the archive and has "
+             "not been independently checked — a source silently exported in UTC "
+             "would not be caught by this tool.")
+    L.append("")
+    L.append("Row counts are physical records, not unique messages; the same message "
+             "appears in many files and this index deliberately does not deduplicate.")
+    L.append("")
+    L.append("## Related")
+    L.append("")
+    L.append("[[wiki/self/message-corpora/master-message-dump]]")
+    L.append("")
+
+    os.makedirs(os.path.dirname(PAGE), exist_ok=True)
+    with open(PAGE, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(L))
+    return total
+
+
+def cmd_scan():
+    profs = collect()
+    total = write_page(profs)
+    print("indexed %d sources, %s rows -> %s" %
+          (len(profs), "{:,}".format(total), os.path.relpath(PAGE, ROOT)))
+
+
+def cmd_check():
+    profs = collect()
+    bad = [p for p in profs if p["warn"]]
+    for p in sorted(bad, key=lambda x: -x["rows"]):
+        print("%9s  %-52s %s" % ("{:,}".format(p["rows"]), p["name"][:52],
+                                 "; ".join(p["warn"])))
+    print("\n%d of %d sources carry at least one warning." % (len(bad), len(profs)))
+    print("%d cannot attribute; %d overstate their coverage in the filename." % (
+        sum(1 for p in profs if not p["has_handle"]),
+        sum(1 for p in profs if any("name claims" in w for w in p["warn"]))))
+    return 0
+
+
+def cmd_pick(argv):
+    if not argv:
+        print("usage: source-index pick YYYY-MM-DD [HANDLE]")
+        return 1
+    date = argv[0]
+    handle = argv[1] if len(argv) > 1 else None
+    if not DATE_RE.match(date):
+        print("date must be YYYY-MM-DD")
+        return 1
+    profs = collect()
+    hits = [p for p in profs
+            if p["start"] and p["end"] and p["start"] <= date <= p["end"]]
+    if handle:
+        digits = re.sub(r"\D", "", handle)
+        named = [p for p in hits if digits and digits in re.sub(r"\D", "", p["name"])]
+        if named:
+            hits = named + [p for p in hits if p not in named]
+    if not hits:
+        print("no indexed source covers %s" % date)
+        return 1
+    hits.sort(key=lambda p: (not p["has_handle"], -p["rows"]))
+    print("Sources covering %s%s, best first:\n" % (date, " for %s" % handle if handle else ""))
+    for p in hits[:8]:
+        print("  %-50s %9s rows  %s → %s  %s" % (
+            p["name"][:50], "{:,}".format(p["rows"]), p["start"], p["end"],
+            "ATTRIBUTED" if p["has_handle"] else "no handle column"))
+        if p["warn"]:
+            print("  %-50s   ! %s" % ("", "; ".join(p["warn"])))
+    print("\nTimezone of the top hit: %s" % hits[0]["tz"])
+    return 0
+
+
+def main():
+    argv = sys.argv[1:]
+    cmd = argv[0] if argv else "scan"
+    if cmd == "scan":
+        cmd_scan()
+    elif cmd == "check":
+        return cmd_check()
+    elif cmd == "pick":
+        return cmd_pick(argv[1:])
+    else:
+        print(__doc__)
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

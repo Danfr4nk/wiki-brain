@@ -1,0 +1,275 @@
+---
+
+domain: timeline
+
+page_type: event
+
+title: "Bald Eagle Cummings (~2000–2001?)"
+
+aliases: ["Bald Eagle", "the Boomerang incident"]
+
+status: stable
+
+knowledge: mixed
+
+date_created: 2026-08-02
+
+date_modified: 2026-08-02
+
+date_range_start: 2000-12-01
+
+date_range_end: 2002-03-31
+
+sources:
+
+- raw/self/captures/2026-08-01_154050_bald-eagle-cummings.md
+
+tags: [uniontown-era, relationships, mental-health]
+
+connections:
+
+- page: wiki/places/seven-springs
+
+type: component-of
+
+claim: "The incident happens on the resort's own terrain and through its social machinery, and the capture that documents it also closes that page's standing gap by naming the ski crew: Jerad Friedline, Josh Brannan and Jon Allen were met through skiing rather than through school."
+
+- page: wiki/mind/psychosexual/developmental-origins
+
+type: causes
+
+claim: "The first documented sexual event in the record is a public failure followed by a year of being renamed for it by older students — the encoding conditions for an architecture in which exposure and humiliation arrive together."
+
+- page: wiki/people/danielle-onesi
+
+type: precedes
+
+claim: "Britney Bolen is the earlier relationship the corpus had no name for: the first documented girlfriend predates Danielle by roughly three years and establishes the above-my-level pattern before the 2004 relationship the wiki treats as the first."
+
+- page: wiki/mind/concepts/attachment-model
+
+type: evidences
+
+claim: "Dan names the pattern himself at its first occurrence — 'somehow getting a girl way above my level to date me' as something 'i would go through many times' — which dates the self-perceived mismatch template to seventh grade rather than to any adult relationship."
+
+- page: wiki/health/hyperreflexivity
+
+type: causes
+
+claim: "A year spent as the middle school's named laughing stock, at an age when he was already a year younger than every classmate and pre-pubertal, is the earliest documented source of the social-exposure sensitivity that page treats as a standing condition."
+
+- page: wiki/interests/extreme-sports
+
+type: co-occurs
+
+claim: "Both the Bald Eagle Cummings incident and the LoveSac virginity event fall inside the Seven Springs adolescent social world — the first is a public sexual failure documented elsewhere, the second is a private milestone the capture records as having happened a year or two after the Vans trips."
+
+- page: wiki/timeline/events/annie-alexis-reunion-november-2018
+
+type: co-occurs
+
+claim: "Both incidents occur in the same house — the first documents Dan's first sexual failure at age 12 (1999) with external humiliation, the second documents a controlled intimacy three years later (2018) with no external exposure beyond the trio. The difference: the first was a failure that named and shamed, the second was orchestrated to be witnessed or remembered but not humiliated."
+
+- page: wiki/mind/synthesis/fayette-return
+
+type: evidences
+
+claim: "Sharpens the Champion question rather than settling it: the family rented at Seven Springs for years before buying unit K2, and Champion is the resort's town — so Morley's 1996-99 listings are now a specific checkable question (that rental, a separate property, or the unit later purchased) instead of a vague adjacency."
+
+- page: wiki/mind/synthesis/the-serial-monogamist
+
+type: component-of
+
+claim: "Dan names his own dating pattern here first — 'somehow getting a girl way above my level to date me' as something he 'would go through many times' — eight years before the earliest adult bond the wiki can document, which makes every later instance a repetition of a self-narrated template rather than an independent conclusion."
+
+---
+
+# Bald Eagle Cummings (~2000–2001?)
+
+In seventh grade, on a night ski trip to [[wiki/places/seven-springs|Seven
+
+Springs]], Dan's girlfriend attempted to give him oral sex in the woods between
+
+two trails, discovered he had not yet begun puberty, and abandoned the attempt.
+
+By the following school day the story had spread through
+
+Laurel Highlands Middle School, and he spent
+
+**the next full year** being called **"Bald Eagle"** — sometimes extended to
+
+"Bald Eagle Cummings" — by the older students. It is the earliest sexual event
+
+anywhere in the corpus, and the record of it is a humiliation rather than an
+
+experience.
+
+Dan's own framing of the relationship that produced it is the part with the
+
+longest reach. The girlfriend was, in his words, the prettiest girl in the
+
+class, and he introduces her by saying this was *"my first experience with
+
+something i would go through many times — somehow getting a girl way above my
+
+level to date me."* **The pattern the adult record documents repeatedly is
+
+named by him at its first occurrence, in the seventh grade.**
+
+The account comes from a single operator capture written in 2026, roughly
+
+twenty-five years after the fact, and is marked `knowledge: mixed` accordingly.
+
+Nothing in it is independently corroborated.
+
+## Why he was the youngest person in the room
+
+Two facts compound, and the capture states both plainly:
+
+| Factor | Detail |
+
+| :--- | :--- |
+
+| Started school early | Began a year ahead, so he was *"always a full year or more younger than his classmates"* |
+
+| Late development | *"genetically a late bloomer"* — at 38 he still cannot grow a full beard |
+
+| State at the time | *"fully and completely yet to start the process of puberty"* |
+
+| Understanding | Barely familiar with the term; sexual gratification *"was still a concept that had yet to click"* |
+
+That combination is the whole event. A twelve-year-old a year young for his
+
+grade, physically pre-adolescent, in a relationship with the most socially
+
+prominent girl in the class, is placed in a sexual situation he does not
+
+understand and cannot physically participate in — and the failure is then
+
+narrated back to him by an entire school. **He did not know what had happened,
+
+why it was bad, or what it predicted**, which is his own summary of it.
+
+## The geography is not incidental
+
+The ski club ran seven or eight trips a year: a school bus up for the
+
+after-school session, everyone back aboard by 9 p.m. when the lifts closed.
+
+**Dan did not ride the bus.** His family had a season pass for him before he
+
+turned one, rented a condo every winter, and eventually bought unit K2 in the
+
+Sunridge development of the Villages at Seven Springs — ski-in, ski-out. So
+
+instead of the supervised trip, he selected a group of friends,
+
+[[wiki/people/suzanne-frank|Suz]] drove them, and they used the condo as a base,
+
+skiing later with *"less restrictions and no technical school supervision."*
+
+That access asymmetry is what put four unsupervised twelve-to-fourteen-year-olds
+
+on the mountain after the school group had gone home. The party that night was
+
+Dan, his friend **Victor Fiano**, the girlfriend **Britney Bolen**, and Britney's
+
+cousin **Alan**, two years older. The site was the undeveloped, ungroomed woods
+
+between the green trail *Boomerang* and the residential access trail running up
+
+from the lower Villages — terrain reachable because they were staying in it.
+
+## The aftermath, and the second humiliation
+
+The nickname ran for a year, and it came from **older kids** — the cohort he was
+
+already a year behind by grade and further behind by development.
+
+The capture closes with a second injury that Dan reports learning later: on the
+
+drive home, in Suz's Chrysler Town and Country minivan, Victor Fiano sat in the
+
+back with Britney and *"got his fingers wet."* Dan's reading of it, written in
+
+2026, attributes this to her frustration after the failed attempt. Whatever the
+
+cause, the structure of the evening is that the friend in the car succeeded in
+
+the same hour, in the same vehicle, at the thing Dan had publicly failed at —
+
+and that Dan found out afterwards.
+
+## What this dates
+
+**The first girlfriend is not Danielle.** [[wiki/places/seven-springs]] and
+
+[[wiki/people/danielle-onesi]] both treat the 2004 Danielle relationship as the
+
+first documented one. Britney Bolen predates it by roughly three years and is
+
+now the earliest named partner in the record.
+
+**The ski crew has names.** That page carried a standing gap — *"any named
+
+individuals from the Seven Springs crew beyond the general cohort
+
+description."* The capture closes it: [[wiki/people/jerad-friedline|Jerad
+
+Friedline]], [[wiki/people/josh-brannan|Josh Brannan]] and Jon Allen were all
+
+met through skiing, and Dan states directly that *"most of my best friends were
+
+not from Laurel Highlands where i went to school, but from skiing at
+
+7Springs."* His primary peer network was formed twenty-five miles from the
+
+place he was educated, on weekends, inside a property his family owned.
+
+**The condo question has a shape.** [[wiki/mind/synthesis/fayette-return]]
+
+flagged [[wiki/people/morley-frank|Morley]]'s 1996–99 Champion, Pennsylvania
+
+directory listings as a documented co-occurrence with Dan's recorded weekly ski
+
+identity, with the causal link explicitly unestablished. The capture does not
+
+establish it either, but it changes what is being asked: the family rented at
+
+the resort for years before purchasing K2, and Champion is the resort's town.
+
+Whether Morley's Champion address was that rental, a separate property, or the
+
+unit later purchased is now a specific, checkable question rather than a vague
+
+adjacency. It is still not answered.
+
+## Gaps
+
+- **The date is unfixed.** Seventh grade for a student who started a year early
+
+puts it around the 2000–01 school year, but the capture says only "7th grade"
+
+and "one winter day." Nothing narrows it further.
+
+- **Britney Bolen, Victor Fiano, Alan and Jon Allen have no other presence in
+
+the corpus.** None appears in any message export, Facebook archive or dossier
+
+located so far. Whether any of them remained in contact is unknown — which
+
+makes this cohort a direct test of [[wiki/mind/synthesis/dormancy-not-exit]]'s
+
+no-exit rule at the earliest point the record reaches.
+
+- **The nickname is unattested outside this capture.** A year of school-wide use
+
+should have left traces in the 2007-era Facebook archive; nobody has looked.
+
+- **The second-hand claim about Victor and Britney in the minivan** is reported
+
+as something Dan *"later found out"* and is not corroborated.
+
+---
+
+**Up:** [[wiki/timeline/index|Timeline]]

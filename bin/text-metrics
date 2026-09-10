@@ -1,0 +1,376 @@
+#!/usr/bin/env python3
+"""text-metrics — turn-level style measurement over the message corpus.
+
+Pure stdlib. The instrument behind wiki/mind/profile/texting-deviance-audit.md,
+kept in the repo so every figure on that page is reproducible and so progress
+against the brevity target can be re-measured rather than asserted.
+
+Why turn-level rather than message-level
+----------------------------------------
+`bin/mine-messages` counts messages. That is the wrong unit for style: 98% of
+Dan's messages are a single line and his median is 6 words, so a message-level
+read makes him look unremarkable. The unit that corresponds to "one thing said"
+is the **turn** — a maximal run of consecutive messages from one side in one
+thread, split when the same side pauses more than 30 minutes. Measured that way
+he runs 3.05x his interlocutors' words in 2026 against 1.23x in 2015-19.
+
+Source
+------
+Defaults to `imessage_export_deep_20260813.csv`, the only sender-tagged export
+reaching past 2025. Timestamps in that file are UTC; `hours` converts to Eastern.
+Excluded from every count: tapbacks, attachment-only rows, and any exactly
+repeated block of 10+ copies (one 427-copy glyph-spam message otherwise inflates
+2025-26 by 1.33%).
+
+Subcommands
+-----------
+  eras                 the headline series - words/turn, ratio, mode share, by era
+  modes [era]          the seven-mode turn taxonomy, Dan vs interlocutors
+  contacts [era]       per-counterparty paired comparison
+  response             answer rate / latency / reply size by his turn length
+  hours                time-of-day profile (Eastern)
+  silence              how his turn length responds to being left waiting
+  target               distance from the 11-20 word target, current era
+"""
+import argparse, csv, datetime, os, re, sys
+from collections import Counter, defaultdict
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SRC = os.path.join(ROOT, "raw", "self", "message-csv", "imessage_export_deep_20260813.csv")
+SESSION_GAP = 1800          # 30 min: same side beyond this is a new initiation
+REPLY_WINDOW = 6 * 3600     # beyond this a "reply" is a new conversation
+WORD = re.compile(r"[A-Za-z][A-Za-z'\-]*")
+SENT_SPLIT = re.compile(r"[.!?]+[\s\"')\]]*|\n+")
+TAPBACK = re.compile(r'^(Liked|Loved|Laughed at|Emphasized|Disliked|Questioned)\s+(["“]|an image)', re.I)
+VOWELS = "aeiouy"
+
+
+def norm(s):
+    return (s.replace("’", "'").replace("‘", "'")
+             .replace("“", '"').replace("”", '"')
+             .replace("￼", " ").replace("﻿", " ").strip())
+
+
+def words(t):
+    return WORD.findall(t)
+
+
+def sentences(t):
+    return max(len([p for p in SENT_SPLIT.split(t) if p.strip()]), 1) if t.strip() else 0
+
+
+def syllables(w):
+    w = w.lower().strip("'-")
+    if not w:
+        return 0
+    n, prev = 0, False
+    for ch in w:
+        v = ch in VOWELS
+        if v and not prev:
+            n += 1
+        prev = v
+    if w.endswith("e") and n > 1 and not w.endswith(("le", "ee", "ye")):
+        n -= 1
+    return max(n, 1)
+
+
+def med(v):
+    v = sorted(v)
+    n = len(v)
+    return 0 if not n else (v[n // 2] if n % 2 else (v[n // 2 - 1] + v[n // 2]) / 2)
+
+
+def load(path=SRC):
+    csv.field_size_limit(10 ** 9)
+    rows = []
+    with open(path, encoding="utf-8", errors="replace") as fh:
+        for r in csv.DictReader(fh):
+            if (r.get("MESSAGE TYPE") or "Normal") != "Normal":
+                continue
+            t = norm(r.get("MESSAGE CONTENT") or "")
+            if not t or TAPBACK.match(t):
+                continue
+            try:
+                ts = datetime.datetime.strptime(r["DATE/TIME"], "%Y-%m-%d %H:%M:%S")
+            except Exception:
+                continue
+            rows.append({"ts": ts, "year": r["DATE/TIME"][:4], "dir": r["SENT OR RECEIVED"],
+                         "handle": r.get("HANDLE") or "",
+                         "thread": (r.get("CHAT ID") or r.get("CHAT NAME")
+                                    or r.get("HANDLE") or "?"),
+                         "text": t})
+    # drop exactly-repeated blocks (paste/glyph spam), which are not utterances
+    c = Counter(r["text"] for r in rows)
+    spam = {k for k, v in c.items() if v >= 10 and len(k) >= 20}
+    rows = [r for r in rows if r["text"] not in spam]
+    # resolve each thread to its counterparty (Sent rows carry HANDLE='Me')
+    byt = defaultdict(list)
+    for r in rows:
+        byt[r["thread"]].append(r)
+    for th, ms in byt.items():
+        cc = Counter(x["handle"] for x in ms if x["handle"] and x["handle"] != "Me")
+        p = cc.most_common(1)[0][0] if cc else th
+        for x in ms:
+            x["party"] = p
+    rows.sort(key=lambda r: r["ts"])
+    return rows
+
+
+def turns(rows):
+    """Maximal same-direction runs per counterparty, split on SESSION_GAP."""
+    by = defaultdict(list)
+    for r in rows:
+        by[r["party"]].append(r)
+    out = []
+    for p, ms in by.items():
+        ms.sort(key=lambda r: r["ts"])
+        cur = []
+        for r in ms:
+            if cur:
+                q = cur[-1]
+                if q["dir"] != r["dir"] or (r["ts"] - q["ts"]).total_seconds() > SESSION_GAP:
+                    out.append(cur)
+                    cur = []
+            cur.append(r)
+        if cur:
+            out.append(cur)
+    return out
+
+
+def classify(t):
+    ws = [len(words(m["text"])) for m in t]
+    tot, n, m = sum(ws), len(t), med(ws)
+    if n == 1:
+        if tot >= 100: return "SOLO-MONOLITH (1 msg, 100+w)"
+        if tot >= 50:  return "SOLO-WALL (1 msg, 50-99w)"
+        if tot >= 20:  return "SOLO-LONG (1 msg, 20-49w)"
+        return "SOLO-SHORT (1 msg, <20w)"
+    if n == 2: return "PAIR (2 msgs)"
+    if m <= 6: return "STACCATO (3+, med<=6w)"
+    if m >= 13: return "STACKED-ESSAY (3+, med>=13w)"
+    return "STACKED-MID (3+, med 7-12w)"
+
+
+MODE_ORDER = ["SOLO-SHORT (1 msg, <20w)", "SOLO-LONG (1 msg, 20-49w)", "SOLO-WALL (1 msg, 50-99w)",
+              "SOLO-MONOLITH (1 msg, 100+w)", "PAIR (2 msgs)", "STACCATO (3+, med<=6w)",
+              "STACKED-MID (3+, med 7-12w)", "STACKED-ESSAY (3+, med>=13w)"]
+ERAS = [("2015-2019", "2015", "2019"), ("2020-2024", "2020", "2024"),
+        ("2025", "2025", "2025"), ("2026", "2026", "2026")]
+
+
+def side_stats(T):
+    n = len(T)
+    ms = [m for t in T for m in t]
+    ws = [len(words(m["text"])) for m in ms]
+    W, M = sum(ws), len(ms)
+    sn = sum(sentences(m["text"]) for m in ms) or 1
+    sy = sum(syllables(w) for m in ms for w in words(m["text"]))
+    ess = sum(1 for t in T if len(t) >= 3 and med([len(words(m["text"])) for m in t]) >= 13)
+    essw = sum(sum(len(words(m["text"])) for m in t) for t in T
+               if len(t) >= 3 and med([len(words(m["text"])) for m in t]) >= 13)
+    return dict(turns=n, msgs=M, words=W, wpm=W / M if M else 0, mpt=M / n if n else 0,
+                wpt=W / n if n else 0, wps=W / sn, fk=0.39 * (W / sn) + 11.8 * (sy / max(W, 1)) - 15.59,
+                ess=100 * ess / n if n else 0, essw=100 * essw / W if W else 0)
+
+
+def cmd_eras(T, _):
+    print("Words per turn, Dan against the people answering him in the same year.\n")
+    print(f"{'era':<11}{'side':<7}{'msgs':>8}{'turns':>7}{'words':>9}{'w/msg':>7}{'m/turn':>8}"
+          f"{'w/turn':>8}{'w/sent':>8}{'FK':>6}{'ESSAY%turn':>12}{'ESSAY%word':>12}")
+    print("-" * 103)
+    for lab, a, b in ERAS:
+        E = [t for t in T if a <= t[0]["year"] <= b]
+        D = side_stats([t for t in E if t[0]["dir"] == "Sent"])
+        O = side_stats([t for t in E if t[0]["dir"] == "Received"])
+        if not D["turns"] or not O["turns"]:
+            continue
+        for nm, d in (("DAN", D), ("them", O)):
+            print(f"{lab if nm=='DAN' else '':<11}{nm:<7}{d['msgs']:>8,}{d['turns']:>7,}{d['words']:>9,}"
+                  f"{d['wpm']:>7.2f}{d['mpt']:>8.2f}{d['wpt']:>8.2f}{d['wps']:>8.2f}{d['fk']:>6.2f}"
+                  f"{d['ess']:>11.1f}%{d['essw']:>11.1f}%")
+        print(f"{'':<11}{'RATIO':<7}{'':>8}{'':>7}{'':>9}{D['wpm']/O['wpm']:>6.2f}x"
+              f"{D['mpt']/O['mpt']:>7.2f}x{D['wpt']/O['wpt']:>7.2f}x\n")
+
+
+def _era(spec, default=("2026", "2026")):
+    if not spec:
+        return default
+    if "-" in spec:
+        a, b = spec.split("-", 1)
+        return a.strip(), b.strip()
+    return spec, spec
+
+
+def cmd_modes(T, args):
+    a, b = _era(args.era)
+    E = [t for t in T if a <= t[0]["year"] <= b]
+    print(f"Turn-mode taxonomy, {a}-{b}. The mode that matters is STACKED-ESSAY.\n")
+    for side, nm in (("Sent", "DAN"), ("Received", "THEM")):
+        S = [t for t in E if t[0]["dir"] == side]
+        if not S:
+            continue
+        cnt = Counter(classify(t) for t in S)
+        wrd = defaultdict(int)
+        for t in S:
+            wrd[classify(t)] += sum(len(words(m["text"])) for m in t)
+        tot, totw = len(S), sum(wrd.values()) or 1
+        print(f"  --- {nm} --- {tot:,} turns, {totw:,} words")
+        for k in MODE_ORDER:
+            if not cnt[k]:
+                continue
+            print(f"     {k:<30}{cnt[k]:>7,} turns {100*cnt[k]/tot:>6.2f}%   "
+                  f"{wrd[k]:>8,} words {100*wrd[k]/totw:>6.2f}%")
+        print()
+
+
+def cmd_contacts(T, args):
+    a, b = _era(args.era)
+    E = [t for t in T if a <= t[0]["year"] <= b]
+    by = defaultdict(list)
+    for t in E:
+        by[t[0]["party"]].append(t)
+    print(f"Per-counterparty, {a}-{b}. Ratio is his words/turn over theirs.\n")
+    print(f"{'counterparty':<26}{'msgs':>7} | {'DAN wpm':>8}{'m/turn':>7}{'w/turn':>8} | "
+          f"{'THEM wpm':>9}{'m/turn':>7}{'w/turn':>8} | {'ratio':>7}")
+    print("-" * 98)
+    for p, ts_ in sorted(by.items(), key=lambda kv: -sum(len(t) for t in kv[1])):
+        D = side_stats([t for t in ts_ if t[0]["dir"] == "Sent"])
+        O = side_stats([t for t in ts_ if t[0]["dir"] == "Received"])
+        if D["msgs"] < 60 or not O["turns"] or not O["wpt"]:
+            continue
+        print(f"{p[:25]:<26}{D['msgs']+O['msgs']:>7,} | {D['wpm']:>8.2f}{D['mpt']:>7.2f}{D['wpt']:>8.2f} | "
+              f"{O['wpm']:>9.2f}{O['mpt']:>7.2f}{O['wpt']:>8.2f} | {D['wpt']/O['wpt']:>6.2f}x")
+
+
+def _sequences(T):
+    by = defaultdict(list)
+    for t in T:
+        by[t[0]["party"]].append(t)
+    for p in by:
+        by[p].sort(key=lambda t: t[0]["ts"])
+    return by
+
+
+def cmd_response(T, args):
+    since = args.since or "2025"
+    buckets = [(1, 5), (6, 10), (11, 20), (21, 35), (36, 60), (61, 100), (101, 200), (201, 10 ** 9)]
+    agg = defaultdict(lambda: dict(n=0, rep=0, lat=[], rw=[]))
+    for p, ts_ in _sequences(T).items():
+        for i, t in enumerate(ts_):
+            if t[0]["dir"] != "Sent" or t[0]["year"] < since:
+                continue
+            w = sum(len(words(m["text"])) for m in t)
+            bk = next((x for x in buckets if x[0] <= w <= x[1]), None)
+            if not bk:
+                continue
+            A = agg[bk]
+            A["n"] += 1
+            nxt = ts_[i + 1] if i + 1 < len(ts_) else None
+            if nxt and nxt[0]["dir"] == "Received":
+                lat = (nxt[0]["ts"] - t[-1]["ts"]).total_seconds()
+                if lat <= REPLY_WINDOW:
+                    A["rep"] += 1
+                    A["lat"].append(lat)
+                    A["rw"].append(sum(len(words(m["text"])) for m in nxt))
+    print(f"What each turn size buys him, {since} onward. Answer rate peaks at 11-20 words.\n")
+    print(f"{'his turn':<14}{'turns':>8}{'answered':>10}{'reply lat med':>15}{'reply words':>13}")
+    print("-" * 60)
+    for bk in buckets:
+        A = agg.get(bk)
+        if not A or A["n"] < 30:
+            continue
+        lab = f"{bk[0]}-{'inf' if bk[1] > 10**8 else bk[1]} w"
+        rw = sum(A["rw"]) / len(A["rw"]) if A["rw"] else 0
+        print(f"{lab:<14}{A['n']:>8,}{100*A['rep']/A['n']:>9.1f}%{med(A['lat'])/60:>13.1f}m{rw:>13.1f}")
+
+
+def cmd_hours(T, args):
+    since = args.since or "2025"
+    hr = defaultdict(lambda: dict(n=0, w=0, turns=0, ess=0, big=0))
+    for t in T:
+        if t[0]["dir"] != "Sent" or t[0]["year"] < since:
+            continue
+        H = hr[(t[0]["ts"].hour - 4) % 24]          # UTC -> Eastern
+        ws = [len(words(m["text"])) for m in t]
+        H["turns"] += 1; H["n"] += len(t); H["w"] += sum(ws)
+        if len(t) >= 3 and med(ws) >= 13:
+            H["ess"] += 1
+        H["big"] += sum(1 for x in ws if x >= 50)
+    print(f"By hour (Eastern), {since} onward. The night hours are the target window.\n")
+    print(f"{'hour':<7}{'msgs':>9}{'words/msg':>11}{'words/turn':>12}{'ESSAY%':>9}{'msgs>=50w':>11}")
+    print("-" * 60)
+    for h in range(24):
+        H = hr.get(h)
+        if not H or H["n"] < 100:
+            continue
+        print(f"{h:02d}:00 {H['n']:>9,}{H['w']/H['n']:>11.2f}{H['w']/H['turns']:>12.2f}"
+              f"{100*H['ess']/H['turns']:>8.1f}%{100*H['big']/H['n']:>10.2f}%")
+
+
+def cmd_silence(T, args):
+    since = args.since or "2025"
+    buckets = [(0, 60, "<1 min"), (60, 300, "1-5 min"), (300, 1800, "5-30 min"),
+               (1800, 7200, "30m-2h"), (7200, 86400, "2h-1 day"), (86400, 10 ** 9, "1+ day")]
+    agg = defaultdict(lambda: dict(n=0, w=[], m=[], ess=0))
+    for p, ts_ in _sequences(T).items():
+        for i, t in enumerate(ts_):
+            if t[0]["dir"] != "Sent" or t[0]["year"] < since:
+                continue
+            prev = next((ts_[j][-1] for j in range(i - 1, -1, -1) if ts_[j][0]["dir"] == "Received"), None)
+            if not prev:
+                continue
+            gap = (t[0]["ts"] - prev["ts"]).total_seconds()
+            bk = next((x for x in buckets if x[0] <= gap < x[1]), None)
+            if not bk:
+                continue
+            A = agg[bk]; A["n"] += 1
+            ws = [len(words(m["text"])) for m in t]
+            A["w"].append(sum(ws)); A["m"].append(len(t))
+            if len(t) >= 3 and med(ws) >= 13:
+                A["ess"] += 1
+    print(f"How being left waiting changes his turn, {since} onward.\n")
+    print(f"{'silence before':<18}{'turns':>8}{'words/turn':>12}{'median':>8}{'msgs/turn':>11}{'ESSAY%':>9}")
+    print("-" * 68)
+    for bk in buckets:
+        A = agg.get(bk)
+        if not A or A["n"] < 30:
+            continue
+        print(f"{bk[2]:<18}{A['n']:>8,}{sum(A['w'])/A['n']:>12.1f}{med(A['w']):>8.0f}"
+              f"{sum(A['m'])/A['n']:>11.2f}{100*A['ess']/A['n']:>8.1f}%")
+
+
+def cmd_target(T, args):
+    since = args.since or "2026"
+    ws = [sum(len(words(m["text"])) for m in t) for t in T
+          if t[0]["dir"] == "Sent" and t[0]["year"] >= since]
+    n, tot = len(ws), sum(ws)
+    print(f"Distance from the 11-20 word target, {since} onward.")
+    print(f"  {n:,} turns, {tot:,} words, mean {tot/n:.1f}, median {med(ws):.0f}\n")
+    print(f"{'threshold':<14}{'turns at/below':>16}{'share':>9}{'words above the line':>22}{'share':>9}")
+    print("-" * 72)
+    for th in (10, 20, 30, 50, 100):
+        k = sum(1 for x in ws if x <= th)
+        wk = sum(x for x in ws if x > th)
+        print(f"<= {th:>3} words {k:>16,}{100*k/n:>8.1f}%{wk:>22,}{100*wk/tot:>8.1f}%")
+    print(f"\n  In the 11-20 band: {sum(1 for x in ws if 11<=x<=20):,} turns "
+          f"({100*sum(1 for x in ws if 11<=x<=20)/n:.1f}%)")
+
+
+CMDS = {"eras": cmd_eras, "modes": cmd_modes, "contacts": cmd_contacts, "response": cmd_response,
+        "hours": cmd_hours, "silence": cmd_silence, "target": cmd_target}
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("cmd", choices=sorted(CMDS))
+    ap.add_argument("era", nargs="?", help="year or YYYY-YYYY range for modes/contacts (default 2026)")
+    ap.add_argument("--since", help="earliest year for response/hours/silence/target")
+    ap.add_argument("--src", default=SRC)
+    a = ap.parse_args()
+    if not os.path.exists(a.src):
+        sys.exit(f"text-metrics: source not found: {a.src}")
+    CMDS[a.cmd](turns(load(a.src)), a)
+
+
+if __name__ == "__main__":
+    main()

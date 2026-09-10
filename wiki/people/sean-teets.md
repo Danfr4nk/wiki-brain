@@ -1,0 +1,47 @@
+
+---
+domain: people
+page_type: entity
+status: active
+date_created: 2026-06-23
+date_modified: 2026-07-20
+sources:
+  - raw/self/facebook/facebook-ihatedanfrank/messages/inbox/seanteets_ycj9jpkeba/message_1.html
+tags: [addiction-recovery, digital-footprint]
+infobox:
+  name: "Sean Teets"
+  relationship_to_dan: unknown
+  known_for: "Sparse, initiator-Dan Facebook contact; two apparent supply-seeking outreach messages a year apart"
+connections:
+  - page: wiki/health/chemical-architecture
+    type: co-occurs
+    claim: "The 2017 and 2018 outreach messages ('looking for tax or strpz'; 'Mushys and k') read as supply-seeking language consistent with the mushrooms/Suboxone-strips/ketamine-adjacent substance vocabulary documented on chemical-architecture.md, though Sean's role in that supply network — buyer, seller, or fellow user — isn't established."
+---
+
+# Sean Teets
+
+Sean Teets is a peripheral Facebook contact with a seven-message thread
+spanning October 2017 to August 2018, almost entirely initiated by Dan.
+Two of the three exchanges read as supply-seeking outreach: in October
+2017, "looking for tax or strpz... know anything?", and in August 2018,
+"Mushys and k... I'll put a nice lil bounty on two things if you can
+come across either" — vocabulary ("strpz," mushrooms, "k") consistent
+with the substance landscape documented on
+[[wiki/health/chemical-architecture]], though nothing in the thread
+confirms whether Sean supplied, used, or simply fielded the question.
+The one non-drug exchange is unrelated: in April 2018, Sean asks if Dan
+knows anyone who wants a lightly-used Nintendo Switch with Zelda for
+$200.
+
+## Corpus record
+
+| Metric | Value |
+|---|---|
+| Messages | 7 (Facebook) |
+| Date range | 2017-10-08 – 2018-08-23 |
+| Defining content | Two supply-seeking outreach messages, a year apart |
+
+**Gaps:** whether either outreach was answered or led anywhere; how Dan
+and Sean know each other; no contact before 2017 or after August 2018.
+
+

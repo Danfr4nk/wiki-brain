@@ -1,0 +1,648 @@
+#!/usr/bin/env python3
+"""wiki-lessons — the gate and the router over `skills/`, the cross-agent memory.
+
+    bin/wiki-lessons            active skills, by domain
+    bin/wiki-lessons check      the gate: malformed, drifted, orphaned, unrecorded
+    bin/wiki-lessons scan       regenerate skills/INDEX.md from the skill files
+    bin/wiki-lessons route ...  which skills a described task must load
+    bin/wiki-lessons next       what is waiting: inbox candidates, provisionals
+    bin/wiki-lessons status     one line per domain, plus the inbox backlog
+    bin/wiki-lessons new <domain>/<slug>    scaffold a skill file
+
+WHY THIS EXISTS
+
+`skills/` arrived on 2026-08-30 as seven markdown files describing a system, and
+the system did not exist. The README declared "Mandatory session behavior";
+`CLAUDE.md` — the file every session is required to read, and the only file that
+can make anything mandatory here — did not mention `skills/` at all. Nothing
+loaded it, nothing validated it, nothing surfaced what it was holding. It was a
+contract with no counterparty.
+
+This repository has already learned that lesson once and written it down. From
+`bin/wiki-work`: outstanding work "was scattered across six files and two
+frontmatter flags, and every one of them relied on somebody remembering to
+look." A session that read four of the six was indistinguishable from one that
+read all six. `skills/` was the seventh such file, shipped the same week, with
+the same defect — and it is worse than the others, because a skill corpus nobody
+reads does not merely sit idle: it accumulates instructions that were never
+tested against a second reader, and the first agent to finally open it inherits
+them all at once with no way to tell which ones were ever true.
+
+WHAT THIS TOOL REFUSES TO LET DRIFT
+
+  * **INDEX.md is generated, not maintained.** It carried a `Status` column
+    duplicating each skill's `status:` frontmatter — two sources of truth for
+    one fact, which is the defect `WORK.md` exists to not have. `scan` writes
+    the table from the files; `check` fails when the committed file is not what
+    `scan` would write. There is nothing left to disagree.
+
+  * **A skill file that no index routes to is invisible**, and one routed with
+    no file behind it is a promise to load something that is not there. Both are
+    errors, in both directions, because the failure is silent either way.
+
+  * **A superseded skill that is still `active` is the dangerous case.**
+    `PROTOCOL.md` §6 forbids silently changing what a skill means, so a
+    replacement declares `supersedes:`. If the old file stays active, the router
+    hands an agent both, and the agent follows the one it reads first.
+
+  * **A promotion nobody recorded did not happen.** §6 requires every state
+    transition in `CHANGELOG.md`. A skill absent from it is an instruction that
+    entered the corpus with no dated account of why it should be believed.
+
+WHAT IT DELIBERATELY DOES NOT DO
+
+It does not judge whether a skill is *good*. `bin/wiki-plain audit` can referee
+prose because every rule it applies is arithmetic over two files; there is no
+equivalent arithmetic for "is this instruction true?" Validation here is
+evidence and a second occurrence, per `PROTOCOL.md` §3, and that needs a reader.
+This tool checks that the corpus is well-formed, routed, and accounted for — and
+then gets out of the way.
+
+Exit 0 = clean. 1 = an error. 2 = usage.
+"""
+import argparse
+import datetime
+import os
+import re
+import sys
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SKILLS = os.path.join(ROOT, "skills")
+INDEX = os.path.join(SKILLS, "INDEX.md")
+INBOX = os.path.join(SKILLS, "INBOX.md")
+CHANGELOG = os.path.join(SKILLS, "CHANGELOG.md")
+
+# The five files that are the subsystem's own furniture rather than skills.
+FURNITURE = {"README.md", "INDEX.md", "PROTOCOL.md", "INBOX.md", "CHANGELOG.md"}
+
+# `skills/registry/` is the capability database written by `bin/wiki-skills` —
+# JSONL, a JSON projection, per-model manifests and a README about all three. It
+# lives under `skills/` because it is the other half of the same subsystem, and
+# none of it is a skill file: walking into it made the gate demand frontmatter
+# from a README. The two tools share a directory and nothing else.
+NOT_SKILL_DIRS = {"registry"}
+
+# PROTOCOL.md §4 fixes this frontmatter. Every key is required: a skill with no
+# `triggers:` cannot be routed to, and one with no `validated:` date cannot be
+# told apart from one promoted on somebody's confidence.
+REQUIRED_KEYS = ("status", "scope", "triggers", "sources", "validated")
+
+# INDEX.md's own "Status meanings" section is the authority for this set.
+STATUSES = ("active", "provisional", "deprecated", "retired")
+
+# Routed to a session; the rest are history. Keeping deprecated out of the
+# routing table is the whole point of the distinction.
+ROUTED = ("active", "provisional")
+
+# PROTOCOL.md §4's skeleton. A file missing one of these is a note, not a skill:
+# `## Why` is what lets a later agent decide whether the reason still holds, and
+# `## Validation` is what separates an instruction from an opinion.
+REQUIRED_SECTIONS = ("## Instruction", "## Why", "## Validation")
+
+# Text lifted verbatim from the PROTOCOL §4 template or from `new`'s scaffold.
+# A file still carrying any of it was never actually written — and it still
+# parses, still routes, and is still handed to an agent as an instruction.
+#
+# `REPLACE` leads the list because it is what `cmd_new` writes into every field,
+# and it was missing here until a test caught it: `new` printed "the gate fails
+# until they are filled in" while the gate did no such thing. A scaffolder whose
+# promise the checker does not keep is worse than no scaffolder.
+SCAFFOLD = (
+    "REPLACE",
+    "Imperative, specific steps.",
+    "The failure mode or invariant.",
+    "Exact command, test, inspection, or observable condition.",
+    "Where the rule does not apply.",
+    "# Skill name",
+    "description of applicable work",
+    "file/path/or/incident",
+    "TODO",
+)
+
+DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+
+def read(path):
+    with open(path, encoding="utf-8", errors="replace") as fh:
+        return fh.read()
+
+
+def today():
+    return datetime.date.today().isoformat()
+
+
+def rel(path):
+    return os.path.relpath(path, ROOT)
+
+
+# ---------------------------------------------------------------------------
+# frontmatter
+#
+# A deliberately small YAML subset — scalars and `- ` lists — because the repo is
+# stdlib-only and because a skill needing more structure than this is a skill
+# that has stopped being one instruction.
+
+
+def frontmatter(text):
+    """Parse the leading `---` block. Returns (dict, error_or_None)."""
+    if not text.startswith("---"):
+        return {}, "no frontmatter block"
+    end = text.find("\n---", 3)
+    if end == -1:
+        return {}, "frontmatter block is never closed"
+    data, key = {}, None
+    for line in text[4:end].splitlines():
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        item = re.match(r"^\s+-\s*(.*)$", line)
+        if item and key:
+            value = item.group(1).strip().strip("\"'")
+            if value:
+                data.setdefault(key, []).append(value)
+            continue
+        pair = re.match(r"^([A-Za-z_][\w-]*):\s*(.*)$", line)
+        if not pair:
+            return data, "cannot parse frontmatter line %r" % line.strip()[:60]
+        key, value = pair.group(1), pair.group(2).strip()
+        if value in ("[]", "~", "null"):
+            data[key] = []
+        elif value.startswith("[") and value.endswith("]"):
+            data[key] = [v.strip().strip("\"'") for v in value[1:-1].split(",") if v.strip()]
+        elif value:
+            data[key] = value.strip("\"'")
+        else:
+            data[key] = []
+    return data, None
+
+
+def body_of(text):
+    if not text.startswith("---"):
+        return text
+    end = text.find("\n---", 3)
+    return text[end + 4:] if end != -1 else text
+
+
+class Skill:
+    def __init__(self, path):
+        self.path = path
+        self.slug = os.path.relpath(path, SKILLS).replace(os.sep, "/")
+        self.domain = self.slug.split("/")[0] if "/" in self.slug else ""
+        self.text = read(path)
+        self.meta, self.parse_error = frontmatter(self.text)
+        self.body = body_of(self.text)
+
+    def get(self, key, default=""):
+        return self.meta.get(key, default)
+
+    def as_list(self, key):
+        value = self.meta.get(key, [])
+        return value if isinstance(value, list) else [value]
+
+    @property
+    def status(self):
+        value = self.get("status", "")
+        return value if isinstance(value, str) else ""
+
+    @property
+    def title(self):
+        m = re.search(r"^#\s+(.+)$", self.body, re.M)
+        return m.group(1).strip() if m else self.slug
+
+    @property
+    def triggers(self):
+        return self.as_list("triggers")
+
+    @property
+    def routed(self):
+        return self.status in ROUTED
+
+
+def load():
+    """Every skill file on disk, sorted by slug. Furniture is not a skill."""
+    out = []
+    if not os.path.isdir(SKILLS):
+        return out
+    for base, dirs, files in os.walk(SKILLS):
+        dirs[:] = sorted(d for d in dirs if not d.startswith(".") and d not in NOT_SKILL_DIRS)
+        for name in sorted(files):
+            if not name.endswith(".md"):
+                continue
+            path = os.path.join(base, name)
+            if os.path.dirname(path) == SKILLS and name in FURNITURE:
+                continue
+            out.append(Skill(path))
+    return sorted(out, key=lambda s: s.slug)
+
+
+# ---------------------------------------------------------------------------
+# INDEX.md
+#
+# Generated in full, the way WORK.md is, and for the same stated reason: a table
+# that can be edited independently of the thing it describes is a table that can
+# lie. The prose below is part of the generated artifact — it is the routing
+# contract, and it belongs with the rows it governs.
+
+INDEX_HEADER = [
+    "# Skill Index",
+    "",
+    "_Generated by `bin/wiki-lessons scan`. **Do not hand-edit** — every row is read",
+    "from the skill files themselves, so an edit here is erased on the next scan and",
+    "`bin/wiki-lessons check` fails until it is. Change a skill's `status:` or",
+    "`triggers:` in its own file and rescan._",
+    "",
+    "Read this before non-trivial repository work. Load skills by trigger, not by",
+    "curiosity — `bin/wiki-lessons route \"<what you are about to do>\"` does the",
+    "matching for you.",
+    "",
+]
+
+INDEX_FOOTER = [
+    "",
+    "## Routing algorithm",
+    "",
+    "1. Identify the files, commands, workflows, and subsystems the task can affect.",
+    "2. Load every skill whose trigger intersects that surface.",
+    "3. Prefer the narrowest applicable skill first.",
+    "4. If no skill applies but the work teaches a reusable lesson, create an INBOX",
+    "   candidate after validation.",
+    "5. Do not treat absence from this index as permission to invent repository",
+    "   conventions.",
+    "",
+    "## Status meanings",
+    "",
+    "- **active** — validated and expected to be followed",
+    "- **provisional** — useful but not yet sufficiently validated; follow it and",
+    "  report whether it held",
+    "- **deprecated** — retained for history; do not use for new work",
+    "- **retired** — known wrong, obsolete, or superseded",
+    "",
+    "Only **active** and **provisional** skills are routed. The rest are listed",
+    "under History so that a retired instruction stays findable by the agent who",
+    "remembers being told it — deleting it would leave the memory with nothing to",
+    "correct it.",
+]
+
+
+def index_text(skills):
+    out = list(INDEX_HEADER)
+    routed = [s for s in skills if s.routed]
+    history = [s for s in skills if not s.routed]
+
+    out.append("## Routed (%d)" % len(routed))
+    out.append("")
+    if routed:
+        out.append("| Skill | Trigger | Status | Validated |")
+        out.append("|---|---|---|---|")
+        for s in routed:
+            triggers = "; ".join(s.triggers) or "—"
+            out.append("| `%s` | %s | %s | %s |" % (
+                s.slug, triggers.replace("|", "\\|"), s.status, s.get("validated", "—")))
+    else:
+        out.append("_No routed skills. Every instruction here is history._")
+    out.append("")
+
+    out.append("## History (%d)" % len(history))
+    out.append("")
+    if history:
+        out.append("| Skill | Status | Superseded by | Validated |")
+        out.append("|---|---|---|---|")
+        by_super = {}
+        for s in skills:
+            for target in s.as_list("supersedes"):
+                by_super.setdefault(target, []).append(s.slug)
+        for s in history:
+            heirs = ", ".join("`%s`" % h for h in by_super.get(s.slug, [])) or "—"
+            out.append("| `%s` | %s | %s | %s |" % (
+                s.slug, s.status, heirs, s.get("validated", "—")))
+    else:
+        out.append("_Nothing deprecated or retired yet._")
+
+    out.extend(INDEX_FOOTER)
+    return "\n".join(out).rstrip() + "\n"
+
+
+# ---------------------------------------------------------------------------
+# INBOX.md
+#
+# The inbox is prose by design — PROTOCOL §1 wants the reasoning preserved, not a
+# form filled in — so this reads only the two fields that carry obligation: the
+# heading's date and the `**Status:**` line.
+
+
+class Candidate:
+    def __init__(self, date, title, status):
+        self.date = date
+        self.title = title
+        self.status = status
+
+
+def inbox_candidates():
+    """Entries under `## Seed candidates` and any later section, minus the template."""
+    if not os.path.exists(INBOX):
+        return []
+    text = read(INBOX)
+    # The `## Entry template` section is documentation of the shape, not an entry.
+    body = re.split(r"^##\s+Seed candidates\s*$", text, maxsplit=1, flags=re.M)
+    body = body[1] if len(body) > 1 else re.sub(
+        r"^##\s+Entry template.*?(?=^##\s)", "", text, flags=re.M | re.S)
+    out = []
+    for block in re.split(r"^###\s+", body, flags=re.M)[1:]:
+        head = block.splitlines()[0].strip()
+        m = re.match(r"^(\d{4}-\d{2}-\d{2})\s*[—-]\s*(.+)$", head)
+        if not m:
+            continue
+        status = re.search(r"\*\*Status:\*\*\s*([A-Za-z |]+)", block)
+        value = status.group(1).strip().lower() if status else ""
+        # "inbox | provisional" in the template means either; a real entry picks one.
+        value = value.split("|")[0].strip() if "|" in value else value
+        out.append(Candidate(m.group(1), m.group(2).strip(), value))
+    return out
+
+
+# ---------------------------------------------------------------------------
+# check
+
+
+def check_one(s, skills, changelog, errors, warnings):
+    slugs = {x.slug for x in skills}
+
+    if s.parse_error:
+        errors.append("%s: %s" % (s.slug, s.parse_error))
+        return
+
+    for key in REQUIRED_KEYS:
+        if key not in s.meta:
+            errors.append("%s: frontmatter is missing `%s:` (PROTOCOL.md §4)" % (s.slug, key))
+        elif s.meta[key] == [] and key in ("triggers", "status", "scope", "validated"):
+            errors.append("%s: `%s:` is empty" % (s.slug, key))
+
+    if s.status and s.status not in STATUSES:
+        errors.append("%s: status %r is not one of %s" % (
+            s.slug, s.status, ", ".join(STATUSES)))
+
+    validated = s.get("validated", "")
+    if validated and isinstance(validated, str):
+        if not DATE.match(validated):
+            errors.append("%s: validated: %r is not a YYYY-MM-DD date" % (s.slug, validated))
+        elif validated > today():
+            errors.append("%s: validated: %s is in the future" % (s.slug, validated))
+
+    for section in REQUIRED_SECTIONS:
+        if not re.search(r"^%s\s*$" % re.escape(section), s.body, re.M):
+            errors.append("%s: missing required section `%s` (PROTOCOL.md §4)" % (
+                s.slug, section))
+
+    for phrase in SCAFFOLD:
+        if phrase in s.body:
+            errors.append("%s: unfilled scaffold text — %r is still in the file" % (
+                s.slug, phrase))
+
+    for target in s.as_list("supersedes"):
+        if target not in slugs:
+            errors.append("%s: supersedes: `%s`, which is not a skill file" % (
+                s.slug, target))
+
+    # The dangerous case: two live skills, one of which replaced the other, and a
+    # router that hands over both.
+    for other in skills:
+        if s.slug in other.as_list("supersedes") and s.routed:
+            errors.append(
+                "%s: superseded by `%s` but still routed as %s — mark it deprecated "
+                "or retired (PROTOCOL.md §6)" % (s.slug, other.slug, s.status))
+
+    if s.slug not in changelog and s.title not in changelog:
+        errors.append(
+            "%s: never named in CHANGELOG.md — PROTOCOL.md §6 requires every state "
+            "transition recorded with its date and reason" % s.slug)
+
+    if not s.as_list("sources"):
+        warnings.append("%s: no `sources:` — what evidence promoted this?" % s.slug)
+
+
+def cmd_check(_args):
+    errors, warnings = [], []
+    skills = load()
+
+    if not os.path.isdir(SKILLS):
+        print("ERROR skills/ does not exist")
+        return 1
+
+    changelog = read(CHANGELOG) if os.path.exists(CHANGELOG) else ""
+    if not changelog.strip():
+        errors.append("CHANGELOG.md is missing or empty")
+
+    for s in skills:
+        check_one(s, skills, changelog, errors, warnings)
+
+    # INDEX drift. Generated, so the check is exact rather than approximate.
+    if not os.path.exists(INDEX):
+        errors.append("INDEX.md does not exist — run `bin/wiki-lessons scan`")
+    else:
+        want, have = index_text(skills), read(INDEX)
+        if want != have:
+            errors.append(
+                "INDEX.md is out of step with the skill files — run "
+                "`bin/wiki-lessons scan` (it is generated; do not hand-edit it)")
+
+    if not skills:
+        warnings.append("no skill files at all — skills/ is furniture only")
+
+    for w in warnings:
+        print("WARN  %s" % w)
+    for e in errors:
+        print("ERROR %s" % e)
+
+    routed = sum(1 for s in skills if s.routed)
+    pending = [c for c in inbox_candidates() if c.status in ("inbox", "provisional")]
+    print("wiki-lessons: %d skill(s), %d routed, %d inbox candidate(s) — %d error(s), %d warning(s)"
+          % (len(skills), routed, len(pending), len(errors), len(warnings)))
+    return 1 if errors else 0
+
+
+# ---------------------------------------------------------------------------
+# scan / list / status / route / next / new
+
+
+def cmd_scan(_args):
+    skills = load()
+    text = index_text(skills)
+    before = read(INDEX) if os.path.exists(INDEX) else ""
+    with open(INDEX, "w", encoding="utf-8") as fh:
+        fh.write(text)
+    verb = "unchanged" if before == text else "rewritten"
+    print("wiki-lessons: INDEX.md %s — %d skill(s), %d routed"
+          % (verb, len(skills), sum(1 for s in skills if s.routed)))
+    return 0
+
+
+def cmd_list(_args):
+    skills = load()
+    if not skills:
+        print("wiki-lessons: no skills yet. `bin/wiki-lessons new repo/<slug>` starts one.")
+        return 0
+    domain = None
+    for s in skills:
+        if s.domain != domain:
+            domain = s.domain
+            print("\n%s/" % domain)
+        mark = {"active": "  ", "provisional": "? ", "deprecated": "~ ", "retired": "x "}
+        print("  %s%-34s %s" % (mark.get(s.status, "  "), s.slug, s.title))
+        for t in s.triggers:
+            print("      · %s" % t)
+    print()
+    return 0
+
+
+def cmd_status(_args):
+    skills = load()
+    counts = {}
+    for s in skills:
+        counts[s.status] = counts.get(s.status, 0) + 1
+    domains = {}
+    for s in skills:
+        domains.setdefault(s.domain, []).append(s)
+    print("skills/ — %d file(s) across %d domain(s)" % (len(skills), len(domains)))
+    for name in sorted(domains):
+        live = sum(1 for s in domains[name] if s.routed)
+        print("  %-12s %d skill(s), %d routed" % (name + "/", len(domains[name]), live))
+    print("  " + ", ".join("%d %s" % (n, k) for k, n in sorted(counts.items())))
+    candidates = inbox_candidates()
+    pending = [c for c in candidates if c.status in ("inbox", "provisional")]
+    print("INBOX — %d candidate(s), %d awaiting validation" % (len(candidates), len(pending)))
+    for c in pending:
+        print("  %s  %s  (%s)" % (c.date, c.title, c.status or "no status"))
+    return 0
+
+
+def cmd_route(args):
+    """Step 2 of the routing algorithm, run rather than remembered."""
+    task = " ".join(args.task).lower()
+    if not task:
+        print("wiki-lessons: describe the task, e.g. route \"edit bin/wiki-lint\"")
+        return 2
+    words = set(re.findall(r"[a-z0-9_./-]{3,}", task))
+    hits = []
+    for s in load():
+        if not s.routed:
+            continue
+        matched = set()
+        for trigger in s.triggers:
+            for token in re.findall(r"[a-z0-9_./-]{3,}", trigger.lower()):
+                if token in words or any(token in w or w in token for w in words):
+                    matched.add(trigger)
+        if matched:
+            hits.append((len(matched), s, sorted(matched)))
+    if not hits:
+        print("wiki-lessons: no skill matches that surface.")
+        print("  Absence from the index is not permission to invent a convention")
+        print("  (INDEX.md, routing algorithm step 5). If the work teaches something")
+        print("  reusable, add a candidate to skills/INBOX.md when you are done.")
+        return 0
+    hits.sort(key=lambda h: (-h[0], h[1].slug))
+    print("Load these before starting (narrowest first):\n")
+    for _, s, matched in hits:
+        print("  %s   [%s]" % (s.slug, s.status))
+        print("      %s" % s.title)
+        print("      matched: %s" % "; ".join(matched))
+    print()
+    return 0
+
+
+def cmd_next(_args):
+    pending = [c for c in inbox_candidates() if c.status in ("inbox", "provisional")]
+    provisional = [s for s in load() if s.status == "provisional"]
+    if not pending and not provisional:
+        print("wiki-lessons: nothing waiting — no unvalidated candidates, no provisionals.")
+        return 0
+    if pending:
+        print("INBOX candidates awaiting validation (PROTOCOL.md §3):\n")
+        for c in sorted(pending, key=lambda c: c.date):
+            print("  %s  %s  [%s]" % (c.date, c.title, c.status or "no status"))
+        print("\n  Promote when it has explained the same failure twice, a command")
+        print("  validates it, or a governing spec already implies it. Otherwise")
+        print("  leave it — an unvalidated instruction promoted early is worse than")
+        print("  one still in the inbox, because the index vouches for it.\n")
+    if provisional:
+        print("Provisional skills — follow them, then record whether they held:\n")
+        for s in provisional:
+            print("  %s  (validated %s)" % (s.slug, s.get("validated", "—")))
+        print()
+    return 0
+
+
+SCAFFOLD_TEXT = """---
+status: provisional
+scope: {scope}
+triggers:
+  - REPLACE — when this applies
+sources:
+  - REPLACE — the file, PR, or incident that taught it
+validated: {date}
+supersedes: []
+---
+
+# REPLACE — the instruction as a sentence
+
+## Instruction
+
+REPLACE — imperative steps, specific to this repository.
+
+## Why
+
+REPLACE — the failure this prevents, with the incident that showed it.
+
+## Validation
+
+REPLACE — the exact command or observable condition.
+
+## Known limits
+
+REPLACE — where this rule does not apply.
+"""
+
+
+def cmd_new(args):
+    slug = args.slug.strip("/")
+    if not slug.endswith(".md"):
+        slug += ".md"
+    if "/" not in slug:
+        print("wiki-lessons: a skill needs a domain — e.g. repo/%s" % slug)
+        return 2
+    path = os.path.join(SKILLS, *slug.split("/"))
+    if os.path.exists(path):
+        print("wiki-lessons: %s already exists — revise it, do not overwrite it" % slug)
+        print("  PROTOCOL.md §6: never silently change what a skill means.")
+        return 2
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write(SCAFFOLD_TEXT.format(scope=slug.split("/")[0], date=today()))
+    print("wiki-lessons: scaffolded %s" % rel(path))
+    print("  It is `provisional` and every field says REPLACE — the gate fails")
+    print("  until they are filled in. Then: record it in CHANGELOG.md with the")
+    print("  date and the reason, and run `bin/wiki-lessons scan`.")
+    return 0
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        prog="wiki-lessons", description=__doc__.splitlines()[0],
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = parser.add_subparsers(dest="cmd")
+    sub.add_parser("check", help="the gate")
+    sub.add_parser("scan", help="regenerate INDEX.md")
+    sub.add_parser("list", help="active skills by domain")
+    sub.add_parser("status", help="counts and the inbox backlog")
+    sub.add_parser("next", help="what is waiting for validation")
+    route = sub.add_parser("route", help="which skills a task must load")
+    route.add_argument("task", nargs="+")
+    new = sub.add_parser("new", help="scaffold a skill file")
+    new.add_argument("slug")
+    args = parser.parse_args()
+    handlers = {"check": cmd_check, "scan": cmd_scan, "list": cmd_list,
+                "status": cmd_status, "next": cmd_next, "route": cmd_route,
+                "new": cmd_new}
+    return handlers.get(args.cmd, cmd_list)(args)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

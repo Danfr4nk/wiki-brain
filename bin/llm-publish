@@ -1,0 +1,197 @@
+#!/usr/bin/env python3
+"""llm-publish — build the LLM-readable static export of the wiki (llm/).
+
+Purpose: give ANY LLM — including ones with no GitHub access, no auth, and
+no tool sophistication beyond "fetch a URL" — read access to the actual
+body content of every wiki page, via the same GitHub Pages deploy the
+repo already uses.
+
+Output (committed to the repo, served verbatim by Pages because .txt/.json
+bypass Jekyll's markdown pipeline):
+
+  llm/index.txt      the single entry-point URL to hand to a model:
+                     plain-text instructions + a manifest of every page
+                     with its absolute fetchable URL
+  llm/corpus.txt     the entire wiki in one plain-text file with page
+                     separators (for models that can take it in one gulp)
+  llm/manifest.json  machine-readable page list for capable agents
+  llm/pages/...      one .txt file per wiki page, mirroring wiki/ paths
+                     (raw markdown served as text/plain)
+
+Usage:
+  bin/llm-publish [--base-url URL]
+
+Run after any content pass and commit the llm/ diff alongside it —
+llm/ is generated-but-committed (unlike exports/, which stays local).
+"""
+import argparse
+import datetime
+import json
+import shutil
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+WIKI = ROOT / "wiki"
+OUT = ROOT / "llm"
+DEFAULT_BASE = "https://caakehorn.github.io/wiki-brain"
+
+SKIP_DIRS = {".obsidian"}
+
+
+def wiki_pages():
+    for p in sorted(WIKI.rglob("*.md")):
+        if any(part in SKIP_DIRS for part in p.parts):
+            continue
+        yield p
+
+
+def page_title(text, fallback):
+    for line in text.splitlines():
+        if line.startswith("# "):
+            return line[2:].strip()
+    return fallback
+
+
+def one_line_summary(text):
+    """First prose paragraph after the H1 (wrapped lines joined), trimmed."""
+    seen_h1 = False
+    in_fm = False
+    para = []
+    for i, line in enumerate(text.splitlines()):
+        s = line.strip()
+        if i == 0 and s == "---":
+            in_fm = True
+            continue
+        if in_fm:
+            if s == "---":
+                in_fm = False
+            continue
+        if s.startswith("# "):
+            seen_h1 = True
+            continue
+        if not seen_h1:
+            continue
+        if s and not s.startswith(("#", "|", ">", "-", "!", "[")):
+            para.append(s)
+            continue
+        if para:
+            break
+    if not para:
+        return ""
+    s = " ".join(para)
+    return (s[:157] + "...") if len(s) > 160 else s
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--base-url", default=DEFAULT_BASE)
+    args = ap.parse_args()
+    base = args.base_url.rstrip("/")
+
+    if not WIKI.exists():
+        print(f"Error: wiki directory not found at {WIKI}", file=sys.stderr)
+        return 1
+
+    if OUT.exists():
+        shutil.rmtree(OUT)
+    (OUT / "pages").mkdir(parents=True)
+
+    stamp = datetime.date.today().isoformat()
+    manifest = []
+    corpus_parts = []
+
+    for p in wiki_pages():
+        rel = p.relative_to(ROOT)              # wiki/people/annie-ulmer.md
+        rel_wiki = p.relative_to(WIKI)         # people/annie-ulmer.md
+        text = p.read_text(encoding="utf-8", errors="replace")
+        txt_rel = Path("pages") / rel_wiki.with_suffix(".txt")
+        dest = OUT / txt_rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_text(text, encoding="utf-8")
+        manifest.append({
+            "page": str(rel),
+            "title": page_title(text, rel_wiki.stem),
+            "summary": one_line_summary(text),
+            "url": f"{base}/llm/{txt_rel.as_posix()}",
+            "bytes": len(text.encode("utf-8")),
+        })
+        corpus_parts.append(
+            f"\n\n{'=' * 72}\nPAGE: {rel}\n{'=' * 72}\n\n{text}"
+        )
+
+    total_bytes = sum(m["bytes"] for m in manifest)
+    est_tokens = total_bytes // 4
+
+    corpus_header = (
+        f"WIKI-BRAIN FULL CORPUS EXPORT — generated {stamp}\n"
+        f"{len(manifest)} pages, ~{est_tokens:,} tokens.\n"
+        "This file concatenates every page of a personal wiki about Dan Frank.\n"
+        "Pages are separated by lines of = signs, each starting 'PAGE: <path>'.\n"
+        "Each page begins with YAML frontmatter (metadata) then markdown prose.\n"
+        "[[wiki/...]] is an internal link to another page in this same file.\n"
+    )
+    (OUT / "corpus.txt").write_text(
+        corpus_header + "".join(corpus_parts), encoding="utf-8"
+    )
+
+    (OUT / "manifest.json").write_text(
+        json.dumps(
+            {"generated": stamp, "base_url": base, "entry_point": f"{base}/llm/index.txt",
+             "corpus": f"{base}/llm/corpus.txt", "page_count": len(manifest),
+             "pages": manifest},
+            indent=1,
+        ),
+        encoding="utf-8",
+    )
+
+    # ---- index.txt — the one URL a human hands to any model ----
+    lines = [
+        "WIKI-BRAIN — LLM ACCESS POINT",
+        f"generated {stamp} · {len(manifest)} pages · full corpus ~{est_tokens:,} tokens",
+        "",
+        "WHAT THIS IS",
+        "A machine-readable export of a personal wiki (a 'second brain') that",
+        "documents one person: Dan Frank — biography, timeline, relationships,",
+        "psychology, work, interests, legal and health history. You (the model",
+        "reading this) have been pointed here so you can READ the wiki's actual",
+        "content. Everything is plain text. No auth, no API, no GitHub needed.",
+        "",
+        "HOW TO READ IT",
+        f"1. Everything at once: fetch {base}/llm/corpus.txt",
+        "   (all pages in one file — only if you can handle the token count above)",
+        "2. One page at a time: fetch any URL from the manifest below.",
+        "3. Machine-readable page list: fetch "
+        f"{base}/llm/manifest.json",
+        "",
+        "READING RULES",
+        "- Each page starts with YAML frontmatter (metadata), then markdown prose.",
+        "- [[wiki/domain/page]] is an internal wiki link; its content is at",
+        f"  {base}/llm/pages/domain/page.txt",
+        "- 'connections:' entries in frontmatter are typed, argued relationships",
+        "  between pages — treat each claim as a citable conclusion.",
+        "- Pages marked knowledge: earned contain reasoned conclusions;",
+        "  derived pages are mechanical summaries of source data.",
+        "- Start with self/overview and self/context-core for orientation;",
+        "  index pages (index.txt files) are navigation hubs per domain.",
+        "",
+        "PAGE MANIFEST (title | url | one-line summary)",
+    ]
+    cur_domain = None
+    for m in manifest:
+        domain = m["page"].split("/")[1] if len(m["page"].split("/")) > 2 else ""
+        if domain != cur_domain:
+            cur_domain = domain
+            lines.append("")
+            lines.append(f"--- {domain.upper()} ---")
+        summary = f" | {m['summary']}" if m["summary"] else ""
+        lines.append(f"{m['title']} | {m['url']}{summary}")
+    (OUT / "index.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+    print(f"llm-publish: {len(manifest)} pages -> llm/ "
+          f"(corpus ~{est_tokens:,} tokens, {total_bytes/1e6:.1f} MB)")
+    print(f"entry point: {base}/llm/index.txt")
+
+
+if __name__ == "__main__":
+    sys.exit(main())

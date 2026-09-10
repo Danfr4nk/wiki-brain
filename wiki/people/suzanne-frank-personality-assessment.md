@@ -1,0 +1,357 @@
+
+---
+domain: people
+page_type: profile
+title: "Suzanne Frank — Forensic Personality Assessment"
+aliases: ["Suz MBTI", "Suz Enneagram", "Suz personality type"]
+status: active
+knowledge: earned
+date_created: 2026-08-19
+date_modified: 2026-09-04
+importance: high
+tags: [personality-profile, forensic-analysis, ai-collaboration]
+infobox:
+  name: "Suzanne Frank"
+  sex: female
+  location: uniontown
+  relationship_to_dan: family
+  role: "mother; realtor"
+  known_for: "rank-2 correspondent in the corpus; this page is the typology read derived from her entity page"
+sources:
+  - "raw/self/dox-scan/all_imessages_complete_dump.txt"
+  - "raw/self/message-csv/imessage_7243228715_both_all_now.csv"
+synthesizes:
+  - wiki/people/suzanne-frank
+connections:
+  - page: wiki/people/suzanne-frank
+    type: instantiates
+    claim: "The forensic assessment of Suz's MBTI and Enneagram types is based on behavioral evidence from her 33,698-message corpus."
+---
+
+# Suzanne Frank — Forensic Personality Assessment
+
+> **RE-CHECKED [2026-09-04] — one new datum, and it cuts toward the
+> assessment rather than against it.** [[wiki/people/suzanne-frank]] gained a
+> section on her six messages naming Judge Fred Adams. **No scored dimension
+> here is affected.** Worth recording for a later pass: the 2018-11-05 message
+> asks a sitting judge and her son for money in the same breath, which is a
+> clean instance of whatever this page says about resource-seeking under
+> pressure — it is offered as an instance, not as a re-score, because one
+> message does not move an instrument.
+
+
+> **RE-CHECKED [2026-08-28]:** flagged stale against
+> [[wiki/people/suzanne-frank]] (2026-08-28), which added a March 2014
+> eviction of Alexis Armel from the household over a washing-machine
+> incident. No existing claim on this page is falsified, but this is
+> genuinely new material this assessment has not incorporated: a
+> boundary-enforcement act against a household member's romantic partner,
+> which this page's own "protector for her children" framing (below) does
+> not currently account for either direction (protecting Dan by removing a
+> disruptive presence, or asserting a boundary regardless of Dan's wishes).
+> Flagged as a real gap rather than integrated here — this page's own pass
+> should read the new material and decide which reading it supports, or
+> whether it complicates the existing framing.
+
+> **RE-CHECKED [2026-08-26]:** flagged stale against
+> [[wiki/people/suzanne-frank]] (2026-08-26), which gained a `RE-CHECKED`
+> blockquote confirming the fran-death-vigil closure-cluster finding doesn't
+> touch her caregiving or estate material. **No claim on this page is
+> affected.**
+
+> **RE-CHECKED [2026-08-22]:** flagged stale against
+> [[wiki/people/suzanne-frank]] (2026-08-22), which moved by a `RE-CHECKED`
+> blockquote adding one undocumented event — an April 2018 court summons for Dan
+> arriving at her address during the funeral week
+> ([[wiki/timeline/events/uniontown-hospital-vape-alarm]]). **No trait score,
+> instrument reading or behavioural exemplar on this page is affected**, because
+> the corpus records nothing she said or did about it; an assessment cannot move
+> on an event with no observed response. Nothing withdrawn.
+
+
+> **RE-CHECKED [2026-08-20]:** flagged stale against [[wiki/people/suzanne-frank]] (2026-08-20). That page gained a section on Coles targeting her again and Dan pre-emptively blocking Annie's number on her phone. Re-read against
+> the change; **no claim on this page is affected** and nothing here is
+> withdrawn. No trait claim here is affected; she is absent from the window as a participant.
+
+
+## MBTI Determination
+
+### Primary Type: ISTJ
+
+**Confidence: MODERATE**
+
+ISTJ (Introverted, Sensing, Thinking, Judging) is the most defensible MBTI type for Suzanne Frank based on behavioral evidence from the corpus. The determination is built from analyzing cognitive functions (Si, Te, Fi, Ne), evaluating each Enneagram type independently, and contrastive testing against the strongest alternatives.
+
+### Cognitive Function Stack
+
+1. **Dominant: Si (Introverted Sensing)** — Suz preserves detailed records of past transactions, compares current circumstances against precedent, and maintains practical continuity across decades. She tracks every financial exchange because she needs to know where she stands relative to what came before.
+2. **Auxiliary: Te (Extraverted Thinking)** — Suz gives direct, practical advice focused on measurable outcomes and operational effectiveness. She asks "does this work?" and provides step-by-step procedures for achieving concrete results.
+3. **Tertiary: Fi (Introverted Feeling)** — Suz has intense internal values about motherhood and family that guide her decisions. Her identity is deeply tied to being a provider and protector for her children.
+4. **Inferior: Ne (Introverted Intuition)** — Suz resists novelty and change, struggles to see alternative possibilities, and becomes anxious when facing uncertain futures. Her life is organized around known procedures and established patterns.
+
+### Evidence for Si (Dominant)
+
+**Detailed memory of financial transactions:**
+Suz keeps meticulous records of who owes what. The October 2018 ledger message is the clearest artifact: "Dan to Suzanne $1000 $14,000+ Sum of transactions on app Suzanne to Dan (past week) $450." This is not abstract record-keeping—it's a concrete, line-by-line accounting of specific amounts and specific dates.
+
+**Comparison against precedent:**
+Suz consistently references past events to interpret current ones. "I would never lose contact with either of your children the way it happened with your Dad and me and our parents." She uses her own childhood experience as a template for understanding her relationship with her children.
+
+**Preservation of reference points:**
+The house (337 Saratoga), the family, the past—these are the anchors of Suz's identity. When the house is sold, it's not just a financial event; it's the loss of a reference point that has organized her life for decades.
+
+**Practical continuity:**
+Suz has lived in the same area, worked in the same field, and maintained the same relationships for decades. She doesn't seek change; she seeks stability.
+
+**Concrete, specific language:**
+"I have $7 in there now." "I need $642 by the 23rd or my gas will be shut off." "I just need $20 so I can use my $80 free play." Every message is specific and concrete.
+
+### Evidence for Te (Auxiliary)
+
+**Direct, practical advice:**
+"You probably should WRITE DOWN on paper what you absolutely need each month and know that number. Then maybe set up auto bill pay through their accounts." This is not abstract theorizing—it's operational, step-by-step guidance designed to produce a concrete result.
+
+**Measurable outcomes:**
+"I've paid off almost all of my bills. I own a car now." Suz measures success in concrete, verifiable terms. She doesn't ask "how do I feel?"—she ask "what do I have?"
+
+**Procedures and systems:**
+"set up auto bill pay"—Suz creates systems to manage chaos. She understands that procedures produce results, and she implements them consistently.
+
+**Effectiveness orientation:**
+When Dan is sick, she brings medicine. When money is tight, she tracks every penny. When the house needs to be sold, she finds a buyer. She's focused on what works, not on what feels good.
+
+### Evidence for Fi (Tertiary)
+
+**Strong internal values about motherhood:**
+"I have loved you deeply since the day you were born... I would never lose contact with either of your children the way it happened with your Dad and me." This is not social expectation—it's a deeply held personal value that guides her behavior.
+
+**Identity tied to being a provider:**
+Suz's sense of self is built around taking care of her children. When she can't provide, she feels like a failure. The bankruptcy is not just a financial crisis—it's an identity crisis.
+
+**Emotional intensity about family:**
+The July 2019 letter is emotionally intense: "My feelings are TOTALLY VALID and the fact that you don't care, hurts deeply." She feels things deeply about her children and her role as a mother.
+
+**Personal moral boundaries:**
+Suz has clear lines about what is acceptable. She won't tolerate being disrespected or taken advantage of. She confronts when those lines are crossed.
+
+### Evidence for Inferior Ne
+
+**Resistance to novelty:**
+Suz doesn't seek change. She's been in the same area, same job, same lifestyle for decades. Change happens to her, not because she pursues it.
+
+**Difficulty seeing alternatives:**
+The bankruptcy was a result of not seeing alternatives until too late. Suz doesn't brainstorm options or consider multiple possibilities. She follows established patterns until they fail.
+
+**Anxiety about uncertainty:**
+Suz tracks every penny because she needs to know where she stands. Uncertainty is threatening. She manages it by controlling what she can measure.
+
+**Stuck in patterns:**
+The gambling, the drinking, the financial mismanagement—these are patterns that repeat across decades. Suz doesn't easily break patterns, even destructive ones.
+
+### Contrastive Testing: Why ISTJ Wins
+
+**ISTJ vs ESTJ:**
+Both use Si and Te, but ISTJ has Fi tertiary while ESTJ has Fi inferior. Suz's strong internal values about motherhood (Fi) are more consistent with ISTJ. She's not primarily driven by external effectiveness (Te dominant)—she's driven by internal security (Si dominant) and personal values (Fi tertiary).
+
+**ISTJ vs ISFJ:**
+Both have Si dominant, but ISFJ has Fe auxiliary while ISTJ has Te auxiliary. Suz gives direct, practical advice (Te) rather than harmonizing with others' feelings (Fe). She's confrontational about money, not conciliatory.
+
+**ISTJ vs ISTP:**
+Both have Si tertiary (wait, no—ISTP has Ti dominant, Se auxiliary, Ni tertiary, Fe inferior). Actually, ISTP has Ti-Se-Ni-Fe. Suz is clearly not Ti dominant—she doesn't analyze systems for their own sake. She's focused on practical outcomes, not logical consistency.
+
+**ISTJ vs INTJ:**
+INTJ has Ni dominant, Te auxiliary, Fi tertiary, Se inferior. Suz is clearly Si dominant, not Ni dominant. She doesn't synthesize patterns or see underlying trajectories. She deals with concrete specifics.
+
+### Disconfirming Evidence
+
+Suz sometimes displays what looks like Ne—generating alternatives or seeing possibilities. But this is usually in the context of financial crisis when she's forced to consider options. This is not natural Ne but rather stress-driven problem-solving. She doesn't enjoy brainstorming; she does it when she has to.
+
+Suz sometimes displays what looks like Fe—concern for others' feelings or relational harmony. But this is usually directed at her children and is more about maintaining relationships than about harmony for its own sake. She doesn't avoid conflict for the sake of harmony; she confronts when she feels threatened.
+
+### Nearest Alternatives Ranked
+
+1. **ESTJ** — Both Si-Te but ESTJ is more externally focused and organized. Suz is more internally focused on security.
+2. **ISFJ** — Both Si dominant but ISFJ has Fe concern for others' feelings. Suz is more confrontational and direct.
+3. **ISTP** — Both introverted and practical but ISTP analyzes systems while Suz tracks specifics.
+4. **INTJ** — Both introverted and organized but INTJ synthesizes patterns while Suz preserves details.
+
+## Enneagram Determination
+
+### Core Type: 6w7
+
+**Confidence: MODERATE**
+
+Type 6 with a 7 wing (The Loyalist with an Enthusiast wing) is the most defensible Enneagram type for Suz. The determination is built from analyzing core motivation, defense mechanisms, and behavioral experiments.
+
+### Core Motivation
+
+**Security and support.**
+
+Suz's behavior consistently prioritizes knowing where she stands, having reliable support systems, and being prepared for worst-case scenarios. She keeps detailed financial records because she needs security. She maintains relationships with her children because they are her support system. She tracks every penny because she needs to be prepared.
+
+### Core Fear
+
+**Being without support or guidance.**
+
+Suz's deepest fear is abandonment and loss of support. This is why she maintains such intense contact with her children. This is why the bankruptcy is so threatening—it's not just financial loss, it's the loss of the security she's built her life around.
+
+### Defense Mechanism
+
+**Externalization and counterattack.**
+
+Suz's primary defense is to externalize blame and counterattack when threatened. "You stole from me" (when she spent the money). "You have cost me since 2004." "You have no respect for me." She locates the cause of her problems outside herself and confronts directly.
+
+### Behavioral Experiments
+
+**What does Suz do when the thing she needs most is threatened?**
+
+When Suz's security is threatened (financial crisis, loss of the house, Dan's independence), she deploys one of three strategies:
+
+1. **Track and document:** Keep detailed records of who owes what. The October 2018 ledger is the clearest example.
+2. **Confront directly:** "I have the PayPal receipts from the $14,000 you stole from me." She doesn't hint or imply—she states.
+3. **Counterattack:** "You have cost me since 2004." She redirects blame to avoid facing her own role.
+
+These are all Type 6 strategies—seek certainty, test loyalty, confront threat.
+
+### Evidence for Type 6
+
+**Anxiety about security:**
+Suz tracks every penny because she needs to know where she stands. She doesn't tolerate financial uncertainty. The bankruptcy is her worst nightmare realized.
+
+**Loyalty to family:**
+Suz is loyal to her children above all else. "I would never lose contact with either of your children." This is not abstract principle—it's a core motivation that drives her behavior.
+
+**Testing reliability:**
+Suz tests Dan's reliability constantly. She asks for money, then tracks whether he sends it. She creates situations to see if he will come through for her. This is Type 6 testing behavior.
+
+**Worst-case simulation:**
+Suz always has a worst-case scenario in mind. The bankruptcy, the eviction, the loss of the house—she's been preparing for these possibilities for years.
+
+**Counterphobic expression:**
+Suz doesn't avoid conflict when she feels threatened. She confronts directly. "I have the PayPal receipts from the $14,000 you stole from me." This is counterphobic Type 6 behavior—dealing with anxiety by confronting it head-on.
+
+### Evidence for 7 Wing
+
+**Stimulus-seeking:**
+Suz gambles and drinks—both are forms of stimulation-seeking. She's not a pure 6 who avoids all risk; she seeks excitement within the bounds of her security needs.
+
+**Reframing:**
+"I have what my mother never will." Suz reframes her situation to make it more tolerable. She focuses on what she has, not what she's lost.
+
+**Future orientation (limited):**
+While Suz is primarily past-focused, she does have some future orientation—the desire for something better, the hope that things will improve. This is the 7 wing showing through.
+
+### Why Not Other Types
+
+**Type 2 (Helper):**
+Suz provides for her children, but she's not particularly helpful or nurturing. She's transactional about relationships. The ledger is the relationship model—she keeps score.
+
+**Type 8 (Challenger):**
+Suz is direct and intense, but her core motivation is security, not control. She confronts because she feels threatened, not because she seeks power for its own sake. She's reactive, not strategic.
+
+**Type 1 (Reformer):**
+Suz has internal standards about motherhood, but she's not focused on correctness or improvement. She's focused on survival, not on being right.
+
+**Type 3 (Achiever):**
+Suz is not focused on achievement, image management, or recognition. She's focused on security and stability.
+
+**Type 4 (Individualist):**
+Suz has emotional depth and identity struggles, but she's not focused on uniqueness or authenticity. She's focused on practical survival.
+
+**Type 5 (Investigator):**
+Suz conserves resources and tracks information, but she's not intellectually curious or autonomous. She's dependent on others for support.
+
+**Type 9 (Peacemaker):**
+Suz is not conflict-avoidant or merger-oriented. She confronts directly and doesn't seek harmony for its own sake.
+
+### Defense Mechanisms Analysis
+
+**Externalization:** Primary defense. "You stole from me" (when she spent the money). "You have cost me since 2004." She locates the cause of her problems outside herself.
+
+**Denial:** "I DID NOT INITIATE THOSE PAYMENTS." Suz denies her own role in financial transactions when confronted.
+
+**Rationalization:** "I have what my mother never will." She reframes her situation to make it more tolerable.
+
+**Compartmentalization:** She separates her gambling/drinking from her role as a mother. These are different compartments that don't interact.
+
+**Reaction formation:** "I would never lose contact with either of your children" (while simultaneously creating financial enmeshment that pushes them away).
+
+**Counterattack:** "You have cost me since 2004." When confronted, she redirects blame.
+
+### Relationship-Specific Personas
+
+**With Dan (son):**
+Suz is financially enmeshed, emotionally intense, and confrontational. She keeps detailed records of who owes what. She tests his reliability. She provides practical advice and material support. She's both supportive and demanding.
+
+**With Annie (daughter-in-law):**
+Suz is warm, supportive, and approving. She calls Annie his girlfriend before he uses the word himself. She builds Annie a purple hair chair. She's more harmonious with Annie than with Dan—possibly because Annie doesn't threaten her security the way Dan does.
+
+**With her mother (Diane):**
+Suz is hostile, defensive, and confrontational. "My mother is a shit." "My mother doesn't know what she's talking about." This is the relationship that formed her—the rejection she's spent her life trying to avoid repeating.
+
+**With Fran (grandmother):**
+Suz is loyal, devoted, and grieving. "She was the one and only guiding force in my life." Fran was the unconditional relationship that Suz never had with her own mother.
+
+These differences reveal adaptive layers around a stable core. The core is Si-Te: practical, detail-oriented, focused on security. The adaptations are context-specific—different personas for different relationships, but the same underlying cognitive functions.
+
+### Temporal Analysis
+
+**2015-2016 (relationship onset with Annie):**
+Suz is at her most active and engaged. She brokers the match, provides cocaine and a car, and builds a relationship with Annie. This is Si-Te in its engaged, practical form—making things happen in the material world.
+
+**2017-2018 (poverty floor and Fran's death):**
+Suz is under maximum stress. The $14,000 transfer, the ledger, the detailed record-keeping—this is Si-Te under pressure. She's tracking every penny because she needs to know where she stands.
+
+**2019-2020 (bankruptcy approach):**
+Suz is increasingly anxious and defensive. The gambling continues. The financial situation deteriorates. She's not seeing alternatives (inferior Ne)—she's following established patterns until they fail.
+
+**2021-2024 (coverage gap and recovery):**
+The corpus is thin, but Suz appears to be stabilizing. She stops gambling. She continues working. She's rebuilding security.
+
+**2025-2026 (bankruptcy and eviction):**
+Suz is in crisis. The house is sold. She moves to 463 Morgantown. She's lost her primary reference point. The August 2026 message—"It's time for you to go"—is the voice of someone who has lost everything and has nothing left to lose.
+
+### Summary
+
+**Suzanne Frank: ISTJ 6w7**
+
+The evidence most strongly supports ISTJ 6w7 because three independent behavioral systems repeatedly converge: the subject preserves detailed records of past transactions and compares current circumstances against precedent; gives direct, practical advice focused on measurable outcomes; and externalizes blame while counterattacking when security is threatened. The strongest competing hypothesis is ESTJ, but the corpus contains substantially more evidence for internally directed security-seeking than externally directed effectiveness. The strongest Enneagram evidence is not the subject's confrontational style itself, but the repeated use of documentation, testing, and counterattack as defenses against abandonment, uncertainty, and loss of support.
+
+### Confidence Rules Applied
+
+**MBTI: MODERATE**
+Evidence favors ISTJ but meaningful alternatives remain (ESTJ, ISFJ). The corpus is large but heavily context-dependent (financial crisis, single motherhood, family trauma). Suz's behavior under extreme stress may not reflect her natural preferences. Future passes should re-evaluate as new messages enter the corpus, particularly from non-crisis periods.
+
+**Enneagram: MODERATE**
+Evidence favors 6w7 but meaningful alternatives remain (Type 8, Type 2). The corpus is heavily weighted toward financial conflict, which may distort the core type. Suz's gambling and drinking may amplify 7 wing characteristics. Future passes should re-evaluate as new messages enter the corpus, particularly from stable periods.
+
+### Instinctual Stacking
+
+**Possible configuration: so/sp**
+
+The evidence weakly suggests so/sp for Suz:
+- **so (social) likely primary:** Suz is deeply embedded in her community—the family, the neighborhood, the local economy. She knows everyone and everyone knows her. Her identity is tied to her role in the social fabric (mother, realtor, neighbor). Her conflicts with Dan are often about social perception ("the optics would be bad").
+- **sp (self-preservation) likely secondary:** Suz is intensely focused on financial security, housing, and material survival. Her detailed financial tracking and her anxiety about losing the house are sp traits.
+- **sx (sexual/one-to-one) likely tertiary:** While Suz has intense relationships (with her children, with Fran), she doesn't seem driven by one-to-one fusion or intensity for its own sake. Her relationships are more about duty and social role than about passionate connection.
+
+**Alternative: sp/so** is possible if her financial anxiety is interpreted as primary rather than social embeddedness. The evidence is insufficient to strongly distinguish.
+
+### Trifix
+
+**Possible configuration: 6-2-9**
+
+The evidence weakly suggests a 6-2-9 trifix for Suz:
+- **6 core:** Anxiety, security-seeking, loyalty, testing, worst-case simulation.
+- **2 fix:** Helping, providing, earning love through usefulness. Suz's identity is built around being needed by her children. Her financial support (even when she can't afford it) is 2-style giving.
+- **9 fix:** Conflict avoidance (until she explodes), merging with others' agendas, difficulty identifying personal priorities. Suz's tendency to accommodate until she can't anymore, and her difficulty saying no to her children, suggest a 9 fix.
+
+**Alternative: 6-4-8** is possible if her emotional intensity and confrontational style are interpreted as 4 and 8 traits rather than 2 and 9. The evidence is insufficient to strongly distinguish.
+
+### Future Research Directions
+
+1. **Suz's own self-assessment:** If Suz ever takes an MBTI or Enneagram test and shares the result, this assessment should be updated accordingly.
+2. **Non-crisis periods:** The corpus is heavily weighted toward financial crisis. More data from stable periods would strengthen the assessment.
+3. **Additional conversational partners:** More data from Suz's interactions with people other than Dan (her mother, her sister, her coworkers) would provide additional evidence.
+4. **Longitudinal analysis:** As new messages enter the corpus, the assessment should be re-evaluated to determine whether the type holds across time and context.
+
+

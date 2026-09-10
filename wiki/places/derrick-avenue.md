@@ -1,0 +1,125 @@
+
+---
+domain: places
+page_type: entity
+title: "Derrick Avenue"
+aliases: ["Derrick", "Derrick Ave", "the derrick ave gang"]
+status: active
+knowledge: earned
+importance: normal
+date_created: 2026-08-23
+date_modified: 2026-08-23
+date_range_start: 2015-11-29
+date_range_end: 2025-08-07
+tags: [uniontown-era, family, relationships]
+sources:
+  - raw/self/dox-scan/all_imessages_complete_dump.txt
+  - raw/self/message-csv/imessage_2124702449_both_all_now.csv
+connections:
+  - page: wiki/places/117-belmont-circle
+    type: supplies
+    claim: "Derrick is the approach road to the Belmont Circle corner — 'the lower belmont x Derrick corner' — which makes it the physical artery serving the most causally dense address in the wiki and the adjacent Ulmer lot beside it."
+  - page: wiki/people/annie-ulmer
+    type: co-occurs
+    claim: "Forty-five uses across eleven years, the great majority of them a bare arrival signal — 'On Derrick', 'Just got on derrick' — make this the single most repeated piece of shared vocabulary between Dan and Annie that is not about the relationship."
+  - page: wiki/people/betherin-mechling
+    type: co-occurs
+    claim: "Dan's own phrase 'the derrick ave gang' is glossed in the same sentence as 'the whole ulmer/mechling crew', which is the corpus's only statement that the two families are one social unit anchored to one street."
+---
+
+# Derrick Avenue
+
+Derrick Avenue is a road in Uniontown, Pennsylvania that appears **forty-five
+times** in this corpus between November 2015 and August 2025 and has never had a
+page. It earns one for a reason that has little to do with geography: it is the
+**approach road to the Belmont Circle corner**, and therefore the artery serving
+both [[wiki/places/117-belmont-circle|Fran's house]] and the
+[[wiki/people/annie-ulmer|Ulmer]] lot a property line away from it — and for
+eleven years it functioned as the single most-used piece of shared vocabulary
+between Dan and Annie that is not about the relationship.
+
+## What it is, from the messages alone
+
+No source in `raw/` describes the street. Everything below is reconstructed from
+incidental mention, which is what makes it worth writing down:
+
+- **It meets Belmont.** *"Someone hit the stop sign on the lower belmont x Derrick
+  corner"* (2018-05-18); *"Belmont and Derrick are not bad. I could see the yellow
+  lines"* (2016-01-23).
+- **It runs past the country club.** *"Passing country club almost on derrick"*
+  (2018-05-28) — the same Uniontown Country Club fairway that
+  [[wiki/places/117-belmont-circle]] backs onto.
+- **It is reached from Route 43.** *"Just got on 43 text when i get on derrick and
+  when im pulling in"* (2019-06-08).
+- **It climbs.** *"snowmobiling up Derrick ave"* (2016-01-23), *"Walking up
+  Derrick"* (2025-03-13), and *"she said she can't push the stroller up Derrick"*
+  (2025-03-10).
+- **It is weather-critical and occasionally shut.** *"Derrick ave is closed"*
+  (2016-05-12); construction delays in August 2018; and a run of January 2016 snow
+  messages in which the whole question of whether anyone can get anywhere reduces
+  to whether Derrick is passable.
+- **Bailey Street is the way around it.** *"I went the back way out of hh and then
+  down Bailey so I didn't have to drive Derrick"* (2017-11-22) — sent the day
+  after *"They pulled us over on Derrick."*
+- **278 Derrick Ave burned** on 2020-09-21, reported by Suz.
+
+## The arrival protocol
+
+**More than twenty of the forty-five mentions are a bare position report**, and
+that is the finding. *"On Derrick."* *"Just got on derrick."* *"I'm on Derrick."*
+*"About to turn on Derrick."* *"Yeah I'm on Derrick."* They are sent by Dan, by
+Annie, by Suz and by at least one other contact (`+17249124645`), across ten
+years, and they carry no content beyond location.
+
+The protocol is made explicit once, and by somebody else: *"Just got on 43 text
+when i get on derrick and when im pulling in"* (2019-06-08). Derrick is the
+**penultimate waypoint** — the last landmark that means *nearly there*, sent so
+the person waiting knows to expect a door.
+
+This is the mundane detail that `STYLE_GUIDE` rule 1 exists to protect. A
+proximity beacon shared between four people for a decade is not obviously
+significant, and it is the kind of thing that turns out to be the third instance
+of a shape: [[wiki/mind/synthesis/spatial-behavior]] models Dan's movement as
+home-anchored with a 15.8 km radius of gyration, and this is what the inside of
+that radius sounds like in his own words.
+
+## "The derrick ave gang"
+
+The street's one moment of self-awareness is Dan's, writing to a third party on
+**2024-07-13**:
+
+> *"The whole ulmer/mechling crew was in Hilton head for the last week. Although,
+> that might not be news to you given your proximity to the derrick ave gang."*
+
+That sentence does two things this wiki has nowhere else. It treats the Ulmers
+and the [[wiki/people/betherin-mechling|Mechlings]] as **one social unit**, and it
+names that unit **by street**. The fifty-year adjacency that
+[[wiki/places/117-belmont-circle]] records as the thing both families read as fate
+is, in ordinary speech, just the address everybody already lives at.
+
+It is also written eight months after the relationship's terminal phase began, to
+somebody outside it, in a wry register that appears almost nowhere else in the
+2024–26 material.
+
+## The 2025 return
+
+After a five-year absence from the record — one mention in 2020, one in 2024 —
+Derrick reappears **nine times in 2025**, all from Annie's handle, and the content
+has changed. She is on foot now, with children: pushing a stroller up the hill,
+walking up, asking to be collected from the sidewalk, reporting stopped traffic.
+The street that was a driving waypoint for a decade becomes, in the last year, the
+route she walks [[wiki/people/alice]] and [[wiki/people/otto]] along.
+
+## Gaps
+
+1. **Street numbers.** Only one is recorded anywhere — 278, and only because it
+   caught fire. Which house is the Ulmers', and whether Fran's Belmont Circle lot
+   fronts Derrick or merely corners it, are both unresolved.
+2. **Whose houses.** *"I saw al coming down Derrick. Must have been at your moms"*
+   (2018-05-11) puts Dan's mother in the same orbit, but the corpus does not fix
+   which addresses on or off Derrick belong to whom in which years.
+3. **One false positive, excluded.** A 2025-06-08 message about *"my buddy in
+   Pittsburgh Derrick"* is a person, not the street, and is not counted in the
+   forty-five.
+
+

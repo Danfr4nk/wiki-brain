@@ -1,0 +1,128 @@
+# The backstop for the work list.
+#
+# `CLAUDE.md` makes draining `WORK.md` a required step of every session, which
+# covers the normal case: somebody is working in this repository, and the list is
+# in front of them. It does not cover a quiet week. The portal promises whoever
+# types into the question box that their question will be answered, and that
+# promise cannot depend on somebody happening to open the repo.
+#
+# So this wakes up on its own, checks whether anything is actually outstanding,
+# and only then starts a session. It opens a draft PR and never pushes to `main`:
+# an answer is published prose about a real person, and a human reads it before
+# the site does.
+#
+# ---- it ships inert, on purpose --------------------------------------------
+#
+# Without `ANTHROPIC_API_KEY` in the repository secrets, the drain step is
+# skipped and the run still passes — the same shape `caakehorn/home`'s deploy
+# uses for `HOME_PASSPHRASE`. A workflow that fails red every night because a
+# secret was never set is a workflow people learn to ignore, and the whole point
+# of this file is to be the thing that does not get ignored.
+#
+# The report step runs either way, so a run with no key still says out loud what
+# is outstanding rather than passing silently.
+name: Drain the work list
+
+on:
+  schedule:
+    # 09:00 UTC daily. Nothing here is urgent to the minute; what matters is that
+    # a parked question is never more than a day from being looked at.
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+  # Fired by the portal when somebody asks, so a question does not wait for the
+  # next scheduled run to be picked up.
+  repository_dispatch:
+    types: [sage-asked]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+# One drain at a time. Two sessions answering the same question would produce two
+# PRs writing the same files, and the second would be resolving conflicts against
+# the first for no reason.
+concurrency:
+  group: sage-drain
+  cancel-in-progress: false
+
+jobs:
+  drain:
+    runs-on: ubuntu-latest
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # What is outstanding, and is it worth starting a session for? Written to
+      # the step summary either way, so a run that does nothing still leaves a
+      # record of what it saw.
+      - id: work
+        name: Read the work list
+        run: |
+          chmod +x bin/wiki-work bin/wiki-lint bin/wiki-connect bin/wiki-climb
+          bin/wiki-work check | tee /tmp/work.txt
+          {
+            echo '## Outstanding work'
+            echo
+            echo '```'
+            cat /tmp/work.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          if grep -q 'no obligations outstanding' /tmp/work.txt; then
+            echo 'obligations=false' >> "$GITHUB_OUTPUT"
+          else
+            echo 'obligations=true' >> "$GITHUB_OUTPUT"
+          fi
+
+      # Nothing to do is the common case and is not a failure. Say so and stop
+      # rather than starting a session to be told the list is empty.
+      - name: Nothing outstanding
+        if: steps.work.outputs.obligations == 'false'
+        run: echo 'Nothing outstanding. Not starting a session.'
+
+      - name: Drain the top of the list
+        if: steps.work.outputs.obligations == 'true' && env.ANTHROPIC_API_KEY != ''
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # The protocol lives in CLAUDE.md, not here. This prompt only points at
+          # it — duplicating the ANSWER steps into a workflow file would give the
+          # repository two specifications of the same operation, and the one in
+          # the YAML would be the one nobody updates.
+          prompt: |
+            Run `bin/wiki-work next` and work the single item it names, following
+            the protocol CLAUDE.md gives for that item's operation exactly. Read
+            `CLAUDE.md` and `LLM_HANDOFF.md` first.
+
+            One item, fully. Do not start a second, and do not improvise a
+            different job because the named one looks hard — if you cannot
+            complete it, say why in the pull request body and leave it
+            outstanding rather than half-done.
+
+            For a parked `sage/` question, ANSWER is the operation, and the
+            standard is the part that matters: cite every claim, quote the record
+            directly with its date, state the answer's own strongest
+            counter-evidence, and say plainly where the corpus cannot settle the
+            question. `bin/mine-messages` over the message record, not grep.
+            Never quote a page named in the portal's `wiki.locks.json`.
+
+            Finish with `bin/wiki-work scan` and all three gates at 0 errors:
+            `bin/wiki-lint`, `bin/wiki-connect check`, `bin/wiki-climb check`.
+
+            Open a DRAFT pull request. Never push to main.
+          claude_args: '--max-turns 80'
+
+      - name: No key configured
+        if: steps.work.outputs.obligations == 'true' && env.ANTHROPIC_API_KEY == ''
+        run: |
+          echo 'Work is outstanding, but ANTHROPIC_API_KEY is not set on this'
+          echo 'repository, so the drain step was skipped. Add the secret to turn'
+          echo 'this on; until then the list is drained by whoever opens the repo.'
+          {
+            echo
+            echo '> `ANTHROPIC_API_KEY` is not set, so nothing was drained.'
+          } >> "$GITHUB_STEP_SUMMARY"

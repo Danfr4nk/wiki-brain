@@ -1,0 +1,143 @@
+---
+
+domain: people
+
+page_type: entity
+
+status: active
+
+knowledge: mixed
+
+date_created: 2026-07-20
+
+date_modified: 2026-07-20
+
+date_range_start: 2018-08-25
+
+date_range_end: 2020-02-13
+
+sources:
+
+- "raw/self/facebook/facebook-ihatedanfrank/messages/inbox/matthewpalermo_nkpz90-e_g/message_1.html"
+
+tags: [uniontown-era, grief, addiction-recovery]
+
+infobox:
+
+name: "Matthew Palermo"
+
+sex: male
+
+location: uniontown
+
+relationship_to_dan: acquaintance
+
+known_for: "Uniontown classmate whose brother relapsed and fatally overdosed after a long period clean; recipient of Dan's starkest opiate-epidemic self-assessment (\"a quarter of my graduating class isn't around anymore\")"
+
+connections:
+
+- page: wiki/people/lewis-strosnider
+
+type: co-occurs
+
+claim: "A Sept 22, 2018 message ('Got the mavic 2 yesterday') dates the purchase of the same DJI Mavic 2 Dan later tried and failed to sell to Lewis Strosnider — one thread confirms the drone's origin, the other its unresolved fate."
+
+- page: wiki/people/joe-oshnack
+
+type: parallels
+
+claim: "Both threads carry the same generational framing of the Uniontown opiate epidemic — 'the class of 06 was a real low point for humanity' to Joe (Aug 2018) and 'a quarter of my graduating class isn't around anymore' to Matthew (Feb 2020) — independent statements of the same scale claim eighteen months apart."
+
+- page: wiki/people/lewis-strosnider
+
+type: evidences
+
+claim: "A Sept 22, 2018 message to Matthew Palermo ('Got the mavic 2 yesterday') independently dates the drone's purchase, one day before the crash/repair saga that runs through this page begins."
+
+---
+
+# Matthew Palermo
+
+Matthew Palermo is a Uniontown-era acquaintance whose short, sparse
+
+Facebook thread (2018–2020) carries one genuinely heavy exchange: a
+
+February 13, 2020 conversation in which Dan, unprompted, tells Matthew
+
+he'd been thinking about Matthew's brother — and Matthew, without being
+
+asked, explains how he died.
+
+## The brother's death
+
+"I hope this doesn't bum you out but i was thinking about your brother
+
+today and he's one of the few that i really really miss," Dan opens,
+
+and Matthew — despite noting "we didn't get along" — answers plainly:
+
+his brother had been "clean for a long time," relapsed once after
+
+losing his living situation ("he lived away with a girl for a while and
+
+they got kicked out"), stayed one night at their parents' house alone
+
+for the first time in a long while, asked Matthew for a cigarette (a
+
+tell — "he only smoked when he was high") — and overdosed. Matthew:
+
+"I just ignored it and he ended up od'ing." Dan's response generalizes
+
+the loss into the corpus's starkest quantified statement of the
+
+Uniontown opiate epidemic's scale: "people in nyc are SHOCKED when they
+
+hear how many young people have died from opiates. they think that 'a
+
+lot' means 5 people... no, a quarter of my graduating class isn't
+
+around anymore... we have lost more friends at 30 than our parents have
+
+at 60."
+
+## Tyler, and revising old perceptions
+
+The same conversation carries a smaller, self-reflective story: Dan
+
+recalls disliking a mutual acquaintance, Tyler, from third grade through
+
+high school, then reconnecting with him years later alongside
+
+[[wiki/people/zachariah-harshman|Zach Harshman]] and being "SHOCKED how
+
+naturally funny he was" — a reminder, Dan says, "that i shouldn't rely
+
+on my perceptions of people that were formed when i was an absolute
+
+shithead." Matthew corroborates that Tyler "used to depend who he was
+
+around" but is "pretty much the same guy all the time finally" now —
+
+"you either loved him or hated him... about a 50/50 mix."
+
+## Corpus record
+
+| Metric | Value |
+
+|---|---|
+
+| Messages | ~70 (Facebook Messenger, both directions) |
+
+| Date range | 2018-08-25 – 2020-02-13 |
+
+| Defining content | The Feb 13, 2020 brother's-death and opiate-epidemic exchange |
+
+**Gaps:** the brother's first name and exact date of death; Matthew's
+
+current circumstances beyond the Feb 2020 update (house, HVAC/
+
+refrigeration trade, plans to relocate near the Outer Banks).
+
+---
+
+**Up:** [[wiki/people/index|People]]

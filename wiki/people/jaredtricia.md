@@ -1,0 +1,108 @@
+
+---
+domain: people
+page_type: entity
+status: closed
+date_created: 2026-06-23
+date_modified: 2026-07-14
+date_range_start: 2019-06-01
+date_range_end: 2020-06-28
+sources: ["raw/self/message-csv/MASTER_MESSAGES_DB_DUMP.csv", "raw/people/annie-ulmer/escort-messages-chatgpt-export-2025-08.md"]
+related: ["wiki/people/brian", "wiki/people/kelly-johansson", "wiki/people/trinity-st-clair", "wiki/people/annie-ulmer", "wiki/self/message-corpora/master-message-dump", "wiki/mind/psychosexual/orchestration-and-voyeurism", "wiki/mind/psychosexual/arrangement-history"]
+tags: [relationships, nyc-era]
+knowledge: earned
+infobox:
+  name: "Jaredtricia"
+  relationship_to_dan: unknown
+  first_contact: 2019-06-01
+  known_for: "Jared and Tricia were a married Gramercy-based couple who booked [[wiki/people/annie-ulmer|Annie]] twice in June 2019 as"
+connections:
+  - page: wiki/people/annie-ulmer
+    type: evidenced-by
+    claim: "Annie's 'Hazel' persona (the paid-provider identity behind the Jared/Tricia, Nabeel, and Jason threads) is the same alias documented across three independent 2019–2020 escort threads, one of which Dan personally impersonated her inside."
+---
+
+# Jared and Tricia
+
+Jared and Tricia were a married Gramercy-based couple who booked [[wiki/people/annie-ulmer|Annie]] twice in June 2019 as a paid participant in group encounters (`+16178710640`, 50 messages, June 1–23) — one of several 2019 data points on Annie working as a paid provider under the alias **"Hazel"** (confirmed by Dan, 2026-07-14; she also used "Lily Lush" and the joint Chaturbate handles "smashonistaa"/"sofvded"), advertised via what the couple calls "the Eros ad." The same "Hazel" persona appears in the separate [[wiki/people/brian]] thread from the same summer — the couple was, in parallel, also paying escorts [[wiki/people/kelly-johansson|Kelly Johansson]] and [[wiki/people/trinity-st-clair|Trinity St. Clair]] for group sessions of their own.
+
+## The two bookings
+
+**June 1, 2019 (first booking).** Jared and Tricia, out at a rooftop bar near their Gramercy hotel with their girlfriend, text asking if "Hazel" is available later that night, offer to meet for drinks first, and eventually settle on a straight booking: $1,000 for two hours, confirmed against "the Eros ad." They request a FaceTime call first to verify identity before sending an Uber, and note "Tricia, my wife, has lots of ideas for everyone" before asking if "the girls" can get started.
+
+**June 23, 2019 (second booking).** The couple reaches back out three weeks later from the same neighborhood, again proposing drinks first before "same situation (& agreement) at our apartment as last time." "Hazel" declines the pre-drinks portion; the booking proceeds anyway, with Tricia's separate number given as a backup contact and a closing aside that they were "hanging with random older women that live in our building."
+
+## August 2, 2019: the photo, and Dan wearing the "Hazel" voice
+
+A newly recovered Google Voice thread (2026-07-14, from a ChatGPT export
+Dan located and shared directly) picks the relationship up again in
+early August, on a new number, and this time captures both sides of the
+conversation — unlike the June bookings above, where only Jared/Tricia's
+side survives in the master export. "Hazel" opens with a check-in framed
+as a soft goodbye: a "bad experience" with an unrelated client had pushed
+her toward camming/webcam-only work, except for three regular clients she
+genuinely enjoyed — Jared and Tricia among them, "the first ones i
+contacted." They respond warmly, invite her over that night, and she
+declines (out of town for a wedding) but reopens the door for "the next
+few weeks."
+
+Inside that same conversation, "Hazel" — this side of the exchange
+confirmed by Dan (2026-07-14) to be **him writing as her, not Annie
+herself** — asks for something new: "i forgot to ask last time i saw you
+if i'd be allowed to get one or two of the pictures of the 'girl fun'
+from the first time we met? i'd keep it totally private and don't mind if
+you want to blur anything, but i totally totally understand if you don't
+want to. 😥 that was the most amazing experience it still works me up."
+Trish's reply is immediate and unguarded — "Ummm... Best night ever lol"
+— followed by an image. Dan/"Hazel" answers with "😍😍😍" and, at the end of
+the exchange, "thank you so much for the picture omg i love it 🖤🖤🖤."
+
+Asked directly why he'd stepped into Annie's persona for this specific
+message, Dan's own account was blunt: "or i wanted that picture." Nothing
+elaborate — a keepsake from the June encounter, obtained by writing to
+the couple in Annie's voice rather than his own, banking on the fact that
+Trish and Jared had no way to tell the difference between "Hazel" typing
+one week and "Hazel" typing the next. The same conversation shows the
+"vouch" mechanic already documented on [[wiki/people/trinity-st-clair]]:
+when Trish asks for a provider recommendation, "Hazel" names Trinity
+directly ("the only one i have personal experience with is trinity
+st.clair who is absolutely lovely but very expensive... i think she
+charged 1400 when i booked her" — a minor figure discrepancy against the
+$1,500 documented on Trinity's own page, plausibly just loose recall in a
+casual text).
+
+**The June 28, 2020 non-recognition.** Nearly a year later, "Hazel"
+reaches out one more time — "Hey Trish! If you guys are ever looking to
+set something up, please don't hesitate to call. would love to see you
+guys!" — and gets back only "Who is this?" followed six hours later by
+"????????". Whether this reflects Trish/Jared having moved on, blocked
+and re-added the number, genuinely forgotten a year-old provider, or
+something about the new number itself failing to read as familiar is not
+resolved in the thread; it's the last contact on record.
+
+## Corpus Dimensions
+
+| Metric | Value |
+|--------|-------|
+| Messages | 50 (June 2019 booking thread) + a separate Aug 2019 / Jun 2020 Google Voice thread |
+| Date range | 2019-06-01 to 2020-06-28 |
+| Direction | June thread unreliable in this export (marked "Received" throughout) — read as one-way (Jared/Tricia to "Hazel"). The August 2019 thread is two-sided, and at least the photo-request message is confirmed to be Dan writing as "Hazel," not Annie. |
+| Handle | +16178710640 (June bookings, messages self-prefixed with +12014639300); a separate Google Voice number by August 2019 |
+| Rate | $1,000 / 2 hours (per the June 1 booking) |
+
+## Gaps
+
+Whether further bookings occurred after the June 28, 2020 non-response is
+undocumented — the thread simply goes quiet. Which specific messages in
+the August 2019 thread beyond the photo request were Dan-as-"Hazel"
+versus genuinely Annie is not fully disambiguated; only the photo-request
+exchange has Dan's own direct confirmation. Whether Trish and Jared ever
+learned the "Hazel" they'd been recommending clients to and requesting
+photos from was, at least some of the time, not the woman they'd actually
+met is unknown.
+
+## Related
+
+[[wiki/people/brian]] · [[wiki/people/kelly-johansson]] · [[wiki/people/trinity-st-clair]] · [[wiki/people/annie-ulmer]] · [[wiki/self/message-corpora/master-message-dump]]
+
+

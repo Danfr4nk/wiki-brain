@@ -1,0 +1,237 @@
+---
+
+domain: mind
+
+page_type: dataset
+
+title: "Annual Message Volume: Dan vs. Suz"
+
+status: active
+
+knowledge: mixed
+
+date_created: 2026-08-26
+
+date_modified: 2026-09-04
+
+sources: []
+
+synthesizes:
+
+- wiki/people/suzanne-frank
+
+tags: [family, digital-footprint]
+
+chart:
+
+kind: line
+
+title: "Dan vs. Suz, messages sent per year"
+
+x: { label: "Year", type: category }
+
+y: { label: "Messages sent", type: number }
+
+series:
+
+- name: "Dan's messages"
+
+points:
+
+"2015": 281
+
+"2016": 2453
+
+"2017": 1850
+
+"2018": 3066
+
+"2019": 1891
+
+"2020": 1517
+
+"2021": 259
+
+"2023": 483
+
+"2024": 1206
+
+"2025": 1202
+
+"2026": 619
+
+- name: "Suz's messages"
+
+points:
+
+"2015": 267
+
+"2016": 2132
+
+"2017": 1866
+
+"2018": 4191
+
+"2019": 2426
+
+"2020": 1964
+
+"2021": 440
+
+"2023": 519
+
+"2024": 1818
+
+"2025": 2044
+
+"2026": 1204
+
+connections:
+
+- page: wiki/people/suzanne-frank
+
+type: evidenced-by
+
+claim: "The per-year volume table on that page is this chart's entire dataset: a fourteen-month reversal at the relationship's 2015-16 opening, then Suz permanently ahead from 2017, widening to roughly two-to-one by the record's end."
+
+---
+
+# Annual Message Volume: Dan vs. Suz
+
+> **RE-CHECKED [2026-09-04] — the premise gained material and the arithmetic is
+
+> untouched.** [[wiki/people/suzanne-frank]] gained a section on six dated
+
+> messages naming Judge Fred Adams, including her report of his death
+
+> (2020-05-24). **No volume figure on this page is affected** — the messages
+
+> were always in the corpus and always counted; what changed is that somebody
+
+> read six of them. Nothing withdrawn.
+
+> **RE-CHECKED [2026-08-28]:** flagged stale against
+
+> [[wiki/people/suzanne-frank]] (2026-08-28), which added a new
+
+> 2013–2014 eviction/concealment episode (Alexis Armel, the washing
+
+> machine). No message-volume figure this page draws on is touched. **No
+
+> claim on this page is affected.**
+
+[[wiki/people/suzanne-frank|Suz]]'s page already states the finding in
+
+prose — she outwrites Dan in every year but two, and the gap widens after
+
+2018 until she is sending twice what he does. Read as a chart rather than a
+
+table, the shape has a structure the prose doesn't foreground: a clean
+
+two-phase pattern with one hinge, not a gradual drift.
+
+## What the chart shows
+
+**Phase one (2015–2016): Dan ahead, narrowly.** In the relationship's first
+
+fourteen months — corpus start 2015-11-17 through the end of 2016 — Dan
+
+sends more than Suz in both years: 281 to 267 in the opening seven weeks,
+
+2,453 to 2,132 across all of 2016. Neither margin is large (5% and 13%
+
+respectively), but the direction is consistent across a full calendar year,
+
+which is long enough that it is not simply the volatility of a small
+
+partial-year sample.
+
+**The hinge (2017): a near-exact tie that resolves the other way.** 1,850
+
+to 1,866 — the closest year in the whole series, and the last year Dan is
+
+even competitive. From here the relationship's volume balance never returns
+
+to his favor.
+
+**Phase two (2017–2026): Suz ahead, and increasingly so.** Every year from
+
+2017 onward, Suz sends more, and the ratio climbs rather than holding
+
+steady: roughly 1.14:1 in 2018, widening past 1.5:1 by 2024–25 and reaching
+
+**1.94:1 in 2026** (619 to 1,204) — Suz is sending essentially two messages
+
+for every one of Dan's by the record's most recent year. 2018 is also the
+
+single largest year on either side (4,191 for Suz, 3,066 for Dan), which is
+
+the year [[wiki/people/fran-coldren|Fran]] died and the estate dispute
+
+opened — volume peaks for both of them at once, inside a widening gap
+
+rather than resetting it.
+
+## What this does and does not establish
+
+It establishes that the asymmetry is not a fixed disposition running the
+
+whole length of the relationship — it is a two-phase pattern with a
+
+specific pivot year (2017), and treating "she writes more" as true of the
+
+whole eleven-year record obscures that the first two years ran the other
+
+way.
+
+It does **not** establish why 2017 is the hinge. Suz's own page does not
+
+name a specific event dating to that year that would explain the reversal,
+
+and this page does not speculate one. It also does not establish whether
+
+the widening after 2018 tracks a specific cause (the estate dispute, her
+
+financial deterioration, the general drift of the relationship) or is
+
+simply what an already-reversed asymmetry does when nothing intervenes to
+
+correct it — both are consistent with the same numbers.
+
+## Falsifiers
+
+1. A message-content read of 2017 that shows the near-tie is driven by a
+
+single short-lived event (an argument, a crisis) rather than a genuine
+
+trend inflection — this would relocate the hinge to a different year or
+
+dissolve it into noise.
+
+2. A per-month breakdown of 2018–2020 showing the widening gap is flat or
+
+reversing rather than monotonic — the yearly aggregates here could hide
+
+a non-monotonic path that a coarser read would miss.
+
+## Gaps
+
+- No mechanism is proposed for the 2017 hinge; the message content around
+
+it has not been read specifically for this question.
+
+- 2021 and 2023 are partial years in the source table (to April; from
+
+August), which is why they sit lower than the surrounding years — this
+
+chart plots the partial-year totals as given rather than annualizing them,
+
+and a reader comparing bar heights across those two years against full
+
+years should account for that before drawing a conclusion from magnitude
+
+alone.
+
+---
+
+**Up:** [[wiki/mind/index|Mind]]

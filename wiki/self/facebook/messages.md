@@ -1,0 +1,96 @@
+
+---
+domain: self
+page_type: report
+status: active
+date_created: 2026-06-23
+date_modified: 2026-06-23
+sources: ["raw/self/facebook/facebook-ihatedanfrank/messages/"]
+related: ["wiki/self/facebook", "wiki/people/annie-ulmer", "wiki/mind/concepts/contact-gini", "wiki/mind/synthesis/attachment-trauma-bond", "wiki/self/message-corpora/master-message-dump", "wiki/timeline/events/timeline", "wiki/timeline/periods/2015-2016-annie-relationship-start", "wiki/mind/concepts/forensic-method", "wiki/mind/synthesis/totality-themes"]
+tags: [nyc-era, relationships, trauma-bond, family, digital-footprint]
+---
+
+# Facebook Messages (ihatedanfrank)
+
+## Overview
+403+ threads containing message_1.html (271 inbox, 128 filtered, 3 requests, legacy + your_messages + blocked). High volume social surface across 2007-2022. Export ~Sep 2022 snapshot.
+
+FB message export format: per-thread HTML with participants, timestamps, content, system events (video calls, theme changes, nickname sets, attachments). Many filtered as low-engagement or spam-adjacent.
+
+## Stats
+- Threads: 403 unique (message_1.html count)
+- Real signal: Concentrated in key nodes (Annie primary documented; golf, music, early NYC acquaintances)
+
+**Cross to iMessage corpora:** Annie FB thread parallels iMessage Annie handles (+1724 early / +2124 later) for attachment sequences. See [[wiki/self/message-corpora/master-message-dump]] (Annie 48k+ volume, contact gini). Ties periods genesis 2015-16 + collapse. FB as breadth (650 friends) vs depth. Forensic lens applies (see [[wiki/mind/concepts/forensic-method]]).
+- Noise floor: Spam/phishing (iPhone scams 2011, driver license/attachment phishing 2018-21), generic facebookuser_*, filtered heavy
+- Date range: 2011 (legacy sample) through 2021-22 (Annie/RJ samples); earlier likely truncated or low volume
+- Categories in export: inbox (core), filtered_threads, message_requests, legacy_threads (1), messenger_contacts_blocked, secret_conversations, your_messages.html
+
+## Key Samples (cleaned text extracts)
+
+### Annie Ulmer / Eggie (primary attachment node)
+inbox/anneulmer_suopdbnvqg/message_1.html
+
+### Ally Lubin (dark humor peripheral, 2013)
+See dedicated [[wiki/people/ally-lubin]]. inbox/alexandralubin_jnwin7cizw/message_1.html (Jul 5 2013 only; short banter/dark humor; see operating_manual cross).
+
+- "Getting on Q now" Oct 13 2021
+- "i'm outside at the hotspot waiting for menore" / "my phone is not charging" Oct 13 2021
+- "Eggie sent an attachment" Sep 2020
+- Reddit r/nycr4r link (Apr 2019)
+- "You set the nickname for Anne Ulmer to Eggie" Aug 20 2018
+- "IP Address: 174.140.71.3"
+- "i am wonewy"
+- "The video call ended. Duration: 23 seconds" Feb 2018
+- "I am peepy" / "Weally weally kute" / "Yowr kute" Jul 2017
+- "Where are you? I want out of here" / "And it really upset me" / target with mom & sister story (sister: "maybe you should move back home with mom and dad") Jul 2017
+- "Just got back" / "I'm home"
+- "You changed the chat theme"
+
+Intimate, logistical, affectionate (baby talk), conflict disclosure, NYC daily. Direct 2017-2021 window on relationship. Matches profile "since Nov 28 2015".
+
+### RJ Ritchey (golf + politics)
+- See dedicated [[wiki/people/rj-ritchey]].
+- Golf/country club talk 2021-22: "We were playing the country club about a month ago...", "I just showed my dad this", "Lmao I found all of our slow motion footage", "I’m thinking about coming back for a few months and caddying for the summer. Would you ask your dad if he could get me in the door at Laurel Valley?"
+- Politics: "I feel like I'm far from falling for that or any other mainstream political bullshit... I'd rather know the truth and find a higher meaning in life than to be ignorant and a willing pawn"
+- Dan: "yeah dude i just think it's such an important time to make sure people don't fall for this right wing bullshit."
+- "Didn't know you were doing TikTok", missed call Apr 2021
+
+### Marc Charles (golf 2018)
+- "tiger was on some franko customs before he made the jump to taylormade"
+- "nothing worse than an aggressively competitive amateur golfer"
+- "the only reason i turned my 90's into 85's is that i was able to buy new clubs"
+- "it's fucking HARD to level up at our skill level"
+- "low ball joe"
+
+### Other real/short
+- Sean Teets: "Mushys and k", Nintendo Switch Zelda sale 200$, "looking for tax or strpz"
+- Charles Davenport 2010 (NYC move era): "how everything n the nyc?", "im here...wats your #", "i'm in need of another run down there"
+
+### Spam / Noise
+- Legacy 2011 (emilydeanna...): "hello, because you are also a close friend of EJ I am going to tell you exactly what I discovered. that website ... is giving away an iPhone5 ... hurry up before they close it."
+- Rick Hamborsky (requests): repeated suspicious attachments (keqingsong / mxgpujv domains) + "Your drivers license is at UCC" 2018-2021
+
+## Analysis
+**Volume vs. Depth:** 400+ threads = broad social footprint (aligns friends ~650). Exported visible depth low. Real conversations short/logistical or scene-based (golf, music, early NYC). Annie thread is the richest preserved attachment record.
+
+**Theorizing links:**
+- **Contact-gini:** High node count, low sustained depth in most threads. Peripheral ties abundant; primary fidelity low except key (Annie).
+- **Attachment model:** Digital messaging as low-stakes tether/safe ambiguity layer. Baby talk + logistics + disclosure in Annie vs. spam as attention noise. Possible filter/privacy effect.
+- **Forensic / lossless:** Even spam archived. Full graph as data for later analysis.
+- **Persona:** Short, staccato, sometimes typo-laden ("wonewy", "kute") matches core comms style (ellipsis, fragmented). Ironic armor softens in private Annie channel.
+- **Periods:** 2010 NYC threads (move), 2017-21 Annie peak, 2018-22 golf/Pittsburgh re-engagement + politics.
+
+Cross to main [[wiki/self/facebook]], [[wiki/mind/concepts/contact-gini]], [[wiki/mind/concepts/attachment-model]], [[wiki/people/annie-ulmer]], master message corpora.
+
+## Sources
+raw/self/facebook/facebook-ihatedanfrank/messages/* (inbox, filtered, requests, legacy). Python re + html clean extracts 2026-06-23.
+
+## Related
+[[wiki/self/facebook]]
+[[wiki/people/annie-ulmer]]
+[[wiki/mind/synthesis/attachment-trauma-bond]]
+[[wiki/mind/concepts/contact-gini]]
+[[wiki/self/message-corpora/master-message-dump]]
+
+

@@ -1,0 +1,766 @@
+#!/usr/bin/env python3
+"""Mechanical lint for the personal wiki. Exits 1 if errors found.
+
+Checks: frontmatter presence/fields, status vocabulary, broken wikilinks,
+orphan pages, oversized pages/indexes, sources that don't exist on disk.
+"""
+import os, re, sys, glob, json
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+WIKI = os.path.join(ROOT, "wiki")
+VALID_STATUS = {"active", "stable", "stub", "closed", "archived"}
+VALID_DOMAIN = {"self", "timeline", "people", "mind", "work", "interests", "health", "places", "legal", "meta"}
+VALID_TYPE = {"entity", "event", "concept", "period", "summary", "synthesis", "profile", "report", "chat", "note", "index", "dataset", "journey"}
+VALID_CHART_KIND = {"line", "bar", "grouped-bar", "area", "scatter"}
+VALID_KNOWLEDGE = {"earned", "derived", "mixed"}
+VALID_TAGS = {
+    "relationships", "trauma-bond", "infidelity", "attachment", "family",
+    "addiction-recovery", "mental-health", "physical-health", "grief",
+    "legal", "dui", "financial-stress", "housing", "career",
+    "music-production", "personality-profile", "ideology", "politics",
+    "forensic-analysis", "ai-collaboration", "digital-footprint",
+    "uniontown-era", "nyc-era", "pets", "non-monogamy", "future",
+    "language", "taste", "vocabulary",
+    "behavioral-change", "boundaries", "intensity", "trust", "consistency",
+}
+PAGE_BUDGET = 40 * 1024   # advisory only — see STYLE_GUIDE.md substance rule 4;
+                          # depth is the standing directive, never trim to clear this
+INDEX_BUDGET = 8 * 1024
+MASTER_INDEX_BUDGET = 5 * 1024
+
+errors, warnings = [], []
+
+def fm_parse(text):
+    m = re.match(r"^---\n(.*?)\n---\n", text, re.S)
+    if not m:
+        return None
+    fm = {}
+    for line in m.group(1).splitlines():
+        kv = re.match(r"^(\w[\w_]*):\s*(.*)$", line)
+        if kv:
+            fm[kv.group(1)] = kv.group(2).strip()
+    return fm
+
+
+# --------------------------------------------------------------------- helpers
+# Kept as free functions with no globals so tests/test_lint_gates.py can import
+# them directly (see that file for the cases each one is expected to survive).
+
+CORRECTION_MARKERS = (
+    "CORRECTED", "RETRACTED", "REVISED", "RE-CHECKED",
+    "CONTRADICTION", "GAP CLOSED", "RESOLVED", "ADDED",
+)
+
+# A *bolded* correction word is a deliberate marker even in lowercase
+# ("the rate is **retracted**" in a table cell). Bare lowercase prose is NOT a
+# marker — "the figure was revised upward" must not blind the gate — so the
+# bold delimiters are load-bearing here, not decoration.
+BOLD_MARKER_RE = re.compile(r"\*\*[^*]{0,40}(?:retracted|corrected|superseded)[^*]{0,40}\*\*", re.I)
+
+
+def duplicate_top_level_keys(fm_text):
+    """Yield (key, first_line_no, count) for top-level keys defined more than once.
+
+    Only column-0 `key:` lines count. Indented lines, list items and the bodies of
+    block scalars (`key: |` / `key: >`) are skipped, so nested mappings and
+    embedded prose containing colons do not false-positive. Line numbers are
+    1-based within the frontmatter block.
+    """
+    seen, order, in_block = {}, [], False
+    key_re = re.compile(r"^(\w[\w_]*)\s*:(.*)$")
+    for i, line in enumerate(fm_text.splitlines(), start=1):
+        if not line.strip():
+            continue
+        indented = line[:1] in (" ", "\t")
+        if in_block:
+            if indented:
+                continue
+            in_block = False
+        if indented or line.lstrip().startswith(("- ", "#")):
+            continue
+        m = key_re.match(line)
+        if not m:
+            continue
+        key, rest = m.group(1), m.group(2).strip()
+        if rest in ("|", ">", "|-", ">-", "|+", ">+"):
+            in_block = True
+        if key not in seen:
+            seen[key] = [i, 0]
+            order.append(key)
+        seen[key][1] += 1
+    for key in order:
+        first, count = seen[key]
+        if count > 1:
+            yield key, first, count
+
+
+def validate_dataset_chart(fm_text):
+    """Check a `page_type: dataset` page's `chart:` block against STYLE_GUIDE.md.
+
+    Returns a list of error strings (empty if the block is well-formed). Only
+    called when `page_type` is `dataset`; every other page is exempt. The
+    checks are structural — presence and shape — not numeric: nothing here can
+    confirm the plotted values are correct, only that a renderer has something
+    parseable to work with. `fm_text` is the raw frontmatter block (the text
+    between the `---` fences, as `fm_match.group(1)` gives it).
+    """
+    errors = []
+    chart_block = re.search(r"^chart:\s*\n((?:[ \t]+.*\n?)*)", fm_text, re.M)
+    if chart_block is None:
+        return ["page_type=dataset requires a chart: block (kind, title, series)"]
+    cb = chart_block.group(1)
+    kind_m = re.search(r"^\s*kind:\s*(\S+)", cb, re.M)
+    if not kind_m:
+        errors.append("chart: block missing required 'kind'")
+    elif kind_m.group(1) not in VALID_CHART_KIND:
+        errors.append(f"chart.kind '{kind_m.group(1)}' invalid — one of {sorted(VALID_CHART_KIND)}")
+    if not re.search(r"^\s*title:\s*\S", cb, re.M):
+        errors.append("chart: block missing required 'title'")
+    series_names = re.findall(r"^\s*-\s*name:\s*\S", cb, re.M)
+    if not series_names:
+        errors.append("chart: block needs series: as a list with at least one named series")
+    points_blocks = re.findall(r"points:\s*\n((?:[ \t]+\S.*\n?)*)", cb)
+    if series_names and not any(pb.strip() for pb in points_blocks):
+        errors.append("chart series has no non-empty points: map")
+    return errors
+
+
+def validate_journey_stops(fm_text, page_exists):
+    """Check a `page_type: journey` page's `journey:` block against STYLE_GUIDE.md.
+
+    Returns a list of error strings (empty if well-formed). Only called when
+    `page_type` is `journey`. A journey is a curated, narrated sequence of
+    existing pages — the `journey.stops:` block is the machine-readable form
+    a future renderer (e.g. the portal) can walk without re-parsing prose,
+    mirroring how `chart:` serves `page_type: dataset`. `page_exists` is a
+    callable(rel_wiki_path) -> bool, so this stays a pure function testable
+    without touching disk.
+    """
+    errors = []
+    block = re.search(r"^journey:\s*\n((?:[ \t]+.*\n?)*)", fm_text, re.M)
+    if block is None:
+        return ["page_type=journey requires a journey: block (stops: with page + note each)"]
+    jb = block.group(1)
+    stop_pages = re.findall(r"^\s*-\s*page:\s*(\S+)", jb, re.M)
+    if len(stop_pages) < 3:
+        errors.append("journey: block needs stops: as a list with at least 3 stops")
+    notes = re.findall(r"^\s*note:\s*\S", jb, re.M)
+    if len(notes) < len(stop_pages):
+        errors.append("every journey stop needs a note: explaining why it's on this journey")
+    for pg in stop_pages:
+        if not page_exists(pg):
+            errors.append(f"journey stop page not found: {pg}")
+    return errors
+
+
+def quarantine_mask(text):
+    """Per-line booleans: True where a retracted claim would be a LIVE assertion.
+
+    Three kinds of region are quarantined, matching the three ways the corpus
+    actually documents a correction (STYLE_GUIDE rule 9 plus observed practice):
+
+      1. a blockquote run carrying a marker  -> `> **CORRECTED [date]:** ...`
+      2. a heading carrying a marker         -> `## RE-CHECKED [2026-08-18]`,
+         quarantined until the next heading of the same or higher level
+      3. a single line carrying a marker     -> a table cell noting the figure
+         `is **retracted**`
+
+    Anything else is live. Widening this set is how the gate goes blind, so a
+    new form belongs here only with a real page that needs it.
+    """
+    lines = text.splitlines()
+    live = [True] * len(lines)
+    heading_re = re.compile(r"^(#{1,6})\s")
+
+    def marked(chunk):
+        return any(mark in chunk for mark in CORRECTION_MARKERS) or bool(
+            BOLD_MARKER_RE.search(chunk)
+        )
+
+    # 2. heading-scoped regions
+    open_level = None
+    for i, line in enumerate(lines):
+        h = heading_re.match(line)
+        if h:
+            level = len(h.group(1))
+            if open_level is not None and level <= open_level:
+                open_level = None
+            if open_level is None and marked(line):
+                open_level = level
+                live[i] = False
+                continue
+        if open_level is not None:
+            live[i] = False
+
+    # 1. blockquote runs
+    i = 0
+    while i < len(lines):
+        if lines[i].lstrip().startswith(">"):
+            j = i
+            while j < len(lines) and lines[j].lstrip().startswith(">"):
+                j += 1
+            if marked("\n".join(lines[i:j])):
+                for k in range(i, j):
+                    live[k] = False
+            i = j
+        else:
+            i += 1
+
+    # 3. self-marking single lines
+    for i, line in enumerate(lines):
+        if marked(line):
+            live[i] = False
+
+    return live
+
+
+def load_retractions(path, errors):
+    """Parse the fenced ```json blocks in RETRACTED.md into validated entries.
+
+    A malformed ledger is a hard error rather than a silent no-op: a retraction
+    gate that quietly stops running is the failure mode this whole file exists
+    to prevent.
+    """
+    if not os.path.exists(path):
+        return []
+    with open(path, encoding="utf-8", errors="replace") as fh:
+        raw = fh.read()
+    entries = []
+    for block in re.findall(r"^```json\n(.*?)^```", raw, re.S | re.M):
+        try:
+            entry = json.loads(block)
+        except json.JSONDecodeError as e:
+            errors.append(f"RETRACTED.md: malformed json block ({e}) — retraction gate cannot run")
+            continue
+        missing = [f for f in ("id", "claim", "patterns", "replacement") if not entry.get(f)]
+        if missing:
+            errors.append(f"RETRACTED.md: entry missing required field(s) {missing}")
+            continue
+        compiled = []
+        for pat in entry["patterns"]:
+            try:
+                compiled.append(re.compile(pat, re.I))
+            except re.error as e:
+                errors.append(f"RETRACTED.md [{entry['id']}]: invalid regex {pat!r} ({e})")
+        if not compiled:
+            continue
+        entry["_compiled"] = compiled
+        entries.append(entry)
+    return entries
+
+
+# Files that are empty by design and are not evidence.
+STRUCTURAL_FILES = {".gitkeep", ".gitignore", ".DS_Store"}
+
+
+def find_empty_raw_files(root):
+    """Repo-relative paths under raw/ that exist but carry no data rows.
+
+    Zero bytes, or a single non-blank line (a CSV header with no records).
+    Structural placeholders are excluded — they are not cited as sources.
+    """
+    raw_dir = os.path.join(root, "raw")
+    found = set()
+    if not os.path.isdir(raw_dir):
+        return found
+    for dirpath, _dirs, files in os.walk(raw_dir):
+        for fname in files:
+            if fname in STRUCTURAL_FILES:
+                continue
+            fpath = os.path.join(dirpath, fname)
+            try:
+                size = os.path.getsize(fpath)
+            except OSError:
+                continue
+            if size == 0:
+                found.add(os.path.relpath(fpath, root))
+            elif size < 4096 and fname.lower().endswith((".csv", ".tsv", ".json", ".txt", ".md")):
+                try:
+                    with open(fpath, encoding="utf-8", errors="replace") as f:
+                        body = f.read()
+                except OSError:
+                    continue
+                if len([l for l in body.splitlines() if l.strip()]) <= 1:
+                    found.add(os.path.relpath(fpath, root))
+    return found
+
+
+def raw_basename_index(root):
+    """basename -> [repo-relative paths]. raw/ has thousands of colliding
+    basenames (0.html, 1.html, exported jpgs), so a bare filename citation can
+    never be resolved by name alone."""
+    raw_dir = os.path.join(root, "raw")
+    index = {}
+    if not os.path.isdir(raw_dir):
+        return index
+    for dirpath, _dirs, files in os.walk(raw_dir):
+        for fname in files:
+            index.setdefault(fname, []).append(
+                os.path.relpath(os.path.join(dirpath, fname), root)
+            )
+    return index
+
+
+def frontmatter_sources(text):
+    """Citations listed under `sources:` in frontmatter, in order.
+
+    Only the frontmatter block is read: prose may name a file without citing it.
+    """
+    m = re.match(r"^---\n(.*?)\n---\n", text, re.S)
+    if not m:
+        return []
+    out, collecting = [], False
+    for line in m.group(1).splitlines():
+        if re.match(r"^sources\s*:", line):
+            collecting = True
+            continue
+        if collecting:
+            if line[:1] not in (" ", "\t", "-") or not line.strip():
+                if re.match(r"^\w[\w_]*\s*:", line):
+                    break
+            item = re.match(r"^\s*-\s*(.+?)\s*$", line)
+            if item:
+                out.append(item.group(1).strip().strip("\"'"))
+            elif line.strip() and not line[:1].isspace():
+                break
+    return out
+
+
+def find_corrupt_text(text):
+    """Return [(line_no, message)] for junk that no other gate sees.
+
+    Two classes, both of which have reached main and been published into
+    llm/corpus.txt before anyone noticed by eye:
+
+      1. Unresolved merge-conflict markers. Two sat on main in
+         annie-read-notes.md and annie-record.md, the second hiding a
+         duplicated entry whose two copies differed.
+      2. Assistant citation artifacts: private-use codepoints (U+E000-U+F8FF)
+         wrapping a 'filecite'/'turn' reference. Invisible in most editors,
+         survive copy-paste, and assert a source that points nowhere.
+    """
+    out = []
+    lines = text.split("\n")
+    for i, line in enumerate(lines, 1):
+        if line.startswith("<<<<<<<") or line.startswith(">>>>>>>") or line.rstrip() == "=======":
+            out.append((i, f"unresolved merge-conflict marker {line.strip()[:12]!r} — "
+                           f"resolve the conflict; a page carrying one is never correct"))
+    pua = sorted({c for c in text if 0xE000 <= ord(c) <= 0xF8FF})
+    if pua:
+        line_no = next((i for i, line in enumerate(lines, 1)
+                        if any(0xE000 <= ord(c) <= 0xF8FF for c in line)), 1)
+        codes = ", ".join(hex(ord(c)) for c in pua)
+        out.append((line_no, f"private-use codepoint(s) {codes} — assistant citation "
+                             f"artifact or paste corruption; strip them (they render as "
+                             f"nothing and assert a source that does not exist)"))
+    return out
+
+
+def strip_code(text):
+    """Blank out fenced blocks and inline code spans, preserving offsets.
+
+    A wikilink inside backticks is an *example* of the syntax, not a link:
+    `wiki/timeline/annie-read-notes` discusses adding "[[wiki/...]] links" and
+    was reported as three broken links for it. Replacing code with spaces
+    rather than deleting it keeps line numbers and offsets intact.
+    """
+    def blank(m):
+        return re.sub(r"[^\n]", " ", m.group(0))
+    text = re.sub(r"```.*?```", blank, text, flags=re.S)
+    text = re.sub(r"~~~.*?~~~", blank, text, flags=re.S)
+    text = re.sub(r"`+[^`\n]*`+", blank, text)
+    return text
+
+
+def index_count_drift(root):
+    """Return [(domain, indexed, actual)] where index.md's page counts are stale.
+
+    The master index advertises a per-domain page count. All nine were wrong on
+    2026-08-20 (people said 150 against 164), which makes the wiki's own front
+    door misreport its size. Warning rather than error: adding a page and
+    updating the count are legitimately separate steps.
+    """
+    idx = os.path.join(root, "index.md")
+    if not os.path.exists(idx):
+        return []
+    text = open(idx, encoding="utf-8", errors="replace").read()
+    drift = []
+    for m in re.finditer(r"^\| ([a-z]+) \|[^|]*\| *(\d+) *\|", text, re.M):
+        dom, claimed = m.group(1), int(m.group(2))
+        dom_dir = os.path.join(root, "wiki", dom)
+        if not os.path.isdir(dom_dir):
+            continue
+        actual = sum(
+            1 for p in glob.glob(os.path.join(dom_dir, "**", "*.md"), recursive=True)
+            if os.path.basename(p) != "index.md" and os.sep + "archive" + os.sep not in p
+        )
+        if actual != claimed:
+            drift.append((dom, claimed, actual))
+    return drift
+
+
+def malformed_frontmatter_blocks(text):
+    """Return [(key, reason, line)] for list blocks whose indentation is wrong.
+
+    A `connections:` block whose entries lost their two-space indent still
+    parses as valid YAML-ish text but is invisible to `bin/wiki-connect`, so
+    the page silently carries no edges and every gate stays green. That is
+    exactly how a whitespace-collapsing cleanup script destroyed four edges on
+    2026-08-20 without tripping anything. An entry that cannot be read is worse
+    than a missing one, because nothing reports it.
+    """
+    out = []
+    for key in ("sources", "synthesizes", "connections"):
+        km = re.search(rf"^{key}:\s*$", text, re.M)
+        if not km:
+            continue
+        for line in text[km.end():].split("\n")[1:]:
+            if not line.strip():
+                continue
+            if line.startswith("---") or re.match(r"^[A-Za-z_]+:", line):
+                break
+            if re.match(r"^- ", line):
+                out.append((key, "list item not indented", line.strip()[:60]))
+            elif key == "connections" and re.match(r"^ (type|claim):", line):
+                out.append((key, "field under-indented", line.strip()[:60]))
+    return out
+
+
+pages = sorted(glob.glob(os.path.join(WIKI, "**", "*.md"), recursive=True))
+rel = lambda p: os.path.relpath(p, ROOT)
+page_keys = set()          # normalized wikilink targets that exist
+for p in pages:
+    r = rel(p)[:-3]        # strip .md
+    page_keys.add(r)
+    page_keys.add(os.path.basename(r))
+
+inbound = {rel(p): 0 for p in pages}
+link_re = re.compile(r"\[\[([^\]|#]+)(?:[#|][^\]]*)?\]\]")
+
+# Pages written by a generator: their backticked paths are the generator's to
+# fix, not a page author's, and an error here would be unfixable by hand.
+GENERATED_PAGES = {
+    "wiki/meta/testimony-veracity", "wiki/meta/skills", "wiki/meta/readers-digest",
+    "wiki/meta/digest", "wiki/meta/recent-activity", "wiki/meta/open-questions",
+    "wiki/health/intake-ledger", "wiki/timeline/master-timeline",
+}
+
+
+def is_generated(r):
+    return r[:-3] in GENERATED_PAGES
+
+
+page_slugs = {rel(p)[:-3] for p in pages}
+
+# root master index is also a link source, though not a wiki/ page
+scan = list(pages)
+root_index = os.path.join(ROOT, "index.md")
+if os.path.exists(root_index):
+    scan.append(root_index)
+
+for p in scan:
+    r = rel(p)
+    text = open(p, encoding="utf-8", errors="replace").read()
+    is_contact_stub = "/people/contacts/" in r or "/archive/" in r
+    is_index = os.path.basename(p) == "index.md"
+
+    # size budgets
+    size = len(text.encode())
+    if is_index and r != "index.md" and size > INDEX_BUDGET:
+        warnings.append(f"{r}: index is {size//1024}KB (budget {INDEX_BUDGET//1024}KB) — likely session noise")
+    elif not is_index and size > PAGE_BUDGET and not is_contact_stub:
+        warnings.append(f"{r}: page is {size//1024}KB — unusually long; split ONLY if navigation genuinely improves, never to shorten")
+
+    # A LINK THAT ISN'T ONE. `bin/build-site` linkifies `[[...]]` and nothing
+    # else, so a bare page path written in backticks renders as inert grey code:
+    # it looks like a reference, sits where a reference goes, and cannot be
+    # clicked. Worse, `bin/wiki-crosslink` counted it as a link until
+    # 2026-09-04 and therefore reported such pages as fully cross-linked.
+    #
+    # Measured the day the operator clicked a page and found none: **all 19
+    # wiki/self/twitter/ year pages had zero body wikilinks between them,
+    # against 161 typed edges**, and 161 backticked paths across 49 pages
+    # pointed at real entries. ERROR rather than warning: the fix is
+    # mechanical, there is no case where a path that resolves to a real page is
+    # better as code than as a link, and a warning is what let this stand.
+    for m in re.finditer(r'`(wiki/[a-z0-9/_-]+)`', strip_code(text) if False else text):
+        tgt = m.group(1)
+        if tgt in page_slugs and not is_generated(r):
+            errors.append(
+                f"{r}: `{tgt}` is a bare path in backticks — renders as code, "
+                f"not a link. Write [[{tgt}]].")
+
+    # A page with typed edges and no wikilinks is navigable by the graph and
+    # not by a reader. Typed edges are frontmatter: `CONNECTIONS_SPEC.md`
+    # machinery for synthesis, invisible on the rendered page. WARNING, because
+    # a short stub legitimately has nothing to link and the threshold is a
+    # judgement — but a long page with edges and no links is the defect above
+    # in its other form.
+    if (not is_index and not is_contact_stub and size > 4000
+            and re.search(r"^connections:\s*$", text, re.M)
+            and not re.search(r"\[\[wiki/", text)):
+        n_edges = len(re.findall(r"^\s*- page:\s*wiki/", text, re.M))
+        warnings.append(
+            f"{r}: {n_edges} typed edge(s) and no [[wikilink]] in the body — "
+            f"navigable by the graph, not by a reader")
+
+    # The constitution pass (SYNTHESIS_SPEC.md). A synthesis page that reasons
+    # from no page in the profile layer has, on the evidence of its own
+    # citations, never checked its rule against the cognitive stack or the
+    # measured personality profile. That is the "floating rule" anti-pattern:
+    # a conclusion true of its members and unattached to the person it claims
+    # to describe. WARNING rather than error, because the correct fix is an
+    # argument and a lint gate cannot tell one from a decorative citation --
+    # but it is surfaced on every run, because the 2026-08-28 pass that
+    # prompted this rule wrote three cognition pages citing one profile page
+    # between them and nothing said a word.
+    if re.search(r"^page_type:\s*synthesis\s*$", text, re.M):
+        syn_block = re.search(r"^synthesizes:\s*$(.*?)(?=^[A-Za-z_]+:|^---)", text, re.S | re.M)
+        if syn_block and "wiki/mind/profile/" not in syn_block.group(1):
+            warnings.append(
+                f"{r}: synthesis reasons from no wiki/mind/profile/ page — "
+                f"run the constitution pass (SYNTHESIS_SPEC.md) or say on the "
+                f"page why the profile layer does not bear on this rule"
+            )
+
+    fm_match = re.match(r"^---\n(.*?)\n---\n", text, re.S)
+    fm = fm_parse(text)
+    if fm is None:
+        if not is_index:
+            errors.append(f"{r}: missing frontmatter")
+    else:
+        st = fm.get("status", "")
+        if st not in VALID_STATUS:
+            errors.append(f"{r}: invalid status '{st}'")
+        dom = fm.get("domain", "")
+        if dom not in VALID_DOMAIN:
+            errors.append(f"{r}: invalid domain '{dom}'")
+        pt = fm.get("page_type", "")
+        if pt not in VALID_TYPE:
+            errors.append(f"{r}: invalid page_type '{pt}'")
+        kn = fm.get("knowledge")
+        if kn is not None and kn not in VALID_KNOWLEDGE:
+            errors.append(f"{r}: invalid knowledge '{kn}'")
+        tags_raw = fm.get("tags")
+        if tags_raw is not None:
+            tag_list = [t.strip() for t in tags_raw.strip("[]").split(",") if t.strip()]
+            bad_tags = [t for t in tag_list if t not in VALID_TAGS]
+            if bad_tags:
+                errors.append(f"{r}: invalid tag(s) {bad_tags} — add to VALID_TAGS in bin/wiki-lint and STYLE_GUIDE.md if genuinely new")
+
+        # duplicate top-level frontmatter keys
+        # YAML keeps the LAST occurrence of a duplicated key while some tools
+        # collect both, so a duplicate makes the gates and the site renderer
+        # disagree about what a page says. Reuse fm_match (same anchored regex
+        # fm_parse uses) so this cannot disagree with the parser it protects.
+        if fm_match:
+            for key, line_no, count in duplicate_top_level_keys(fm_match.group(1)):
+                errors.append(
+                    f"{r}:{line_no}: duplicate frontmatter key '{key}' "
+                    f"(appears {count}x) — YAML keeps the last one, the gates may read the first"
+                )
+
+        # people infobox classifier schema (mandatory; contacts/ stubs + indexes exempt)
+        if dom == "people" and not is_contact_stub and not is_index:
+            # extract the full infobox: block (multi-line) from the raw frontmatter
+            ib_block = re.search(r"infobox:\s*\n((?:[ \t]+[^-\n][^\n]*\n)*)", text)
+            if ib_block is None:
+                errors.append(f"{r}: domain=people requires an infobox: block (name + relationship_to_dan)")
+            else:
+                ib_fields = re.findall(r"^\s*([a-z_]+):", ib_block.group(1), re.M)
+                if "name" not in ib_fields:
+                    errors.append(f"{r}: infobox missing required 'name'")
+                if "relationship_to_dan" not in ib_fields:
+                    errors.append(f"{r}: infobox missing required 'relationship_to_dan'")
+
+        # dataset chart schema (mandatory for page_type: dataset — STYLE_GUIDE.md)
+        if pt == "dataset" and fm_match:
+            for msg in validate_dataset_chart(fm_match.group(1)):
+                errors.append(f"{r}: {msg}")
+
+        # journey stops schema (mandatory for page_type: journey — STYLE_GUIDE.md)
+        if pt == "journey" and fm_match:
+            for msg in validate_journey_stops(fm_match.group(1), lambda pg: pg.rstrip("/") in page_keys):
+                errors.append(f"{r}: {msg}")
+
+        # sources must exist on disk
+        for src in re.findall(r'"(raw/[^"]+)"', fm.get("sources", "")):
+            if "?" in src:
+                errors.append(f"{r}: source contains '?' — resolve it: {src}")
+                continue
+            path = src.replace("*", "")
+            if not (os.path.exists(os.path.join(ROOT, src)) or
+                    glob.glob(os.path.join(ROOT, src)) or
+                    os.path.exists(os.path.join(ROOT, os.path.dirname(path)))):
+                errors.append(f"{r}: source not on disk: {src}")
+
+    # wikilinks: broken targets + inbound counting (runs for every page,
+    # including frontmatter-less index files, which are a key link source)
+    body = strip_code(re.sub(r"^---\n.*?\n---\n", "", text, flags=re.S))
+    for target in link_re.findall(body):
+        # A '\|' pipe-escape is required inside markdown tables, and the regex
+        # captures the backslash with the target: [[wiki/people/x\|X]] came
+        # through as 'wiki/people/x\'. Seven correctly-authored table links
+        # were reported broken for it.
+        t = target.strip().rstrip("\\").strip().rstrip("/")
+        key = t[:-3] if t.endswith(".md") else t
+        if key in page_keys or os.path.basename(key) in page_keys:
+            cand = key + ".md"
+            if cand in inbound and cand != r:
+                inbound[cand] += 1
+        elif key.startswith("wiki/"):
+            if os.path.isdir(os.path.join(ROOT, key)):
+                continue
+            warnings.append(f"{r}: broken wikilink [[{target.strip()}]]")
+
+# orphans (skip indexes, contacts, root-level meta)
+for p, n in sorted(inbound.items()):
+    if n == 0 and os.path.basename(p) != "index.md" and "/contacts/" not in p \
+       and p.count("/") > 1 and not p.endswith("lint-report.md"):
+        warnings.append(f"{p}: orphan — no inbound wikilinks")
+
+# ONE-WAY DOORS. `STYLE_GUIDE.md` requires every non-index page to be reachable
+# FROM its domain index, and the orphan check above enforces exactly that
+# sentence. Nothing checked the other direction until 2026-09-05, and the corpus
+# went the way the rule was written: **453 of 497 pages never linked their own
+# index**, every one of the 168 people pages among them. A reader arriving from
+# search or from the portal's front page landed and had nowhere to go.
+#
+# WARNING rather than error: a new page is written before its footer is
+# generated, and blocking that commit would buy nothing. `bin/wiki-crosslink
+# breadcrumb --apply` is the fix and it is idempotent.
+for p in sorted(page_slugs):
+    if (os.path.basename(p) == "index" or is_generated(p + ".md")
+            or "/contacts/" in p or p.count("/") < 2):
+        continue
+    chain, d = [], os.path.dirname(p)
+    while d and d != "wiki":
+        for cand in (d + "/index", d):
+            if cand in page_slugs and cand != p:
+                chain.append(cand)
+                break
+        d = os.path.dirname(d)
+    if not chain:
+        continue
+    body = open(os.path.join(ROOT, p + ".md"), encoding="utf-8",
+                errors="replace").read()
+    if chain[0] not in set(re.findall(r"\[\[(wiki/[a-z0-9\-/]+)", body)):
+        warnings.append(
+            f"{p}.md: never links [[{chain[0]}]], the index above it — a "
+            f"one-way door. Run `bin/wiki-crosslink breadcrumb --apply`")
+
+# master index budget
+mi = os.path.join(ROOT, "index.md")
+if os.path.exists(mi) and os.path.getsize(mi) > MASTER_INDEX_BUDGET:
+    warnings.append(f"index.md: master index over 5KB budget")
+
+# ---------------------------------------------------------------- retracted claims
+# Fails when a claim recorded in RETRACTED.md reappears as a LIVE assertion.
+# Correction blockquotes are exempt by design — STYLE_GUIDE.md rule 9 requires
+# the old claim to stay visible where it is corrected. See RETRACTED.md.
+for entry in load_retractions(os.path.join(ROOT, "RETRACTED.md"), errors):
+    allowed = set(entry.get("documented_on") or [])
+    for p in pages:
+        r = rel(p)
+        if r in allowed:
+            continue
+        text = open(p, encoding="utf-8", errors="replace").read()
+        live = quarantine_mask(text)
+        for pat in entry["_compiled"]:
+            for m in pat.finditer(text):
+                line_no = text.count("\n", 0, m.start()) + 1
+                if not live[line_no - 1]:
+                    continue
+                errors.append(
+                    f"{r}:{line_no}: retracted claim '{entry['id']}' asserted live "
+                    f"— found {m.group(0)!r}; correct reading: {entry['replacement']}. "
+                    f"If this is documenting the retraction, put it in a "
+                    f"'> **CORRECTED [date]:**' blockquote (STYLE_GUIDE rule 9)."
+                )
+                break   # one error per pattern per page is enough to act on
+
+# ------------------------------------------------- malformed frontmatter blocks
+for p_ in pages:
+    r = rel(p_)
+    text = open(p_, encoding="utf-8", errors="replace").read()
+    for key, why, line in malformed_frontmatter_blocks(text):
+        errors.append(
+            f"{r}: '{key}:' block has a {why} ({line!r}) — the entry is "
+            f"invisible to wiki-connect/wiki-climb and the page silently "
+            f"carries no edge; indent list items with two spaces"
+        )
+
+# ---------------------------------------------------------------- index drift
+for dom, claimed, actual in index_count_drift(ROOT):
+    warnings.append(
+        f"index.md: {dom} claims {claimed} pages, actual {actual} — "
+        f"master index misreports the wiki's size"
+    )
+
+# ---------------------------------------------------------------- corrupt text
+for p_ in pages:
+    r = rel(p_)
+    text = open(p_, encoding="utf-8", errors="replace").read()
+    for line_no, msg in find_corrupt_text(text):
+        errors.append(f"{r}:{line_no}: {msg}")
+
+# ---------------------------------------------------------------- phantom sources
+# A cited source that exists but carries no data. WARNING, not error: an empty
+# export is a data-quality problem for a human to resolve, not file corruption,
+# and pages that catalogue the corpus (source-coverage-index) cite them on
+# purpose. Only `sources:` citations are checked — prose may name a file freely.
+empty_raw = find_empty_raw_files(ROOT)
+if empty_raw:
+    by_basename = {}
+    for rp in empty_raw:
+        by_basename.setdefault(os.path.basename(rp), []).append(rp)
+    raw_basenames = raw_basename_index(ROOT)
+
+    for p in pages:
+        r = rel(p)
+        text = open(p, encoding="utf-8", errors="replace").read()
+        for cite in frontmatter_sources(text):
+            if "/" in cite:
+                # Repo-relative path: unambiguous. This is the documented convention.
+                if cite in empty_raw:
+                    warnings.append(f"{r}: cites empty/header-only source '{cite}'")
+                continue
+            # Bare basename: only meaningful if it resolves to exactly one file.
+            matches = raw_basenames.get(cite, [])
+            if len(matches) > 1:
+                warnings.append(
+                    f"{r}: source '{cite}' is a bare filename matching {len(matches)} "
+                    f"files under raw/ — ambiguous, cite the repo-relative path"
+                )
+            elif len(matches) == 1 and matches[0] in empty_raw:
+                warnings.append(f"{r}: cites empty/header-only source '{matches[0]}'")
+
+print(f"wiki-lint: {len(pages)} pages, {len(errors)} errors, {len(warnings)} warnings\n")
+for e in errors:
+    print(f"ERROR   {e}")
+for w in warnings:
+    print(f"warning {w}")
+
+# ---------------------------------------------------------------- work banner
+#
+# The one place every pass is guaranteed to look, because it is the gate that has
+# to pass before a commit. `bin/wiki-work check` never fails and this never reads
+# its exit code: an obligation outstanding since Tuesday must not block Thursday's
+# typo fix. Printed after the findings so it is the last thing on screen.
+#
+# Wrapped because the banner is a courtesy and the lint is not — a missing or
+# broken wiki-work must never take down the gate that guards the corpus.
+try:
+    import subprocess
+    work = os.path.join(ROOT, "bin", "wiki-work")
+    if os.path.exists(work):
+        out = subprocess.run([sys.executable, work, "check"], cwd=ROOT,
+                             capture_output=True, text=True, timeout=180).stdout.strip()
+        if out and not out.startswith("wiki-work: no obligations"):
+            print("\n" + "─" * 72)
+            print(out)
+            print("─" * 72)
+except Exception:
+    pass
+
+sys.exit(1 if errors else 0)

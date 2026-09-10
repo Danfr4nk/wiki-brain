@@ -1,0 +1,339 @@
+#!/usr/bin/env python3
+"""mine-messages — corpus mining over the full iMessage dump.
+
+Pure stdlib. The instrument for the message-density campaign (see
+MESSAGE_MINING.md): finding new nodes, corroborating standing wiki claims, and
+supplying primary evidence for mind/ and self/ pages.
+
+Why this file exists rather than ad-hoc greps
+---------------------------------------------
+Three properties of the dump make naive `grep` quietly wrong, and every one of
+them has already produced a false measurement during development:
+
+1. **Messages span multiple lines.** A record starts with `TS|Sent|handle|…`;
+   anything after that until the next such header is a continuation. Line-based
+   grep splits one message into several and miscounts, and it cannot show you a
+   whole message.
+2. **Curly apostrophes outnumber straight ones 28,904 to 19,978 in Dan's sent
+   text.** A pattern written `i'm` misses the majority of its own matches. All
+   text is normalised through `norm()` before matching, and patterns should be
+   written against the normalised (straight-quote, lowercase) form.
+3. **Direction is reliable here; the counterparty is reliable ONLY here.** This
+   dump splits 106,629 Sent / 110,944 Received. An earlier version of this note
+   said `MASTER_MESSAGES_DB_DUMP.csv` "marks nearly everything Received" — as
+   that file stands it splits 88,988 / 86,370, so direction is fine there too.
+   What is not fine is *who*: 69,869 of its Sent rows carry no
+   `contact_handle` at all. The CSV can say what Dan wrote and, four times in
+   five, not to whom, which makes it sound for a corpus-wide claim and unsound
+   for a per-relationship one. Note also that the two files are not two exports
+   of one thing — 50,396 rows exist only in the CSV, including **all of 2026**,
+   which this dump does not reach at all (see CROSSLINK_CAMPAIGN.md).
+
+Subcommands
+-----------
+  stats                       corpus shape, per-year volume, direction split
+  grep PATTERN                dated matches, --dir/--from/--to/--limit
+  battery [--list]            run the curated self-description pattern battery
+  timeline PATTERN            per-year match counts, normalised per 1k messages
+  entities                    capitalised name candidates with no wiki page
+
+Every subcommand takes --dump PATH (default: the canonical dump).
+"""
+import argparse
+import glob
+import os
+import re
+import sys
+from collections import Counter, defaultdict
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DUMP = os.path.join(ROOT, "raw", "self", "dox-scan", "all_imessages_complete_dump.txt")
+WIKI = os.path.join(ROOT, "wiki")
+
+HEADER = re.compile(r"^(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2})\|(Sent|Received)\|([^|]*)\|([^|]*)\|(.*)$")
+TRAILING_FIELDS = 6  # attachment|service|4 numeric flags
+
+
+def norm(s):
+    """Normalise for matching: curly quotes folded, attachment glyphs dropped."""
+    return (s.replace("’", "'").replace("‘", "'")
+             .replace("“", '"').replace("”", '"')
+             .replace("—", "--").replace("￼", " "))
+
+
+def records(path=DUMP):
+    """Yield dicts with multi-line messages reassembled."""
+    cur = None
+    with open(path, encoding="utf-8", errors="replace") as fh:
+        for line in fh:
+            line = line.rstrip("\n")
+            m = HEADER.match(line)
+            if m:
+                if cur:
+                    yield cur
+                date, time, direction, handle, _chat, rest = m.groups()
+                parts = rest.split("|")
+                text = "|".join(parts[:-TRAILING_FIELDS]) if len(parts) > TRAILING_FIELDS else parts[0]
+                cur = {"date": date, "time": time, "dir": direction,
+                       "handle": handle, "text": text}
+            elif cur is not None:
+                cur["text"] += "\n" + line
+    if cur:
+        yield cur
+
+
+def load(path, direction=None, start=None, end=None):
+    for r in records(path):
+        if direction and r["dir"].lower() != direction.lower():
+            continue
+        if start and r["date"] < start:
+            continue
+        if end and r["date"] > end:
+            continue
+        r["norm"] = norm(r["text"])
+        yield r
+
+
+# The curated battery. Each entry is (label, pattern). Patterns run
+# case-insensitively against normalised text. Grouped so a run reads as an
+# argument rather than a list of numbers.
+BATTERY = [
+    # -- explicit self-model: Dan stating a general truth about himself
+    ("selfmodel", "i am the kind/type/sort of",  r"\bi(?:'m| am) the (?:kind|type|sort) of\b"),
+    ("selfmodel", "i have always been",          r"\bi(?:'ve| have) always been\b"),
+    ("selfmodel", "i always X",                  r"\bi always \w+"),
+    ("selfmodel", "i never X",                   r"\bi never \w+"),
+    ("selfmodel", "i tend to",                   r"\bi tend to\b"),
+    ("selfmodel", "the thing/problem with me",   r"\bthe (?:thing|problem|issue|deal) (?:with|about) me\b"),
+    ("selfmodel", "that is why i",               r"\b(?:that'?s|thats|which is) why i\b"),
+    ("selfmodel", "i think the reason i",        r"\bi think (?:the reason|that'?s why) i\b"),
+    ("selfmodel", "i have a thing where",        r"\bi have (?:a thing|this thing) (?:where|about)\b"),
+    ("selfmodel", "my brain",                    r"\bmy brain\b"),
+    ("selfmodel", "i am wired",                  r"\bi(?:'m| am) (?:just )?wired\b"),
+    # -- diagnosis / naming a condition in his own voice
+    ("diagnosis", "autis*",                      r"\bautis\w*|\baspergers?\b|\bon the spectrum\b"),
+    ("diagnosis", "adhd",                        r"\badhd\b"),
+    ("diagnosis", "depress*",                    r"\bdepress\w*"),
+    ("diagnosis", "anxiety/anxious",             r"\banxiet\w*|\banxious\b"),
+    ("diagnosis", "diagnosed",                   r"\bdiagnos\w*"),
+    ("diagnosis", "therapy/therapist",           r"\btherap(?:y|ist)\b"),
+    # -- the time=countdown axiom, tested rather than assumed
+    ("countdown", "running out of time",         r"\brunning out of time\b|\bout of time\b|\bno time left\b"),
+    ("countdown", "too late",                    r"\btoo late\b"),
+    ("countdown", "by the time i",               r"\bby the time i\b"),
+    ("countdown", "before i (die|turn|lose)",    r"\bbefore i (?:die|turn \d|lose|run out)\b"),
+    ("countdown", "age self-reference",          r"\bi(?:'m| am) (?:almost |nearly |about to be )?\d\d\b|\bwhen i turn \d\d\b"),
+    ("countdown", "left to live / years left",   r"\byears? (?:left|to live)\b|\brest of my life\b"),
+    ("countdown", "deadline language",           r"\bdeadline\b|\blast chance\b|\bnow or never\b"),
+    # -- mortality
+    ("mortality", "when i die / if i die",       r"\b(?:when|if) i die\b"),
+    ("mortality", "kill myself / suicide",       r"\bkill myself\b|\bsuicid\w*\b|\bend it all\b"),
+    ("mortality", "dead in N years",             r"\bdead in \w+ years?\b"),
+    # -- worth / exceptionalism axiom
+    ("worth", "worthless / a failure",           r"\bworthless\b|\ba failure\b|\bi(?:'m| am) a failure\b"),
+    ("worth", "waste of / wasted my",            r"\bwaste of (?:my )?(?:life|time|potential)\b|\bwasted my\b"),
+    ("worth", "i hate my life",                  r"\bi (?:fucking )?hate my life\b"),
+    ("worth", "supposed to be",                  r"\bsupposed to be\b"),
+]
+
+
+def cmd_stats(a):
+    per_year = defaultdict(Counter)
+    handles = Counter()
+    total = 0
+    chars = 0
+    for r in load(a.dump):
+        total += 1
+        y = r["date"][:4]
+        per_year[y][r["dir"]] += 1
+        if r["dir"] == "Sent":
+            chars += len(r["text"])
+        if r["handle"]:
+            handles[r["handle"]] += 1
+    print(f"records: {total:,}")
+    sent = sum(c['Sent'] for c in per_year.values())
+    print(f"sent:    {sent:,}  ({chars:,} chars of Dan's own text)")
+    print(f"recv:    {sum(c['Received'] for c in per_year.values()):,}")
+    print(f"handles: {len(handles):,}")
+    print()
+    print(f"{'year':6} {'sent':>8} {'recv':>8} {'total':>8}")
+    for y in sorted(per_year):
+        c = per_year[y]
+        print(f"{y:6} {c['Sent']:>8,} {c['Received']:>8,} {c['Sent']+c['Received']:>8,}")
+
+
+def cmd_grep(a):
+    rx = re.compile(a.pattern, 0 if a.case else re.I)
+    n = 0
+    for r in load(a.dump, a.dir, a.start, a.end):
+        if not rx.search(r["norm"]):
+            continue
+        n += 1
+        if a.count:
+            continue
+        t = " ".join(r["norm"].split())
+        if a.width and len(t) > a.width:
+            m = rx.search(t)
+            lo = max(0, m.start() - a.width // 2)
+            t = ("..." if lo else "") + t[lo:lo + a.width] + "..."
+        print(f"{r['date']} {r['time'][:5]} {r['dir'][:1]} {r['handle'][-10:]:>10} | {t}")
+        if a.limit and n >= a.limit:
+            break
+    if a.count:
+        print(n)
+    else:
+        print(f"\n-- {n} matches", file=sys.stderr)
+
+
+def cmd_battery(a):
+    if a.list:
+        for grp, label, pat in BATTERY:
+            print(f"{grp:10} {label:32} {pat}")
+        return
+    compiled = [(g, l, re.compile(p, re.I)) for g, l, p in BATTERY]
+    counts = Counter()
+    examples = defaultdict(list)
+    handles = defaultdict(Counter)
+    sent_total = 0
+    for r in load(a.dump, a.dir):
+        sent_total += 1
+        t = r["norm"]
+        if len(t) < a.minlen:
+            continue
+        for g, l, rx in compiled:
+            if rx.search(t):
+                counts[(g, l)] += 1
+                handles[(g, l)][r["handle"]] += 1
+                if len(examples[(g, l)]) < a.examples and 40 < len(t) < 500:
+                    examples[(g, l)].append((r["date"], " ".join(t.split())))
+    print(f"# battery over {sent_total:,} {a.dir or 'all'} messages "
+          f"(minlen {a.minlen}, apostrophe-normalised)\n")
+    last = None
+    for g, l, _ in BATTERY:
+        if g != last:
+            print(f"\n== {g.upper()}")
+            last = g
+        c = counts[(g, l)]
+        extra = ""
+        if a.concentration and c:
+            h = handles[(g, l)]
+            top, n = h.most_common(1)[0]
+            extra = f"   [{len(h)} handles, top {top[-10:]} {n/c*100:.0f}%]"
+        print(f"  {c:6,}  {c/sent_total*1000:6.2f}/1k  {l}{extra}")
+    if a.examples:
+        print("\n\n# examples")
+        for g, l, _ in BATTERY:
+            ex = examples[(g, l)]
+            if not ex:
+                continue
+            print(f"\n--- {g} / {l}")
+            for d, t in ex:
+                print(f"  {d}  {t[:300]}")
+
+
+def cmd_timeline(a):
+    rx = re.compile(a.pattern, re.I)
+    hits = Counter()
+    totals = Counter()
+    for r in load(a.dump, a.dir):
+        y = r["date"][:4]
+        totals[y] += 1
+        if rx.search(r["norm"]):
+            hits[y] += 1
+    print(f"{'year':6} {'hits':>6} {'msgs':>8} {'per 1k':>8}")
+    for y in sorted(totals):
+        rate = hits[y] / totals[y] * 1000 if totals[y] else 0
+        bar = "#" * int(rate * a.scale)
+        print(f"{y:6} {hits[y]:>6} {totals[y]:>8,} {rate:>8.2f}  {bar}")
+    print(f"TOTAL  {sum(hits.values()):>6} {sum(totals.values()):>8,} "
+          f"{sum(hits.values())/max(1,sum(totals.values()))*1000:>8.2f}")
+
+
+STOP = set("""the and for you your that this with have has had was were are but not
+всё all any can did does from get got him her his she they them then there their our out
+just like know what when where who why how one two now day today tomorrow yesterday
+ok okay yes yea yeah no lol lmao haha omg thanks thank please sorry hey hi hello good
+morning night love text call phone home work time going want need think really much
+would could should will its it's im i'm dont don't cant can't didn't doesn't thats that's
+new next last first second third about after before over under again still even also
+""".split())
+
+
+def cmd_entities(a):
+    # what the wiki already knows about, by slug and by prose mention
+    known = set()
+    for p in glob.glob(os.path.join(WIKI, "**", "*.md"), recursive=True):
+        base = os.path.basename(p)[:-3]
+        for tok in re.split(r"[-_]", base):
+            known.add(tok.lower())
+        try:
+            body = open(p, encoding="utf-8").read()
+        except OSError:
+            continue
+        for tok in re.findall(r"\b[A-Z][a-z]{2,}\b", body):
+            known.add(tok.lower())
+
+    cand = Counter()
+    where = defaultdict(set)
+    # A name-shaped token: capitalised, mid-sentence, not sentence-initial.
+    NAME = re.compile(r"(?<![.!?]\s)(?<!^)\b([A-Z][a-z]{2,14})\b")
+    for r in load(a.dump):
+        for line in r["norm"].split("\n"):
+            for m in NAME.finditer(line):
+                w = m.group(1)
+                lw = w.lower()
+                if lw in STOP or lw in known:
+                    continue
+                cand[w] += 1
+                where[w].add(r["date"][:4])
+    print(f"{'count':>6}  {'years':<22} name")
+    for w, c in cand.most_common(a.limit):
+        if c < a.min:
+            break
+        yrs = ",".join(sorted(where[w]))
+        print(f"{c:>6}  {yrs[:22]:<22} {w}")
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--dump", default=DUMP)
+    sub = ap.add_subparsers(dest="cmd", required=True)
+
+    s = sub.add_parser("stats"); s.set_defaults(fn=cmd_stats)
+
+    g = sub.add_parser("grep")
+    g.add_argument("pattern")
+    g.add_argument("--dir", choices=["Sent", "Received"], default=None)
+    g.add_argument("--from", dest="start"); g.add_argument("--to", dest="end")
+    g.add_argument("--limit", type=int, default=0)
+    g.add_argument("--width", type=int, default=0, help="truncate around the match")
+    g.add_argument("--case", action="store_true"); g.add_argument("--count", action="store_true")
+    g.set_defaults(fn=cmd_grep)
+
+    b = sub.add_parser("battery")
+    b.add_argument("--list", action="store_true")
+    b.add_argument("--examples", type=int, default=0)
+    b.add_argument("--minlen", type=int, default=12)
+    b.add_argument("--dir", choices=["Sent", "Received"], default="Sent")
+    b.add_argument("--concentration", action="store_true",
+                   help="show how many distinct handles each pattern reaches")
+    b.set_defaults(fn=cmd_battery)
+
+    t = sub.add_parser("timeline")
+    t.add_argument("pattern")
+    t.add_argument("--dir", choices=["Sent", "Received"], default="Sent")
+    t.add_argument("--scale", type=float, default=4.0)
+    t.set_defaults(fn=cmd_timeline)
+
+    e = sub.add_parser("entities")
+    e.add_argument("--limit", type=int, default=120)
+    e.add_argument("--min", type=int, default=8)
+    e.set_defaults(fn=cmd_entities)
+
+    a = ap.parse_args()
+    a.fn(a)
+
+
+if __name__ == "__main__":
+    main()

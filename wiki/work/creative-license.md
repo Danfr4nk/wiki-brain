@@ -1,0 +1,294 @@
+
+---
+domain: work
+page_type: event
+title: "Creative License (NYC, 2011–2012)"
+status: closed
+knowledge: mixed
+date_created: 2026-08-10
+date_modified: 2026-08-10
+date_range_start: 2011-04-01
+date_range_end: 2012-02-15
+sources:
+  - raw/self/dox-scan/Resume.txt
+  - "raw/self/facebook/facebook-ihatedanfrank/other_personal_information/your_address_books.html"
+  - "raw/self/facebook/facebook-ihatedanfrank/messages/inbox/kevinmckiernan__3hd8v2u0g/message_1.html"
+  - raw/self/dox-md/THE_DAN_FRANK_BOOTLOADER.md
+  - raw/self/dox-md/THE_DAN_FRANK_MANUAL.md
+  - raw/self/dox-md/DAN_COGNITIVE_PROFILE.txt
+  - raw/self/context-core/CONTEXT_CORE_EXPANDED.md
+  - raw/self/gmail-captures/2026-08-10-creative-license-kevin-mckiernan-gmail.md
+  - raw/self/dox-scan/Gemini-_58.txt
+tags: [nyc-era, career, digital-footprint, legal]
+connections:
+  - page: wiki/mind/synthesis/failure-to-launch
+    type: evidences
+    claim: "Ten months ending in a payroll dispute, a whistleblower disclosure and a retaliatory false LinkedIn claim is the earliest instance of the pattern the audit names: capability entering an institution through the vertical axis and exiting through a fight about the record."
+  - page: wiki/people/kevin-mckiernan
+    type: contains
+    claim: "Kevin McKiernan was Creative License's president and Dan's ultimate authority for the full run of the job — the principal in every escalation, distinguished in Dan's own words from the functionaries (Marty, Katherine) who carried out his instructions."
+  - page: wiki/people/marty-jackson
+    type: contains
+    claim: "Marty Jackson ran payroll and is the author of the dispute's single most quotable line — 'It's a trust issue. We don't trust you.' — but is also the one figure Dan explicitly exempted from his hostility once the dispute closed."
+  - page: wiki/people/katherine-palakovich
+    type: contains
+    claim: "Katherine Palakovich sent Dan his own non-compete agreement in 2011 and, as a notary public, notarized the false statements Kevin used against him in the 2012 LinkedIn retaliation — the same person on both sides of the relationship's arc."
+  - page: wiki/places/90th-st-manhattan
+    type: co-occurs
+    claim: "That page carries the exit as its central event; this page now settles what that page could only guess at — the real conflict was a payroll/whistleblower/retaliation sequence, not the AI dossiers' unsupported 'airfare-billing' claim, and the exit date is confirmed February 2012 by a dated primary email."
+  - page: wiki/places/424-bedford-ave
+    type: co-occurs
+    claim: "The job ran the entire time Dan lived at Bedford Ave and into the following year — it is the one period of his life audio-engineering training was the actual job, per Resume.txt's own two consecutive studio-adjacent entries (Ishlab, then this)."
+  - page: wiki/mind/synthesis/vertical-authority-skepticism
+    type: evidences
+    claim: "The best-documented instance of the pattern in the entire corpus below the 2026 BFS case: a company's own accounting officer telling Dan in writing 'we don't trust you,' followed four months later by its president backing a false, notarized claim to get Dan's professional identity erased from LinkedIn — met with a filed IRS/Dept-of-Labor complaint and a successful counter-notice rather than capitulation."
+  - page: wiki/people/menore
+    type: co-occurs
+    claim: "A later AI-reconstructed line ('a world of un-fun pandemic decay and Creative License style fraud') shows the company survived in Dan's own vocabulary as a byword for institutional unreliability years after it ended — now confirmed against a real, if differently-shaped, betrayal rather than an unverified allegation."
+  - page: wiki/work/bfs-foods
+    type: parallels
+    claim: "The corpus's own naming names these two jobs as the first and most recent instances of one shape — a trusted vertical figure's undocumented financial claim met with exit and documentation rather than confrontation — fourteen years apart."
+  - page: wiki/people/rick-frank
+    type: contains
+    claim: "Rick reviewed Dan's non-compete from the day the job started and, during the payroll dispute, switched registers entirely from brief/logistical to active tactical coach — 'You sound so desperate. That is what kevin wants. We'll talk about a strategy for this.' — the corpus's clearest instance of him operating as strategist rather than distant authority figure."
+  - page: wiki/people/renae-holland
+    type: co-occurs
+    claim: "Renae was the target of a December 2011 LinkedIn recommendation-removal request McKiernan sent through Dan's own account — the specific incident Dan later apologized to her for and explained in his May 2012 disclosure."
+---
+
+# Creative License (NYC, 2011–2012)
+
+Creative License was a small celebrity-talent and licensed-music brokering
+company at 71 8th Avenue in the West Village — its one recovered client
+pitch is a Walmart RFP for "3rd Party Negotiator — Licensed Music and
+Celebrity Talent," not the generic "production services" earlier passes on
+this page guessed at — where Dan worked under company president
+[[wiki/people/kevin-mckiernan|Kevin McKiernan]] from April 2011 to
+February 2012. It is the second of two consecutive studio-adjacent jobs in
+Dan's only NYC-era stretch of audio-engineering-track employment (the
+first was an internship/engineer role at Ishlab Studios under Jamin
+Gilbert, 10 Jay Street, DUMBO — still undocumented in the wiki beyond this
+mention).
+
+> **CORRECTED, then RE-CORRECTED [2026-08-10, three passes in one day]:**
+> Pass one, written earlier the same day from the Facebook address book and
+> two AI dossiers, correctly flagged that the dossiers' "airfare-billing
+> discrepancies and altered intern contracts" claim had zero primary
+> corroboration, and concluded the whole "founding case" story might be
+> unconfirmed narrative. Pass two, a live Gmail search prompted by the
+> operator ("i believe there IS corroborating info about kevin mckiernan in
+> my gmail"), recovered ~35 real 2011–2012 threads documenting a genuine
+> conflict — but found no airfare dispute in them, and this page briefly,
+> **wrongly**, concluded the airfare claim was outright invented. That
+> conclusion was itself an extraction failure: it never checked the wiki's
+> own existing `wiki/self/chats/gemini-58.md` page, built from a source
+> already in `raw/` (`Gemini-_58.txt`) that was sitting there the whole
+> time. Pass three (prompted by the operator again: "check all of my
+> gmail stuff and takeout archives for kevin mckiernan shit") found it, and
+> found something neither prior pass had: **Dan's own primary testimony**,
+> inside that Gemini session, stating plainly that he did cite an airfare
+> issue as his reason for quitting — "the thing i cited when i quit had to
+> do with some kind of small fraud with airplane tickets that i blew it up
+> into a much much bigger thing but maybe i was just desensitized." That
+> sentence is Dan's own words, not the model's — per this wiki's own
+> source-tier discipline, that makes it primary testimony, and it settles
+> the question pass two got wrong: the airfare citation is real. What
+> remains unconfirmed is Gemini's own elaboration of what the "small fraud"
+> specifically was (a claim about mismarked travel-expense billing to
+> Walmart/Molson Coors) — that detail is the model's speculative fleshing-
+> out of one prompt sentence and should not be treated as verified. See
+> `raw/self/gmail-captures/2026-08-10-creative-license-kevin-mckiernan-gmail.md`
+> for the Gmail record and `raw/self/dox-scan/Gemini-_58.txt` (lines
+> 580–625) for the Gemini exchange this correction draws from.
+
+## What the job actually was
+
+Dan's own resume lists three duties: "Assisted company President with
+daily tasks including correspondence, travel logistics, calendar
+management and other personal project requests," "Created graphic design
+elements for website and business development," and "Oversight of office
+and employee expenses." His contemporaneous email signature during the job
+itself says something the résumé doesn't: his actual title was **"Special
+Projects Coordinator,"** not "Executive Assistant / Office Manager" — the
+résumé's title is a later, self-flattering rewrite, or at minimum an
+inconsistent one. LinkedIn's own 2012 notice to Dan (see below) independently
+uses "Special Projects Coordinator" too, which settles which title is
+contemporaneous.
+
+Day-to-day, the recovered emails show a normal office job: covering for
+migraines and doctor's appointments (a recurring pattern — July, September,
+October, November 2011, January 2012), coordinating client relationships
+with **Walmart** (Simona Rabsatt) and **Molson Coors** (Lori Estabrooks),
+helping prep a colleague ("Aatish") for speaking appearances, and once
+helping the company track down a departed employee, "Lisa," to arrange the
+return of company property — the same tactic later turned on Dan himself.
+In May 2011, [[wiki/people/katherine-palakovich|Katherine
+Palakovich]], the company's Director of Business Affairs, sent Dan his own
+non-disclosure/non-compete agreement to sign; Dan forwarded it to his
+father Rick the same day ("Thought you might want to take a look at
+this.") — Rick was consulted on Dan's employment paperwork from the very
+start of the job, not only at its acrimonious end. Dan's office allies —
+recurring in the Gemini-58 session, unconfirmed against email in this pass
+— included Rachel Rauch, Sarah Bromberg, and Charley Siegel, all
+apparently part of a "survivors' network" that continued meeting after
+individual departures (see the December 2014 happy-hour invite, below);
+Chris Marraffino and Michael DiTullio are named as interns caught up in
+the company's later intern-management conduct.
+
+## Why Dan actually quit, and how it ended: four acts
+
+**Act zero — the airfare citation (the stated reason, Feb 2012).** Per
+Dan's own later account, what he cited *at the time* as his reason for
+quitting was a "small fraud with airplane tickets" — some billing
+irregularity in Kevin's travel expenses that Dan, in a role with real
+"oversight of office and employee expenses" responsibility, was positioned
+to notice. Dan's own retrospective framing, self-doubting: he used it as
+"the 'legal ground' to detach" because a personality complaint would have
+been dismissed as him being "sensitive," while a "financial anomaly" made
+the departure "an objective failure" on the company's part rather than his
+own — and he explicitly wonders, years later, whether he "blew it up into
+a much much bigger thing" or was simply desensitized to normal industry
+practice. Nothing about the specific mechanism of the alleged fraud is
+independently verified; this section states only what is confirmed —
+that Dan cited an airfare issue, in his own words, as his stated reason —
+and separates it clearly from the elaborated version.
+
+**Act one — the payroll dispute (Feb–Apr 2012).** Dan's last day was on or
+before **February 15, 2012** — the date of his first email flagging that
+his final paycheck had a **$104 charge for a MetroCard he says he never
+requested or received.** The check also arrived unsigned. Over the next
+six weeks Dan and [[wiki/people/marty-jackson|Marty Jackson]] (Accounting)
+went back and forth over the missing signature, the disputed charge, and a
+W-2 that didn't arrive on schedule; Marty's position was that Dan needed to
+have opted out of the automatic MetroCard program "in writing before you
+quit," which Dan disputed ever being told. On February 27, after Dan
+pushed back on Marty's math (Marty claimed the returned check "took 10
+weeks to come back," which Dan corrected — he'd only been gone from CL a
+month at that point), Marty wrote the line that anchors this whole page:
+
+> "It's a trust issue. We don't trust you. Please do not forget the keys or
+> any other CL property you have."
+
+Dan escalated by filing complaints with the **IRS and the NYS Department
+of Labor**, and CC'd his father, [[wiki/people/rick-frank|Rick Frank]],
+throughout, who functioned as tactical coach rather than authority figure
+in this exchange ("You sound so desperate. That is what kevin wants. We'll
+talk about a strategy for this."). By April 9, Dan closed the dispute out
+directly with Marty — conceding the $104 to end it, and explicitly
+separating the accountant from the president: "I didn't mean to give the
+impression that my hostility was directed at you personally... I don't
+believe that your intention was to create a volatile or unpleasant
+situation." The distinction between the functionary and the principal is
+Dan's own, made in real time, not an interpretation added later.
+
+**Act two — the catharsis (April 26, 2012).** Two months after leaving,
+Dan sent Rachel Rauch, per the Gemini-58 session, a one-line email —
+"Enjoy!!!" — with an attachment titled `BEST OF KTM VOICEMAILS.mp3`, a
+compiled recording of McKiernan's "erratic, high-volatility communication
+style." Not independently verified against the Gmail record in this pass
+(the message wasn't among the threads recovered by keyword search), but
+consistent with everything else documented: the relationship's end
+produced an archive, not just a grievance.
+
+**Act three — the whistleblower disclosure (May 2012).** Unprompted, months
+after the payroll dispute closed, Dan wrote to a former CL contact,
+[[wiki/people/renae-holland|Renae Holland]], to explain something that had
+been bothering him: in December 2011, while he was still employed, Kevin
+had used Dan's own email/LinkedIn account to send recommendation-removal
+requests to former employees — Renae among them. In Dan's own words:
+
+> "I (my account, rather) was acting as a channel for Kevin to act out his
+> most immature fantasies and I'm glad I can say that I didn't even help
+> write those emails... The more alarming aspect of this was the
+> employment contracts that Kevin had me send to the two former interns.
+> These documents had been altered before they were sent and a clause was
+> added that prohibited recommendations without CEO approval... I think
+> that the two interns should be aware of this for their own legal
+> protection and because it's just disgustingly wrong."
+
+Renae's reply corroborates independently, from her own tenure at the
+company: "in my time there I was Kevin falsify more documents that I can
+count — I know what he is capable of." This is the real substance behind
+the AI dossiers' garbled "altered intern contracts" line — a specific,
+named mechanism (a CEO-approval gag clause quietly inserted into departing
+interns' paperwork), not a vague allegation.
+
+**Act four — retaliation (June 2012).** A month after the whistleblower
+email, Kevin filed a formal LinkedIn intellectual-property complaint
+against Dan's profile, backed by **two notarized documents asserting Dan
+had never been a Creative License employee and had fabricated his job
+title** — notarized by Katherine Palakovich, using her own notary
+commission on behalf of her employer against a former coworker, which Dan
+explicitly flagged as a professional-responsibility violation in his reply
+to her ("the notarization of documents which the notary public believes to
+be false, deceptive, or fraudulent is forbidden by the Notary Public Code
+of Professional Responsibility"). LinkedIn threatened to terminate Dan's
+account within three business days. Dan filed a counter-notice, offering
+"paystubs, tax documentation, or any other official documentation," and
+named the retaliation motive directly: "Mr. McKiernan has and continues to
+attempt to smear my name because of my actions as a whistleblower while
+under his employ." No resolution email was located in this pass — whether
+LinkedIn sided with Dan is unconfirmed, though his profile clearly
+survived, since the wiki's own Facebook/address-book record of ongoing
+contact with McKiernan continues for years afterward.
+
+## The postscript
+
+Despite all of the above, Dan kept Kevin McKiernan's contact information
+for close to a decade (Facebook address-book snapshots from 2016 through
+2021 still carry `kevin@creativelicense.com`), and in December 2014
+Katherine Palakovich — by then leaving the company herself — bcc'd Dan on
+a mass "Ex-Creative License Happy Hour" invitation addressed to "all my
+favorite ex (and current) CL employees." Two and a half years after a
+conflict serious enough to involve the IRS, the NYS Department of Labor,
+and a notarized false statement, Dan was still on the alumni list. Neither
+fact cancels the other; both are true and worth holding together rather
+than letting the dramatic ending overwrite the more ordinary, ongoing
+relationship around it.
+
+By February 2012, Dan was also already job-hunting in the ordinary sense —
+the Gemini-58 session (unconfirmed against email in this pass) describes
+Craigslist applications to EA/Office Manager roles across Manhattan and
+outreach to firms like the Bond Street Group. That matters for how the
+"principled whistleblower exit" reading should be held: it does not
+contradict anything documented above, but it means the departure was
+probably also an ordinary job change in progress, not purely a dramatic
+break — consistent with Dan's own later self-doubt about whether the
+airfare complaint was proportionate to what actually happened.
+
+## Corpus record
+
+| Metric | Value |
+|---|---|
+| Employed | ~April 2011 – February 15, 2012 (confirmed) |
+| Contemporaneous title | "Special Projects Coordinator" (résumé says "Executive Assistant / Office Manager" — later, inconsistent) |
+| Client accounts | Walmart (Simona Rabsatt), Molson Coors (Lori Estabrooks) |
+| Stated reason for quitting, per Dan | An airfare/travel-expense billing irregularity — confirmed by Dan's own primary testimony; specific mechanism unverified |
+| Disputed final-paycheck charge | $104 (MetroCard/TransitChek) |
+| Escalation filed by Dan | IRS + NYS Dept of Labor complaints (Mar 2012) |
+| Cathartic archive | `BEST OF KTM VOICEMAILS.mp3`, sent to Rachel Rauch, Apr 26 2012 |
+| Whistleblower disclosure | To Renae Holland, May 3 2012, re: altered intern contracts |
+| Retaliation | Kevin's notarized LinkedIn IP claim, backed by Katherine Palakovich's notarization, June 2012 |
+| Outcome | Dan's counter-notice filed; LinkedIn resolution unconfirmed; profile appears to have survived |
+
+## Gaps
+
+The specific mechanism behind the airfare citation — what Dan actually
+found in the travel-expense records, and whether it involved
+Walmart/Molson Coors billing as the Gemini session speculates — is
+unverified; only the fact that he cited it is confirmed. What specifically
+happened to Renae Holland ("his attack against me") is unknown — her
+phrasing implies she was herself a target of some Kevin McKiernan
+campaign, but the substance wasn't recovered in this pass. The exact text
+of the notarized `Creative License 2.pdf` documents Kevin submitted to
+LinkedIn was not extracted. Whether LinkedIn ultimately ruled for or
+against Dan is unconfirmed. The `BEST OF KTM VOICEMAILS.mp3` email to
+Rachel Rauch, and the survivors'-network figures (Rachel Rauch, Sarah
+Bromberg, Charley Siegel, Chris Marraffino, Michael DiTullio), are sourced
+to the Gemini-58 session only and were not independently located in the
+Gmail search — a targeted follow-up search (by name rather than
+"mckiernan"/"creative license") would likely surface them. Ishlab
+Studios, the job immediately preceding this one, still has no page of its
+own.
+
+

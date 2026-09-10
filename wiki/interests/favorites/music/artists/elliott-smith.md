@@ -1,0 +1,109 @@
+
+---
+domain: interests
+page_type: entity
+status: active
+importance: high
+date_created: 2026-06-22
+date_modified: 2026-07-16
+sources:
+  - "raw/self/favorites/FAVS MASTERLIST.csv"
+  - "raw/self/facebook/facebook-ihatedanfrank/posts/your_posts_1.html"
+  - "raw/self/message-csv/MASTER_MESSAGES_DB_DUMP.csv"
+  - "raw/self/gemini-activity/Gemini Activity.html"
+related:
+  - "wiki/interests/favorites/music"
+  - "wiki/self/context-core"
+  - "wiki/mind/profile/deviance-mapping"
+  - "wiki/interests/favorites/music/artists/fall-out-boy"
+tags: [personality-profile, forensic-analysis]
+connections:
+  - page: wiki/mind/synthesis/music-as-identity
+    type: component-of
+    claim: "Smith's quiet-pole role is the emotional-regulator facet of the four-mode music-as-identity thesis."
+  - page: wiki/self/twitter/2018
+    type: evidenced-by
+    claim: "'Gonna crowdfund an Elliott Smith tattoo for myself. I deserve it' (24 January 2018) is the only evidence that the attachment was ever meant to be permanent — nine months before the October 2018 Misfits sequence, and no later source records it being done."
+---
+
+
+# Elliott Smith
+
+Portland singer-songwriter, 1969–2003. Recorded on four-track cassette
+recorders and later in professional studios, but with a production
+sensibility that always kept the room quiet enough to hear the breath.
+Known for *Either/Or* (1997), *XO* (1998), and *Figure 8* (2000) — albums
+of extraordinary melodic precision built around the kind of personal
+devastation that sounds like it was written in the dark and shouldn't be
+overheard.
+
+He died of two stab wounds to the chest in 2003. The circumstances remain disputed.
+
+## In Favorites
+
+7 tracks in the masterlist — "Waltz #2 (XO)," "King's Crossing," "High
+Times," "Whatever (Folk Song in C)," plus remastered repeats — and the
+Gemini activity export ranks him the #1 individual artist in a listening
+profile otherwise dominated by bass-heavy electronic warfare. That
+placement is not a footnote; it is the single clearest data point for the
+"two-mode" emotional architecture the profile describes (a hard electronic
+shell protecting a hypersensitive core, no stable middle).
+
+## "patron saint of liars and fakes" — the 2013 handle
+
+The most concrete trace of what Smith meant is a 2013 Facebook username:
+**"patron saint of liars and fakes."** That phrase is Smith's own
+self-description, lifted as an identity. It reveals the specific angle of
+the attraction — not sadness as sadness, but Smith's exactitude about
+self-deception, about the gap between the presented self and the thing
+underneath. For an INTP 5w4 whose default mode is forensic analysis, music
+this emotionally precise is the same mode applied to a different domain:
+Smith doesn't vague-gesture at feeling, he finds the specific image, the
+specific chord, the specific vocal break. The attraction is to the
+precision, and to the permission to name the lie plainly.
+
+## The R&B-before-1979 gate (2025)
+
+The attachment shows up as a live filter, not just a nostalgic entry. In a
+2025 message laying down a rule for what music is allowed in a shared
+space, Dan wrote: "if she insists on playing r&b it has to be before 1979
+or it will be overproduced trash… you cut that shit out and go back to
+listening to real music like elliott smith or radiohead" (2025-09-02).
+Smith is the positive pole of the gate — the artist you pivot *to* when the
+overproduced stuff gets cut. The fact that he is the named alternative to
+"trash" tells you his position in the listening hierarchy: not a guilty
+pleasure but the standard.
+
+## Why this artist fits the profile
+
+Smith is the emotional pole of a library that also includes JPEGMAFIA and
+My Chemical Romance — the quietest, most intimate presence in a collection
+that elsewhere tends toward intensity. The 7 tracks aren't background
+listening; they're what you put on when the volume of everything else gets
+too high. The Gemini export frames this as the "glitch that reveals the
+system's architecture": the patron saint of whispered ruin sitting at the
+top of a bass-music playlist is the visible seam between radical
+dissociation (the machine) and radical vulnerability (the wound). There is
+no "chill" state in between, and Smith is the evidence for the vulnerable
+end.
+
+For the wider self model, this is the same move documented in
+[[wiki/mind/profile/deviance-mapping]] — shame transmuted into intellectual
+weaponry rather than avoided. Smith names his own defects with clinical
+precision and makes that the art; the profile's owner does something
+adjacent with his own foresight and betrayal material.
+
+## The Quiet Anchor
+
+In the broader favorites map — JPEGMAFIA's abrasion, MCR's theatrical
+volume, the emo cluster's collective emotional intensity — Elliott Smith
+functions as the proof that the emotional range extends all the way in the
+other direction. The library isn't just loud; it can hold its breath.
+
+## Related
+
+[[wiki/interests/favorites/music]] · [[wiki/self/context-core]] · [[wiki/mind/profile/deviance-mapping]] · [[wiki/interests/favorites/music/artists/fall-out-boy]]
+
+Smith's role as the quiet pole of an otherwise bass-dominant library is generalized at [[wiki/mind/synthesis/music-as-identity]]: the emotional-regulator mode of the four-mode thesis, still live and still enforced as of the 2025 gate.
+
+
