@@ -1,0 +1,231 @@
+[
+
+{
+
+"segment_id": "intro_memphis_vibe",
+
+"time_start_s": 0,
+
+"time_end_s": 12,
+
+"key_elements": ["original_synth_loop", "Ruby_vocals_processed", "lo_fi_texture"],
+
+"loudness_avg_dBFS": -18.5,
+
+"dynamic_range_dB": 8,
+
+"spectral_centroid_hz": 850,
+
+"spectral_flux_rate": 0.25,
+
+"bass_energy_relative_0_10": 4,
+
+"mid_energy_relative_0_10": 7,
+
+"treble_energy_relative_0_10": 3,
+
+"rhythmic_density_subdivs": "8th_notes_sparse",
+
+"harmonic_complexity_0_10": 3,
+
+"spatial_width_relative_0_10": 6,
+
+"distortion_intensity_0_10": 5,
+
+"atmosphere_descriptor": "eerie_menacing",
+
+"vocal_processing": "overdrive_delay"
+
+},
+
+{
+
+"segment_id": "pre_drop_build_01",
+
+"time_start_s": 12,
+
+"time_end_s": 17.5,
+
+"key_elements": ["rising_synth_siren", "snare_rolls_accelerating", "vocal_chops"],
+
+"loudness_avg_dBFS": -12.0,
+
+"dynamic_range_dB": 6,
+
+"spectral_centroid_hz": 1500,
+
+"spectral_flux_rate": 0.8,
+
+"bass_energy_relative_0_10": 2,
+
+"mid_energy_relative_0_10": 8,
+
+"treble_energy_relative_0_10": 7,
+
+"rhythmic_density_subdivs": "16th_to_32nd_notes",
+
+"harmonic_complexity_0_10": 4,
+
+"spatial_width_relative_0_10": 8,
+
+"distortion_intensity_0_10": 6,
+
+"atmosphere_descriptor": "tension_escalating",
+
+"vocal_processing": "stutter_chop_filter"
+
+},
+
+{
+
+"segment_id": "drop_01_sub_bass_impact",
+
+"time_start_s": 17.5,
+
+"time_end_s": 39,
+
+"key_elements": ["earth_shaking_808s", "wonky_modulated_synths", "crisp_trap_hats", "minimal_vocal_reverb"],
+
+"loudness_avg_dBFS": -5.0,
+
+"dynamic_range_dB": 15,
+
+"spectral_centroid_hz": 300,
+
+"spectral_flux_rate": 0.7,
+
+"bass_energy_relative_0_10": 10,
+
+"mid_energy_relative_0_10": 6,
+
+"treble_energy_relative_0_10": 9,
+
+"rhythmic_density_subdivs": "halftime_syncopated_triplets",
+
+"harmonic_complexity_0_10": 7,
+
+"spatial_width_relative_0_10": 9,
+
+"distortion_intensity_0_10": 9,
+
+"atmosphere_descriptor": "visceral_chaotic",
+
+"vocal_processing": "chopped_reverb_tails"
+
+},
+
+{
+
+"segment_id": "bridge_vocal_focus",
+
+"time_start_s": 39,
+
+"time_end_s": 56,
+
+"key_elements": ["primary_rap_vocals_return", "atmospheric_pads", "foley_textures"],
+
+"loudness_avg_dBFS": -14.0,
+
+"dynamic_range_dB": 12,
+
+"spectral_centroid_hz": 950,
+
+"spectral_flux_rate": 0.4,
+
+"bass_energy_relative_0_10": 3,
+
+"mid_energy_relative_0_10": 8,
+
+"treble_energy_relative_0_10": 5,
+
+"rhythmic_density_subdivs": "vocal_driven_steady",
+
+"harmonic_complexity_0_10": 3,
+
+"spatial_width_relative_0_10": 7,
+
+"distortion_intensity_0_10": 4,
+
+"atmosphere_descriptor": "rebuilding_tension_eerie",
+
+"vocal_processing": "cleaner_some_delay"
+
+},
+
+{
+
+"segment_id": "drop_02_deconstruction_glitch",
+
+"time_start_s": 56,
+
+"time_end_s": 136,
+
+"key_elements": ["fractured_bass_stutters", "tape_stop_effects", "pitch_shifting_glitches", "weaponized_vocals"],
+
+"loudness_avg_dBFS": -4.0,
+
+"dynamic_range_dB": 18,
+
+"spectral_centroid_hz": 400,
+
+"spectral_flux_rate": 0.9,
+
+"bass_energy_relative_0_10": 10,
+
+"mid_energy_relative_0_10": 7,
+
+"treble_energy_relative_0_10": 9,
+
+"rhythmic_density_subdivs": "erratic_idm_glitch",
+
+"harmonic_complexity_0_10": 8,
+
+"spatial_width_relative_0_10": 10,
+
+"distortion_intensity_0_10": 10,
+
+"atmosphere_descriptor": "absolute_sonic_meltdown",
+
+"vocal_processing": "degraded_distorted_percussive"
+
+},
+
+{
+
+"segment_id": "outro_decay",
+
+"time_start_s": 136,
+
+"time_end_s": 149,
+
+"key_elements": ["high_freq_roll_off", "fading_synths", "reverb_wash"],
+
+"loudness_avg_dBFS": -25.0,
+
+"dynamic_range_dB": 10,
+
+"spectral_centroid_hz": 600,
+
+"spectral_flux_rate": 0.15,
+
+"bass_energy_relative_0_10": 2,
+
+"mid_energy_relative_0_10": 4,
+
+"treble_energy_relative_0_10": 1,
+
+"rhythmic_density_subdivs": "decaying_sparse",
+
+"harmonic_complexity_0_10": 2,
+
+"spatial_width_relative_0_10": 5,
+
+"distortion_intensity_0_10": 2,
+
+"atmosphere_descriptor": "desolate_echoing",
+
+"vocal_processing": "fading_reverb"
+
+}
+
+]

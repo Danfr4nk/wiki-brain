@@ -1,0 +1,127 @@
+PROJECT: VIDEO ESSAY SCRIPT WORKBOOK — FULL DRAFT ENVIRONMENT
+
+You are building a browser-based writing workbook for long-form video essay scripts. These scripts run 30–60 minutes of final spoken content — approximately 4,500–9,000 words of dense spoken prose. There is no AI integration of any kind. No API calls, no generation, no summarization. This is a pure writing environment. Do not add AI features, suggest AI integration, or design UI affordances that imply AI assistance.
+
+CORE CONSTRAINT — READ THIS FIRST AND HONOR IT THROUGHOUT:
+
+No "summarize this section," no "tighten your argument," no word-count warnings that flag long as bad. The entire purpose is to grow and sustain a large piece of writing. Shorter is not better here. Violation of this constraint is a first-order failure regardless of how polished everything else is.
+
+THE CORE PROBLEM THIS TOOL SOLVES:
+
+The writer's primary challenge is losing tonal footing — the wit, register, and spoken energy of the piece — when sections go deep into technical or analytical content. Academic gravity pulls the writing toward prose that reads well but performs badly. The tool's job is to keep the spoken voice present and recoverable at every stage, especially on cold re-entry after time away from the project.
+
+WHAT THE TOOL DOES:
+
+Phase 1 — Concept Foundation
+
+A required setup layer before scripting unlocks. Fields:
+
+The Spine — One to three sentences: what is this essay's central argument? Not the topic. The argument.
+
+The Voice Contract — A short freeform field where the writer describes the register of this specific piece. Example: "Dry. Forensic but with a lit fuse. Talks to people who are already suspicious, not people who need convincing." This sits at the top of every section view as a persistent anchor.
+
+The Audience Assumption — Who does the writer imagine when writing? What do they already know? What do they resent being told?
+
+The Entry Hook Strategy — How does this essay earn the first 90 seconds?
+
+The Exit / Resolution — Where does the audience land emotionally and intellectually?
+
+These are not optional. They persist and are visible during scripting.
+
+Phase 2 — Section Architecture
+
+A structured skeleton builder. Each section has:
+
+Title
+
+Stated purpose (what this section does for the argument — one sentence)
+
+Estimated spoken duration in minutes
+
+Auto-calculated word target at 140 words per minute
+
+A Tone Flag — a brief label the writer sets: e.g., "analytical / keep it alive," "pivot moment / earn the turn," "pure performance / no hedging." This is a freeform tag, not a dropdown.
+
+Status: Not Started / In Progress / Drafted / Revised
+
+Live total runtime tracker summing all section estimates. Supports 8–20 sections comfortably.
+
+Phase 3 — Script Editor
+
+Per-section full prose editor. Each section view displays:
+
+The Voice Contract from Phase 1 pinned at the top — always visible, never collapsible
+
+The section's Tone Flag directly above the editor
+
+A large, uncapped text area (minimum 600px tall, grows with content, no scroll cap)
+
+Live word count and live estimated spoken time at 140 WPM
+
+Word target with a neutral indicator (under / near / over — over is information, not a warning)
+
+A Director's Note field: production annotations, delivery notes, asides to self — clearly separated from the spoken script text, not exported as script copy
+
+Punch Word Tagging:
+
+The writer can select any word or short phrase and mark it as a punch word. Punch words render with a visible but non-disruptive highlight (bold + accent color, no icons cluttering the line). These survive export as ALL CAPS in the plain text output so delivery emphasis survives the format change. Punch tags are stored in the project JSON.
+
+Phase 4 — Teleprompter / Read Mode
+
+A dedicated full-screen read mode for any section or the full script. Features:
+
+Clean single-column view, large comfortable type size (user-adjustable, 24px–40px range)
+
+Auto-scroll at an adjustable WPM rate (range: 100–180 WPM) controlled by a simple slider
+
+Pause/resume on spacebar or click
+
+Punch words displayed in the accent color at larger weight so they're visible at scroll speed
+
+Director's Notes are hidden in this mode — only the spoken script text appears
+
+No editing in this mode — read-only, forces the writer to hear the text rather than fix it
+
+Phase 5 — Full Assembly & Export
+
+A read-only assembled view of all sections in order with section headers, total word count, and total runtime. Export options:
+
+Plain text (.txt) — Full script, section headers included, punch words rendered as ALL CAPS, Director's Notes omitted. One click, immediate download.
+
+Project JSON — Full project state including all metadata, punch tags, tone flags, voice contract, section architecture. For backup and reload.
+
+JSON import to restore a saved project. That's the full round-trip.
+
+RE-ENTRY UX — CRITICAL:
+
+The writer works in bursts and returns cold. The tool must support fast re-entry without re-reading everything. On open or project load, the dashboard should surface:
+
+The Voice Contract (full text, front and center)
+
+Every section's Tone Flag and current status at a glance
+
+The last-edited section, highlighted
+
+Total project runtime so far
+
+The goal: the writer opens the tool, reads the Voice Contract, scans the Tone Flags, clicks into the last active section, and is writing within 60 seconds.
+
+TECHNICAL REQUIREMENTS:
+
+Single-file HTML/JS/CSS, self-contained, runs in browser with no server, no external APIs
+
+All data persisted to localStorage with autosave every 30 seconds and on field blur
+
+Project save as JSON, project load from JSON file
+
+CDN dependencies allowed (no build step)
+
+Desktop-first, wide viewport assumed, mobile not a priority
+
+Dark theme, high contrast, editorial aesthetic — not SaaS, not productivity tool, not Notion. Think serious writer's environment. Typography and spacing should prioritize extended reading and writing comfort. UI chrome recedes; text dominates.
+
+FIRST DELIVERABLE:
+
+Build the complete working application in a single HTML file. All five phases functional. Punch word tagging functional. Teleprompter mode functional with adjustable scroll speed. Plain text export functional with ALL CAPS punch words. localStorage autosave functional. JSON export/import functional.
+
+Flag any architectural tradeoffs you made so they can be addressed deliberately in iteration. We are building toward a shippable version — v1 should be fully functional, not a prototype.

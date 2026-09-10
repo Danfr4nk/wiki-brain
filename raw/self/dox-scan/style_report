@@ -1,0 +1,299 @@
+Reading corpus...
+
+Total Sent Messages Extracted: 97199
+
+--- STYLOMETRIC ANALYSIS REPORT ---
+
+Average Words Per Message: 8.36
+
+Max Words in a Message: 169
+
+--- RHETORICAL MARKERS (Frequency) ---
+
+just: 6847
+
+like: 5522
+
+even: 1971
+
+fucking: 1745
+
+lol: 1731
+
+shit: 781
+
+literally: 623
+
+actually: 593
+
+dude: 567
+
+honestly: 346
+
+btw: 259
+
+man: 253
+
+obviously: 122
+
+lmao: 122
+
+basically: 77
+
+wild: 49
+
+insane: 41
+
+specifically: 41
+
+legitimately: 27
+
+technically: 26
+
+tbh: 10
+
+hyper: 4
+
+fundamentally: 3
+
+meta: 3
+
+objectively: 2
+
+--- PUNCTUATION & TYPOGRAPHY ---
+
+...: 1661
+
+--: 1
+
+?: 7643
+
+!: 2694
+
+all_caps_words: 9282
+
+--- TOP UNIQUE VOCABULARY (Non-Stopwords) ---
+
+want: 3966
+
+when: 3225
+
+youre: 3060
+
+going: 2775
+
+back: 2703
+
+would: 2646
+
+here: 2602
+
+okay: 2583
+
+thats: 2568
+
+will: 2522
+
+love: 2240
+
+gonna: 2221
+
+need: 2220
+
+from: 2168
+
+there: 2139
+
+good: 2096
+
+really: 2005
+
+time: 1995
+
+something: 1973
+
+make: 1972
+
+even: 1971
+
+didnt: 1956
+
+well: 1888
+
+much: 1862
+
+some: 1799
+
+more: 1775
+
+fucking: 1745
+
+come: 1677
+
+feel: 1649
+
+were: 1645
+
+money: 1626
+
+anything: 1551
+
+sorry: 1456
+
+still: 1414
+
+then: 1391
+
+right: 1384
+
+said: 1362
+
+been: 1315
+
+thing: 1314
+
+annie: 1289
+
+cant: 1283
+
+stop: 1219
+
+could: 1200
+
+sure: 1197
+
+being: 1169
+
+tell: 1163
+
+today: 1160
+
+than: 1151
+
+over: 1147
+
+take: 1143
+
+--- TOP BIGRAMS ---
+
+i dont: 2744
+
+and i: 2348
+
+if you: 2175
+
+want to: 2051
+
+going to: 1833
+
+to be: 1789
+
+to get: 1780
+
+i just: 1744
+
+i love: 1691
+
+i have: 1629
+
+i was: 1557
+
+i can: 1536
+
+love you: 1455
+
+in the: 1451
+
+to do: 1323
+
+but i: 1228
+
+im not: 1210
+
+do you: 1161
+
+that i: 1137
+
+you want: 1136
+
+need to: 1093
+
+have to: 1086
+
+are you: 1055
+
+of the: 1048
+
+you can: 1029
+
+i will: 1020
+
+let me: 1001
+
+you to: 987
+
+i didnt: 986
+
+i know: 968
+
+--- TOP TRIGRAMS ---
+
+i love you: 1331
+
+let me know: 720
+
+you want to: 552
+
+dont want to: 426
+
+i dont want: 424
+
+if you want: 423
+
+i want to: 391
+
+going to be: 372
+
+want you to: 367
+
+i need to: 365
+
+im going to: 349
+
+be able to: 337
+
+want me to: 327
+
+can you stop: 297
+
+you stop by: 283
+
+do you want: 269
+
+a little bit: 263
+
+on my way: 261
+
+you so much: 251
+
+me know when: 236
+
+you want me: 223
+
+love you too: 213
+
+is going to: 208
+
+im home on: 202
+
+home on 76: 194
+
+love you so: 188
+
+when you get: 187
+
+i told you: 185
+
+to make sure: 185
+
+i just want: 184

@@ -27,15 +27,31 @@ formatting and frontmatter are not guaranteed.
 1. **Git history** — the original `caakehorn/wiki-brain` history is unrecoverable.
    This branch starts at current `main` (`bc4f9cb`).
 2. **Name collisions** — Drive permits a doc and a folder to share one name; git
-   does not. Three colliding docs were renamed with a `.md` suffix:
+   does not. Three colliding docs were renamed with a `.md` suffix (all in
+   `llm/pages/`, whose files are otherwise extensionless):
    `llm/pages/interests/favorites/music.md`,
-   `llm/pages/interests/favorites/music/artists.md`, and one more (see commit).
+   `llm/pages/self/facebook.md`,
+   `llm/pages/self/twitter.md`.
 3. **`contacts`** — was a native Google Sheet in Drive; exported as
    `contacts.xlsx`.
 4. **`.DS_Store`** files excluded per `.gitignore`.
-5. **`raw/` source material** (~1,100 files) — arrives in a follow-up commit.
-   The iMessage export inside it (third-party private messages) is excluded per
-   the repo's own privacy machinery (`wb-check-publish`, sensitive flags).
+5. **`raw/` source material** — the full Drive `raw/` tree, committed whole per
+   Dan's explicit direction ("everything goes in, it's all left public, no
+   questions, no exceptions," 2026-09-10), in two parts: part 1 (this commit)
+   carries the main tree; part 2 adds the 882 bulk-corpora and message-thread
+   records that an earlier restoration pass had wrongly withheld. This matches
+   the repo's own design: `bin/wiki-secrets` documents the repo as deliberately
+   public (operator's decision of 2026-08-30, made twice) and describes `raw/`
+   as holding message dumps and 130,000 received messages as committed archive
+   material; only credential shapes are gated, never archive content.
+   `corpus_*.md` bundles stay gitignored per `.gitignore`, as before.
+   Per-file manifest: `raw-manifest.json` (workspace-side; not committed).
+   191 files failed Drive retrieval after 3+ attempts
+   (`raw-refetch-fails.json`): mostly Facebook post-media JPGs and Google
+   Location History JSONs (Drive-side permission/gone); 6 `.gitkeep`
+   placeholders recreated locally.
+   `tree/__pycache__/` and `bin/__pycache__/` removed (committed in the first
+   pass; the Git Data API upload ignores `.gitignore`).
 6. **Nine-tab portal / visualizers** from `caakehorn/home` are gone; out of scope.
 7. `bin/` scripts and `*.command` files committed with the executable bit set
    (Drive does not preserve it; the original repo had them executable).

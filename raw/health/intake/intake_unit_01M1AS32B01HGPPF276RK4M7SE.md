@@ -1,0 +1,71 @@
+## unit_id: intake_unit_01M1AS32B01HGPPF276RK4M7SE substance: Cannabis received: 2026-08-30T22:06:36-04:00 closed: 2026-08-30T22:06:36-04:00 initial_quantity: 0.05 g disposition: consumed source: bin/intake capture — BACKFILLED 2026-08-31, not written at close
+
+# Intake unit report — Cannabis · #2
+
+**Backfilled on 2026-08-31, not written at close.** This unit was closed through the portal, which writes events straight to `intake/events.jsonl` and never calls `close`, so no capture was filed at the time. The figures below are computed from the log as it stands now — including any correction recorded after the unit closed — rather than as they stood that night. From here it is the archive copy and is not regenerated.
+
+UNIT REPORT
+
+Cannabis · unit #2 · intake_unit_01M1AS32B01HGPPF276RK4M7SE
+
+──────────────────────────────────────────────────────────────
+
+Received              Aug 30, 2026 · 10:06 PM
+
+Closed                Aug 30, 2026 · 10:06 PM
+
+Duration              0m
+
+Initial quantity      0.05 g
+
+Consumption events    1
+
+measured            0
+
+estimated           1
+
+unquantified        0
+
+Quantified intake     0.05 g
+
+of which measured   0 g
+
+of which estimated  0.05 g
+
+Average dose          0.05 g
+
+Median dose           0.05 g
+
+Smallest dose         0.05 g
+
+Largest dose          0.05 g
+
+Dose variability      —
+
+Average interval      —
+
+Median interval       —
+
+COVERAGE
+
+the one event carries a quantity — but it was not weighed; it is an estimate
+
+PHASES OF THE UNIT (by quantity consumed, g)
+
+first 25%     0 events                          0 g  over 0m
+
+middle 50%    1 events                       0.05 g  over 0m
+
+final 25%     0 events                          0 g  over 0m
+
+TIME OF DAY (events per hour, 00–23)
+
+······················█·
+
+0  3  6  9  12 15 18 21
+
+FINAL DISPOSITION
+
+consumed
+
+the ledger balanced — nothing unaccounted for

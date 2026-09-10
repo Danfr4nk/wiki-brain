@@ -1,0 +1,3 @@
+## captured: 2026-07-14 type: fact tags: [relationships, digital-footprint] source: session capture (Claude Code)
+
+Direct account from Dan: Kya Hansen, better known by her online handle "bbblud" (or "blud"), is a Canadian model/OnlyFans creator. Dan was the admin of her Reddit (subreddit) for a period in 2019, until he got bored of the fact that she was an OnlyFans creator who "absolutely refused to appear topless, much less naked." He was in communication with her for a while during that period, mostly via OnlyFans messaging. He noted the actual OF message history might be extractable from a source not yet in the corpus.

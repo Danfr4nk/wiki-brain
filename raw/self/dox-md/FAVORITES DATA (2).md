@@ -1,0 +1,14 @@
+| **Title** | **Author(s)** | **Avg Rating** | **Num Ratings** | **My Rating** | **Date Pub** | **Date Read** | **Date Added** | **Shelves** |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Caesar: Life of a Colossus | Goldsworthy, Adrian | 4.23 | 12763 | ★★★★★ | 1977 | Jul 31, 2024 | Mar 27, 2024 | ancient-history, biography, caesar, great-man-theory, history, non-fiction, philosophy, roman-republic, stories, top-shelf |
+| Cicero: The Life and Times of Rome's Greatest Politician | Everitt, Anthony | 3.89 | 8071 | ★★★★☆ | 2001 | Dec 21, 2024 | Aug 28, 2024 | ancient-history, biography, history, non-fiction, politics, roman-republic, stories, top-shelf |
+| Rubicon: The Last Years of the Roman Republic | Holland, Tom | 4.23 | 25522 | ★★★★★ | 2003 | Apr 07, 2024 | Mar 29, 2024 | ancient-history, caesar, history, non-fiction, politics, roman-republic, stories, top-shelf, war |
+| Manhunt: The 12-Day Chase for Lincoln's Killer | Swanson, James L. | 4.16 | 34162 | ★★★★☆ | Feb 06, 2006 | Jan 2024 | Feb 16, 2024 | american-history, crime, history, non-fiction, top-shelf |
+| The Assassination of Julius Caesar: A People's History of Ancient Rome | Parenti, Michael | 4.29 | 1988 | ★★★★☆ | 2003 | Apr 29, 2024 | Mar 29, 2024 | ancient-history, caesar, crime, history, non-fiction, roman-republic |
+| The Rise and Fall of the Third Reich: A History of Nazi Germany | Shirer, William L. | 4.22 | 144595 | ★★★★★ | Oct 17, 1960 | Jan 26, 2023 | Dec 26, 2022 | gonzo, history, journalism, massive, non-fiction, politics, source, top-shelf, war |
+| Personality Types: Using the Enneagram for Self-Discovery | Riso, Don Richard | 4.17 | 3495 | ★★★★☆ | Sep 01, 1987 | not set | Sep 21, 2024 | massive, non-fiction, personality, philosophy, science, self-improvement, sex, sociology, top-shelf |
+| American Prometheus: The Triumph and Tragedy of J. Robert Oppenheimer | Bird, Kai | 4.31 | 55200 | ★★★★★ | Apr 05, 2005 | Jul 14, 2023 | Jul 13, 2023 | american-history, biography, great-man-theory, history, massive, non-fiction, science, source, top-shelf, war |
+| Family of Secrets: The Bush Dynasty, the Powerful Forces That Put It in the White House... | Baker, Russ | 4.11 | 1742 | ★★☆☆☆ | Dec 23, 2008 | Jan 06, 2023 | Mar 24, 2022 | american-history, conservative, conspiracy, history, journalism, non-fiction, politics, president, recent-history, top-shelf |
+| I Hate Your Guts | Norton, Jim | 3.84 | 937 | ★★★☆☆ | Nov 04, 2008 | Jan 06, 2023 | Mar 24, 2022 | comedy, memoir, personality, stories, top-shelf |
+| Lives of the Noble Romans | Plutarch | 4.07 | 104 | ★★★☆☆ | 100 | Jan 2024 | Jun 04, 2024 | ancient-history, history, non-fiction, politics, roman-republic, stories, war |
+| Game Change: Obama and the Clintons, McCain and Palin, and the Race of a Lifetime | Heilemann, John | 4.13 | 22715 | ★★★★☆ | Jan 11, 2010 |  |  |  |
