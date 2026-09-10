@@ -1,0 +1,271 @@
+#!/usr/bin/env python3
+"""Regression tests for the constitutional law.
+
+The layer invariant is the one rule the whole system rests on, so it gets a
+test that fails loudly rather than a comment asking people to be careful.
+Each case builds a throwaway knowledge base, runs bin/wb-validate against it,
+and asserts both the exit status and that the diagnostic actually names the
+problem — an error that fires for the wrong reason is not a passing test.
+
+Usage:  tests/test-invariant [-v]
+
+Standard library only. Exit 0 when every case passes.
+"""
+
+from __future__ import annotations
+
+import argparse
+import pathlib
+import subprocess
+import sys
+import tempfile
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+VALIDATE = ROOT / "bin" / "wb-validate"
+
+SOURCE = """+++
+id = "src:fixture"
+layer = 0
+type = "source"
+title = "Fixture source"
+source_type = "message-corpus"
+provenance = "synthetic test fixture"
+reliability = "primary"
++++
+"""
+
+DATUM = """+++
+id = "dat:0001"
+layer = 1
+type = "datum"
+title = "A claim"
+claim = "X said Y"
+cites = ["src:fixture"]
++++
+"""
+
+EVENT = """+++
+id = "evt:thing"
+layer = 2
+type = "event"
+title = "A thing happened"
+cites = ["dat:0001"]
+[when]
+date = "2018-03-04"
++++
+"""
+
+INTERPRETATION = """+++
+id = "int:reading"
+layer = 3
+type = "interpretation"
+title = "What it might mean"
+perspective = "llm"
+cites = ["evt:thing", "dat:0001"]
++++
+"""
+
+BASE = {"a": SOURCE, "b": DATUM, "c": EVENT, "d": INTERPRETATION}
+
+# name -> (extra files, expect_ok, substring the diagnostic must contain)
+CASES: list[tuple[str, dict[str, str], bool, str]] = [
+    ("legal chain L3->L2->L1->L0 passes", {}, True, ""),
+
+    ("datum citing an interpretation is a layer violation", {"x": """+++
+id = "dat:0002"
+layer = 1
+type = "datum"
+title = "Laundered conclusion"
+claim = "the relationship was abusive"
+cites = ["src:fixture", "int:reading"]
++++
+"""}, False, "LAYER VIOLATION"),
+
+    ("nothing may cite a synthesis", {"x": """+++
+id = "syn:model"
+layer = 5
+type = "synthesis"
+title = "Whole-person model"
+cites = ["int:reading"]
++++
+""", "y": """+++
+id = "int:leans"
+layer = 3
+type = "interpretation"
+title = "Rests on a conclusion"
+perspective = "llm"
+cites = ["syn:model"]
++++
+"""}, False, "a synthesis is a leaf"),
+
+    ("a pattern may not cite another pattern", {"x": """+++
+id = "pat:first"
+layer = 4
+type = "pattern"
+title = "First pattern"
+evidence_count = 3
+cites = ["int:reading"]
++++
+""", "y": """+++
+id = "pat:second"
+layer = 4
+type = "pattern"
+title = "Pattern of patterns"
+evidence_count = 2
+cites = ["pat:first"]
++++
+"""}, False, "LAYER VIOLATION"),
+
+    ("an unsourced datum is rejected", {"x": """+++
+id = "dat:0003"
+layer = 1
+type = "datum"
+title = "Unsourced"
+claim = "something"
+cites = []
++++
+"""}, False, "at least 1 item"),
+
+    ("an interpretation must declare whose reading it is", {"x": """+++
+id = "int:anon"
+layer = 3
+type = "interpretation"
+title = "No perspective"
+cites = ["evt:thing"]
++++
+"""}, False, "perspective"),
+
+    ("a caused edge must state its causal basis", {"x": """+++
+id = "evt:second"
+layer = 2
+type = "event"
+title = "Later thing"
+[when]
+date = "2019-01-01"
+[[edges]]
+rel = "caused"
+target = "evt:thing"
++++
+"""}, False, "causal_basis"),
+
+    ("a preceded edge needs no causal basis", {"x": """+++
+id = "evt:third"
+layer = 2
+type = "event"
+title = "Later thing"
+[when]
+date = "2019-01-01"
+[[edges]]
+rel = "preceded"
+target = "evt:thing"
++++
+"""}, True, ""),
+
+    ("a dangling citation is caught", {"x": """+++
+id = "evt:dangling"
+layer = 2
+type = "event"
+title = "Cites nothing real"
+cites = ["dat:nonexistent"]
+[when]
+date = "2020-01-01"
++++
+"""}, False, "does not exist"),
+
+    ("type and declared layer must agree", {"x": """+++
+id = "evt:mislayered"
+layer = 4
+type = "event"
+title = "Mislayered"
+[when]
+date = "2020-01-01"
++++
+"""}, False, "belongs to layer 2"),
+
+    ("a contradiction needs at least two sides", {"x": """+++
+id = "con:onesided"
+layer = 3
+type = "contradiction"
+title = "Only one side"
+cites = ["evt:thing"]
++++
+"""}, False, "at least 2 item"),
+
+    ("a duplicate id is caught", {"x": DATUM}, False, "duplicate id"),
+
+    ("a node may not cite itself", {"x": """+++
+id = "int:selfref"
+layer = 3
+type = "interpretation"
+title = "Self-citing"
+perspective = "llm"
+cites = ["int:selfref"]
++++
+"""}, False, "itself"),
+
+    ("unknown frontmatter fields are rejected", {"x": """+++
+id = "evt:typo"
+layer = 2
+type = "event"
+title = "Has a typo'd field"
+confidenc = "high"
+[when]
+date = "2020-01-01"
++++
+"""}, False, "unknown field"),
+
+    ("an imprecise date may not be padded into precision", {"x": """+++
+id = "evt:baddate"
+layer = 2
+type = "event"
+title = "Malformed date"
+[when]
+date = "March 2018"
++++
+"""}, False, "does not match"),
+]
+
+
+def run_case(files: dict[str, str], tmp: pathlib.Path) -> tuple[int, str]:
+    kb = tmp / "kb"
+    kb.mkdir()
+    for name, content in {**BASE, **files}.items():
+        (kb / f"{name}.md").write_text(content, encoding="utf-8")
+    proc = subprocess.run([sys.executable, str(VALIDATE), "--kb", str(kb)],
+                          capture_output=True, text=True)
+    return proc.returncode, proc.stdout + proc.stderr
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("-v", "--verbose", action="store_true")
+    args = ap.parse_args()
+
+    if not VALIDATE.exists():
+        print(f"missing {VALIDATE}", file=sys.stderr)
+        return 1
+
+    passed = failed = 0
+    for name, files, expect_ok, needle in CASES:
+        with tempfile.TemporaryDirectory() as raw:
+            code, output = run_case(files, pathlib.Path(raw))
+        ok = (code == 0) if expect_ok else (code != 0 and needle in output)
+        if ok:
+            passed += 1
+            print(f"  pass  {name}")
+            if args.verbose and output.strip():
+                print("\n".join(f"        {line}" for line in output.strip().splitlines()))
+        else:
+            failed += 1
+            print(f"  FAIL  {name}")
+            print(f"        expected {'clean' if expect_ok else f'failure mentioning {needle!r}'}, "
+                  f"got exit {code}")
+            print("\n".join(f"        {line}" for line in output.strip().splitlines()))
+
+    print(f"\n{passed} passed, {failed} failed")
+    return 1 if failed else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
