@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Work diagram">
+  <rect width="200" height="200" fill="#f0f4f8"/>
+  <rect x="55" y="70" width="90" height="70" rx="6" fill="none" stroke="#2c5f8a" stroke-width="3"/>
+  <line x1="55" y1="90" x2="145" y2="90" stroke="#2c5f8a" stroke-width="3"/>
+  <circle cx="66" cy="80" r="3" fill="#2c5f8a"/><circle cx="78" cy="80" r="3" fill="#2c5f8a"/>
+  <text x="100" y="170" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#202122">Work</text>
+</svg>

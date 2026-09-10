@@ -1,0 +1,1420 @@
+#!/usr/bin/env python3
+"""wiki-testimony — the operator testimony veracity ledger: what he said, what turned out to be so, and what that predicts.
+
+    bin/wiki-testimony                    the standing state
+    bin/wiki-testimony score              the trust score, global and by class
+    bin/wiki-testimony assess --class date --confidence certain
+    bin/wiki-testimony profile            what and how he gets things wrong
+    bin/wiki-testimony record ...         enter a claim
+    bin/wiki-testimony adjudicate t004 --outcome refuted ...
+
+WHAT THIS IS
+
+`CLAUDE.md`'s CLOSE operation already says the right thing: an operator answer
+is **T0 first-person testimony, not proof**, and where it can be checked against
+`raw/` it must be. The wiki has been doing that for months. What it has never
+done is *keep the results*. Each check lands as a blockquote on one page —
+GAP CLOSED, CONTRADICTION, CORROBORATION ATTEMPTED — and then it is over. Page
+41 has no idea that the same person's date claims came back eight weeks early on
+page 12, so the next answer is weighed exactly as credulously as the first.
+
+This is the missing half of CLOSE: the place the result of the check is
+recorded, so that a hundred scattered adjudications become one instrument
+pointed at the next unproven thing he says.
+
+TWO NUMBERS, BECAUSE ONE WOULD BE A LIE
+
+A single "trust score" collapses two independent facts that behave differently
+and predict differently, and the collapse is the reason most credibility scores
+are useless:
+
+  VERACITY     How often he turns out to be right, weighted by how specific and
+               load-bearing the claim was. This is the score in the ordinary
+               sense: points gained, points lost.
+
+  CALIBRATION  Whether his own stated confidence tracks that accuracy. A person
+               right 70% of the time who says "I think, not sure" on exactly the
+               30% is *fully reliable* — you just have to read the hedge. A
+               person right 90% of the time who says "definitely" on all of it
+               is more accurate and less usable, because nothing in the delivery
+               tells you which tenth to distrust.
+
+Veracity says how much to believe him. Calibration says whether to believe his
+confidence. Only the second one makes an UNPROVEN claim assessable, which is the
+entire point of the exercise — you cannot check the unproven claim, so all you
+have is the class it belongs to and the confidence it arrived with.
+
+THE STRATIFICATION IS THE PRODUCT
+
+"Dan is 74% reliable" is not usable by anything. The findings that are usable
+look like: *date claims about events more than ten years back come back early
+94% of the time, by a median of eight weeks* — because that is a correction you
+can actually apply to the next date he gives. So every testimony is filed under
+a CLAIM CLASS (what kind of proposition it is), and every failed one under a
+FAILURE MODE (how it broke) and a DIRECTION (which way it broke). `profile`
+reads those three columns; `assess` turns them into a prior.
+
+SMALL SAMPLES ARE NAMED AS SUCH, ALWAYS
+
+The corpus has tens of adjudications, not thousands, and several classes will
+sit at n=1 for a long time. So: every rate carries its n, class rates are
+shrunk toward the global rate with a pseudocount, and a Wilson interval is
+printed rather than a bare percentage. A class under MIN_N is refused as a
+prior outright — `assess` falls back to the global figure and says it did.
+This is the same discipline `bin/intake` applies to a mean over 10 of 13
+events, for the same reason: a figure that cannot state its own denominator
+gets believed as if it had one.
+
+WHAT SCORES NOTHING, DELIBERATELY
+
+  unfalsifiable    Checked, and the corpus cannot settle it. Scores ZERO, never
+                   negative. Punishing him for the archive's gaps would make the
+                   number a measure of the corpus rather than of the man, and
+                   would make honest recording of a hard claim costly.
+  unadjudicated    Not yet checked. Excluded from every statistic; it is the
+                   queue, not the record.
+
+WHOSE CLAIM IT IS
+
+`subject: self` is a claim about his own conduct, states or history.
+`subject: other` is a claim about somebody else. Both are scored, separately —
+they are different tasks with different error profiles, and merging them would
+hide the most interesting question the ledger can ask.
+
+Third-party testimony (somebody else asserting something) is recordable with
+`--speaker`, and is excluded from the operator's own score by construction.
+
+THE STANDING DIRECTIVE IS ENFORCED HERE, NOT REMEMBERED
+
+`CLAUDE.md` carries a moratorium on new narrative about one living person. A
+testimony record is new writing about the subject of the claim, and the
+generated page is public, so the rule is mechanical and refuses rather than
+warns: `record` will not take a claim that names her, and `check` fails if one
+appears in the log or on the page. This BIASES THE SAMPLE — at least one
+cleanly adjudicated confirmation is excluded by it — and the page says so
+rather than quietly reporting a score drawn from a filtered record.
+
+EVENT-SOURCED, IN PLAIN FILES
+
+`testimony/events.jsonl` is the source of truth: append-only, one JSON object
+per line, never rewritten. `testimony/testimonies.json` is a projection,
+regenerated on every write and safe to delete. An adjudication that turns out
+to be wrong is SUPERSEDED, never edited — the ledger shows the current verdict
+and the log remembers that it changed, which matters more here than anywhere
+else in this repository: a veracity record that can be quietly rewritten is
+worth less than no veracity record at all.
+
+Pure stdlib. Reads and appends `testimony/`, generates
+`wiki/meta/testimony-veracity.md` and `testimony/SUMMARY.md`, shells to nothing.
+"""
+import argparse
+import datetime
+import json
+import math
+import re
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+LEDGER = ROOT / "testimony"
+LOG = LEDGER / "events.jsonl"
+PROJECTION = LEDGER / "testimonies.json"
+SUMMARY = LEDGER / "SUMMARY.md"
+PAGE = ROOT / "wiki" / "meta" / "testimony-veracity.md"
+
+# ---------------------------------------------------------------- the directive
+#
+# Same pattern and the same reasoning as `bin/wiki-plain`: the rule is code
+# rather than something a session has to remember, and it refuses rather than
+# strips. See that file's header and CLAUDE.md's STANDING DIRECTIVE section.
+MORATORIUM = re.compile(r"\b(annie|ulmer|lo_weez)\b", re.I)
+
+# ---------------------------------------------------------------- taxonomy
+#
+# CLAIM CLASSES are the "what". They are cut by the KIND OF PROPOSITION rather
+# than by subject matter, because the error profile follows the proposition:
+# a date is misremembered the same way whether it is about a job or a funeral,
+# and lumping "claims about work" together would mix a date, a quantity and a
+# motive into one meaningless rate.
+CLAIM_CLASSES = {
+    "date":        "when something happened — a day, month, season or year",
+    "duration":    "how long something lasted, or how far apart two things were",
+    "quantity":    "counts, sums, money, volumes, sizes",
+    "sequence":    "the order of events, or which caused which to be scheduled",
+    "identity":    "who somebody is — a name, a surname, a role, a handle",
+    "attribution": "who said or did a particular thing",
+    "existence":   "whether an event, object or document exists at all",
+    "self_state":  "his own internal state, motive or reasoning at the time",
+    "other_state": "somebody else's internal state, motive or intent",
+    "causation":   "why something happened — one thing accounted for by another",
+    "verbatim":    "the exact wording of something said or written",
+    "enumeration": "a list presented as covering some set",
+    "location":    "where somebody or something physically was",
+    "behavior":    "his own habitual or aggregate conduct — 'I always', 'I never'",
+}
+
+# FAILURE MODES are the "how". Recorded only on a claim that did not come back
+# clean, and a claim may carry several.
+FAILURE_MODES = {
+    "compression":   "the interval was remembered as shorter than it was",
+    "expansion":     "the interval was remembered as longer than it was",
+    "displacement":  "the whole thing sits at the wrong point on the timeline",
+    "conflation":    "two separate events remembered as one",
+    "transposition": "the facts are right and attached to the wrong person, place or time",
+    "inversion":     "the direction is backwards — who did what to whom, or what caused what",
+    "magnitude":     "right kind of thing, wrong size",
+    "confabulation": "a detail that appears to have no referent at all",
+    "omission":      "materially incomplete, presented as if complete",
+    "overreach":     "a real observation generalised past what it supports",
+    "rounding":      "snapped to a clean boundary — a new year, a round number",
+    "stale":         "true when formed, silently false by the time it was asserted",
+}
+
+# DIRECTION is the signed half of the failure, and it is the half that makes a
+# correction possible. Knowing he is wrong about dates is nearly useless;
+# knowing he is EARLY is a subtractable bias.
+DIRECTIONS = {
+    "early":   "dated or placed before the truth",
+    "late":    "dated or placed after the truth",
+    "over":    "quantity stated above the truth",
+    "under":   "quantity stated below the truth",
+    "inward":  "responsibility placed on himself that the record puts elsewhere",
+    "outward": "responsibility placed elsewhere that the record puts on him",
+    "none":    "no meaningful direction to the error",
+}
+
+# The direction of an error RELATIVE TO HIS OWN INTEREST, which is a different
+# axis from whether it is early or late and is the one most likely to expose a
+# systematic bias rather than a memory limit. Recorded on every non-confirmed
+# adjudication, including as `neutral`, so the absence of self-serving error is
+# itself evidence rather than an untested assumption.
+SLANTS = {
+    "flattering": "the error, had it stood, would have reflected better on him",
+    "condemning": "the error, had it stood, would have reflected worse on him",
+    "neutral":    "the error carries no credit or discredit either way",
+}
+
+CONFIDENCES = {"certain": 0.95, "confident": 0.80, "hedged": 0.60, "unsure": 0.40}
+
+# How the claim reached the record. This is a real predictor and not bookkeeping:
+# a fact typed into a platform profile years ago and a fact given in answer to a
+# direct question are not the same evidentiary object, and the first has no
+# occasion for care.
+CHANNELS = {
+    "capture":              "a dated capture in raw/, given in answer to a wiki gap",
+    "session":              "stated in an AI session and preserved in a dossier",
+    "platform_self_report": "a field he filled in on a platform — profile, bio, form",
+    "inline":               "quoted on a wiki page as his account, sourced to raw/",
+    "message":              "asserted in a message to somebody at the time",
+}
+
+OUTCOMES = {
+    "confirmed":        "independent evidence bears it out",
+    "partial":          "the core holds, a material detail does not",
+    "refuted":          "independent evidence contradicts it",
+    "self_contradicted": "he has given two accounts that cannot both be true",
+    "unfalsifiable":    "checked, and the corpus cannot settle it",
+}
+
+# What settled it. A confirmation by a primary document and a confirmation by
+# something else he said are not the same event, and a ledger that cannot tell
+# them apart will happily score him for agreeing with himself.
+EVIDENCE_TIERS = {
+    "primary_document":   "a dated document produced by a third party — a docket, a lease, a summons",
+    "first_party_record": "a dated first-party artifact he did not write for the record — a message, a tweet, an export",
+    "third_party":        "another person's account",
+    "derived":            "a figure computed from the corpus",
+    "none":               "nothing independent was found",
+}
+
+EVENT_TYPES = ("testimony_recorded", "testimony_adjudicated",
+               "adjudication_revised", "testimony_voided")
+
+# Outcome → the value the claim turned out to have. `partial` sits at the
+# midpoint by construction and `self_contradicted` below it: two irreconcilable
+# accounts mean at least one is wrong and nothing identifies which, which is
+# worse evidentially than a half-right claim.
+OUTCOME_VALUE = {"confirmed": 1.0, "partial": 0.5, "self_contradicted": 0.25, "refuted": 0.0}
+
+# Below this, a class has no usable prior of its own and `assess` says so
+# instead of quoting a rate computed from three cases.
+MIN_N = 5
+# Pseudocount for shrinking a class rate toward the global rate. Three is
+# deliberately strong relative to the corpus size: at n=3 a class sits halfway
+# between its own evidence and the global figure, which is where it belongs.
+SHRINK_K = 3.0
+# The floor under any bucket reported as a finding of its own -- a confidence
+# band, a recall-span split. Below it the tool prints the count and withholds
+# the interpretation, which is the rule `bin/intake` applies to a mean.
+MIN_BUCKET = 3
+
+
+# ---------------------------------------------------------------- small helpers
+def today():
+    return datetime.date.today().isoformat()
+
+
+def wilson(successes, n, z=1.96):
+    """Wilson score interval. A bare k/n reads as certainty it has not earned."""
+    if n == 0:
+        return (0.0, 1.0)
+    p = successes / n
+    d = 1 + z * z / n
+    centre = (p + z * z / (2 * n)) / d
+    half = z * math.sqrt(max(0.0, p * (1 - p) / n + z * z / (4 * n * n))) / d
+    return (max(0.0, centre - half), min(1.0, centre + half))
+
+
+def pct(x):
+    return f"{100 * x:.0f}%"
+
+
+def die(msg, code=2):
+    print(f"wiki-testimony: {msg}", file=sys.stderr)
+    sys.exit(code)
+
+
+def moratorium_guard(*texts):
+    """Refuse rather than strip. See the header."""
+    for t in texts:
+        if t and MORATORIUM.search(str(t)):
+            hit = MORATORIUM.search(str(t)).group(0)
+            die(f"refused — this names '{hit}', who is under the standing directive in "
+                f"CLAUDE.md. The directive is a stop on new writing, and a testimony "
+                f"record is new writing. Nothing was appended.")
+
+
+def read_log():
+    if not LOG.exists():
+        return []
+    out = []
+    for i, line in enumerate(LOG.read_text(encoding="utf-8").splitlines(), 1):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            out.append(json.loads(line))
+        except json.JSONDecodeError as exc:
+            die(f"testimony/events.jsonl:{i} is not valid JSON ({exc}). "
+                f"The log is the record — repair the line, never truncate the file.")
+    return out
+
+
+def append(event):
+    LEDGER.mkdir(parents=True, exist_ok=True)
+    with LOG.open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(event, ensure_ascii=False, sort_keys=True) + "\n")
+
+
+def next_id(events):
+    n = sum(1 for e in events if e.get("type") == "testimony_recorded")
+    return f"t{n + 1:03d}"
+
+
+# ---------------------------------------------------------------- the projection
+def project(events):
+    """Replay the log into current state. Pure; the log is never consulted again."""
+    t = {}
+    for e in events:
+        et, tid = e.get("type"), e.get("id")
+        if et == "testimony_recorded":
+            rec = dict(e.get("testimony", {}))
+            rec.update({"id": tid, "recorded_at": e.get("at"),
+                        "adjudication": None, "history": []})
+            t[tid] = rec
+        elif et == "testimony_adjudicated":
+            if tid in t:
+                t[tid]["adjudication"] = dict(e.get("adjudication", {}))
+        elif et == "adjudication_revised":
+            if tid in t:
+                prior = t[tid].get("adjudication")
+                if prior:
+                    t[tid]["history"].append(
+                        {"superseded_at": e.get("at"),
+                         "reason": e.get("reason", ""), "was": prior})
+                t[tid]["adjudication"] = dict(e.get("adjudication", {}))
+        elif et == "testimony_voided":
+            if tid in t:
+                t[tid]["voided"] = {"at": e.get("at"), "reason": e.get("reason", "")}
+    live = {k: v for k, v in t.items() if not v.get("voided")}
+    return {
+        "generated": "bin/wiki-testimony — do not hand-edit; the log is the record",
+        "counts": {
+            "testimonies": len(live),
+            "adjudicated": sum(1 for v in live.values() if v.get("adjudication")),
+            "voided": sum(1 for v in t.values() if v.get("voided")),
+        },
+        "testimonies": {k: t[k] for k in sorted(t)},
+    }
+
+
+# The operator under any other name. `--speaker` exists so third-party
+# testimony can be recorded and kept OUT of Dan's own score — correct, and the
+# reason every statistic here filters on `speaker == "operator"`. The trap is
+# that the filter is silent, so a first-person claim filed as `--speaker dan`
+# is treated as somebody else's and disappears from the score, the profile and
+# the public page with nothing saying so.
+#
+# It had already happened twice when this was written (2026-09-05): **t017**
+# (*"As of May 2017 Dan was spending well over $100 a day on cocaine"*, filed
+# `dan`) and **t020** (the $14,000 loan framing, filed `Dan`). The headline was
+# being computed over 18 of 20 records and reporting no such thing.
+SPEAKER_ALIASES = {"dan", "dan frank", "danfrank", "d", "self", "operator",
+                   "dfrank88@gmail.com"}
+
+
+def normalise_speaker(name):
+    """`dan`, `Dan`, `Dan Frank` and `self` all mean the operator."""
+    n = (name or "operator").strip()
+    return "operator" if n.lower() in SPEAKER_ALIASES else n
+
+
+def live_records(state, speaker="operator"):
+    """Adjudicable records for one speaker. Voided rows never reach a statistic."""
+    return [v for v in state["testimonies"].values()
+            if not v.get("voided") and v.get("speaker", "operator") == speaker]
+
+
+def weight(rec):
+    """How much this claim is worth getting right.
+
+    Specificity, because "sometime in the nineties" and "4 April 2018" are not
+    the same assertion and must not move the score equally. Load-bearing, because
+    a claim other pages reason FROM does more damage when it is wrong than one
+    sitting on a single page with nothing downstream of it.
+    """
+    w = float(rec.get("specificity", 2))
+    return w * (1.5 if rec.get("load_bearing") else 1.0)
+
+
+def scored(records):
+    """The subset that can move a score, with its outcome value attached.
+
+    `unfalsifiable` and unadjudicated are excluded here rather than scored as
+    zero, which is a real distinction: a zero would drag a mean toward the
+    middle, while exclusion leaves the mean to the claims that were actually
+    settled and lets the counts report the rest.
+    """
+    out = []
+    for r in records:
+        a = r.get("adjudication")
+        if not a:
+            continue
+        v = OUTCOME_VALUE.get(a.get("outcome"))
+        if v is None:
+            continue
+        out.append((r, a, v))
+    return out
+
+
+def veracity(records):
+    """Points in, points out, and the 0-100 figure they make.
+
+    points = weight x (2v - 1): a confirmed claim earns its full weight, a
+    refuted one loses it, a partial is a wash. That is the plain reading of
+    "given or lose points" and it is deliberately not the calibration term,
+    which is a separate number computed below for a separate purpose.
+    """
+    rows = scored(records)
+    if not rows:
+        return {"n": 0, "score": None, "points": 0.0, "weight": 0.0, "rate": None}
+    pts = sum(weight(r) * (2 * v - 1) for r, _, v in rows)
+    wt = sum(weight(r) for r, _, v in rows)
+    rate = sum(v for _, _, v in rows) / len(rows)
+    return {"n": len(rows), "score": 50 + 50 * (pts / wt) if wt else None,
+            "points": pts, "weight": wt, "rate": rate}
+
+
+def calibration(records):
+    """Brier skill against a coin flip, plus the over/under-confidence split.
+
+    The skill score answers "is his confidence worth reading at all"; the split
+    answers "which way does it fail", and only the second one tells you what to
+    do about a claim that arrives marked `certain`.
+    """
+    rows = scored(records)
+    if not rows:
+        return {"n": 0, "brier": None, "skill": None, "bands": {}, "gap": None}
+    briers, bands = [], {}
+    for r, _, v in rows:
+        p = CONFIDENCES.get(r.get("confidence", "confident"), 0.8)
+        briers.append((p - v) ** 2)
+        b = bands.setdefault(r.get("confidence", "confident"),
+                             {"n": 0, "value": 0.0, "stated": p})
+        b["n"] += 1
+        b["value"] += v
+    for b in bands.values():
+        b["actual"] = b["value"] / b["n"]
+        b["gap"] = b["actual"] - b["stated"]
+    brier = sum(briers) / len(briers)
+    stated = sum(CONFIDENCES.get(r.get("confidence", "confident"), 0.8) for r, _, _ in rows) / len(rows)
+    actual = sum(v for _, _, v in rows) / len(rows)
+    return {"n": len(rows), "brier": brier, "skill": 1 - brier / 0.25,
+            "bands": bands, "gap": actual - stated}
+
+
+def by_class(records):
+    """Per-class veracity, with the shrunk rate `assess` actually uses."""
+    rows = scored(records)
+    glob = (sum(v for _, _, v in rows) / len(rows)) if rows else 0.5
+    out = {}
+    for r, a, v in rows:
+        for c in r.get("classes", []) or ["unclassified"]:
+            d = out.setdefault(c, {"n": 0, "value": 0.0, "confirmed": 0,
+                                   "failures": {}, "directions": {}, "slants": {}})
+            d["n"] += 1
+            d["value"] += v
+            if a.get("outcome") == "confirmed":
+                d["confirmed"] += 1
+            for f in a.get("failure", []):
+                d["failures"][f] = d["failures"].get(f, 0) + 1
+            dr = a.get("direction")
+            if dr and dr != "none":
+                d["directions"][dr] = d["directions"].get(dr, 0) + 1
+            sl = a.get("slant")
+            if sl:
+                d["slants"][sl] = d["slants"].get(sl, 0) + 1
+    for d in out.values():
+        d["rate"] = d["value"] / d["n"]
+        d["shrunk"] = (SHRINK_K * glob + d["value"]) / (SHRINK_K + d["n"])
+        d["lo"], d["hi"] = wilson(d["confirmed"], d["n"])
+    return out, glob
+
+
+def top(counter, k=3):
+    return sorted(counter.items(), key=lambda kv: (-kv[1], kv[0]))[:k]
+
+
+# ---------------------------------------------------------------- commands
+def cmd_record(args):
+    """Enter a claim into the record. Does not adjudicate it."""
+    moratorium_guard(args.claim, args.evidence_note, args.source)
+    for c in args.claim_class:
+        if c not in CLAIM_CLASSES:
+            die(f"unknown claim class '{c}' — one of {', '.join(sorted(CLAIM_CLASSES))}")
+    if args.channel not in CHANNELS:
+        die(f"unknown channel '{args.channel}' — one of {', '.join(sorted(CHANNELS))}")
+    if not 1 <= args.specificity <= 3:
+        die("specificity is 1 (vague), 2 (definite) or 3 (exact)")
+    events = read_log()
+    tid = next_id(events)
+    rec = {
+        "claim": args.claim.strip(),
+        "classes": list(args.claim_class),
+        "confidence": args.confidence,
+        "channel": args.channel,
+        "specificity": args.specificity,
+        "load_bearing": bool(args.load_bearing),
+        "subject": args.subject,
+        "speaker": normalise_speaker(args.speaker),
+        "asserted": args.asserted or today(),
+        "about": args.about or "",
+        "source": args.source or "",
+        "pages": list(args.page or []),
+        "note": (args.evidence_note or "").strip(),
+    }
+    append({"type": "testimony_recorded", "id": tid, "at": today(), "testimony": rec})
+    state = project(read_log())
+    write_projection(state)
+    print(f"recorded {tid} · {rec['claim'][:70]}")
+    print(f"  classes {', '.join(rec['classes'])} · {rec['confidence']} · "
+          f"specificity {rec['specificity']}"
+          f"{' · load-bearing' if rec['load_bearing'] else ''}")
+    print(f"  unadjudicated — it scores nothing until something settles it")
+    return 0
+
+
+def cmd_adjudicate(args):
+    """Settle a claim against evidence, or record that the corpus cannot."""
+    moratorium_guard(args.evidence)
+    events = read_log()
+    state = project(events)
+    rec = state["testimonies"].get(args.id)
+    if not rec:
+        die(f"no testimony {args.id}")
+    if rec.get("voided"):
+        die(f"{args.id} was voided — reinstate it in the log before adjudicating")
+    if rec.get("adjudication") and not args.revise:
+        a = rec["adjudication"]
+        die(f"{args.id} is already adjudicated as {a['outcome']} on {a.get('at')}. "
+            f"Pass --revise with --reason to supersede it — an adjudication is "
+            f"never edited, only superseded.")
+    if args.revise and not rec.get("adjudication"):
+        die(f"{args.id} has no adjudication to revise")
+    if args.revise and not args.reason:
+        die("--revise needs --reason: why the earlier verdict does not stand")
+    if args.outcome not in OUTCOMES:
+        die(f"unknown outcome — one of {', '.join(sorted(OUTCOMES))}")
+    if args.tier not in EVIDENCE_TIERS:
+        die(f"unknown evidence tier — one of {', '.join(sorted(EVIDENCE_TIERS))}")
+    for f in args.failure:
+        if f not in FAILURE_MODES:
+            die(f"unknown failure mode '{f}' — one of {', '.join(sorted(FAILURE_MODES))}")
+    if args.direction not in DIRECTIONS:
+        die(f"unknown direction — one of {', '.join(sorted(DIRECTIONS))}")
+    if args.slant and args.slant not in SLANTS:
+        die(f"unknown slant — one of {', '.join(sorted(SLANTS))}")
+
+    # A claim that did not come back clean has to say HOW it broke. Without
+    # that this degenerates into a scoreboard, and a scoreboard predicts
+    # nothing about the next claim.
+    if args.outcome in ("refuted", "partial", "self_contradicted"):
+        if not args.failure:
+            die(f"outcome '{args.outcome}' requires at least one --failure — "
+                f"the failure mode is what makes this ledger predictive rather "
+                f"than merely a tally. One of: {', '.join(sorted(FAILURE_MODES))}")
+        if not args.slant:
+            die(f"outcome '{args.outcome}' requires --slant "
+                f"({'/'.join(sorted(SLANTS))}) — whether an error runs toward "
+                f"flattering him or condemning him is the single most diagnostic "
+                f"column here, and `neutral` is a real answer that has to be given "
+                f"rather than assumed.")
+    if args.outcome == "confirmed" and args.tier == "none":
+        die("a confirmation with evidence tier 'none' is not a confirmation — "
+            "use 'unfalsifiable' if nothing independent was found")
+
+    adj = {
+        "outcome": args.outcome,
+        "tier": args.tier,
+        "evidence": (args.evidence or "").strip(),
+        "failure": list(args.failure),
+        "direction": args.direction,
+        "magnitude": (args.magnitude or "").strip(),
+        "slant": args.slant or "",
+        "at": args.at or today(),
+    }
+    if args.revise:
+        append({"type": "adjudication_revised", "id": args.id, "at": today(),
+                "reason": args.reason, "adjudication": adj})
+    else:
+        append({"type": "testimony_adjudicated", "id": args.id, "at": today(),
+                "adjudication": adj})
+    state = project(read_log())
+    write_projection(state)
+    rec = state["testimonies"][args.id]
+    v = OUTCOME_VALUE.get(args.outcome)
+    print(f"{'revised' if args.revise else 'adjudicated'} {args.id} · {args.outcome}")
+    if v is None:
+        print("  scores nothing — the corpus could not settle it, which is not his failure")
+    else:
+        print(f"  {weight(rec) * (2 * v - 1):+.1f} points (weight {weight(rec):.1f})")
+    return 0
+
+
+def cmd_void(args):
+    """Withdraw a record that should never have been one."""
+    state = project(read_log())
+    if args.id not in state["testimonies"]:
+        die(f"no testimony {args.id}")
+    if not args.reason:
+        die("--reason is required: a voided record stays in the log and has to explain itself")
+    append({"type": "testimony_voided", "id": args.id, "at": today(), "reason": args.reason})
+    write_projection(project(read_log()))
+    print(f"voided {args.id} — it stays in the log; nothing is deleted here")
+    return 0
+
+
+def cmd_list(args):
+    state = project(read_log())
+    rows = [v for v in state["testimonies"].values() if not v.get("voided")]
+    if args.pending:
+        rows = [r for r in rows if not r.get("adjudication")]
+    if args.claim_class:
+        rows = [r for r in rows if set(args.claim_class) & set(r.get("classes", []))]
+    if args.outcome:
+        rows = [r for r in rows
+                if (r.get("adjudication") or {}).get("outcome") == args.outcome]
+    if not rows:
+        print("nothing matches.")
+        return 0
+    for r in sorted(rows, key=lambda x: x["id"]):
+        a = r.get("adjudication")
+        mark = {"confirmed": "✓", "refuted": "✗", "partial": "~",
+                "self_contradicted": "±", "unfalsifiable": "?"}.get(
+                    (a or {}).get("outcome"), "·")
+        print(f"{mark} {r['id']}  {r['claim'][:78]}")
+        print(f"    {', '.join(r.get('classes', []))} · {r.get('confidence')} · "
+              f"{r.get('channel')} · about {r.get('about') or '—'}")
+        if a:
+            bits = [a["outcome"], a["tier"]]
+            if a.get("failure"):
+                bits.append("/".join(a["failure"]))
+            if a.get("direction") and a["direction"] != "none":
+                bits.append(a["direction"])
+            if a.get("magnitude"):
+                bits.append(a["magnitude"])
+            print(f"    → {' · '.join(bits)}")
+    print(f"\n{len(rows)} testimon{'y' if len(rows) == 1 else 'ies'}.")
+    return 0
+
+
+def cmd_show(args):
+    state = project(read_log())
+    r = state["testimonies"].get(args.id)
+    if not r:
+        die(f"no testimony {args.id}")
+    print(f"{r['id']} — {r['claim']}\n")
+    print(f"  classes      {', '.join(r.get('classes', []))}")
+    print(f"  confidence   {r.get('confidence')} (stated p={CONFIDENCES.get(r.get('confidence'), 0.8)})")
+    print(f"  channel      {r.get('channel')} — {CHANNELS.get(r.get('channel'), '')}")
+    print(f"  specificity  {r.get('specificity')}   load-bearing: {r.get('load_bearing')}")
+    print(f"  subject      {r.get('subject')}   speaker: {r.get('speaker')}")
+    print(f"  asserted     {r.get('asserted')}   about: {r.get('about') or '—'}")
+    print(f"  source       {r.get('source') or '—'}")
+    if r.get("pages"):
+        print(f"  pages        {', '.join(r['pages'])}")
+    if r.get("note"):
+        print(f"\n  {r['note']}")
+    a = r.get("adjudication")
+    if not a:
+        print("\n  UNADJUDICATED — scores nothing, and is the queue rather than the record.")
+    else:
+        print(f"\n  OUTCOME      {a['outcome']} — {OUTCOMES[a['outcome']]}")
+        print(f"  evidence     [{a['tier']}] {a.get('evidence') or '—'}")
+        if a.get("failure"):
+            for f in a["failure"]:
+                print(f"  failure      {f} — {FAILURE_MODES[f]}")
+        if a.get("direction") and a["direction"] != "none":
+            print(f"  direction    {a['direction']} — {DIRECTIONS[a['direction']]}")
+        if a.get("magnitude"):
+            print(f"  magnitude    {a['magnitude']}")
+        if a.get("slant"):
+            print(f"  slant        {a['slant']} — {SLANTS[a['slant']]}")
+        print(f"  adjudicated  {a.get('at')}")
+    for h in r.get("history", []):
+        print(f"\n  SUPERSEDED {h['superseded_at']}: was {h['was']['outcome']} — {h['reason']}")
+    return 0
+
+
+def cmd_score(args):
+    """The trust score — and the second number that makes it usable."""
+    state = project(read_log())
+    recs = live_records(state, speaker=args.speaker)
+    if args.subject:
+        recs = [r for r in recs if r.get("subject") == args.subject]
+    ver, cal = veracity(recs), calibration(recs)
+    total = len(recs)
+    pending = sum(1 for r in recs if not r.get("adjudication"))
+    unfals = sum(1 for r in recs
+                 if (r.get("adjudication") or {}).get("outcome") == "unfalsifiable")
+
+    print(f"OPERATOR TESTIMONY — {args.speaker}"
+          + (f", claims about {args.subject}" if args.subject else ""))
+    print("=" * 62)
+    if ver["n"] == 0:
+        print(f"\n  No settled testimony yet. {total} recorded, {pending} awaiting "
+              f"adjudication.\n  A trust score over nothing is not a low score, it is "
+              f"an absent one.")
+        return 0
+
+    print(f"\n  VERACITY   {ver['score']:.0f} / 100        "
+          f"n = {ver['n']} settled claims")
+    print(f"             {ver['points']:+.1f} points on {ver['weight']:.1f} "
+          f"weight · outcome value {ver['rate']:.2f}")
+    lo, hi = wilson(sum(1 for _, a, _ in scored(recs) if a["outcome"] == "confirmed"), ver["n"])
+    print(f"             clean-confirmation rate {pct(lo)}–{pct(hi)} (95% Wilson)")
+
+    if cal["skill"] is not None:
+        verdict = ("his confidence is worth reading" if cal["skill"] > 0.3 else
+                   "his confidence carries some signal" if cal["skill"] > 0 else
+                   "his confidence is not currently informative")
+        if cal["n"] < MIN_N * 2:
+            verdict += " — but at n=%d this is a reading, not a result" % cal["n"]
+        print(f"\n  CALIBRATION  Brier {cal['brier']:.3f} · skill {cal['skill']:+.2f} "
+              f"vs a coin flip")
+        print(f"             {verdict}")
+        g = cal["gap"]
+        word = "over-confident" if g < -0.02 else "under-confident" if g > 0.02 else "well-matched"
+        print(f"             stated vs actual gap {g:+.2f} — {word}")
+        if cal["bands"]:
+            print(f"\n  {'band':<11}{'says':>6}{'is':>7}{'gap':>8}{'n':>5}")
+            for b in ("certain", "confident", "hedged", "unsure"):
+                d = cal["bands"].get(b)
+                if not d:
+                    continue
+                thin = "  ·" if d["n"] < MIN_BUCKET else ""
+                print(f"  {b:<11}{d['stated']:>6.2f}{d['actual']:>7.2f}"
+                      f"{d['gap']:>+8.2f}{d['n']:>5}{thin}")
+            print(f"  · = fewer than {MIN_BUCKET} settled claims; that gap is "
+                  f"not yet a measurement")
+
+    print(f"\n  Not scored: {pending} unadjudicated, {unfals} unfalsifiable "
+          f"(checked, corpus silent — scores zero, never negative).")
+
+    cls, glob = by_class(recs)
+    if cls:
+        print(f"\n  BY CLASS — shrunk toward the global {glob:.2f} with k={SHRINK_K:g}; "
+              f"a class under n={MIN_N} is not a prior")
+        print(f"  {'class':<14}{'n':>3}{'raw':>7}{'shrunk':>8}   dominant failure")
+        for c, d in sorted(cls.items(), key=lambda kv: (-kv[1]["n"], kv[0])):
+            fails = top(d["failures"], 2)
+            fs = ", ".join(f"{k} x{v}" for k, v in fails) if fails else "—"
+            flag = "" if d["n"] >= MIN_N else "  ·"
+            print(f"  {c:<14}{d['n']:>3}{d['rate']:>7.2f}{d['shrunk']:>8.2f}   {fs}{flag}")
+    return 0
+
+
+def cmd_profile(args):
+    """The 'what and how' — the shape of the error, not its size."""
+    state = project(read_log())
+    recs = live_records(state, speaker=args.speaker)
+    rows = scored(recs)
+    if not rows:
+        print("Nothing settled yet — there is no shape to report.")
+        return 0
+
+    print("HOW THE ERRORS RUN")
+    print("=" * 62)
+
+    fails, dirs, slants, tiers, chans = {}, {}, {}, {}, {}
+    for r, a, v in rows:
+        for f in a.get("failure", []):
+            fails[f] = fails.get(f, 0) + 1
+        d = a.get("direction")
+        if d and d != "none":
+            dirs[d] = dirs.get(d, 0) + 1
+        if a.get("slant"):
+            slants[a["slant"]] = slants.get(a["slant"], 0) + 1
+        tiers[a["tier"]] = tiers.get(a["tier"], 0) + 1
+        ch = r.get("channel", "?")
+        c = chans.setdefault(ch, {"n": 0, "value": 0.0})
+        c["n"] += 1
+        c["value"] += v
+
+    wrong = [(r, a, v) for r, a, v in rows if v < 1.0]
+    print(f"\n  {len(wrong)} of {len(rows)} settled claims came back less than clean.")
+
+    if fails:
+        print("\n  FAILURE MODES")
+        for k, n in top(fails, 99):
+            print(f"    {n:>2}x  {k:<14} {FAILURE_MODES[k]}")
+    if dirs:
+        print("\n  DIRECTION — the subtractable half. A bias you can name is a bias")
+        print("  you can correct for; an error rate is only a warning.")
+        for k, n in top(dirs, 99):
+            print(f"    {n:>2}x  {k:<14} {DIRECTIONS[k]}")
+    if slants:
+        print("\n  SLANT — which way the error runs relative to his own interest")
+        tot = sum(slants.values())
+        for k, n in top(slants, 99):
+            print(f"    {n:>2}x  ({pct(n / tot):>4})  {k:<11} {SLANTS[k]}")
+        f, c = slants.get("flattering", 0), slants.get("condemning", 0)
+        if f or c:
+            if c > f:
+                print("\n    The errors run AGAINST him more often than for him. An"
+                      "\n    unreliable narrator whose distortions are self-condemning is"
+                      "\n    a different object from one whose distortions are"
+                      "\n    self-flattering, and should be discounted differently: the"
+                      "\n    claims to re-check hardest are the ones where he is the"
+                      "\n    accused.")
+            elif f > c:
+                print("\n    The errors run FOR him more often than against. Weigh"
+                      "\n    self-exculpating detail below the rest of the record.")
+            else:
+                print("\n    Errors split evenly for and against him — no directional"
+                      "\n    self-interest visible at this n.")
+
+    if chans:
+        print("\n  BY CHANNEL — how the claim reached the record")
+        for k, d in sorted(chans.items(), key=lambda kv: -kv[1]["n"]):
+            print(f"    {d['n']:>2}  {k:<22} outcome value {d['value'] / d['n']:.2f}"
+                  f"   {CHANNELS.get(k, '')}")
+    if tiers:
+        print("\n  WHAT SETTLED THEM")
+        for k, n in top(tiers, 99):
+            print(f"    {n:>2}x  {k:<20} {EVIDENCE_TIERS[k]}")
+
+    span = []
+    for r, a, v in rows:
+        ab, asrt = r.get("about", ""), r.get("asserted", "")
+        m1, m2 = re.match(r"(\d{4})", ab or ""), re.match(r"(\d{4})", asrt or "")
+        if m1 and m2:
+            span.append((int(m2.group(1)) - int(m1.group(1)), v))
+    if len(span) >= 2 * MIN_BUCKET:
+        near = [v for d, v in span if d <= 5]
+        far = [v for d, v in span if d > 5]
+        # Both buckets have to stand on their own. A 0.00 over one claim is not
+        # a finding about recall span, it is one claim.
+        if len(near) >= MIN_BUCKET and len(far) >= MIN_BUCKET:
+            print("\n  RECALL SPAN — years between the event and the telling")
+            print(f"    within 5 years   {sum(near) / len(near):.2f}  (n={len(near)})")
+            print(f"    beyond 5 years   {sum(far) / len(far):.2f}  (n={len(far)})")
+    return 0
+
+
+def cmd_assess(args):
+    """The point of the whole thing: a prior for a claim nobody can check yet."""
+    state = project(read_log())
+    recs = live_records(state, speaker="operator")
+    cls, glob = by_class(recs)
+    ver, cal = veracity(recs), calibration(recs)
+    if ver["n"] == 0:
+        print("No settled testimony — there is no prior to give. Record and "
+              "adjudicate some claims first.")
+        return 0
+
+    c = args.claim_class
+    if c and c not in CLAIM_CLASSES:
+        die(f"unknown claim class '{c}' — one of {', '.join(sorted(CLAIM_CLASSES))}")
+    conf = args.confidence
+
+    print("ASSESSMENT OF AN UNPROVEN CLAIM")
+    print("=" * 62)
+    if args.claim:
+        print(f"\n  \"{args.claim.strip()}\"")
+    print(f"\n  class {c or '(unspecified)'} · asserted {conf or '(unstated)'}")
+
+    d = cls.get(c) if c else None
+    if d and d["n"] >= MIN_N:
+        base, why = d["shrunk"], f"class rate, n={d['n']}, shrunk toward global {glob:.2f}"
+        lo, hi = d["lo"], d["hi"]
+    elif d:
+        base = d["shrunk"]
+        why = (f"class has only n={d['n']} — under MIN_N={MIN_N}, so this is mostly "
+               f"the global rate ({glob:.2f}) and not a class finding")
+        lo, hi = d["lo"], d["hi"]
+    else:
+        base, why = glob, f"no class evidence at all — global rate over n={ver['n']}"
+        lo, hi = wilson(sum(1 for _, a, _ in scored(recs) if a["outcome"] == "confirmed"), ver["n"])
+
+    print(f"\n  PRIOR        {base:.2f}   ({why})")
+    print(f"               confirmation interval {pct(lo)}–{pct(hi)} (95% Wilson)")
+
+    if conf:
+        p = CONFIDENCES[conf]
+        band = cal["bands"].get(conf)
+        if band and band["n"] >= 3:
+            print(f"\n  HIS '{conf}' has historically been worth {band['actual']:.2f}, "
+                  f"not {p:.2f} (n={band['n']}).")
+            adj = base + (band["gap"] * 0.5)
+            print(f"  ADJUSTED     {max(0.0, min(1.0, adj)):.2f}   "
+                  f"class prior moved halfway by the band's observed gap")
+        else:
+            print(f"\n  He states {p:.2f} for '{conf}'. Too few settled claims in that "
+                  f"band (n={band['n'] if band else 0}) to say what it is really worth.")
+
+    if d and d["n"]:
+        f = top(d["failures"], 2)
+        if f:
+            print(f"\n  IF IT IS WRONG, expect: "
+                  + "; ".join(f"{k} ({FAILURE_MODES[k]})" for k, _ in f))
+        dr = top(d["directions"], 1)
+        if dr:
+            print(f"  DIRECTION    historically {dr[0][0]} — "
+                  f"{DIRECTIONS[dr[0][0]]}. Correct in that direction before "
+                  f"treating the figure as central.")
+        sl = top(d["slants"], 1)
+        if sl:
+            print(f"  SLANT        errors in this class have run {sl[0][0]}.")
+
+    print("\n  WHAT WOULD SETTLE IT")
+    print("    A prior is not a verdict. Record the claim with `record`, name the "
+          "\n    artifact that would decide it, and adjudicate when it lands. An "
+          "\n    assessment that never becomes an adjudication teaches this ledger "
+          "\n    nothing.")
+    return 0
+
+
+# ---------------------------------------------------------------- derived files
+def write_projection(state):
+    """Both derived files, always together.
+
+    They are generated from the same replay and `check` gates on both, so
+    writing one without the other leaves the gate red for no reason a reader
+    could act on.
+    """
+    LEDGER.mkdir(parents=True, exist_ok=True)
+    PROJECTION.write_text(
+        json.dumps(state, indent=2, sort_keys=True, ensure_ascii=False) + "\n",
+        encoding="utf-8")
+    SUMMARY.write_text(render_summary(state), encoding="utf-8")
+
+
+def render_summary(state):
+    """testimony/SUMMARY.md — the analysis surface, so nothing has to parse JSONL."""
+    recs = live_records(state)
+    ver, cal = veracity(recs), calibration(recs)
+    cls, glob = by_class(recs)
+    L = ["# Testimony ledger — summary", "",
+         "_Generated by `bin/wiki-testimony summary`. Do not hand-edit; "
+         "`testimony/events.jsonl` is the record._", ""]
+    L.append(f"- **Recorded:** {len(recs)}")
+    L.append(f"- **Settled (scoring):** {ver['n']}")
+    L.append(f"- **Awaiting adjudication:** "
+             f"{sum(1 for r in recs if not r.get('adjudication'))}")
+    L.append(f"- **Unfalsifiable:** "
+             f"{sum(1 for r in recs if (r.get('adjudication') or {}).get('outcome') == 'unfalsifiable')}"
+             f" — checked, corpus silent, scores zero")
+    L.append("")
+    if ver["n"]:
+        L += [f"**Veracity {ver['score']:.0f}/100** over n={ver['n']} "
+              f"({ver['points']:+.1f} points on {ver['weight']:.1f} weight).",
+              ""]
+        if cal["skill"] is not None:
+            L += [f"**Calibration** Brier {cal['brier']:.3f}, skill "
+                  f"{cal['skill']:+.2f} against a coin flip; stated-vs-actual gap "
+                  f"{cal['gap']:+.2f}.", ""]
+        L += ["| class | n | raw | shrunk | dominant failure |", "|---|---:|---:|---:|---|"]
+        for c, d in sorted(cls.items(), key=lambda kv: (-kv[1]["n"], kv[0])):
+            f = top(d["failures"], 2)
+            L.append(f"| {c} | {d['n']} | {d['rate']:.2f} | {d['shrunk']:.2f} | "
+                     f"{', '.join(k for k, _ in f) or '—'} |")
+        L.append("")
+        L.append(f"Read every rate with its `n`. Classes below n={MIN_N} are not "
+                 f"priors and `assess` refuses to treat them as such.")
+    else:
+        L.append("Nothing settled yet.")
+    L.append("")
+    return "\n".join(L)
+
+
+def render_page(state):
+    """wiki/meta/testimony-veracity.md — the public face, evidence not claim.
+
+    Generated, so a hand-edit fails `check`. Like the intake ledger this page
+    states no finding of its own: a finding drawn from the ledger reaches an
+    ordinary page through the normal operations, never through this one, which
+    is overwritten on every write.
+    """
+    recs = live_records(state)
+    ver, cal = veracity(recs), calibration(recs)
+    cls, glob = by_class(recs)
+    rows = scored(recs)
+    pending = [r for r in recs if not r.get("adjudication")]
+    unfals = [r for r in recs
+              if (r.get("adjudication") or {}).get("outcome") == "unfalsifiable"]
+
+    counts = {}
+    for _, a, _ in rows:
+        counts[a["outcome"]] = counts.get(a["outcome"], 0) + 1
+
+    bands = cal.get("bands") or {}
+    L = ["---",
+         "domain: meta",
+         "page_type: dataset",
+         'title: "Operator Testimony Veracity"',
+         'aliases: ["testimony ledger", "trust score", "veracity ledger"]',
+         "status: active",
+         "importance: high",
+         "knowledge: derived",
+         "date_created: 2026-09-02",
+         f"date_modified: {today()}",
+         "chart:",
+         "  kind: grouped-bar",
+         '  title: "Stated confidence against measured outcome, by confidence band"',
+         '  x: { label: "Confidence band as asserted", type: category }',
+         '  y: { label: "Probability the claim held up", type: number }',
+         "  series:",
+         '    - name: "What he said it was worth"',
+         "      points:"]
+    order = [b for b in ("certain", "confident", "hedged", "unsure") if b in bands]
+    if not order:
+        L.append('        "no data": 0')
+    for b in order:
+        L.append(f'        "{b}": {bands[b]["stated"]:.2f}')
+    L.append('    - name: "What it turned out to be worth"')
+    L.append("      points:")
+    if not order:
+        L.append('        "no data": 0')
+    for b in order:
+        L.append(f'        "{b}": {bands[b]["actual"]:.2f}')
+    L += ["sources:",
+          "  - testimony/events.jsonl",
+          "connections: []",
+          "related:",
+          "  - wiki/meta/index",
+          "  - wiki/self/concepts/wiki-brain",
+          "  - wiki/health/intake-ledger",
+          "---",
+          "",
+          "# Operator Testimony Veracity",
+          "",
+          "**This page is evidence, not a claim.** It is the standing state of "
+          "`testimony/events.jsonl` — every first-person assertion the wiki has "
+          "recorded, what settled it, and the arithmetic over the settled ones. "
+          "It states no finding. A finding drawn from this ledger reaches an "
+          "ordinary page through the normal operations; this one is regenerated "
+          "by `bin/wiki-testimony page` and overwritten on every write.",
+          ""]
+
+    if ver["n"] == 0:
+        L += ["No testimony has been settled yet. A trust score over nothing is "
+              "not a low score — it is an absent one, and this page will say so "
+              "until there is something to report.", ""]
+    else:
+        L += ["## The two numbers", "",
+              "A single trust score would collapse two facts that behave "
+              "differently. **Veracity** is how often he turns out to be right. "
+              "**Calibration** is whether his own stated confidence tracks that. "
+              "The first says how much to believe him; only the second makes an "
+              "*unproven* claim assessable, because an unproven claim offers "
+              "nothing to check except the class it belongs to and the "
+              "confidence it arrived with.", "",
+              "| | value | n |", "|---|---|---:|",
+              f"| **Veracity** | **{ver['score']:.0f} / 100** — "
+              f"{ver['points']:+.1f} points on {ver['weight']:.1f} weight | {ver['n']} |"]
+        if cal["skill"] is not None:
+            L.append(f"| **Calibration** | Brier {cal['brier']:.3f}, skill "
+                     f"{cal['skill']:+.2f} vs a coin flip | {cal['n']} |")
+            L.append(f"| **Stated vs actual** | {cal['gap']:+.2f} | {cal['n']} |")
+        L.append("")
+        L += [f"Points are `weight x (2v - 1)`: a confirmed claim earns its full "
+              f"weight, a refuted one loses it, a partial is a wash. Weight is "
+              f"specificity (1-3) times 1.5 where other pages reason from the "
+              f"claim. **Read every figure with its n** — this ledger holds "
+              f"{ver['n']} settled claims, not thousands.", ""]
+
+        if bands:
+            L += ["## What his confidence is actually worth", "",
+                  "| band | he states | it is worth | gap | n |",
+                  "|---|---:|---:|---:|---:|"]
+            for b in order:
+                d = bands[b]
+                L.append(f"| {b} | {d['stated']:.2f} | {d['actual']:.2f} | "
+                         f"{d['gap']:+.2f} | {d['n']} |")
+            L.append("")
+
+        L += ["## Outcomes", "", "| outcome | n | meaning |", "|---|---:|---|"]
+        for o in ("confirmed", "partial", "self_contradicted", "refuted"):
+            if counts.get(o):
+                L.append(f"| {o} | {counts[o]} | {OUTCOMES[o]} |")
+        if unfals:
+            L.append(f"| unfalsifiable | {len(unfals)} | {OUTCOMES['unfalsifiable']} "
+                     f"— **scores zero, never negative** |")
+        if pending:
+            L.append(f"| _unadjudicated_ | {len(pending)} | not yet checked; "
+                     f"excluded from every statistic |")
+        L.append("")
+
+        if cls:
+            L += ["## By claim class", "",
+                  f"Rates are shrunk toward the global {glob:.2f} with a "
+                  f"pseudocount of {SHRINK_K:g}, and a class below n={MIN_N} is "
+                  f"not treated as a prior at all.", "",
+                  "| class | n | raw | shrunk | 95% CI on clean confirmations | dominant failure |",
+                  "|---|---:|---:|---:|---|---|"]
+            for c, d in sorted(cls.items(), key=lambda kv: (-kv[1]["n"], kv[0])):
+                f = top(d["failures"], 2)
+                L.append(f"| {c} | {d['n']} | {d['rate']:.2f} | {d['shrunk']:.2f} | "
+                         f"{pct(d['lo'])}–{pct(d['hi'])} | "
+                         f"{', '.join(k for k, _ in f) or '—'} |")
+            L.append("")
+
+        slants = {}
+        for _, a, _ in rows:
+            if a.get("slant"):
+                slants[a["slant"]] = slants.get(a["slant"], 0) + 1
+        if slants:
+            L += ["## Which way the errors run", "",
+                  "Whether an error would have flattered him or condemned him, "
+                  "had it stood. This is a different axis from early/late or "
+                  "over/under, and it is the one that separates a memory limit "
+                  "from a bias.", "",
+                  "| slant | n |", "|---|---:|"]
+            for k, n in top(slants, 99):
+                L.append(f"| {k} — {SLANTS[k]} | {n} |")
+            L.append("")
+
+    L += ["## The record", "", "| id | claim | class | said | outcome | what settled it |",
+          "|---|---|---|---|---|---|"]
+    for r in sorted(recs, key=lambda x: x["id"]):
+        a = r.get("adjudication") or {}
+        out = a.get("outcome", "_pending_")
+        ev = a.get("evidence", "") or "—"
+        claim = r["claim"].replace("|", "\\|")
+        ev = ev.replace("|", "\\|")
+        L.append(f"| {r['id']} | {claim} | {', '.join(r.get('classes', []))} | "
+                 f"{r.get('confidence', '')} | {out} | {ev} |")
+    L.append("")
+
+    L += ["## What this ledger cannot see", "",
+          "**The sample is filtered, and not at random.** `CLAUDE.md` carries a "
+          "standing directive stopping new writing about one living person. "
+          "`bin/wiki-testimony` enforces it mechanically rather than leaving it "
+          "to a session to remember, and refuses such a record outright. At "
+          "least one cleanly adjudicated confirmation is excluded by that rule. "
+          "The exclusion is correct and it is still a bias: this score is drawn "
+          "from what the directive permits, not from everything the corpus knows.",
+          "",
+          "**Adjudicated claims are not a random sample of claims.** A claim gets "
+          "checked when somebody had a reason to check it, and the reasons "
+          "correlate with the claim being surprising, load-bearing, or already "
+          "doubted. Expect the settled set to over-represent both the "
+          "spectacular confirmations and the spectacular failures.",
+          "",
+          "**Nothing here measures honesty.** Every outcome in this ledger is "
+          "consistent with a person reporting in good faith and misremembering. "
+          "The failure-mode column exists precisely so the two can be told apart "
+          "in principle — a distribution dominated by `compression` and "
+          "`rounding` is a memory, one dominated by `confabulation` running "
+          "`flattering` would be something else — and at this n it can be told "
+          "apart in principle only.",
+          "",
+          "---",
+          "",
+          "Generated by `bin/wiki-testimony page` from `testimony/events.jsonl`. "
+          "Do not hand-edit — rerun the tool.",
+          "",
+          "[[wiki/meta/index|meta]] · [[wiki/health/intake-ledger|Intake ledger]] · "
+          "[[wiki/self/concepts/wiki-brain|The wiki]]",
+          ""]
+    return "\n".join(L)
+
+
+def cmd_page(args):
+    state = project(read_log())
+    page = render_page(state)
+    moratorium_guard(page)
+    PAGE.parent.mkdir(parents=True, exist_ok=True)
+    PAGE.write_text(page, encoding="utf-8")
+    write_projection(state)
+    print(f"wrote {PAGE.relative_to(ROOT)}, {SUMMARY.relative_to(ROOT)} "
+          f"and {PROJECTION.relative_to(ROOT)}")
+    return 0
+
+
+def cmd_rebuild(args):
+    state = project(read_log())
+    write_projection(state)
+    print(f"rebuilt the projection from {len(read_log())} log events "
+          f"— {state['counts']['testimonies']} testimonies")
+    return 0
+
+
+def cmd_check(args):
+    """The gate. Silent and clean when nothing has ever been recorded."""
+    errors, warnings = [], []
+    events = read_log()
+    if not events and not PAGE.exists():
+        print("wiki-testimony: 0 errors, 0 warnings · ledger empty")
+        return 0
+
+    state = project(events)
+
+    seen = set()
+    for e in events:
+        if e.get("type") not in EVENT_TYPES:
+            errors.append(f"unknown event type '{e.get('type')}' in the log")
+        if e.get("type") == "testimony_recorded":
+            if e.get("id") in seen:
+                errors.append(f"duplicate testimony id {e.get('id')} in the log")
+            seen.add(e.get("id"))
+        elif e.get("id") and e.get("id") not in seen:
+            errors.append(f"{e.get('type')} references unknown testimony {e.get('id')}")
+
+    for tid, r in state["testimonies"].items():
+        if r.get("voided"):
+            continue
+        for c in r.get("classes", []):
+            if c not in CLAIM_CLASSES:
+                errors.append(f"{tid}: unknown claim class '{c}'")
+        if r.get("confidence") not in CONFIDENCES:
+            errors.append(f"{tid}: unknown confidence '{r.get('confidence')}'")
+        # A record filed under any speaker but the operator is excluded from
+        # every statistic and from the public page BY CONSTRUCTION — which is
+        # right for real third-party testimony and silent when it is a
+        # misfiling. Say it out loud on every run, so a deliberate third-party
+        # record reads as deliberate and an accident is caught the next time
+        # the gate runs. `record` now normalises the operator's own aliases;
+        # this catches what is already in the log and anything a hand-written
+        # event puts there.
+        sp = r.get("speaker", "operator")
+        if sp != "operator":
+            warnings.append(
+                f"{tid}: speaker '{sp}' — excluded from the score, the profile "
+                f"and the public page. Intended for third-party testimony; if "
+                f"this is Dan's own claim it is invisible and should be voided "
+                f"and re-recorded")
+        a = r.get("adjudication")
+        if not a:
+            continue
+        if a.get("outcome") not in OUTCOMES:
+            errors.append(f"{tid}: unknown outcome '{a.get('outcome')}'")
+        if a.get("tier") not in EVIDENCE_TIERS:
+            errors.append(f"{tid}: unknown evidence tier '{a.get('tier')}'")
+        # The rule that keeps this a predictive instrument rather than a tally.
+        if a.get("outcome") in ("refuted", "partial", "self_contradicted"):
+            if not a.get("failure"):
+                errors.append(f"{tid}: {a['outcome']} with no failure mode — "
+                              f"the ledger cannot learn from an unexplained miss")
+            if not a.get("slant"):
+                errors.append(f"{tid}: {a['outcome']} with no slant recorded")
+        if a.get("outcome") == "confirmed" and a.get("tier") == "none":
+            errors.append(f"{tid}: confirmed on evidence tier 'none' — that is "
+                          f"'unfalsifiable', not a confirmation")
+        # A source is what makes this testimony rather than assertion. Warn
+        # rather than fail: some genuinely arrive inline on a page.
+        if not r.get("source"):
+            warnings.append(f"{tid}: no source — where did he say this?")
+
+    blob = json.dumps(state, ensure_ascii=False)
+    if MORATORIUM.search(blob):
+        errors.append("the ledger contains a record naming a person under the "
+                      "standing directive in CLAUDE.md — this is published; "
+                      "void the record rather than editing the log in place")
+
+    fresh = json.dumps(state, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
+    if not PROJECTION.exists():
+        errors.append("testimony/testimonies.json is missing — run `bin/wiki-testimony rebuild`")
+    elif PROJECTION.read_text(encoding="utf-8") != fresh:
+        errors.append("testimony/testimonies.json disagrees with the log — "
+                      "run `bin/wiki-testimony rebuild` (the log is the record)")
+
+    page = render_page(state)
+    if not PAGE.exists():
+        errors.append(f"{PAGE.relative_to(ROOT)} is missing — run `bin/wiki-testimony page`")
+    elif PAGE.read_text(encoding="utf-8") != page:
+        errors.append(f"{PAGE.relative_to(ROOT)} is behind the ledger — "
+                      f"run `bin/wiki-testimony page` and do not hand-edit it")
+    if MORATORIUM.search(page):
+        errors.append("the generated page names a person under the standing directive")
+
+    summ = render_summary(state)
+    if SUMMARY.exists() and SUMMARY.read_text(encoding="utf-8") != summ:
+        errors.append("testimony/SUMMARY.md is behind the ledger — "
+                      "run `bin/wiki-testimony page`")
+
+    for w in warnings:
+        print(f"WARN  {w}")
+    for e in errors:
+        print(f"ERROR {e}")
+    ver = veracity(live_records(state))
+    print(f"wiki-testimony: {len(errors)} error{'s' if len(errors) != 1 else ''}, "
+          f"{len(warnings)} warning{'s' if len(warnings) != 1 else ''} · "
+          f"{state['counts']['testimonies']} testimonies, "
+          f"{ver['n']} settled"
+          + (f", veracity {ver['score']:.0f}/100" if ver["score"] is not None else ""))
+    return 1 if errors else 0
+
+
+def cmd_status(args):
+    state = project(read_log())
+    recs = live_records(state)
+    if not recs:
+        print("No testimony recorded yet.\n\n"
+              "  bin/wiki-testimony record --claim \"...\" --class date "
+              "--confidence certain \\\n"
+              "      --channel capture --source raw/... --about 2019-06")
+        return 0
+    ver = veracity(recs)
+    pending = [r for r in recs if not r.get("adjudication")]
+    print(f"{len(recs)} testimonies · {ver['n']} settled · {len(pending)} awaiting adjudication")
+    if ver["score"] is not None:
+        print(f"veracity {ver['score']:.0f}/100 over n={ver['n']}")
+    if pending:
+        print("\nAwaiting adjudication — each is a claim the wiki is currently "
+              "carrying on his word alone:")
+        for r in sorted(pending, key=lambda x: x["id"])[:12]:
+            print(f"  {r['id']}  {r['claim'][:72]}")
+        if len(pending) > 12:
+            print(f"  … and {len(pending) - 12} more")
+    return 0
+
+
+def cmd_taxonomy(args):
+    for title, table in (("CLAIM CLASSES — the 'what'", CLAIM_CLASSES),
+                         ("FAILURE MODES — the 'how'", FAILURE_MODES),
+                         ("DIRECTIONS — the subtractable half", DIRECTIONS),
+                         ("SLANTS — relative to his own interest", SLANTS),
+                         ("CHANNELS — how the claim reached the record", CHANNELS),
+                         ("OUTCOMES", OUTCOMES),
+                         ("EVIDENCE TIERS", EVIDENCE_TIERS)):
+        print(f"\n{title}")
+        for k, v in table.items():
+            print(f"  {k:<22} {v}")
+    print(f"\nCONFIDENCE BANDS")
+    for k, v in CONFIDENCES.items():
+        print(f"  {k:<22} stated probability {v}")
+    return 0
+
+
+def main():
+    ap = argparse.ArgumentParser(
+        prog="wiki-testimony",
+        description="The operator testimony veracity ledger.")
+    sub = ap.add_subparsers(dest="cmd")
+
+    p = sub.add_parser("record", help="enter a claim into the record")
+    p.add_argument("--claim", required=True, help="the proposition, one falsifiable sentence")
+    p.add_argument("--class", dest="claim_class", action="append", required=True,
+                   metavar="CLASS", help="claim class (repeatable)")
+    p.add_argument("--confidence", choices=sorted(CONFIDENCES), default="confident")
+    p.add_argument("--channel", default="capture", help="how it reached the record")
+    p.add_argument("--specificity", type=int, default=2,
+                   help="1 vague, 2 definite, 3 exact")
+    p.add_argument("--load-bearing", action="store_true",
+                   help="other pages reason from this claim")
+    p.add_argument("--subject", choices=("self", "other"), default="self")
+    p.add_argument("--speaker", default="operator")
+    p.add_argument("--asserted", help="date he said it (default today)")
+    p.add_argument("--about", help="date or period the claim is ABOUT")
+    p.add_argument("--source", help="raw/ path or wiki page recording the assertion")
+    p.add_argument("--page", action="append", help="wiki page reasoning from it (repeatable)")
+    p.add_argument("--note", dest="evidence_note", help="context, and what would settle it")
+    p.set_defaults(fn=cmd_record)
+
+    p = sub.add_parser("adjudicate", help="settle a claim against evidence")
+    p.add_argument("id")
+    p.add_argument("--outcome", required=True, choices=sorted(OUTCOMES))
+    p.add_argument("--tier", required=True, choices=sorted(EVIDENCE_TIERS),
+                   help="what class of evidence settled it")
+    p.add_argument("--evidence", help="the citation that settled it")
+    p.add_argument("--failure", action="append", default=[],
+                   help="failure mode (repeatable; required unless confirmed)")
+    p.add_argument("--direction", default="none", choices=sorted(DIRECTIONS))
+    p.add_argument("--magnitude", help="how far off, in its own units")
+    p.add_argument("--slant", choices=sorted(SLANTS),
+                   help="which way the error ran relative to his interest")
+    p.add_argument("--at", help="date of adjudication (default today)")
+    p.add_argument("--revise", action="store_true", help="supersede an existing verdict")
+    p.add_argument("--reason", help="why the earlier verdict does not stand")
+    p.set_defaults(fn=cmd_adjudicate)
+
+    p = sub.add_parser("void", help="withdraw a record that should not be one")
+    p.add_argument("id")
+    p.add_argument("--reason", required=True)
+    p.set_defaults(fn=cmd_void)
+
+    p = sub.add_parser("list", help="the record")
+    p.add_argument("--pending", action="store_true", help="only unadjudicated")
+    p.add_argument("--class", dest="claim_class", action="append")
+    p.add_argument("--outcome", choices=sorted(OUTCOMES))
+    p.set_defaults(fn=cmd_list)
+
+    p = sub.add_parser("show", help="one testimony in full")
+    p.add_argument("id")
+    p.set_defaults(fn=cmd_show)
+
+    p = sub.add_parser("score", help="the trust score, global and by class")
+    p.add_argument("--speaker", default="operator")
+    p.add_argument("--subject", choices=("self", "other"))
+    p.set_defaults(fn=cmd_score)
+
+    p = sub.add_parser("profile", help="what and how he gets things wrong")
+    p.add_argument("--speaker", default="operator")
+    p.set_defaults(fn=cmd_profile)
+
+    p = sub.add_parser("assess", help="a prior for an unproven claim")
+    p.add_argument("--class", dest="claim_class")
+    p.add_argument("--confidence", choices=sorted(CONFIDENCES))
+    p.add_argument("--claim", help="the claim text, for the printout")
+    p.set_defaults(fn=cmd_assess)
+
+    for name, fn, helptext in (
+            ("page", cmd_page, "regenerate the wiki page, summary and projection"),
+            ("summary", cmd_page, "alias for page"),
+            ("rebuild", cmd_rebuild, "regenerate the projection from the log"),
+            ("check", cmd_check, "the gate"),
+            ("status", cmd_status, "the standing state"),
+            ("taxonomy", cmd_taxonomy, "every class, mode, direction and tier")):
+        q = sub.add_parser(name, help=helptext)
+        q.set_defaults(fn=fn)
+
+    args = ap.parse_args()
+    if not args.cmd:
+        return cmd_status(args)
+    return args.fn(args)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

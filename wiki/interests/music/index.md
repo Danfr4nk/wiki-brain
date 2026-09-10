@@ -1,0 +1,45 @@
+
+---
+domain: interests
+page_type: summary
+status: stable
+date_created: 2026-06-23
+date_modified: 2026-07-20
+sources: []
+related: []
+---
+
+# Music Index
+
+## Overview
+[[wiki/interests/music/overview]] — production identity, four-alias summary, philosophy, current status
+
+## Aliases
+
+| Alias | Status | Genre | Period |
+|-------|--------|-------|--------|
+| [[wiki/interests/music/aliases/gripnotic]] | active | Bass house / tech house / DnB-adjacent | 2016–present |
+| [[wiki/interests/music/aliases/mogzart]] | closed | Bass house / trap-adjacent | ~2014–2016 |
+| [[wiki/interests/music/aliases/sloppp]] | closed | House / experimental bass | ~2013–2014 |
+| [[wiki/interests/music/aliases/mogged-up]] | closed | Bootleg / edit imprint | concurrent w/ SLOPPP/MOGZART |
+
+## Bands
+
+| Band | Status | Role | Era |
+|------|--------|------|-----|
+| [[wiki/interests/music/bands/batteries-not-included]] | closed | Lead songwriter (originals); hardcore/punk covers | High school, pre-2006 |
+
+## Concepts
+- [[wiki/interests/music/concepts/sub-bass-signature]] — involuntary 63–85% sub-bass presence across all aliases, 13-year span; origin artifact: Numark NS7 (Fran Whyel)
+- [[wiki/interests/music/concepts/lyrics-as-timbre]] — Dan does not process sung lyrics as language; words register as timbre, not semantic content. Reframes how to read every thematic/lyrical claim in the favorites cluster.
+
+## Taste / Consumption
+- [[wiki/interests/favorites/index]] — full favorites masterlist (1,860 tracks, books, art, movies)
+- [[wiki/interests/favorites/music]] — music breakdown: release year distribution, cluster analysis, top artists
+
+## Gaps (pending ingest)
+- Full release catalog (Spotify/SoundCloud/Bandcamp export)
+- DAW and hardware chain details
+- Platform profile links for GRIPNOTIC
+
+

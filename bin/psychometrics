@@ -1,0 +1,262 @@
+#!/usr/bin/env python3
+"""psychometrics — test the instrument scores against the message corpus.
+
+Pure stdlib. Reuses `mine-messages`'s reader, so the three traps documented
+there (multi-line records, curly apostrophes, direction only reliable in this
+dump) are handled once and not re-solved here.
+
+WHY THIS EXISTS
+---------------
+`wiki/mind/profile/` carries fifteen Big30 facet scores, three PD scores and a
+deviance audit. Every one of them is **self-report** — an instrument Dan filled
+in, restated across several pages. Meanwhile the wiki holds 217,573 messages of
+measured behaviour. The asymmetry is the whole problem: the Annie material grew
+to 17,644 words in `mind/` because it had evidence to grow on, and the
+psychometrics stayed thin because nobody had turned them into anything testable.
+
+A facet score is a claim about behaviour. Behaviour is what a message corpus
+has. So each facet here becomes a **directional prediction** with a lexical
+proxy, run over Dan's 106,629 sent messages against the 110,944 received from
+503 other handles as a **within-medium control**.
+
+The control is the point. "Dan says `sorry` 1.2 times per thousand messages" is
+uninterpretable on its own — SMS is a low-introspection medium for everybody in
+it. "Dan says `sorry` at 0.4x the rate of the people texting him" is a
+measurement. Everything below is reported as a ratio against that baseline.
+
+WHAT THIS CAN AND CANNOT DO
+---------------------------
+`wiki/self/context-core.md` already established the jurisdiction, the hard way:
+the four core axioms were tested lexically and three were invisible, with
+*time = countdown* the clearest negative. The conclusion drawn there is the
+right one and it governs this tool too — **failure to corroborate is not
+falsification.** A trait can be real and leave no lexical trace, because people
+do not narrate their own architecture in text messages.
+
+So a low ratio here means "the corpus does not carry this", never "the
+instrument is wrong". Only a *high* ratio is positive evidence, and only a
+prediction that inverts (low-scored facet showing markedly ELEVATED language) is
+evidence against the score.
+
+Read the matches before believing the counts. The same page records a false
+positive that nearly became a finding: an "age self-reference" pattern scoring
+3.82x baseline turned out to be catching *"I'm 99% sure"* — percentages wearing
+an age pattern's clothes. `--examples` exists for exactly this and the verdict
+column is deliberately conservative.
+
+USAGE
+  bin/psychometrics run                  full sheet, all facets
+  bin/psychometrics run --facet trust    one facet, verbose
+  bin/psychometrics run --examples 5     show matches to eyeball
+  bin/psychometrics list                 the predictions and their proxies
+"""
+import argparse
+import os
+import re
+import sys
+from collections import Counter
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+# `mine-messages` has a hyphen and no .py, so spec_from_file_location cannot
+# infer a loader for it — hand it a SourceFileLoader explicitly.
+import importlib.util
+from importlib.machinery import SourceFileLoader
+
+_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mine-messages")
+_spec = importlib.util.spec_from_loader("mine_messages", SourceFileLoader("mine_messages", _path))
+mm = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(mm)
+
+# ---------------------------------------------------------------------------
+# The predictions.
+#
+# (facet, score, direction, label, pattern)
+#   direction "high" = the score predicts MORE of this language than the control
+#   direction "low"  = the score predicts LESS of it
+#
+# Proxies are deliberately plain. A clever pattern is a pattern whose matches
+# nobody reads.
+# ---------------------------------------------------------------------------
+PREDICTIONS = [
+    # ---- Big30 lows -------------------------------------------------------
+    ("altruism", 1, "low", "offering help unprompted",
+     r"\b(?:let me know if|if you need|anything i can do|happy to help|i can help|need anything)\b"),
+    ("altruism", 1, "low", "other-directed concern",
+     r"\b(?:are you ok|you okay|hope you(?:'re| are) ok|take care of yourself|feel better)\b"),
+
+    ("sympathy", 6, "low", "sympathy tokens",
+     r"\b(?:i(?:'m| am) sorry to hear|that(?:'s| is) awful|poor (?:you|thing)|so sorry|my condolences)\b"),
+
+    ("sociability", 3, "low", "initiating contact / plans",
+     r"\b(?:want to hang|wanna hang|lets hang|let's hang|come over|you free|are you around|wanna grab)\b"),
+    ("sociability", 3, "low", "party / group settings",
+     r"\b(?:party|everyone(?:'s| is) going|the group|hang out with everyone|going out tonight)\b"),
+
+    # A LOW modesty score predicts MORE self-elevation, not less. Same for
+    # trust: a 9th-percentile trust score predicts MORE suspicion. Both were
+    # written pointing the wrong way on the first pass and both produced a
+    # confident "INVERTED" that was an artefact of the table, not the corpus.
+    ("modesty", 5, "high", "self-elevation",
+     r"\b(?:i(?:'m| am) (?:the )?(?:best|smartest|better than)|nobody else (?:can|could)|i(?:'m| am) right)\b"),
+
+    ("assertiveness", 5, "low", "directives / commands",
+     r"\b(?:you (?:need|have) to|you should|do this|i want you to|make sure you)\b"),
+
+    ("submissiveness", 1, "low", "deference / apology",
+     r"\b(?:sorry|my (?:bad|fault)|i apolog\w+|you(?:'re| are) right, i)\b"),
+
+    ("trust", 9, "high", "suspicion of motive",
+     r"\b(?:lying|liar|bullshit|full of shit|dont believe|don't believe|hiding something|what(?:'s| is) the angle)\b"),
+
+    # ---- Big30 highs ------------------------------------------------------
+    ("impulsiveness", 96, "high", "immediacy / right-now",
+     r"\b(?:right now|immediately|cant wait|can't wait|just did it|already did|fuck it)\b"),
+
+    ("intellect", 95, "high", "abstraction / framing",
+     r"\b(?:the point is|structurally|in principle|the mechanism|fundamentally|by definition|the thing about)\b"),
+
+    ("liberalism", 91, "high", "political register",
+     r"\b(?:capitalis\w+|socialis\w+|fascis\w+|the state|working class|billionaire|imperial\w+|leftist)\b"),
+
+    ("self_consciousness", 91, "high", "self-monitoring in company",
+     r"\b(?:i (?:probably )?(?:sound|seem|look) (?:like|so)|(?:they|people) (?:probably )?think i|i felt stupid|embarrass\w+)\b"),
+
+    ("introspection", 87, "high", "causal self-explanation",
+     r"\b(?:the reason i|i think (?:i|its because|it's because)|thats why i|that's why i|i realized|i(?:'ve| have) been thinking)\b"),
+
+    ("artistic_interests", 81, "high", "aesthetic register",
+     r"\b(?:the mix|this record|the album|production|the beat|mastered|sounds? (?:incredible|insane|amazing))\b"),
+
+    ("vulnerability", 78, "high", "overwhelm",
+     r"\b(?:i cant deal|i can't deal|too much|falling apart|i(?:'m| am) (?:so )?(?:tired|done|exhausted)|breaking down)\b"),
+
+    ("anxiety", 67, "high", "worry",
+     r"\b(?:worried|freaking out|panic\w*|stressed|nervous|what if)\b"),
+
+    # ---- PD profile -------------------------------------------------------
+    ("schizotypal", 79, "high", "pattern / conspiracy cognition",
+     r"\b(?:coincidence|no way that(?:'s| is) random|the pattern|connected somehow|they(?:'re| are) (?:all )?in on|psyop)\b"),
+
+    ("narcissistic", 67, "high", "grandiosity / uniqueness",
+     r"\b(?:nobody (?:else )?(?:understands|gets it)|i(?:'m| am) (?:the only|different)|everyone else is (?:an idiot|stupid))\b"),
+
+    ("antisocial", 58, "high", "rule indifference",
+     r"\b(?:who cares|dont care|don't care|fuck (?:them|it|off|the (?:cops|law|rules))|not my problem|illegal)\b"),
+
+    # ---- typology ---------------------------------------------------------
+    ("ti_dominance", None, "high", "probability quantification",
+     r"\b\d{1,3}(?:\.\d+)? ?(?:%|percent)\b|\bi(?:'m| am) \d{1,3}% (?:sure|certain|confident)\b"),
+
+    ("ti_dominance", None, "high", "explicit confidence %",
+     r"\bi(?:'m| am) (?:like )?\d{1,3}(?:\.\d+)? ?(?:%|percent) (?:sure|certain|positive|confident)\b"),
+
+    ("ti_dominance", None, "high", "conditional reasoning",
+     r"\b(?:if (?:its|it's|thats|that's) true then|which (?:means|implies)|therefore|it follows|the implication)\b"),
+]
+
+
+def rate(hits, total):
+    return (hits / total * 1000) if total else 0.0
+
+
+def verdict(direction, ratio, sent_hits):
+    """Deliberately conservative. See the module docstring."""
+    if sent_hits < 20:
+        return "too few"
+    if direction == "high":
+        if ratio >= 2.0:
+            return "SUPPORTED"
+        if ratio >= 1.25:
+            return "leans yes"
+        if ratio <= 0.6:
+            return "INVERTED"
+        return "silent"
+    else:  # low
+        if ratio <= 0.5:
+            return "SUPPORTED"
+        if ratio <= 0.8:
+            return "leans yes"
+        if ratio >= 1.75:
+            return "INVERTED"
+        return "silent"
+
+
+def cmd_list(a):
+    for facet, score, direction, label, pat in PREDICTIONS:
+        s = f"{score}" if score is not None else "—"
+        print(f"{facet:20} {s:>4} {direction:5} {label:34} {pat}")
+
+
+def cmd_run(a):
+    preds = [p for p in PREDICTIONS if not a.facet or p[0] == a.facet]
+    if not preds:
+        sys.exit(f"no facet matching {a.facet!r}; try `list`")
+    compiled = [(f, s, d, l, re.compile(p, re.I)) for f, s, d, l, p in preds]
+
+    sent_hits, recv_hits = Counter(), Counter()
+    sent_total = recv_total = 0
+    examples = {}
+
+    for r in mm.load(a.dump):
+        t = r["norm"]
+        outbound = r["dir"].lower() == "sent"
+        if outbound:
+            sent_total += 1
+        else:
+            recv_total += 1
+        if len(t) < a.minlen:
+            continue
+        for f, s, d, l, rx in compiled:
+            if rx.search(t):
+                key = (f, l)
+                if outbound:
+                    sent_hits[key] += 1
+                    if a.examples and len(examples.setdefault(key, [])) < a.examples and 40 < len(t) < 400:
+                        examples[key].append((r["date"], " ".join(t.split())))
+                else:
+                    recv_hits[key] += 1
+
+    print(f"# psychometrics vs corpus — {sent_total:,} sent (Dan) "
+          f"vs {recv_total:,} received (503 handles, within-medium control)")
+    print(f"# rates are per 1,000 messages; ratio = Dan / control; minlen {a.minlen}\n")
+    print(f"{'facet':20} {'sc':>4} {'dir':5} {'proxy':34} {'Dan':>7} {'ctrl':>7} {'ratio':>7}  verdict")
+    print("-" * 108)
+
+    last = None
+    for f, s, d, l, _ in compiled:
+        key = (f, l)
+        sr, cr = rate(sent_hits[key], sent_total), rate(recv_hits[key], recv_total)
+        ratio = (sr / cr) if cr else float("inf")
+        if f != last:
+            print()
+            last = f
+        sc = f"{s}" if s is not None else "—"
+        rs = "inf" if ratio == float("inf") else f"{ratio:.2f}x"
+        print(f"{f:20} {sc:>4} {d:5} {l:34} {sr:7.2f} {cr:7.2f} {rs:>7}  {verdict(d, ratio, sent_hits[key])}")
+
+    if a.examples:
+        print("\n\n# matches — READ THESE BEFORE BELIEVING ANY COUNT ABOVE")
+        for f, s, d, l, _ in compiled:
+            for date, txt in examples.get((f, l), []):
+                print(f"  [{f}/{l}] {date}  {txt[:150]}")
+
+
+def main():
+    ap = argparse.ArgumentParser(prog="psychometrics", description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--dump", default=mm.DUMP)
+    sub = ap.add_subparsers(dest="cmd", required=True)
+    r = sub.add_parser("run")
+    r.add_argument("--facet")
+    r.add_argument("--examples", type=int, default=0)
+    r.add_argument("--minlen", type=int, default=12)
+    r.set_defaults(fn=cmd_run)
+    l = sub.add_parser("list")
+    l.set_defaults(fn=cmd_list)
+    a = ap.parse_args()
+    a.fn(a)
+
+
+if __name__ == "__main__":
+    main()

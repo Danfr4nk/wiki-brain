@@ -1,0 +1,365 @@
+---
+
+domain: self
+
+page_type: summary
+
+status: active
+
+date_created: 2026-09-04
+
+date_modified: 2026-09-04
+
+knowledge: mixed
+
+date_range_start: 2008-09-04
+
+date_range_end: 2026-09-02
+
+title: "Twitter / X — the reply corpus"
+
+sources:
+
+- "raw/self/twitter/replies-video-2026-09-04/SOURCE.md"
+
+- "raw/self/twitter/replies-video-2026-09-04/replies.jsonl"
+
+- "raw/self/twitter/replies-video-2026-09-04/MANIFEST.md"
+
+- "raw/self/twitter/archive.jsonl"
+
+tags: [digital-footprint, politics, forensic-analysis, ideology]
+
+connections:
+
+- page: wiki/self/twitter
+
+type: component-of
+
+claim: 'The reply record is the half the year pages exclude by construction — that hub indexes originals, and this is the dialogue the originals-only inclusion rule dropped.'
+
+- page: wiki/mind/synthesis/vertical-authority-skepticism
+
+type: evidences
+
+claim: 'The reply corpus shows the skepticism is not aimed at a side: he debunks the Butler-rally "pre-written landing page" conspiracy, corrects an anti-Trump account on Trump''s golf, and tells accounts he agrees with that their data presentation is bad — the correction fires on argument quality regardless of whose argument it is.'
+
+- page: wiki/mind/concepts/calibrated-confidence
+
+type: evidences
+
+claim: 'The policing of other people''s calibration, which that page derives from originals, is the reply corpus''s single most common move: "that''s just polling averages, not a forecast model", "Refrain, not reframe", "that''s....not socialism", "I don''t like the way this data is being presented" — 186 new replies and the modal one is a correction of a specific factual or definitional error.'
+
+- page: wiki/mind/synthesis/failure-to-launch
+
+type: evidences
+
+claim: 'The November 2012 O&A internship application was actually submitted, not merely contemplated — "thanks, i just sent in an app" answers the inquiry that page cites, narrowing what went unanswered from the approach to the application itself.'
+
+- page: wiki/self/twitter/2024
+
+type: evidences
+
+claim: 'The densest anchored band in the reply corpus is November–December 2024 — the commutations, the pardons, the Huckabee appointment and the Mangione shooting — adding an argued, second-person layer to the year the originals already make the account''s peak.'
+
+- page: wiki/self/twitter/2025
+
+type: contextualizes
+
+claim: 'Not one of the 199 new rows anchors to any month of 2025: the collapse-year silence survives contact with a source that straddles it, which is a better reason to believe it than the absence of a source was.'
+
+- page: wiki/interests/opie-and-anthony
+
+type: evidences
+
+claim: 'The Sandy live-broadcast run of October 2012 is a reply relationship, not fandom at a distance — he feeds the show sourced material (the Breezy Point fire video, the Atlantic''s photo debunk, 911 call volume) across a single storm week.'
+
+---
+
+# Twitter / X — the reply corpus
+
+**The corpus had his monologue and none of his dialogue, and the ratio was an
+
+artifact of the archive rather than a fact about the man.**
+
+`raw/self/twitter/archive.jsonl` holds **2,718 originals against 22 replies** —
+
+originals-only by its own inclusion rule, which [[wiki/self/twitter]] states in
+
+its own words: *"one wiki page per year, every retrieved original."* An
+
+operator-supplied video of his profile being scrolled, transcribed on
+
+2026-09-04, is **255 replies and 33 originals**. After dedup against the
+
+archive, **186 of those replies are new**.
+
+**The reply record goes 22 → 208.** This page is what that turns out to show.
+
+| | Rows |
+
+|---|---|
+
+| Transcribed (after directive exclusions) | 288 |
+
+| Already in `archive.jsonl` | 89 (31%) |
+
+| **New to the corpus** | **199 (69%)** |
+
+| — replies | 186 |
+
+| — originals | 13 |
+
+## What the source can be trusted to say, and what it cannot
+
+The video carries X's relative-age labels and **no timestamps**. No row in
+
+`replies.jsonl` has a `created_at`; every row has a one-year band instead.
+
+The 89 rows that were already in the archive make this checkable rather than
+
+assumed, because they carry a true date from a source that has one:
+
+| Check | Result |
+
+|---|---|
+
+| True date inside the derived band | **81 / 89 = 91%** |
+
+| Band-edge misses (≤ 7 days) | 6 |
+
+| **Gross misses (> 400 days)** | **2** |
+
+**The two gross misses are why nothing here is dated by its label.**
+
+`@JimNorton "I've been saying 'yuckamundo'"` is labelled **8y** and is truly
+
+**2014-10-16**. `@whatdirt "another enormous thank you for the support"` is
+
+labelled **13y** and is truly **2014-10-31**. Two posts eleven days apart carry
+
+labels four and a half years apart. That is label-to-post misalignment in the
+
+scroll, not rounding, and roughly 2% of rows will carry it with nothing in the
+
+file able to say which.
+
+So a row reaches a year page only when its own content anchors it to a dated
+
+public event — the commutations of 23 December 2024, the Key Bridge collapse of
+
+26 March 2024, the Butler rally of 13 July 2024, *Titan* in June 2023, Sandy in
+
+October 2012. Everything else stays in a band, on this page.
+
+**This is a sample of unknown selection rule.** One scroll, one video. The 3y
+
+band has 76 rows and the 17y band has 4; that is a fact about the video and not
+
+about the account, and per-band counts here must never be read as per-year
+
+counts.
+
+## The finding: the reply is a different instrument from the original
+
+The year pages read as broadcast — assertions into a room. The replies are
+
+**argument with named strangers**, and across 186 new ones the modal move is not
+
+a political position at all. It is **the correction of a specific factual or
+
+definitional error**, delivered to whoever made it.
+
+> *"Okay that's just polling averages, not a forecast model"*
+
+> *"Refrain, not reframe lol"*
+
+> *"Lmao that's....not socialism. Just because you slipped the words 'means of production' in there doesn't make it socialism"*
+
+> *"Very misleading. The numbers here are just the overall annual defense budget, not money that is given to NATO."*
+
+> *"Lenny Bruce was arrested...not by 'the public', but by the state."*
+
+**The correction does not check which side made the error first.** This is the
+
+part the originals could not show, because a broadcast has no interlocutor to
+
+be wrong. Against accounts he plainly agrees with:
+
+> *"Even though I agree with your thesis, I don't like the way this data is being presented."* — on a chart starting right-wing extremist violence at 1994, one year before Oklahoma City, and jihadist violence at 2010, after 9/11
+
+> *"Totally agreed on the conclusion and the logic, but nitpick on the 'several states away' thing...PA and NJ share a 100+ mile border."*
+
+> *"@PalmerReport This is literally the worst take ever."*
+
+> *"@ZackMcDerm I am smarter than Palmer Report"*
+
+And against his own side's advantage, twice on the Butler rally of 13 July 2024:
+
+> *"How many times do we have to go through this? These are probably landing pages where multiple updates about a subject (Trump, the election, etc) are posted."*
+
+> *"I can't tell you how many promoters were involved in the rally. But I can tell you with total and demonstrable certainty that, regarding PROMPTERS, you have literally no idea what you're talking about. Trump (and literally everyone else) always have 2"*
+
+And on Trump's golf, to an anti-Trump account:
+
+> *"Look I'm no trump fan and his record of lying about club tournament wins and general golf cheating is well established...but... he's broadly accepted to be an exceptionally good golfer for his age. Anyone can hit a bad shot"*
+
+[[wiki/mind/synthesis/vertical-authority-skepticism]] derives this from originals
+
+and published negative results. The reply corpus is the same disposition with a
+
+target in front of it, and it settles a question the originals leave open: the
+
+skepticism is **not** aimed at a political direction. It fires on argument
+
+quality. [[wiki/mind/concepts/calibrated-confidence]] already records that he
+
+polices other people's calibration; here that is not a behaviour the corpus
+
+holds a few instances of, it is the dominant register of 186 rows.
+
+## The counter-evidence, and it is real
+
+**The same corpus holds a large amount of pure contempt with no correction in
+
+it**, and a page that quoted only the section above would be selling something:
+
+> *"Braindead take."* · *"Your Econ take is bad and wrong"* · *"You are not a smart person."* · *"Get fucked"* · *"You seem fun."* · *"Wow so profound 🙄"* · *"Oh god make it stop."* · *"Please, god. No."*
+
+> *"I absolutely adore people like you who, in place of offering anything resembling a coherent thought, parrot a handful of tired quotes and vague aphorisms. Seriously, I've re-read your tweet and it's an achievement in garble-speak"*
+
+> *"Despite your bow tie, you seem to lack even the most basic knowledge of how the legal system operates"*
+
+> *"Okay then you go back to brunch and leave politics to the rest of us who actually care enough to pay attention"*
+
+The honest statement of the finding is therefore narrower than the flattering
+
+one: **when he engages the substance he corrects it symmetrically; he does not
+
+always engage the substance.** The dismissals cluster on accounts he reads as
+
+arguing in bad faith, and *"this is the precise point that I just stopped
+
+reading"* is the seam between the two modes stated out loud.
+
+**What would falsify the symmetry claim:** a hydrated-parent pull (Tier 3 of
+
+`TWITTER_PULL.prompt`) that shows the corrections landing on right-coded
+
+accounts and the dismissals on left-coded ones at a rate the political mix of
+
+his timeline does not explain. This source cannot test that — it has no parents
+
+and no sampling frame. The claim is made on the content of the corrections, not
+
+on a count.
+
+## The six OceanGate rows, as a worked case
+
+June 2023, six replies under `@OceanGateExped`, and none of them is a joke about
+
+billionaires:
+
+> *"Even if they are floating, they need to be found among the waves and whitecaps so that someone can open the 16 external bolts that have everyone trapped inside a hermetically sealed box. Good thing they painted it *checks notes* white"*
+
+> *"Guess what? The submersible is bolted shut from the outside, so even if they were to resurface they still need to be found and rescued before the oxygen runs out"*
+
+> *"That waiver, much like the submersible, isn't going to hold water."*
+
+> *"International waters. There's no real regulatory body to answer to."*
+
+> *"IT SAYS IN THE VIDEO that this was recorded weeks before they even left port for the mission that they died on. That's not the same thing as 'singing a goodbye song as they face their demise' lmao"*
+
+**Five of the six are mechanism.** Bolt count, hull colour against sea state,
+
+the jurisdictional gap, the legal force of a waiver, and a debunk of a viral
+
+misreading — the last one correcting sentiment in his own direction of travel.
+
+This is the anomaly-detection register applied to a news event in real time,
+
+against an audience that was there for the schadenfreude.
+
+## What the new rows put on other pages
+
+- **The O&A internship was submitted.** [[wiki/mind/synthesis/failure-to-launch]]
+
+cites the November 2012 approach as *"an unpaid internship application...
+
+unanswered"*. The archive holds the two inquiry tweets of 2012-11-18; the new
+
+row holds the sequel — *"thanks, i just sent in an app. loved BWTS yesterday,
+
+excited to hear more."* The inquiry **was** answered, and he acted on it
+
+within days. What remains unanswered is the application itself, which is a
+
+narrower and better-supported claim than the page currently makes.
+
+- **December 2024, Manhattan, twenty-five blocks.** *"The distance isn't true.
+
+It's about 235 miles from Altoona to Manhattan. I'm sitting 25 blocks from
+
+where it happened"* — the UnitedHealthcare shooting of 4 December 2024, whose
+
+suspect was arrested in Altoona on 9 December. It is a first-person location
+
+statement with a radius, and it is the kind of row [[wiki/self/location-history]]
+
+is built from. It is **not** filed as an address here: "25 blocks" from a
+
+midtown site is a claim about distance, not a coordinate, and the direction is
+
+not stated.
+
+- **`@alexgfrank` is addressed as "pops".** *"tough week. hang in there pops"*,
+
+2018-09-08, already in the archive and cited on no page.
+
+[[wiki/people/alex-frank]] carries `relationship_to_dan: unknown` and sources
+
+that do not include the twitter archive. This is a lead, not a settlement —
+
+"pops" is used loosely — and it is recorded as one.
+
+- **The Scott Baio bit.** A four-row run in which he claims to hold *"the rights
+
+to his life story and likeness in all commercial film, tv and animation
+
+properties with 23 of the 40 years remaining"*, alongside *"I have no idea who
+
+any of you are and I'm a different dan frank"* — a name-collision mistaken
+
+identity worked into a sustained deadpan. The same thread carries a real
+
+observation: *"It's so deeply weird to be posting AS someone who died years
+
+ago using their actual account."*
+
+## Gaps
+
+- **No parent tweets.** Every reply here is one side of an exchange. Several
+
+rows are close to unreadable without the thing they answer, and are kept
+
+anyway. Tier 3 of `TWITTER_PULL.prompt` is the fix and remains unfilled.
+
+- **No ids, no metrics, no URLs.** Nothing here can be merged into
+
+`archive.jsonl` by its dedup key. The 89 overlaps were matched on normalised
+
+text and the match method is recorded per row.
+
+- **The selection rule of the video is unknown**, so the reply corpus's *shape*
+
+— which years, which interlocutors, how often — is not measurable from it.
+
+A per-year reply count remains a thing the corpus cannot state.
+
+- **Four transcribed blocks merge several consecutive posts** and are kept
+
+unsplit rather than divided on a guess.
+
+- **Five rows were excluded under the standing directive** and are recorded
+
+nowhere but as a count.

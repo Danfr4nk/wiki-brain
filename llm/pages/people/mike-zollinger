@@ -1,0 +1,79 @@
+---
+
+domain: people
+
+page_type: entity
+
+status: closed
+
+date_created: 2026-06-23
+
+date_modified: 2026-09-04
+
+date_range_start: 2018-04-02
+
+date_range_end: 2018-09-15
+
+sources: ["raw/self/message-csv/MASTER_MESSAGES_DB_DUMP.csv"]
+
+related: ["wiki/work/nemacolin-caddying", "wiki/timeline/periods/2020-2021-market-era", "wiki/self/message-corpora/master-message-dump"]
+
+tags: [career, uniontown-era]
+
+knowledge: mixed
+
+infobox:
+
+handles: ["+17246208130"]
+
+name: "Mike Zollinger"
+
+relationship_to_dan: unknown
+
+first_contact: 2018-04-02
+
+known_for: "Mike Zollinger was a fellow [[wiki/work/nemacolin-caddying|Nemacolin]] caddy through the 2018 season (+17246208130, 51 m"
+
+---
+
+# Mike Zollinger
+
+> **COUNT CORRECTED [2026-09-04] — 121, not 51.** This page reported the
+
+> Received-only figure. Dan's 70 messages to this contact are in
+
+> `raw/self/dox-scan/all_imessages_complete_dump.txt`, which this page did not
+
+> read. Its handle was not declared in `infobox.handles:` either — it was
+
+> sitting in the page's own Corpus Dimensions table where no tool could use it —
+
+> so `bin/wiki-crosslink counts` could not see this page until the handle was
+
+> promoted the same day. **The prose below was written against the one-sided
+
+> thread and has not been re-derived.**
+
+Mike Zollinger was a fellow [[wiki/work/nemacolin-caddying|Nemacolin]] caddy through the 2018 season (`+17246208130`, 51 messages, April–September) — casual shift talk, tip comparisons, weather complaints, and a running joke about buying a house to rent back to him — with an early, matter-of-fact crypto thread predating Dan's [[wiki/timeline/periods/2020-2021-market-era|2020–2021 market era]]: a September 12, 2018 exchange has Mike sharing a Bitcoin wallet address and lamenting that his Ethereum "went way down" after expecting it to "sky rocket," two years before the FSLY tip that later defines Dan's own trading period.
+
+## Corpus Dimensions
+
+| Metric | Value |
+
+|--------|-------|
+
+| Messages | **121** — 70 sent (Dan), 51 received (was: 51) |
+
+| Date range | 2018-04-02 to 2018-09-15 |
+
+| Direction | **70 Sent / 51 Received** — corrected 2026-09-04 |
+
+| Handle | +17246208130 |
+
+## Related
+
+[[wiki/work/nemacolin-caddying]] · [[wiki/timeline/periods/2020-2021-market-era]] · [[wiki/self/message-corpora/master-message-dump]]
+
+---
+
+**Up:** [[wiki/people/index|People]]

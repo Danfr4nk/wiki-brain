@@ -1,0 +1,507 @@
+---
+
+domain: people
+
+page_type: entity
+
+status: closed
+
+knowledge: mixed
+
+date_created: 2026-06-23
+
+date_modified: 2026-09-04
+
+date_range_start: 2017-05-04
+
+date_range_end: 2018-05-27
+
+sources:
+
+- "raw/self/message-csv/MASTER_MESSAGES_DB_DUMP.csv"
+
+- "raw/self/dox-scan/all_imessages_complete_dump.txt"
+
+tags: [uniontown-era, career, financial-stress, addiction-recovery]
+
+infobox:
+
+name: "Vaughn"
+
+sex: male
+
+location: uniontown
+
+relationship_to_dan: coworker
+
+role: "Fellow Nemacolin caddie; two-product middleman (weed and cocaine)"
+
+first_contact: 2017-05-04
+
+handles: ["+17245578229"]
+
+known_for: "Caddie-yard coworker who doubled as a middleman for both weed and cocaine between loops — rides up the mountain, check-day logistics, chronic short-weight disputes, and the 2017 gap in the supply succession"
+
+aliases: ["cuevo"]
+
+connections:
+
+- page: wiki/work/nemacolin-caddying
+
+type: component-of
+
+claim: "Vaughn is the cohort's paycheck-to-paycheck edge: a fellow caddie coordinating rides to the yard and check pickups who doubled as a middleman between loops — and the thread carries the yard's drug-testing regime from the evading side, two stealth bottles of clean urine sourced from a third caddie."
+
+- page: wiki/mind/synthesis/supply-network
+
+type: component-of
+
+claim: "Vaughn is the network's missing 2017 node — the succession ran Zach Harshman (2014–15) straight to Johnny (2018–19) with nothing between, and this thread opens 2017-05-04, twenty-three days after Jay Lauer's overdose, and runs to 2018-05-27."
+
+- page: wiki/health/cocaine
+
+type: evidenced-by
+
+claim: "The thread carries the only contemporaneous dollar figure the corpus has for the cocaine peak — 'I spend well over $100 a day on it,' said to a prospective supplier on 2017-05-04 — plus a $100/gram price Dan enforces by weight and a distinct coded vocabulary ('powder', 'pow', 'that girl', 'Versace') the page's alias list did not carry."
+
+- page: wiki/timeline/periods/2017-poverty-floor
+
+type: co-occurs
+
+claim: "The thread runs on poverty-floor logistics from both sides — coordinating rides to collect paychecks, $50 fronts, 'U getting ur check today', 'I get paid again on Monday so I'm just trying to make it till then' — documenting that Dan's suppliers were as broke as he was."
+
+- page: wiki/people/suzanne-frank
+
+type: evidenced-by
+
+claim: "By 2017–18 the cocaine direction between Dan and his mother has reversed: she is the end consumer of what he procures ('my mom wants the whole thing', 2018-02-08; 'Mom is happy enough with the quality', 2017-05-30) and the driver to the pickup ('I'll get my mom to bring me over if u can get t now', 2018-02-05), where the 2015–16 record has her as his source."
+
+- page: wiki/people/jack-rusko
+
+type: co-occurs
+
+claim: "Jack Rusko supplied the clean urine Dan carried to Nemacolin against a possible early test — 'i had jack rusko piss for me lol' (2018-03-19) — placing a third caddie inside the yard's testing-evasion economy."
+
+- page: wiki/places/155-virginia-ave
+
+type: co-occurs
+
+claim: "The address is handed to a brand-new supplier within seven hours of first contact (2017-05-04) and handoffs are staged by door — 'Side door porch' — the same geometry the 2014–15 Zach Harshman handoffs used at the same house, two supplier generations apart."
+
+- page: wiki/mind/psychosexual/orchestration-and-voyeurism
+
+type: co-occurs
+
+claim: "The February 2018 exchanges are not one night but a five-day transactional sequence in which access to an unnamed woman is offered explicitly against cocaine procurement — 'You're going to want to get powder / Because tomorrow or Friday if you can hook it up she said she would blow you' (2018-02-07) — making this the corpus's clearest instance of the orchestration pattern being used as currency."
+
+---
+
+# Vaughn
+
+> **RE-DERIVED [2026-09-04] against the full 582-message thread.** This page was
+
+> written from the 228 received messages alone and stated that Dan's half
+
+> "survives nowhere in it". It survives in
+
+> `raw/self/dox-scan/all_imessages_complete_dump.txt`, which the page did not
+
+> read, and it is the demand side of a supply relationship — so the missing half
+
+> was the half the page most needed. The count was corrected earlier the same
+
+> day by `bin/wiki-crosslink counts`; this pass is the re-derivation that
+
+> correction said it did not attempt. **What changed is not detail but subject:
+
+> the thread is a two-product channel, and the second product is cocaine.**
+
+Vaughn (`+17245578229`, saved by Dan at least once as "cuevo") was a fellow
+
+[[wiki/work/nemacolin-caddying|Nemacolin caddie]] who doubled as Dan's
+
+middleman for **both weed and cocaine** across 582 messages, 73 active days and
+
+thirteen months (2017-05-04 – 2018-05-27). He had children, no car and an
+
+upstream source he called "my homey" and "my best friend"; he relayed product in
+
+$20–$100 quantities between loops, could not weigh what he sold without
+
+borrowing Dan's scale, and left for a railroad job in May 2018.
+
+He is also the node the [[wiki/mind/synthesis/supply-network|supply network]]
+
+page did not have. That page's succession runs
+
+[[wiki/people/zachariah-harshman|Zach Harshman]] (2014–15) directly to
+
+[[wiki/people/johnny-dealer|Johnny]] (2018–19) with nothing in between. This
+
+thread opens on **2017-05-04, twenty-three days after
+
+[[wiki/people/jay-lauer|Jay Lauer]] died of a heroin overdose** on or about
+
+April 11, 2017, and by 20:11 that first evening Dan is asking for weed; by 20:13
+
+he is asking for cocaine.
+
+## Two products, one channel, and the page only ever saw one
+
+The earlier version of this page described a "weed middleman" because weed is
+
+what Vaughn's own half of the thread mostly discusses. Dan's half is where the
+
+other product lives, and it is unambiguous — Vaughn himself disambiguates the
+
+two on 2018-02-01, asking simply: **"The smoke or that girl"**.
+
+The cocaine vocabulary in this thread is *powder*, *pow*, *that girl*, *a cut*
+
+and — as a quality grade — *Versace*:
+
+| Date | Line | Direction |
+
+|---|---|---|
+
+| 2017-05-04 | "Also I'm always looking for powder so if u come across any keep me in mind" | Sent |
+
+| 2017-05-04 | "I'd get 100 of it tonight to try and if it's Versace i can get 300 or so tomorrow" | Sent |
+
+| 2018-01-30 | "Can u get pow" | Sent |
+
+| 2018-02-01 | "The smoke or that girl" | Received |
+
+| 2018-02-03 | "Any powder?" — "Naw he left for the weekend" | Sent / Received |
+
+| 2018-02-05 | "If you located the girl I can spend a benjj" | Sent |
+
+| 2018-02-08 | "Pow?" — "A g" | Sent / Received |
+
+| 2018-02-13 | "if your dude has the pow lmk" | Sent |
+
+Corpus-wide, `pow` returns 9 rows and 8 of them are this product; `Versace`
+
+returns 11 and is a **brand-tier metaphor for purity** Dan uses with more than
+
+one supplier — in January 2017 he is grading a batch as *"the Versace stuff"*
+
+against *"the Forever21 stuff"* and asking *"What's halfway between f21 and
+
+Versace?"*. None of these words were in [[wiki/health/cocaine]]'s `aliases:`
+
+before this pass, which is why every automated scan of this thread returned that
+
+page's real matches as noise and its false ones ("golf balls", "blow u up") as
+
+hits.
+
+**"Cut" is the one term this page will not call.** It carries the cocaine sense
+
+in some rows — *"Can I grab a cut" / "Yeah its 50 though"* (2018-02-07), the
+
+scale-borrowing (*"Whenever you want I just need a scale"*), and the
+
+$100/gram benchmark below — and behaves as a weed substitute in others, most
+
+sharply on 2018-01-14, where *"Could u get me a cut this morning?"* is withdrawn
+
+an hour later with *"I actually don't need it now. I'm grabbing some green crack
+
+now"*, naming a cannabis strain. It is left ambiguous rather than resolved by
+
+preference.
+
+## The dollar figure the cocaine page says the corpus does not have
+
+[[wiki/health/cocaine]] closes with an explicit gap: *"The true scale of the
+
+2017–2020 spend: the dosage arc gives quantities but not dollar figures; the
+
+financial cost of the 3.5–7g daily peak is undocumented."* On his first evening
+
+of contact with Vaughn, pitching himself to an upstream source he had never
+
+met, Dan wrote:
+
+> **"Let him know that getting me as a client on that girl is like hitting the
+
+> lottery haha. I spend well over $100 a day on it"** — 2017-05-04, 21:20
+
+That is a contemporaneous, dated, first-person dollar rate for cocaine, and it
+
+is the only one the corpus is currently known to hold. It comes with two
+
+qualifications that have to travel with it, and the second is the interesting
+
+one:
+
+1. **It was said to make a sale happen.** The audience is a prospective
+
+supplier's supplier and the sentence is an advertisement for himself as a
+
+customer. Its slant, if it is wrong, is upward.
+
+2. **It is at the *bottom* of the arc it falls inside, not the top.** The
+
+cocaine page dates the 3.5–7 g/day peak to 2017–2020. Dan enforces a
+
+**$100/gram** price in this same thread — *"if I'm getting it I gotta at
+
+least be at the 100/1 Mark"* (2018-01-23) — so "well over $100 a day" is
+
+a rate of roughly **one gram a day**, which is the arc's *pre-inheritance
+
+baseline*, in the arc's first peak year. Either the escalation had not
+
+started in May 2017, or the retrospective 3.5–7 g figure is inflated. The
+
+thread cannot decide between those and this page does not pretend to.
+
+The largest single intent stated in the thread is **$250–275**, half a paycheck,
+
+and that one is for weed by the zip (2018-02-01). Cocaine intents run $50, $100
+
+("Gonna need 100", "I can spend a benjj"), and the one-off $300.
+
+## The short-weight dispute, three times, and what it prices
+
+The thread's signature motif is Dan weighing what he bought and finding it
+
+light. He owned a scale from day one (*"I got a super nice scale here so we
+
+should be good"*, 2017-05-04, 21:25); Vaughn had to borrow it.
+
+| Date | Bought as | Weighed | Vaughn's defence |
+
+|---|---|---|---|
+
+| 2017-05-04 | just under $50 | **0.47** | "they said they will definitely make it right for you" |
+
+| 2017-05-30 | 3.5 g | **2.59** | "that's my best friend I got it from and I know he wouldn't do it on purpose" |
+
+| 2018-01-23 | 1 g | **0.7** (0.9 in the bag) | "I swear I watched him weigh it" |
+
+The first is a cocaine buy — it is the same night as the powder conversation,
+
+and the herb is still outstanding three hours later (*"Also let me know about
+
+that herb I'm sooooooo ready to smoke"*, 22:13). The third establishes the price
+
+Dan considered standard: *"if I'm getting it I gotta at least be at the 100/1
+
+Mark."* The second is weed, and its tell is elsewhere entirely — *"Mom is happy
+
+enough with the quality that it's cool."*
+
+The complaints are also, consistently, **de-escalated within one message**:
+
+"Not your fault dude. It's all good", "Totally not your fault", "Not trying to
+
+make a big deal of it either". Dan documents the shortfall to the tenth of a
+
+gram and then absorbs it, every time, and buys again within days. At the
+
+market's bottom tier the middleman could not verify his own product — the
+
+quality-control vacuum the network's professional nodes
+
+([[wiki/people/menore|Menore]], [[wiki/people/sam|Sam]]) existed to solve.
+
+## The mother is downstream by 2018, not upstream
+
+[[wiki/people/suzanne-frank]] records Suz as a **routine cocaine source** for
+
+Dan in 2015–16. Two and a half years later the direction has reversed and this
+
+thread is where it shows:
+
+- *"Mom is happy enough with the quality that it's cool"* — 2017-05-30, on the
+
+2.59 g that was sold as 3.5.
+
+- *"I'll get my mom to bring me over if u can get t now"* — 2018-02-05, his
+
+mother driving him to a cocaine pickup.
+
+- *"Okay my mom wants the whole thing, do u want me to swing by In a few"* —
+
+2018-02-08, on a gram of powder.
+
+- *"my moms got a lil spice, i'll roll us a jimmy john for the way up"* —
+
+2018-03-19, supplying the ride to work.
+
+By the 2018 deep cycle Dan is the household's procurement function. That is a
+
+change of role rather than a new fact about either of them, and it is written
+
+back to her page.
+
+## The yard: rides, checks, a grip lesson and two bottles of clean urine
+
+The caddie half of the thread is [[wiki/timeline/periods/2017-poverty-floor|the
+
+poverty floor]] in miniature, from both sides. Ride coordination is constant and
+
+mutual — Vaughn has no car, Dan has one intermittently ("I won't have a ride
+
+anywhere until midnight when my girl gets off work", "no wheels", "I don't have
+
+a ride"). Check day is a joint operation run through the caddie master
+
+[[wiki/people/brad-hubeaut|Brad]] ("b-rad"): *"U getting ur check today"*,
+
+*"can you get mine? I'll message brad"*, *"Brad said ok"*. Neither man's cash
+
+outlasts the week — *"Just a half. I get paid again on Monday so I'm just trying
+
+to make it till then lol"*.
+
+Three things the one-sided version could not see:
+
+- **Vaughn taught Dan his golf grip.** *"Dude the way you changed my grip / Has
+
+made a REAL difference / I'm still getting things in place but my striking is
+
+better than it has been"* (2017-05-28). The supply relationship also ran
+
+instruction, in the direction the page would not have predicted.
+
+- **The yard drug-tested, and the crew had a countermeasure.** *"i got clean
+
+piss in case they test early, got u covered if you need a splash"*
+
+(2018-03-19); *"i had jack rusko piss for me lol"*; *"i got 2 stealth bottles
+
+of clean pee just in case"* (2018-03-20). That names
+
+[[wiki/people/jack-rusko|Jack Rusko]] — an already-documented caddie with his
+
+own page — as the donor, and makes the evasion a three-man arrangement rather
+
+than a private one.
+
+- **The friendship is real and asymmetric in Dan's favour.** He invites Vaughn
+
+and his girlfriend to the Halloween 2017 end-of-season and birthday party
+
+(*"11:1"*), offers him a *PlayerUnknown's Battlegrounds* beta key, sends him
+
+[[wiki/interests/music/aliases/sloppp|SoundCloud.com/sloppp]] on their third
+
+day of contact, and returns an ASAP Ferg track Vaughn had recommended. Vaughn
+
+declines the party, declines the beta key, and asks for rides.
+
+## The February 2018 sequence — barter, not a night
+
+The earlier version of this page recorded one night: February 3, 2018, explicit
+
+photographs of an unnamed woman, an offer to film, and a 1 AM visit three nights
+
+later. The full thread makes it a **five-day sequence in which access is offered
+
+as consideration for procurement**, and that is a different claim.
+
+- **2018-02-03, 01:20–02:38** — Dan sends images; Vaughn's replies run from
+
+appraisal (*"Hell yeah nipples pierced and everything"*) through mock-anguish
+
+(*"Dan you playing wit my emotions… I thought we were friends LOL😞😞"*) to
+
+*"I got a nice camera let me tape lol"*. Every message in that window is
+
+Vaughn's; Dan sends images and two characters.
+
+- **2018-02-05, 22:19** — mid-negotiation over a $100 cocaine buy Vaughn would
+
+have to deliver: *"I'll give you some videos for bringing it haha"*. Vaughn:
+
+*"Lol that don't help"*.
+
+- **2018-02-06, 01:11** — during the delivery run: *"I'd let u tho… It's
+
+usually a pretty simple formula to get her in threesome mode"*. Vaughn:
+
+*"Listen you know I'm a complete gentleman / All about having fun nothing
+
+more / I'm here."*
+
+- **2018-02-07, 04:15** — *"she's the only girl I've ever let loose like that.
+
+She's like…not smart enough to have tricks up her sleeve or lie / I can enjoy
+
+the taboo of sharing her and know that she's not about to catch feels"*.
+
+- **2018-02-07, 18:18** — the barter stated outright: *"You're going to want to
+
+get powder / Because tomorrow or Friday if you can hook it up she said she
+
+would blow you / You're welcome forever"*.
+
+The next night Dan adds *"Play it cool about what I mentioned earlier… I
+
+wouldn't overdo it if you do say something"* (2018-02-08, 02:28) — a
+
+consciousness that the offer was his to walk back. The thread records no
+
+outcome. **The woman is never named in it**, and this page does not attempt an
+
+identification; the appraisal of her intelligence and her incapacity to "catch
+
+feels" is the load-bearing part of the quote for
+
+[[wiki/mind/psychosexual/orchestration-and-voyeurism]] whoever she was.
+
+## Corpus record
+
+| Metric | Value |
+
+|---|---|
+
+| Messages | **582** — 354 sent (Dan), 228 received |
+
+| Active days | 73 across 13 months |
+
+| Date range | 2017-05-04 – 2018-05-27 |
+
+| Products | Cannabis (flower, oil carts) **and cocaine** |
+
+| Price benchmark | $100/gram, enforced by weight |
+
+| Quantities | $20–$100 typical; $250–275 stated once (weed, by the zip) |
+
+| Exit | Railroad job starting ~2018-05-16 |
+
+**The thread's shape is seasonal and then it is not.** 156 messages in May
+
+2017, then **23 across the next seven months**, then 146 in January 2018, 178
+
+in February and 58 in March — 382 messages in eleven weeks. The dead stretch is
+
+the 2017 caddie season, when both men were working; the 2018 spike is the
+
+[[wiki/timeline/periods/2018-deep-cycle|deep cycle]], and it stops as abruptly
+
+as it started.
+
+**Gaps:** surname, and which yard crew he belonged to. The identity of the
+
+"homey"/"best friend" upstream source — the person the $100/day pitch was
+
+actually aimed at — who is never named and who this page cannot connect to any
+
+other node. The February 2018 woman and whether anything occurred. Whether the
+
+railroad job took: the thread ends twelve days after he announces it, with
+
+*"Yo do you know anyone wit a ride that wants to make sum money"* (2018-05-27),
+
+and he never reappears in the corpus. And the "cut" ambiguity above, which one
+
+more corroborated price or a scale reading would settle.
+
+---
+
+**Up:** [[wiki/people/index|People]]

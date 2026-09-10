@@ -1,0 +1,105 @@
+
+---
+domain: interests
+page_type: entity
+title: "Batteries Not Included (BNI)"
+status: closed
+knowledge: mixed
+date_created: 2026-07-20
+date_modified: 2026-07-20
+sources:
+  - "raw/self/facebook/facebook-ihatedanfrank/messages/inbox/joeoshnack_7killpebkw/message_1.html"
+  - "raw/self/facebook/facebook-ihatedanfrank/messages/inbox/sethledonne_ydkapzhbla/message_1.html"
+tags: [music-production, uniontown-era, personality-profile]
+connections:
+  - page: wiki/people/joe-oshnack
+    type: evidenced-by
+    claim: "Joe's Aug 2018 setlist-reconstruction thread and Sept 2021 retrospective are the corpus's primary sources on the band — Dan names himself lead songwriter for the originals."
+  - page: wiki/people/seth-ledonne
+    type: evidenced-by
+    claim: "Seth is named as one of the scene mentors (with Andy, Paul, Nathan, Kessler) whose harsh, high-standards hardcore/punk scene the band operated inside of, and 'Rejected Gazette' as a named zine/scene touchstone of the same milieu."
+  - page: wiki/interests/opie-and-anthony
+    type: parallels
+    claim: "Both are formative teenage counterculture immersions Dan explicitly credits decades later — the hardcore scene via Seth LeDonne, the shock-radio archive via years of solo listening — that trained the same anti-normie, no-flinch aesthetic register."
+  - page: wiki/people/joe-oshnack
+    type: evidences
+    claim: "Joe is one of two named bandmates (with Matt Turko), and his thread is the primary source for the band's setlist and the 2021 political retrospective on covering Dead Kennedys' 'California Uber Alles.'"
+---
+
+# Batteries Not Included (BNI)
+
+Batteries Not Included — "BNI" in Dan's own shorthand — was his high
+school-era band with [[wiki/people/joe-oshnack|Joe Oshnack]] and a
+third member, Matt Turko, playing hardcore/punk covers alongside
+originals Dan wrote as, in his own words, "lead songwriter." It
+predates every other music project the wiki documents by nearly a
+decade — the earliest evidence of the same instinct that later becomes
+SLOPPP, MOGZART, and GRIPNOTIC.
+
+## The setlist
+
+An August 2018 exchange has Dan and Joe jointly reconstructing the
+band's full setlist from memory, years later. The covers are a clean
+snapshot of the local hardcore/punk canon they were working from: the
+Misfits ("She," plus the band's own logo song), the Dead Kennedys
+("California Uber Alles"), and the Ramones ("Teenage Lobotomy"). Joe
+separately names a CKY track — "96 Quite Bitter Beings," from the
+band's 1999 debut album *Volume 1* — as material that "never left your
+basement": practiced but never performed live, half-jokingly blamed on
+the shopping-cart-stunt culture CKY's own videos made famous ("we
+couldn't play it because everyone would just start running shopping
+carts off curbs"). The originals are otherwise unnamed and unrecorded
+in the corpus.
+
+## The politics nobody understood at the time
+
+The band's single most-examined moment, revisited by Dan unprompted in
+a September 23, 2021 message to Joe, is covering "California Uber
+Alles" — a Dead Kennedys song satirizing authoritarian California
+governor Jerry Brown — without any of the three members understanding
+or agreeing with its politics at the time. Dan's own retrospective is
+unsparing: he was, in his words, "an annoying little conservative
+fuckcunt" who was "less than thrilled about playing songs with an
+anti-Iraq-war theme," a position he calls "MORTIFYING" to remember from
+the vantage of his later "far left political ideology." Matt Turko is
+named in the same conversation as having voted for Trump, one of the
+few concrete adult-life data points the corpus carries on him beyond
+his band membership — otherwise placed in "the burgh" (Pittsburgh),
+married with kids and a career, as of 2021.
+
+## The scene around it
+
+[[wiki/people/seth-ledonne|Seth LeDonne]]'s own thread supplies the
+surrounding culture rather than the band itself: a named group of
+scene mentors — Seth, Andy, Paul, Nathan, Kessler — whose "visceral
+disdain" for anything perceived as inauthentic (Dan recalls being
+mocked for a tie-dye "311 concert" shirt at a hardcore basement show)
+Dan credits, decades later, as "developmental" and the direct source of
+his adult taste for counterculture. A zine or scene publication called
+"Rejected Gazette" is named as a touchstone of the same milieu. BNI was
+one visible output of a wider local hardcore scene, not an isolated
+project.
+
+## The reunion that never happened
+
+By September 2021 Dan floats the idea of a reunion show, then
+immediately deflates it: "literally half of the people who were
+involved in that scene or would be interested or understand the
+significance... they're dead" — an echo of the same opiate-epidemic
+framing documented on [[wiki/people/matthew-palermo]] and elsewhere in
+the corpus. No reunion is recorded as having happened.
+
+## Corpus record
+
+| Metric | Value |
+|---|---|
+| Members (documented) | Dan (lead songwriter), Joe Oshnack, Matt Turko |
+| Era | High school (pre-2006, per Dan's own "class of 06" graduating-year references elsewhere) |
+| Documented covers | Misfits ("She," logo song), Dead Kennedys ("California Uber Alles"), Ramones ("Teenage Lobotomy"); CKY's "96 Quite Bitter Beings" (rehearsal only, never performed live) |
+
+**Gaps:** what "BNI" stands for beyond "Batteries Not Included"; any
+original song titles or recordings; whether the band ever played a
+real venue versus basement shows only; exact active years; whether any
+other members existed beyond the three named here.
+
+

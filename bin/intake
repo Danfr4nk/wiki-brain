@@ -1,0 +1,2363 @@
+#!/usr/bin/env python3
+"""intake — the intake ledger: finite units in, discrete events out, honest arithmetic.
+
+    bin/intake                       active units and today's events
+    bin/intake new cocaine 3.5g      open a unit
+    bin/intake log 1 .18g            log an intake against it
+    bin/intake report 1              the unit report
+    bin/intake stats                 across every unit ever opened
+
+WHAT THIS IS, AND WHY IT IS NOT A DOSE DIARY
+
+A dose diary records "I did X at 8:30" and can tell you almost nothing
+afterwards, because the number it holds has no denominator. This tracks the
+**unit** — a finite quantity that entered the record at a known time — and then
+records every known disposition of that unit until it is gone. The two objects
+are different and the distinction is the whole design:
+
+    UNIT     3.5 g acquired 2026-08-29 13:42, status active
+    EVENT    0.18 g at 15:17, measured  ─┐
+    EVENT    "one line" at 16:40         ├─ each consumes some of that unit
+    EVENT    ~0.2 g at 19:02, estimated ─┘
+    CLOSURE  consumed, 0.44 g unaccounted, recorded as a discrepancy
+
+Only with a denominator can the ledger answer "how long does 3.5 g actually
+last", "does the first dose run larger than the rest", "does consumption
+accelerate toward the end of a unit" — none of which a list of doses can reach.
+
+THREE KINDS OF EVENT, BECAUSE PRECISION IS NOT ALWAYS AVAILABLE
+
+  measured       0.18 g on a scale. The good case.
+  estimated      about 0.2 g, with a confidence. Kept apart from measured so a
+                 mean can say how much of itself rests on a guess.
+  unquantified   "one line", "two hits", "some". Carries NO quantity, and is
+                 still a real event.
+
+The third one is the point. A system that only accepts grams loses the
+behavioural record — the count, the timing, the clustering — every time the
+scale is not to hand, and it loses it silently. Here an unquantified event
+counts toward event totals, intervals, time-of-day and clustering, and is
+excluded from every quantity statistic. Each figure this tool prints carries the
+share of events it was actually computed from, so a mean over 12 of 17 events
+never gets to look like a mean over 17.
+
+THE ARITHMETIC IS DELIBERATELY INCOMPLETE
+
+Open 3.5 g, log ten events totalling 2.7 g, close the unit: this tool will not
+tell you the average dose was 0.35 g. It does not know what happened to the
+other 0.8 g, and inventing a distribution for it would produce a number that
+looks like evidence and is not. Closing a unit asks how it ended, and if
+quantity is unaccounted for it asks what that quantity was — a final intake, a
+measurement discrepancy, a spill, a transfer. Whatever the answer, the unit
+report prints it. Reconciliation is a recorded decision, never a silent
+subtraction.
+
+EVENT-SOURCED, IN PLAIN FILES
+
+`intake/events.jsonl` is the source of truth: append-only, one JSON object per
+line, never rewritten. `intake/units.json` is a **projection** — regenerated
+from the log on every write and by `bin/intake rebuild`, and safe to delete.
+Nothing is ever edited in place: a mistyped 0.5 g becomes an `event_corrected`
+record naming the original, the correction and the reason. The ledger shows the
+corrected value; the log remembers both.
+
+JSONL rather than the SQLite the first sketch called for, because this
+repository is plain files under git and that is not incidental to it. A JSONL
+line diffs, greps, survives every tool here, and shows up in `git log` as the
+history it already is; a .db file is an opaque blob in a repo whose entire
+premise is that the record is readable. sqlite3 is stdlib and would have worked;
+it would just have been the only unreadable file in the corpus.
+
+WHY IT LIVES IN wiki-brain
+
+Because this is the anti-unreliable-narrator layer. The wiki reasons from what
+was written down, and prose recollection of consumption is the least reliable
+testimony a person gives about themselves. "I barely used anything that weekend"
+is a claim; `bin/intake stats --since 2026-08-14 --until 2026-08-16` is a
+counterexample with timestamps. The ledger is a first-party dated dataset that
+can be set against a page's narrative the way `bin/text-metrics` is set against
+a page's assertions about how he writes.
+
+Pure stdlib. Reads and appends `intake/`, writes an immutable unit report to
+`raw/health/intake/` when a unit closes, and shells to nothing.
+"""
+import argparse
+import datetime
+import json
+import os
+import random
+import re
+import statistics
+import sys
+import time
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+
+# ---------------------------------------------------------------- quantities
+#
+# Conversion exists so a 3.5 g unit can take a 180 mg event without the person
+# logging it doing arithmetic at the moment they are least inclined to. It stays
+# strictly inside a family: milligrams are grams, millilitres are not, and
+# "two tabs" is never 2 g. A cross-family log is an error, not a coercion.
+FAMILIES = {
+    "mass": {"mcg": 0.001, "ug": 0.001, "mg": 1.0, "g": 1000.0, "kg": 1000000.0},
+    "volume": {"ml": 1.0, "cc": 1.0, "cl": 10.0, "dl": 100.0, "l": 1000.0},
+    "count": {"count": 1.0, "ct": 1.0, "tab": 1.0, "cap": 1.0, "pill": 1.0,
+              "dose": 1.0, "patch": 1.0, "puff": 1.0, "drop": 1.0, "unit": 1.0},
+}
+UNITS = {u: (fam, factor) for fam, table in FAMILIES.items() for u, factor in table.items()}
+
+MEASUREMENT_TYPES = ("measured", "estimated", "unquantified")
+CONFIDENCES = ("high", "medium", "low")
+DISPOSITIONS = ("consumed", "discarded", "transferred", "unknown", "other")
+# How an unaccounted remainder at close is recorded. `final_intake` is the only
+# one that adds quantity to the consumption record, and it does so as an
+# explicitly estimated event rather than by adjusting a total.
+RESOLUTIONS = ("final_intake", "discrepancy", "lost", "transferred", "other")
+EVENT_TYPES = ("substance_added", "unit_created", "intake_logged", "unit_adjusted",
+               "event_corrected", "event_voided", "unit_closed", "unit_reopened")
+ADJUSTMENT_KINDS = ("spill", "loss", "transfer", "seizure", "disposal", "found", "correction")
+
+
+class LedgerError(Exception):
+    """Anything the operator did that the ledger will not record as asked."""
+
+
+# ------------------------------------------------------------------- ids/time
+_CROCKFORD = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
+
+
+def ulid():
+    """A sortable, collision-resistant id — Crockford base32, stdlib only.
+
+    48 bits of millisecond timestamp then 80 bits of randomness, exactly as a
+    ULID. Sortability matters: ids in the log sort into the order the events
+    were recorded, so `sort` over the file is a chronological read.
+    """
+    ms = int(time.time() * 1000)
+    bits = (ms << 80) | random.getrandbits(80)
+    out = []
+    for shift in range(125, -1, -5):
+        out.append(_CROCKFORD[(bits >> shift) & 31])
+    return "".join(out)
+
+
+def now_iso():
+    return datetime.datetime.now().astimezone().replace(microsecond=0).isoformat()
+
+
+def parse_time(text, what="time"):
+    """Accept an ISO stamp, 'now', a bare date, or 'YYYY-MM-DD HH:MM'."""
+    if text is None or str(text).strip().lower() in ("", "now"):
+        return now_iso()
+    s = str(text).strip().replace("Z", "+00:00")
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", s):
+        s += "T00:00:00"
+    s = re.sub(r"^(\d{4}-\d{2}-\d{2}) (\d)", r"\1T\2", s)
+    # A single-digit hour is a natural thing to type at 9am and fromisoformat
+    # rejects it. Zero-pad rather than making the operator care.
+    s = re.sub(r"^(\d{4}-\d{2}-\d{2}T)(\d):", r"\g<1>0\2:", s)
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}", s):
+        s += ":00"
+    try:
+        dt = datetime.datetime.fromisoformat(s)
+    except ValueError:
+        raise LedgerError(f"unreadable {what}: {text!r} — use ISO, 'YYYY-MM-DD HH:MM', or 'now'")
+    if dt.tzinfo is None:
+        dt = dt.astimezone()
+    return dt.replace(microsecond=0).isoformat()
+
+
+def dt(iso):
+    return datetime.datetime.fromisoformat(iso)
+
+
+def parse_quantity(text):
+    """'3.5g' / '3.5 g' / '.18 g' / '180mg' -> (float, unit). Unit is required.
+
+    Requiring the unit is not pedantry: the same substance is logged in grams
+    and milligrams within one unit, and a bare number would have to guess.
+    """
+    if text is None:
+        raise LedgerError("no quantity given")
+    m = re.fullmatch(r"\s*([0-9]*\.?[0-9]+)\s*([A-Za-z]+)\s*", str(text))
+    if not m:
+        raise LedgerError(f"unreadable quantity: {text!r} — write it like 3.5g, 180mg, 2tab")
+    qty, unit = float(m.group(1)), m.group(2).lower()
+    if unit not in UNITS:
+        raise LedgerError(f"unknown unit {unit!r} — known: {', '.join(sorted(UNITS))}")
+    if qty < 0:
+        raise LedgerError("quantity cannot be negative")
+    return qty, unit
+
+
+def to_base(qty, unit):
+    fam, factor = UNITS[unit]
+    return fam, qty * factor
+
+
+def convert(qty, unit, target):
+    """Convert within a family. Across families this raises rather than guesses."""
+    if unit == target:
+        return qty
+    fam_a, base = to_base(qty, unit)
+    fam_b, factor = UNITS[target][0], UNITS[target][1]
+    if fam_a != fam_b:
+        raise LedgerError(f"cannot express {unit} as {target} — different kinds of quantity")
+    return base / factor
+
+
+def fmt_qty(qty, unit):
+    if qty is None:
+        return "—"
+    if abs(qty) >= 100:
+        s = f"{qty:,.1f}"
+    elif abs(qty) >= 1:
+        s = f"{qty:.2f}"
+    else:
+        s = f"{qty:.3f}"
+    s = s.rstrip("0").rstrip(".") if "." in s else s
+    return f"{s} {unit}"
+
+
+def fmt_dur(seconds):
+    if seconds is None:
+        return "—"
+    seconds = int(seconds)
+    if seconds < 0:
+        return "-" + fmt_dur(-seconds)
+    d, rem = divmod(seconds, 86400)
+    h, rem = divmod(rem, 3600)
+    m = rem // 60
+    if d:
+        return f"{d}d {h}h {m:02d}m"
+    if h:
+        return f"{h}h {m:02d}m"
+    return f"{m}m"
+
+
+def fmt_when(iso):
+    return dt(iso).strftime("%b %-d, %Y · %-I:%M %p") if iso else "—"
+
+
+# ------------------------------------------------------------------- catalog
+#
+# The substance catalog exists so the interface can offer a SELECT box rather
+# than a free-text field. That is not cosmetic: free text produces "coke",
+# "cocaine", "Cocaine " and "c" as four substances in the same dataset, and no
+# cross-unit statistic survives that. Anything genuinely new is added once, on
+# purpose, and every later unit picks it from the list.
+#
+# It is a reference table, not history — the one file here that is meant to be
+# edited by hand. Adding through the tool also appends a `substance_added` event
+# so the log records when the vocabulary grew.
+# THE PRESETS are the reason this file is more than a list of names. A ledger
+# only tells you anything if the logging actually happens, and the moment when
+# it is least likely to happen is the moment it matters most — so the common
+# case has to be one tap with no arithmetic in it.
+#
+# Every preset is `estimated`, never `measured`, and that is not a technicality.
+# Nobody weighed a one-hitter or a line; the number is a stand-in with a known
+# spread, and the ledger's whole premise is that a stand-in must never be able
+# to pass for a measurement. `confidence` records how wide the spread is, and
+# the note travels onto the event so the record explains its own figure.
+DEFAULT_SUBSTANCES = [
+    {"id": "cocaine", "name": "Cocaine", "category": "stimulant", "default_unit": "g",
+     "presets": [
+         {"id": "line", "label": "ONE LINE", "quantity": 0.1, "unit": "g",
+          "measurement_type": "estimated", "confidence": "low",
+          "note": "preset: one line, 0.1 g by eye — the widest-spread estimate here"},
+     ]},
+    {"id": "cannabis", "name": "Cannabis", "category": "cannabinoid", "default_unit": "g",
+     "presets": [
+         {"id": "one-hitter", "label": "ONE HITTER", "quantity": 0.05, "unit": "g",
+          "measurement_type": "estimated", "confidence": "medium",
+          "note": "preset: one-hitter bowl, 0.05 g — a fixed bowl, so it repeats well"},
+     ]},
+    {"id": "nicotine", "name": "Nicotine", "category": "stimulant", "default_unit": "mg",
+     "presets": [
+         # 12 mg is the nicotine CONTENT of the tobacco rod (typically 10-14 mg,
+         # published analyses run 7.5-13.4). That is the right number for this
+         # ledger because it is what leaves the pack: 20 cigarettes at 12 mg
+         # depletes a 240 mg unit exactly, and a pack has to be able to run out.
+         #
+         # It is NOT the dose. A smoker absorbs roughly 1-1.5 mg per cigarette,
+         # about a tenth of the content, and machine-measured pack yields run
+         # 0.6-1.2 mg. Any reading of this substance's mean has to know which of
+         # the two it is looking at, so the note says so on every event.
+         {"id": "cigarette", "label": "ONE CIGARETTE", "quantity": 12, "unit": "mg",
+          "measurement_type": "estimated", "confidence": "medium",
+          "note": "preset: one cigarette — 12 mg is CONTENT in the rod (typical "
+                  "10-14 mg), which is what leaves the pack. Absorbed dose is "
+                  "roughly 1-1.5 mg, about a tenth of this."},
+     ]},
+    {"id": "caffeine", "name": "Caffeine", "category": "stimulant", "default_unit": "mg",
+     "presets": [
+         {"id": "coffee", "label": "A COFFEE", "quantity": 150, "unit": "mg",
+          "measurement_type": "estimated", "confidence": "low",
+          "note": "preset: one brewed coffee, 150 mg — an 8 oz cup runs 95-165 mg, "
+                  "so brew strength moves this more than cup size does"},
+     ]},
+    {"id": "buprenorphine", "name": "Buprenorphine", "category": "opioid",
+     "default_unit": "mg", "presets": []},
+]
+CATEGORIES = ["stimulant", "depressant", "psychedelic", "dissociative", "opioid",
+              "cannabinoid", "prescription", "supplement", "other"]
+
+
+def slug(text):
+    s = re.sub(r"[^a-z0-9]+", "-", str(text).lower()).strip("-")
+    return s[:48].rstrip("-")
+
+
+class Ledger:
+    """The whole ledger: an append-only log, and everything derived from it.
+
+    Every read walks the log. That is affordable — a heavy year is a few
+    thousand lines — and it means there is exactly one place a fact can live.
+    """
+
+    def __init__(self, root=None):
+        self.root = Path(root) if root else ROOT
+        self.dir = self.root / "intake"
+        self.events_path = self.dir / "events.jsonl"
+        self.units_path = self.dir / "units.json"
+        self.substances_path = self.dir / "substances.json"
+        self.sealed_path = self.dir / SEALED
+        self.captures = self.root / "raw" / "health" / "intake"
+
+    # ------------------------------------------------------------ raw log
+    def read_events(self):
+        if not self.events_path.exists():
+            return []
+        out = []
+        for n, line in enumerate(self.events_path.read_text(encoding="utf-8").splitlines(), 1):
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                out.append(json.loads(line))
+            except json.JSONDecodeError as exc:
+                raise LedgerError(f"{self.events_path}:{n} is not JSON — {exc}")
+        return out
+
+    def append(self, etype, unit_id=None, data=None, occurred_at=None, interface="cli"):
+        """Write one event. The only function in this file that mutates the record."""
+        if etype not in EVENT_TYPES:
+            raise LedgerError(f"unknown event type {etype!r}")
+        ev = {
+            "id": f"intake_evt_{ulid()}",
+            "type": etype,
+            "timestamp": now_iso(),          # when it was recorded
+            "occurred_at": occurred_at or now_iso(),   # when it happened
+            "unit_id": unit_id,
+            "data": data or {},
+            "source": {"application": "wiki-brain", "tool": "intake-ledger",
+                       "interface": interface},
+        }
+        self.dir.mkdir(parents=True, exist_ok=True)
+        with open(self.events_path, "a", encoding="utf-8") as fh:
+            fh.write(json.dumps(ev, ensure_ascii=False) + "\n")
+        return ev
+
+    # ---------------------------------------------------------- substances
+    def substances(self):
+        if self.substances_path.exists():
+            try:
+                data = json.loads(self.substances_path.read_text(encoding="utf-8"))
+            except json.JSONDecodeError as exc:
+                raise LedgerError(f"{self.substances_path} is not JSON — {exc}")
+            return data.get("substances", data if isinstance(data, list) else [])
+        return list(DEFAULT_SUBSTANCES)
+
+    def write_substances(self, items):
+        self.dir.mkdir(parents=True, exist_ok=True)
+        payload = {
+            "note": "The select box. Edit by hand or with `bin/intake substance add`. "
+                    "Reference data, not history — the log is history.",
+            "categories": CATEGORIES,
+            "substances": sorted(items, key=lambda s: s["name"].lower()),
+        }
+        self.substances_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n",
+                                        encoding="utf-8")
+
+    def add_substance(self, name, category="other", default_unit="g", interface="cli"):
+        items = self.substances()
+        sid = slug(name)
+        if not sid:
+            raise LedgerError("substance name has no usable characters")
+        if any(s["id"] == sid for s in items):
+            raise LedgerError(f"substance {sid!r} is already in the catalog")
+        if default_unit not in UNITS:
+            raise LedgerError(f"unknown unit {default_unit!r}")
+        entry = {"id": sid, "name": name.strip(), "category": category,
+                 "default_unit": default_unit}
+        items.append(entry)
+        self.write_substances(items)
+        self.append("substance_added", data=dict(entry), interface=interface)
+        return entry
+
+    def presets(self, substance_id):
+        for sub in self.substances():
+            if sub["id"] == substance_id:
+                return sub.get("presets") or []
+        return []
+
+    def find_preset(self, substance_id, ref):
+        """By id or by label, case-insensitively. Never guesses across substances."""
+        options = self.presets(substance_id)
+        q = str(ref).strip().lower()
+        for pre in options:
+            if pre["id"].lower() == q or pre.get("label", "").lower() == q:
+                return pre
+        if not options:
+            raise LedgerError(f"{substance_id} has no presets — log a quantity instead")
+        raise LedgerError(f"no preset {ref!r} for {substance_id} — try: " +
+                          ", ".join(p["id"] for p in options))
+
+    def resolve_substance(self, text):
+        """Accept an id, a name, or an unambiguous prefix — never invent one.
+
+        A substance absent from the catalog is rejected rather than created on
+        the fly, because silently creating one is how a select box degrades back
+        into free text.
+        """
+        items = self.substances()
+        q = str(text).strip().lower()
+        by_id = {s["id"]: s for s in items}
+        if q in by_id:
+            return by_id[q]
+        exact = [s for s in items if s["name"].lower() == q]
+        if len(exact) == 1:
+            return exact[0]
+        hits = [s for s in items if s["id"].startswith(slug(q)) or q in s["name"].lower()]
+        if len(hits) == 1:
+            return hits[0]
+        if not hits:
+            raise LedgerError(
+                f"{text!r} is not in the substance catalog — "
+                f"add it with: bin/intake substance add {text!r}")
+        raise LedgerError(f"{text!r} matches {len(hits)}: " + ", ".join(s["id"] for s in hits))
+
+    # ---------------------------------------------------------- projection
+    def project(self):
+        """Replay the log into units. Pure — reads nothing but the events.
+
+        Corrections and voids are applied here rather than at write time, which
+        is the property that makes the log trustworthy: the file on disk still
+        says a 0.5 g was entered at 15:17 and corrected to 0.05 g at 15:19 with
+        a reason, and no later read can make that disappear.
+        """
+        events = self.read_events()
+        corrections, voided = {}, {}
+        for ev in events:
+            if ev["type"] == "event_corrected":
+                corrections.setdefault(ev["data"].get("target"), []).append(ev)
+            elif ev["type"] == "event_voided":
+                voided[ev["data"].get("target")] = ev
+
+        def effective(ev):
+            """The event as it now stands, plus the provenance of getting there."""
+            rec = dict(ev)
+            rec["data"] = dict(ev.get("data") or {})
+            rec["corrections"] = []
+            rec["voided"] = None
+            for c in corrections.get(ev["id"], []):
+                fields = c["data"].get("fields") or {}
+                rec["corrections"].append(
+                    {"at": c["timestamp"], "reason": c["data"].get("reason"),
+                     "from": {k: rec["data"].get(k) for k in fields}, "to": dict(fields)})
+                rec["data"].update(fields)
+                if "occurred_at" in fields:
+                    rec["occurred_at"] = fields["occurred_at"]
+            if ev["id"] in voided:
+                v = voided[ev["id"]]
+                rec["voided"] = {"at": v["timestamp"], "reason": v["data"].get("reason")}
+            return rec
+
+        units, order = {}, 0
+        for ev in events:
+            if ev["type"] != "unit_created":
+                continue
+            rec = effective(ev)
+            if rec["voided"]:
+                continue
+            order += 1
+            d = rec["data"]
+            units[ev["unit_id"]] = {
+                "id": ev["unit_id"],
+                "ordinal": order,
+                "substance": d.get("substance"),
+                "substance_id": d.get("substance_id"),
+                "category": d.get("category"),
+                "initial_quantity": d.get("quantity"),
+                "quantity_unit": d.get("unit"),
+                "received_at": rec["occurred_at"],
+                "created_at": ev["timestamp"],
+                "source_context": d.get("source_context"),
+                "note": d.get("note"),
+                "status": "active",
+                "closed_at": None,
+                "disposition": None,
+                "reconciliation": None,
+                "corrections": rec["corrections"],
+                "intakes": [],
+                "adjustments": [],
+            }
+
+        for ev in events:
+            u = units.get(ev.get("unit_id"))
+            if u is None:
+                continue
+            if ev["type"] == "intake_logged":
+                rec = effective(ev)
+                d = rec["data"]
+                u["intakes"].append({
+                    "id": ev["id"],
+                    "occurred_at": rec["occurred_at"],
+                    "logged_at": ev["timestamp"],
+                    "quantity": d.get("quantity"),
+                    "quantity_unit": d.get("unit"),
+                    "measurement_type": d.get("measurement_type", "measured"),
+                    "confidence": d.get("confidence"),
+                    "descriptor": d.get("descriptor"),
+                    "note": d.get("note"),
+                    "reconciliation": bool(d.get("reconciliation")),
+                    "corrections": rec["corrections"],
+                    "voided": rec["voided"],
+                })
+            elif ev["type"] == "unit_adjusted":
+                rec = effective(ev)
+                d = rec["data"]
+                u["adjustments"].append({
+                    "id": ev["id"],
+                    "occurred_at": rec["occurred_at"],
+                    "kind": d.get("kind"),
+                    "quantity": d.get("quantity"),
+                    "quantity_unit": d.get("unit"),
+                    "note": d.get("note"),
+                    "corrections": rec["corrections"],
+                    "voided": rec["voided"],
+                })
+            elif ev["type"] == "unit_closed":
+                u["status"] = "closed"
+                u["closed_at"] = ev.get("occurred_at") or ev["timestamp"]
+                u["disposition"] = ev["data"].get("disposition")
+                u["reconciliation"] = ev["data"].get("reconciliation")
+                u["closing_note"] = ev["data"].get("note")
+            elif ev["type"] == "unit_reopened":
+                u["status"] = "active"
+                u["closed_at"] = None
+                u["disposition"] = None
+                u["reconciliation"] = None
+                u["reopen_reason"] = ev["data"].get("reason")
+
+        for u in units.values():
+            u["intakes"].sort(key=lambda e: e["occurred_at"])
+            u["adjustments"].sort(key=lambda e: e["occurred_at"])
+            u["analysis"] = analyse(u)
+        return [units[k] for k in sorted(units, key=lambda k: units[k]["ordinal"])]
+
+    def write_projection(self, units=None):
+        units = self.project() if units is None else units
+        self.dir.mkdir(parents=True, exist_ok=True)
+        payload = {
+            "generated": now_iso(),
+            "note": "GENERATED from intake/events.jsonl by bin/intake — never edit. "
+                    "Delete it and run `bin/intake rebuild` and it comes back identical.",
+            "event_count": len(self.read_events()),
+            "units": units,
+        }
+        self.units_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n",
+                                   encoding="utf-8")
+        # The prose surface is regenerated with the projection, never separately —
+        # a summary that can lag the log is a summary that can be quoted wrong.
+        try:
+            (self.dir / "SUMMARY.md").write_text(
+                render_summary(units, cross_stats(units) if units else None),
+                encoding="utf-8")
+        except Exception:
+            pass          # a summary must never be the reason a write fails
+        return payload
+
+    # ------------------------------------------------------------ lookups
+    def find_unit(self, ref, units=None):
+        """Ordinal ('3'), id, id suffix, or substance name when only one is open."""
+        units = units if units is not None else self.project()
+        if not units:
+            raise LedgerError("no units in the ledger yet — open one with `bin/intake new`")
+        ref = str(ref).strip()
+        if ref.lower() in ("", "active", "current"):
+            open_units = [u for u in units if u["status"] == "active"]
+            if len(open_units) == 1:
+                return open_units[0]
+            raise LedgerError(f"{len(open_units)} units are open — name the one you mean")
+        if re.fullmatch(r"#?\d+", ref):
+            n = int(ref.lstrip("#"))
+            for u in units:
+                if u["ordinal"] == n:
+                    return u
+            raise LedgerError(f"no unit #{n}")
+        hits = [u for u in units if u["id"] == ref or u["id"].endswith(ref.upper())]
+        if len(hits) == 1:
+            return hits[0]
+        if not hits:
+            named = [u for u in units
+                     if u["status"] == "active" and ref.lower() in (u["substance"] or "").lower()]
+            if len(named) == 1:
+                return named[0]
+            if len(named) > 1:
+                raise LedgerError(f"{len(named)} open units match {ref!r} — use the number")
+        if len(hits) > 1:
+            raise LedgerError(f"{ref!r} matches {len(hits)} units — use more characters")
+        raise LedgerError(f"no unit matching {ref!r}")
+
+    def find_event(self, ref):
+        hits = [e for e in self.read_events() if e["id"] == ref or e["id"].endswith(ref.upper())]
+        if len(hits) == 1:
+            return hits[0]
+        if not hits:
+            raise LedgerError(f"no event matching {ref!r}")
+        raise LedgerError(f"{ref!r} matches {len(hits)} events — use more characters")
+
+
+# ------------------------------------------------------------------ analysis
+#
+# Everything below computes only what the events support. Where a figure rests
+# on a subset it carries the subset's size, and where the evidence will not
+# carry a figure at all the value is None and the report prints an em dash. No
+# statistic here silently spreads an unaccounted remainder across known doses.
+PEAK_WINDOW_HOURS = 5
+
+
+def _live(records):
+    return [r for r in records if not r.get("voided")]
+
+
+def analyse(unit):
+    base_unit = unit.get("quantity_unit") or "g"
+    intakes = _live(unit["intakes"])
+    adjustments = _live(unit["adjustments"])
+    voided = len(unit["intakes"]) - len(intakes)
+
+    def in_base(rec):
+        if rec.get("quantity") is None:
+            return None
+        try:
+            return convert(rec["quantity"], rec.get("quantity_unit") or base_unit, base_unit)
+        except LedgerError:
+            return None
+
+    measured = [e for e in intakes if e["measurement_type"] == "measured" and in_base(e) is not None]
+    estimated = [e for e in intakes if e["measurement_type"] == "estimated" and in_base(e) is not None]
+    unquantified = [e for e in intakes if e["measurement_type"] == "unquantified"
+                    or in_base(e) is None]
+    quantified = measured + estimated
+    quantified.sort(key=lambda e: e["occurred_at"])
+    doses = [in_base(e) for e in quantified]
+
+    # A remainder written off as a final intake at close is a real claim about
+    # consumption and belongs in the totals — but it is one lump nobody watched
+    # happen, and it can be larger than every measured dose put together. It is
+    # counted, and it is always named.
+    reconciliation_total = sum(in_base(e) for e in quantified if e.get("reconciliation")) or 0.0
+    measured_total = sum(in_base(e) for e in measured) if measured else 0.0
+    estimated_total = sum(in_base(e) for e in estimated) if estimated else 0.0
+    quantified_total = measured_total + estimated_total
+
+    # An adjustment moves quantity out of the unit without anyone consuming it.
+    # It is tracked apart from intake for the obvious reason: a spilled gram is
+    # not a dose, and a ledger that folds the two together reports a use pattern
+    # that did not happen.
+    adj_total = 0.0
+    for a in adjustments:
+        q = in_base(a)
+        if q is None:
+            continue
+        adj_total += -q if a.get("kind") == "found" else q
+
+    initial = unit.get("initial_quantity")
+    accounted = quantified_total + adj_total
+    remaining = None if initial is None else max(0.0, initial - accounted)
+    overdrawn = initial is not None and (initial - accounted) < -1e-9
+
+    times = sorted(dt(e["occurred_at"]) for e in intakes)
+    received = dt(unit["received_at"]) if unit.get("received_at") else None
+    closed = dt(unit["closed_at"]) if unit.get("closed_at") else None
+    end = closed or (times[-1] if times else received)
+    duration = (end - received).total_seconds() if received and end else None
+    # An event dated before the unit was received is not a short unit, it is a
+    # wrong timestamp — on the event or on the unit. Reporting it as a negative
+    # duration, or clamping it to zero, both turn a data error into a figure.
+    # It becomes no figure at all, plus a flag that says why.
+    chronology_error = duration is not None and duration < 0
+    if chronology_error:
+        duration = None
+
+    intervals = [(times[i] - times[i - 1]).total_seconds() for i in range(1, len(times))]
+
+    stats = {
+        "quantity_unit": base_unit,
+        "events": {
+            "total": len(intakes),
+            "measured": len(measured),
+            "estimated": len(estimated),
+            "unquantified": len(unquantified),
+            "voided": voided,
+        },
+        # The single most important number in this file. Every quantity
+        # statistic below was computed from this share of the events, and the
+        # report never prints one without it.
+        "coverage": (len(quantified) / len(intakes)) if intakes else None,
+        "measured_total": measured_total,
+        "estimated_total": estimated_total,
+        "quantified_total": quantified_total,
+        "reconciliation_total": reconciliation_total,
+        "adjusted_total": adj_total,
+        "accounted": accounted,
+        "remaining": remaining,
+        "overdrawn": overdrawn,
+        "remaining_is_estimate": bool(estimated or unquantified),
+        "duration_seconds": duration,
+        "chronology_error": chronology_error,
+        "first_event": times[0].isoformat() if times else None,
+        "last_event": times[-1].isoformat() if times else None,
+        "dose": _spread(doses),
+        "interval": _spread(intervals),
+        "first_dose": doses[0] if doses else None,
+        "later_dose_mean": statistics.fmean(doses[1:]) if len(doses) > 1 else None,
+        "rate_per_day": (accounted / (duration / 86400)) if duration and duration > 0 else None,
+        "events_per_day": (len(intakes) / (duration / 86400)) if duration and duration > 0 else None,
+        "peak_window": _peak_window(times),
+        "time_of_day": _hour_histogram(times),
+        "phases": _phases(quantified, unquantified, doses, base_unit),
+        "depleted_within_24h": (duration is not None and duration <= 86400
+                                and unit["status"] == "closed"),
+    }
+    return stats
+
+
+def _spread(values):
+    """Mean/median/min/max/spread, or Nones. Never fabricates from one value."""
+    vals = [v for v in values if v is not None]
+    if not vals:
+        return {"n": 0, "mean": None, "median": None, "min": None, "max": None,
+                "stdev": None, "cv": None}
+    mean = statistics.fmean(vals)
+    sd = statistics.stdev(vals) if len(vals) > 1 else None
+    return {
+        "n": len(vals),
+        "mean": mean,
+        "median": statistics.median(vals),
+        "min": min(vals),
+        "max": max(vals),
+        "stdev": sd,
+        "cv": (sd / mean) if sd is not None and mean else None,
+    }
+
+
+def _peak_window(times):
+    """The densest PEAK_WINDOW_HOURS window, anchored on a real event."""
+    if len(times) < 2:
+        return None
+    span = datetime.timedelta(hours=PEAK_WINDOW_HOURS)
+    best = None
+    for i, start in enumerate(times):
+        j = i
+        while j + 1 < len(times) and times[j + 1] - start <= span:
+            j += 1
+        count = j - i + 1
+        if best is None or count > best["events"]:
+            best = {"start": start.isoformat(), "end": times[j].isoformat(), "events": count}
+    return best if best and best["events"] > 1 else None
+
+
+def _hour_histogram(times):
+    hist = [0] * 24
+    for t in times:
+        hist[t.hour] += 1
+    return hist
+
+
+def _phases(quantified, unquantified, doses, base_unit):
+    """First 25% / middle 50% / final 25% of the unit, measured by quantity.
+
+    By quantity consumed rather than by elapsed time, because the question this
+    answers is "does consumption accelerate toward the end of a unit" — which is
+    about how fast the material went, not how the clock ran. Unquantified events
+    carry no quantity, so they are placed by falling inside a phase's time span
+    and counted separately; they never move a boundary.
+    """
+    total = sum(doses)
+    if not quantified or total <= 0:
+        return None
+    bounds = [(0.0, 0.25, "first 25%"), (0.25, 0.75, "middle 50%"), (0.75, 1.0, "final 25%")]
+    buckets = {label: {"label": label, "events": 0, "unquantified": 0,
+                       "quantity": 0.0, "times": []} for _, _, label in bounds}
+    cum = 0.0
+    for ev, qty in zip(quantified, doses):
+        mid = (cum + qty / 2) / total          # the event's own midpoint in the unit
+        cum += qty
+        for lo, hi, label in bounds:
+            if lo <= mid < hi or (hi == 1.0 and mid >= lo):
+                b = buckets[label]
+                b["events"] += 1
+                b["quantity"] += qty
+                b["times"].append(dt(ev["occurred_at"]))
+                break
+    for e in unquantified:
+        t = dt(e["occurred_at"])
+        for _, _, label in bounds:
+            b = buckets[label]
+            if b["times"] and b["times"][0] <= t <= b["times"][-1]:
+                b["unquantified"] += 1
+                break
+    out = []
+    for _, _, label in bounds:
+        b = buckets[label]
+        ts = sorted(b["times"])
+        out.append({
+            "label": label,
+            "events": b["events"],
+            "unquantified": b["unquantified"],
+            "quantity": round(b["quantity"], 6),
+            "quantity_unit": base_unit,
+            "seconds": (ts[-1] - ts[0]).total_seconds() if len(ts) > 1 else 0.0,
+            "start": ts[0].isoformat() if ts else None,
+            "end": ts[-1].isoformat() if ts else None,
+        })
+    return out
+
+
+# ---------------------------------------------------------------- operations
+#
+# Every mutation lives here rather than in the CLI so the local app's
+# Special:Intake calls exactly the same code path. A second implementation
+# behind a nicer form is how two records of the same night stop agreeing.
+def _tolerance(initial):
+    return max(1e-9, abs(initial or 0.0) * 1e-6)
+
+
+class Ops:
+    def __init__(self, ledger):
+        self.L = ledger
+
+    def new_unit(self, substance, quantity, unit, received_at=None,
+                 source_context=None, note=None, interface="cli"):
+        sub = self.L.resolve_substance(substance)
+        if unit not in UNITS:
+            raise LedgerError(f"unknown unit {unit!r}")
+        if quantity <= 0:
+            raise LedgerError("a unit has to start with something in it")
+        ev = self.L.append(
+            "unit_created", unit_id=f"intake_unit_{ulid()}",
+            occurred_at=parse_time(received_at, "received-at"),
+            data={"substance": sub["name"], "substance_id": sub["id"],
+                  "category": sub.get("category"), "quantity": quantity, "unit": unit,
+                  "source_context": source_context, "note": note},
+            interface=interface)
+        self.L.write_projection()
+        return self.L.find_unit(ev["unit_id"])
+
+    def log_intake(self, ref, quantity=None, unit=None, measurement_type=None,
+                   confidence=None, descriptor=None, occurred_at=None, note=None,
+                   interface="cli"):
+        u = self.L.find_unit(ref)
+        if u["status"] != "active":
+            raise LedgerError(
+                f"unit #{u['ordinal']} is closed — reopen it with "
+                f"`bin/intake reopen {u['ordinal']} --reason ...` if that was wrong")
+        if quantity is None and not descriptor:
+            raise LedgerError("give a quantity, or a descriptor like 'one line'")
+        if quantity is None:
+            measurement_type = "unquantified"
+        elif measurement_type is None:
+            measurement_type = "measured"
+        if measurement_type not in MEASUREMENT_TYPES:
+            raise LedgerError(f"measurement type must be one of {', '.join(MEASUREMENT_TYPES)}")
+        if measurement_type == "unquantified":
+            quantity, unit = None, None
+        else:
+            unit = unit or u["quantity_unit"]
+            convert(quantity, unit, u["quantity_unit"])   # raises across families
+            if confidence is None and measurement_type == "estimated":
+                confidence = "medium"
+            if confidence and confidence not in CONFIDENCES:
+                raise LedgerError(f"confidence must be one of {', '.join(CONFIDENCES)}")
+        ev = self.L.append(
+            "intake_logged", unit_id=u["id"], occurred_at=parse_time(occurred_at, "time"),
+            data={"quantity": quantity, "unit": unit, "measurement_type": measurement_type,
+                  "confidence": confidence, "descriptor": descriptor, "note": note},
+            interface=interface)
+        self.L.write_projection()
+        return ev, self.L.find_unit(u["id"])
+
+    def log_preset(self, ref, preset_id, occurred_at=None, note=None, interface="cli"):
+        """One tap. Resolves the preset, then goes through the ordinary log path.
+
+        Deliberately a thin wrapper rather than its own writer: a preset is a
+        set of default arguments, not a different kind of event, and the moment
+        it becomes a second write path is the moment a tapped line and a typed
+        one stop being the same thing in the record.
+        """
+        u = self.L.find_unit(ref)
+        pre = self.L.find_preset(u.get("substance_id") or "", preset_id)
+        joined = "; ".join(x for x in (pre.get("note"), note) if x)
+        return self.log_intake(
+            ref, pre["quantity"], pre.get("unit") or u["quantity_unit"],
+            pre.get("measurement_type", "estimated"), pre.get("confidence"),
+            None, occurred_at, joined or None, interface=interface)
+
+    def adjust(self, ref, quantity, unit, kind, note=None, occurred_at=None, interface="cli"):
+        u = self.L.find_unit(ref)
+        if kind not in ADJUSTMENT_KINDS:
+            raise LedgerError(f"kind must be one of {', '.join(ADJUSTMENT_KINDS)}")
+        unit = unit or u["quantity_unit"]
+        convert(quantity, unit, u["quantity_unit"])
+        ev = self.L.append("unit_adjusted", unit_id=u["id"],
+                           occurred_at=parse_time(occurred_at, "time"),
+                           data={"kind": kind, "quantity": quantity, "unit": unit, "note": note},
+                           interface=interface)
+        self.L.write_projection()
+        return ev, self.L.find_unit(u["id"])
+
+    def correct(self, event_ref, fields, reason, interface="cli"):
+        """Supersede an earlier event's values without erasing them.
+
+        A typo is not a reason to lose the fact that a typo was made: 0.5 g
+        entered and corrected to 0.05 g two minutes later is itself evidence
+        about how the logging happens.
+        """
+        target = self.L.find_event(event_ref)
+        if target["type"] not in ("unit_created", "intake_logged", "unit_adjusted"):
+            raise LedgerError(f"a {target['type']} event cannot be corrected")
+        if not reason:
+            raise LedgerError("a correction needs a reason — that is the point of it")
+        clean = {k: v for k, v in fields.items() if v is not None}
+        if not clean:
+            raise LedgerError("nothing to correct")
+        if "occurred_at" in clean:
+            clean["occurred_at"] = parse_time(clean["occurred_at"], "time")
+        if "quantity" in clean and clean["quantity"] < 0:
+            raise LedgerError("quantity cannot be negative")
+        if "unit" in clean and clean["unit"] not in UNITS:
+            raise LedgerError(f"unknown unit {clean['unit']!r}")
+        ev = self.L.append("event_corrected", unit_id=target.get("unit_id"),
+                           data={"target": target["id"], "fields": clean, "reason": reason},
+                           interface=interface)
+        self.L.write_projection()
+        return ev
+
+    def void(self, event_ref, reason, interface="cli"):
+        target = self.L.find_event(event_ref)
+        if not reason:
+            raise LedgerError("voiding an event needs a reason")
+        ev = self.L.append("event_voided", unit_id=target.get("unit_id"),
+                           data={"target": target["id"], "reason": reason}, interface=interface)
+        self.L.write_projection()
+        return ev
+
+    def reconciliation(self, unit):
+        """What is unexplained at this moment, and whether closing needs an answer."""
+        a = unit["analysis"]
+        initial = unit.get("initial_quantity")
+        if initial is None:
+            return None
+        gap = initial - a["accounted"]
+        return {
+            "initial": initial,
+            "quantified_intake": a["quantified_total"],
+            "adjusted": a["adjusted_total"],
+            "unaccounted": gap,
+            "quantity_unit": unit["quantity_unit"],
+            "needs_answer": abs(gap) > _tolerance(initial),
+            "overdrawn": gap < -_tolerance(initial),
+            "unquantified_events": a["events"]["unquantified"],
+        }
+
+    def close_unit(self, ref, disposition, resolution=None, closed_at=None,
+                   note=None, interface="cli"):
+        """End a unit — and refuse to guess at what is left in it.
+
+        This is where the design earns its keep. A unit that started at 3.5 g
+        with 2.84 g logged has 0.66 g the ledger cannot see, and there are at
+        least four true stories about it. Picking one silently would produce a
+        clean average dose that is arithmetic over a fiction. So closure asks,
+        records the answer as a decision with a timestamp, and the unit report
+        prints it under FINAL DISPOSITION for as long as the unit exists.
+        """
+        u = self.L.find_unit(ref)
+        if u["status"] != "active":
+            raise LedgerError(f"unit #{u['ordinal']} is already closed")
+        if disposition not in DISPOSITIONS:
+            raise LedgerError(f"disposition must be one of {', '.join(DISPOSITIONS)}")
+        at = parse_time(closed_at, "closed-at")
+        rec = self.reconciliation(u)
+        if rec and rec["needs_answer"]:
+            if not resolution:
+                raise LedgerError(
+                    f"{fmt_qty(abs(rec['unaccounted']), rec['quantity_unit'])} is "
+                    f"{'over-logged' if rec['overdrawn'] else 'unaccounted for'} — "
+                    f"say what happened to it: {' | '.join(RESOLUTIONS)} "
+                    f"(--resolution on the command line)")
+            if resolution not in RESOLUTIONS:
+                raise LedgerError(f"resolution must be one of {', '.join(RESOLUTIONS)}")
+            if resolution == "final_intake":
+                if rec["overdrawn"]:
+                    raise LedgerError("more is logged than the unit held — "
+                                      "correct an event rather than adding another")
+                # Recorded as an estimate, never as a measurement: nobody
+                # weighed this. It enters the dose statistics flagged as a
+                # low-confidence estimate, which is what it is.
+                self.L.append("intake_logged", unit_id=u["id"], occurred_at=at,
+                              data={"quantity": rec["unaccounted"],
+                                    "unit": u["quantity_unit"],
+                                    "measurement_type": "estimated", "confidence": "low",
+                                    "descriptor": None, "reconciliation": True,
+                                    "note": "reconciliation at close — the remainder of the "
+                                            "unit, recorded as one estimated final intake"},
+                              interface=interface)
+                u = self.L.find_unit(u["id"])
+                rec = self.reconciliation(u)
+        resolved = dict(rec or {})
+        resolved["resolution"] = resolution if (rec and resolution) else "balanced"
+        ev = self.L.append("unit_closed", unit_id=u["id"], occurred_at=at,
+                           data={"disposition": disposition, "reconciliation": resolved,
+                                 "note": note}, interface=interface)
+        self.L.write_projection()
+        closed = self.L.find_unit(u["id"])
+        capture = self.write_capture(closed)
+        return closed, capture, ev
+
+    def reopen(self, ref, reason, interface="cli"):
+        u = self.L.find_unit(ref)
+        if u["status"] != "closed":
+            raise LedgerError(f"unit #{u['ordinal']} is not closed")
+        if not reason:
+            raise LedgerError("reopening a closed unit needs a reason")
+        self.L.append("unit_reopened", unit_id=u["id"], data={"reason": reason},
+                      interface=interface)
+        self.L.write_projection()
+        return self.L.find_unit(u["id"])
+
+    def seal(self, pw=None):
+        """Local plaintext log -> `intake/events.enc`, the copy that travels."""
+        crypto = _crypto()
+        lines = [l for l in self.L.events_path.read_text(encoding="utf-8").splitlines()
+                 if l.strip()] if self.L.events_path.exists() else []
+        blob = crypto.seal(pw or passphrase("passphrase to seal with: "),
+                           ("\n".join(lines) + ("\n" if lines else "")).encode("utf-8"))
+        self.L.dir.mkdir(parents=True, exist_ok=True)
+        self.L.sealed_path.write_text(json.dumps(blob) + "\n", encoding="utf-8")
+        return len(lines)
+
+    def unseal(self, pw=None):
+        """`intake/events.enc` -> merged into the local log. Union, never overwrite.
+
+        Nothing is lost in either direction: events written on a phone arrive,
+        events written here stay, and an id present on both sides appears once.
+        """
+        if not self.L.sealed_path.exists():
+            raise LedgerError(f"no {self.L.sealed_path.name} to open")
+        crypto = _crypto()
+        blob = json.loads(self.L.sealed_path.read_text(encoding="utf-8"))
+        remote = crypto.unseal(pw or passphrase("passphrase to open it: "),
+                               blob).decode("utf-8").splitlines()
+        local = (self.L.events_path.read_text(encoding="utf-8").splitlines()
+                 if self.L.events_path.exists() else [])
+        merged = merge_lines(local, remote)
+        gained = len(merged) - len([l for l in local if l.strip()])
+        self.L.dir.mkdir(parents=True, exist_ok=True)
+        self.L.events_path.write_text("\n".join(merged) + ("\n" if merged else ""),
+                                      encoding="utf-8")
+        self.L.write_projection()
+        return gained, len(merged)
+
+    def write_capture(self, unit, backfilled=None):
+        """The immutable record of a closed unit, filed to raw/.
+
+        Same shape as the sage captures: `intake/` is a working ledger whose
+        projection is regenerated, `raw/` is the archive. The report is written
+        once, at close, and never touched again — so a later change of mind
+        about how to compute a statistic cannot quietly restate history.
+        """
+        self.L.captures.mkdir(parents=True, exist_ok=True)
+        path = self.L.captures / f"{unit['id']}.md"
+        path.write_text(render_report(unit, capture=True, backfilled=backfilled),
+                        encoding="utf-8")
+        return path
+
+
+# ----------------------------------------------------------------- rendering
+BAR = "▁▂▃▄▅▆▇█"
+
+
+def sparkline(values):
+    top = max(values) if values else 0
+    if not top:
+        return "·" * len(values)
+    return "".join(BAR[min(7, int(v / top * 7.999))] if v else "·" for v in values)
+
+
+def pct(x):
+    return "—" if x is None else f"{x * 100:.0f}%"
+
+
+def coverage_line(a):
+    """The caveat that goes next to every quantity statistic, spelled out.
+
+    It answers two questions, not one, and the second was missing until presets
+    made it obvious: how many events carry a number at all, and how many of
+    those numbers came off a scale. A table logged entirely by one-tap presets
+    has full coverage and not a single measurement on it — and the old wording
+    called that "all events carry a quantity" and stopped, which read as
+    reassurance for a column that is entirely estimates.
+    """
+    e = a["events"]
+    q = e["measured"] + e["estimated"]
+    if not e["total"]:
+        return "no events logged"
+    if e["unquantified"] == 0:
+        base = ("the one event carries a quantity" if e["total"] == 1
+                else f"all {e['total']} events carry a quantity")
+    else:
+        base = (f"{q} of {e['total']} events carry a quantity ({pct(a['coverage'])}); "
+                f"{e['unquantified']} logged without one")
+    if not q:
+        return base
+    if e["estimated"] == 0:
+        return base + (", and it was weighed" if e["total"] == 1 else " — every one weighed")
+    if e["measured"] == 0:
+        return base + (" — but it was not weighed; it is an estimate" if e["estimated"] == 1
+                       else f" — but none was weighed; all {e['estimated']} are estimates")
+    return base + f" — {e['measured']} weighed, {e['estimated']} estimated"
+
+
+def render_report(unit, capture=False, backfilled=None):
+    a = unit["analysis"]
+    bu = unit["quantity_unit"]
+    L = []
+    if capture:
+        # A backfilled capture says so. The archive's whole value is that it was
+        # computed at close and cannot be quietly restated later — so one that
+        # was NOT must not carry the sentence claiming it was. A unit closed
+        # from the portal reaches raw/ days later, through whatever version of
+        # this code is current, and a reader has to be able to tell.
+        L += [
+            "---",
+            f"unit_id: {unit['id']}",
+            f"substance: {unit['substance']}",
+            f"received: {unit['received_at']}",
+            f"closed: {unit['closed_at']}",
+            f"initial_quantity: {unit['initial_quantity']} {bu}",
+            f"disposition: {unit['disposition']}",
+            ("source: bin/intake — generated once at close, never revised"
+             if not backfilled else
+             f"source: bin/intake capture — BACKFILLED {backfilled}, not written at close"),
+            "---",
+            "",
+            f"# Intake unit report — {unit['substance']} · #{unit['ordinal']}",
+            "",
+        ]
+        L += ([
+            "Written when the unit closed. `intake/units.json` holds the live projection;",
+            "this file is the archive copy and is not regenerated.",
+        ] if not backfilled else [
+            f"**Backfilled on {backfilled}, not written at close.** This unit was closed",
+            "through the portal, which writes events straight to `intake/events.jsonl`",
+            "and never calls `close`, so no capture was filed at the time. The figures",
+            "below are computed from the log as it stands now — including any correction",
+            "recorded after the unit closed — rather than as they stood that night.",
+            "From here it is the archive copy and is not regenerated.",
+        ])
+        L += ["", "```"]
+    L += [
+        "UNIT REPORT",
+        f"{unit['substance']} · unit #{unit['ordinal']} · {unit['id']}",
+        "─" * 62,
+    ]
+    rows = [
+        ("Received", fmt_when(unit["received_at"])),
+        ("Closed", fmt_when(unit["closed_at"]) if unit["closed_at"] else "still open"),
+        ("Duration", fmt_dur(a["duration_seconds"])),
+        ("Initial quantity", fmt_qty(unit["initial_quantity"], bu)),
+        ("", ""),
+        ("Consumption events", str(a["events"]["total"])),
+        ("  measured", str(a["events"]["measured"])),
+        ("  estimated", str(a["events"]["estimated"])),
+        ("  unquantified", str(a["events"]["unquantified"])),
+    ]
+    if a["events"]["voided"]:
+        rows.append(("  voided", str(a["events"]["voided"])))
+    rows += [
+        ("", ""),
+        ("Quantified intake", fmt_qty(a["quantified_total"], bu)),
+        ("  of which measured", fmt_qty(a["measured_total"], bu)),
+        ("  of which estimated", fmt_qty(a["estimated_total"], bu)),
+    ]
+    if a["adjusted_total"]:
+        rows.append(("Adjustments", fmt_qty(a["adjusted_total"], bu)))
+    if unit["status"] == "active":
+        est = " (estimate)" if a["remaining_is_estimate"] else ""
+        rows.append(("Remaining", fmt_qty(a["remaining"], bu) + est))
+    d = a["dose"]
+    rows += [
+        ("", ""),
+        ("Average dose", fmt_qty(d["mean"], bu)),
+        ("Median dose", fmt_qty(d["median"], bu)),
+        ("Smallest dose", fmt_qty(d["min"], bu)),
+        ("Largest dose", fmt_qty(d["max"], bu)),
+        ("Dose variability", "—" if d["cv"] is None else f"{d['cv']:.2f} CV"),
+        ("Average interval", fmt_dur(a["interval"]["mean"])),
+        ("Median interval", fmt_dur(a["interval"]["median"])),
+    ]
+    if a["rate_per_day"]:
+        rows.append(("Rate of consumption",
+                     fmt_qty(a["rate_per_day"], bu) + " / day, quantified events only"))
+    if a["peak_window"]:
+        p = a["peak_window"]
+        rows.append(("Peak usage window",
+                     f"{dt(p['start']).strftime('%b %-d · %-I')}"
+                     f"{dt(p['start']).strftime('%p').lower()}"
+                     f"–{dt(p['end']).strftime('%-I')}{dt(p['end']).strftime('%p').lower()} "
+                     f"({p['events']} events in {PEAK_WINDOW_HOURS}h)"))
+    width = max(len(k) for k, _ in rows) + 2
+    for k, v in rows:
+        L.append("" if not k and not v else f"{k:<{width}}{v}")
+
+    L += ["", "COVERAGE", f"  {coverage_line(a)}"]
+    if a["events"]["unquantified"]:
+        L.append("  Every quantity above is computed from the quantified events alone.")
+    if a.get("reconciliation_total"):
+        L.append(f"  {fmt_qty(a['reconciliation_total'], bu)} of the quantified total is a "
+                 f"single remainder written off at close, not a watched dose.")
+    if a["overdrawn"]:
+        L.append("  ⚠ more has been logged against this unit than it was opened with.")
+    if a["chronology_error"]:
+        L.append("  ⚠ an event is dated before the unit was received — duration, rate and "
+                 "phases are withheld until one of the two timestamps is corrected.")
+
+    if a["phases"]:
+        L += ["", f"PHASES OF THE UNIT (by quantity consumed, {bu})"]
+        for ph in a["phases"]:
+            extra = f" +{ph['unquantified']} unquantified" if ph["unquantified"] else ""
+            L.append(f"  {ph['label']:<12} {ph['events']:>2} events{extra:<18} "
+                     f"{fmt_qty(ph['quantity'], bu):>10}  over {fmt_dur(ph['seconds'])}")
+        first, last = a["phases"][0], a["phases"][-1]
+        if first["seconds"] and last["seconds"]:
+            fr = first["quantity"] / (first["seconds"] / 3600)
+            lr = last["quantity"] / (last["seconds"] / 3600)
+            verdict = ("accelerating toward depletion" if lr > fr * 1.15 else
+                       "slowing toward depletion" if fr > lr * 1.15 else "roughly even")
+            L.append(f"  velocity     {fmt_qty(fr, bu)}/h at the start vs "
+                     f"{fmt_qty(lr, bu)}/h at the end — {verdict}")
+
+    if a["first_dose"] is not None and a["later_dose_mean"] is not None:
+        fd, rest = a["first_dose"], a["later_dose_mean"]
+        rel = "larger than" if fd > rest * 1.1 else "smaller than" if fd * 1.1 < rest else "in line with"
+        L += ["", "FIRST DOSE",
+              f"  {fmt_qty(fd, bu)} against a later mean of {fmt_qty(rest, bu)} — {rel} the rest."]
+
+    if any(a["time_of_day"]):
+        L += ["", "TIME OF DAY (events per hour, 00–23)",
+              "  " + sparkline(a["time_of_day"]),
+              "  " + "".join(f"{h:<3}" for h in range(0, 24, 3))]
+
+    if unit["status"] == "closed":
+        r = unit.get("reconciliation") or {}
+        L += ["", "FINAL DISPOSITION", f"  {unit['disposition']}"]
+        if r.get("resolution") and r["resolution"] != "balanced":
+            L.append(f"  {fmt_qty(abs(r.get('unaccounted') or 0), bu)} unaccounted → "
+                     f"{r['resolution'].replace('_', ' ')}")
+        elif r:
+            L.append("  the ledger balanced — nothing unaccounted for")
+        if unit.get("closing_note"):
+            L.append(f"  note: {unit['closing_note']}")
+    if capture:
+        L += ["```", ""]
+    return "\n".join(L) + "\n"
+
+
+def render_events(unit, limit=None):
+    """One line per event, intake and adjustment interleaved in time order.
+
+    The leading mark is the measurement type, because that is the thing a reader
+    most needs and most easily forgets: `~` estimated, `?` unquantified,
+    `!` an adjustment rather than an intake, `x` voided.
+    """
+    rows = []
+    for e in unit["intakes"]:
+        mark = "x" if e["voided"] else ("~" if e["measurement_type"] == "estimated" else
+                                        "?" if e["measurement_type"] == "unquantified" else " ")
+        what = (e["descriptor"] or "—") if e["quantity"] is None else \
+            fmt_qty(e["quantity"], e["quantity_unit"])
+        note = f"  {e['note']}" if e.get("note") else ""
+        flag = "  (corrected)" if e["corrections"] else ""
+        rows.append((e["occurred_at"],
+                     f"  {mark} {dt(e['occurred_at']).strftime('%b %-d %H:%M')}  "
+                     f"{what:>12}  {e['id'][-6:]}{flag}{note}"))
+    for a in unit["adjustments"]:
+        rows.append((a["occurred_at"],
+                     f"  ! {dt(a['occurred_at']).strftime('%b %-d %H:%M')}  "
+                     f"{fmt_qty(a['quantity'], a['quantity_unit']):>12}  "
+                     f"{a['id'][-6:]}  {a['kind']}"
+                     + (f" — {a['note']}" if a.get("note") else "")))
+    rows.sort(key=lambda r: r[0])
+    lines = [line for _, line in rows]
+    return lines[-limit:] if limit else lines
+
+
+def render_status(units, ops):
+    L = []
+    active = [u for u in units if u["status"] == "active"]
+    closed = [u for u in units if u["status"] == "closed"]
+    if not units:
+        return ("INTAKE LEDGER — nothing recorded yet.\n\n"
+                "  bin/intake substances          what the select box offers\n"
+                "  bin/intake new cocaine 3.5g    open the first unit\n")
+    L.append(f"INTAKE LEDGER — {len(active)} active, {len(closed)} closed, "
+             f"{len(units)} unit{'s' if len(units) != 1 else ''} all told")
+    L.append("")
+    if not active:
+        L.append("  No open units.")
+    for u in active:
+        a, bu = u["analysis"], u["quantity_unit"]
+        rec = ops.reconciliation(u)
+        est = "~" if a["remaining_is_estimate"] else ""
+        L.append(f"  #{u['ordinal']}  {u['substance'].upper()}"
+                 f"   {fmt_qty(u['initial_quantity'], bu)} opened "
+                 f"{fmt_dur((datetime.datetime.now().astimezone() - dt(u['received_at'])).total_seconds())} ago")
+        L.append(f"      {a['events']['total']} events · "
+                 f"{fmt_qty(a['quantified_total'], bu)} logged · "
+                 f"{est}{fmt_qty(a['remaining'], bu)} left"
+                 + (f" · mean {fmt_qty(a['dose']['mean'], bu)}" if a["dose"]["n"] else ""))
+        if a["events"]["unquantified"]:
+            L.append(f"      {a['events']['unquantified']} event(s) logged without a quantity — "
+                     f"the figures above cover {pct(a['coverage'])} of events")
+        if rec and rec["overdrawn"]:
+            L.append("      ⚠ over-logged against the opening quantity")
+        for line in render_events(u, limit=3):
+            L.append("    " + line)
+        L.append(f"      log: bin/intake log {u['ordinal']} <qty>   "
+                 f"close: bin/intake close {u['ordinal']} --disposition consumed")
+        L.append("")
+    today = datetime.date.today().isoformat()
+    n_today = sum(1 for u in units for e in u["intakes"]
+                  if not e["voided"] and e["occurred_at"][:10] == today)
+    L.append(f"  {n_today} event(s) logged today.")
+    return "\n".join(L) + "\n"
+
+
+# ------------------------------------------------------- cross-unit analysis
+def _substance_key(u):
+    """What counts as the same substance across units.
+
+    Never the display string. Three of the four units in the first real export
+    were written by the portal, which sends the substance as free text and
+    leaves `substance_id` null — so `cannibis` opened its own heading in
+    SUMMARY.md beside `cannabis`, with its own mean, and a corrected unit
+    carrying the catalog's `Cannabis` opened a third. Each looked like a
+    finding about a different substance. Group on the catalog id where there is
+    one and on the folded name where there is not, so a typo costs one row
+    rather than forking the analysis.
+    """
+    return ((u.get("substance_id") or "").strip().lower()
+            or (u.get("substance") or "").strip().lower())
+
+
+def cross_stats(units, substance=None, since=None, until=None):
+    """The longitudinal read: everything that needs more than one unit to see."""
+    sel = []
+    for u in units:
+        if substance and (u["substance_id"] or "") != substance and \
+                substance.lower() not in (u["substance"] or "").lower():
+            continue
+        if since and u["received_at"][:10] < since:
+            continue
+        if until and u["received_at"][:10] > until:
+            continue
+        sel.append(u)
+    if not sel:
+        return None
+
+    by_sub = {}
+    hours = [0] * 24
+    all_events = 0
+    for u in sel:
+        bu = u["quantity_unit"]
+        b = by_sub.setdefault(_substance_key(u), {
+            "substance": u["substance"], "unit": bu, "units": 0, "closed": 0,
+            "events": 0, "quantified": 0, "unquantified": 0, "doses": [],
+            "durations": [], "initials": [], "rates": [], "under24": 0,
+            "monthly": {},
+        })
+        b["units"] += 1
+        if u["substance_id"] and b["substance"] != u["substance"]:
+            b["substance"] = u["substance"]      # the catalog name beats free text
+        a = u["analysis"]
+        b["events"] += a["events"]["total"]
+        b["unquantified"] += a["events"]["unquantified"]
+        b["quantified"] += a["events"]["measured"] + a["events"]["estimated"]
+        all_events += a["events"]["total"]
+        for e in _live(u["intakes"]):
+            hours[dt(e["occurred_at"]).hour] += 1
+            if e["quantity"] is None:
+                continue
+            try:
+                q = convert(e["quantity"], e["quantity_unit"] or bu, b["unit"])
+            except LedgerError:
+                continue
+            b["doses"].append(q)
+            b["monthly"].setdefault(e["occurred_at"][:7], []).append(q)
+        if u["status"] == "closed":
+            b["closed"] += 1
+            if a["duration_seconds"]:
+                b["durations"].append(a["duration_seconds"])
+            if a["depleted_within_24h"]:
+                b["under24"] += 1
+        if u["initial_quantity"] is not None:
+            try:
+                b["initials"].append(convert(u["initial_quantity"], bu, b["unit"]))
+            except LedgerError:
+                pass
+        if a["rate_per_day"]:
+            b["rates"].append(a["rate_per_day"])
+
+    for b in by_sub.values():
+        b["dose"] = _spread(b["doses"])
+        b["duration"] = _spread(b["durations"])
+        b["initial"] = _spread(b["initials"])
+        b["rate"] = _spread(b["rates"])
+        b["trend"] = [{"month": m, "n": len(v), "mean": statistics.fmean(v)}
+                      for m, v in sorted(b["monthly"].items())]
+        b.pop("monthly")
+    return {
+        "units": len(sel),
+        "closed": sum(1 for u in sel if u["status"] == "closed"),
+        "events": all_events,
+        "span": (min(u["received_at"] for u in sel), max(u["received_at"] for u in sel)),
+        "time_of_day": hours,
+        "substances": sorted(by_sub.values(), key=lambda b: -b["units"]),
+    }
+
+
+def render_stats(st):
+    if st is None:
+        return "No units match that filter.\n"
+    L = [f"ACROSS {st['units']} UNIT(S) — {st['closed']} closed, {st['events']} events",
+         f"{fmt_when(st['span'][0])}  →  {fmt_when(st['span'][1])}", ""]
+    for b in st["substances"]:
+        bu = b["unit"]
+        L.append(f"{b['substance'].upper()}   {b['units']} unit(s), {b['closed']} closed")
+        cov = (f"{b['quantified']} of {b['events']} events quantified"
+               if b["unquantified"] else f"all {b['events']} events quantified")
+        L.append(f"  coverage        {cov}")
+        if b["initial"]["n"]:
+            L.append(f"  unit size       median {fmt_qty(b['initial']['median'], bu)}"
+                     f"  (range {fmt_qty(b['initial']['min'], bu)}–"
+                     f"{fmt_qty(b['initial']['max'], bu)})")
+        if b["duration"]["n"]:
+            L.append(f"  unit lasts      median {fmt_dur(b['duration']['median'])}"
+                     f"  (range {fmt_dur(b['duration']['min'])}–"
+                     f"{fmt_dur(b['duration']['max'])})")
+            L.append(f"  gone in <24h    {b['under24']} of {b['duration']['n']} closed units")
+        d = b["dose"]
+        if d["n"]:
+            L.append(f"  dose            mean {fmt_qty(d['mean'], bu)} · "
+                     f"median {fmt_qty(d['median'], bu)} · "
+                     f"range {fmt_qty(d['min'], bu)}–{fmt_qty(d['max'], bu)}"
+                     + (f" · CV {d['cv']:.2f}" if d["cv"] is not None else ""))
+        if b["rate"]["n"]:
+            L.append(f"  rate            median {fmt_qty(b['rate']['median'], bu)} / day")
+        if len(b["trend"]) > 1:
+            L.append("  by month        " + "  ".join(
+                f"{t['month'][2:]} {fmt_qty(t['mean'], bu)}×{t['n']}" for t in b["trend"]))
+            first, last = b["trend"][0], b["trend"][-1]
+            if first["mean"]:
+                delta = (last["mean"] - first["mean"]) / first["mean"]
+                L.append(f"  drift           mean dose {'up' if delta > 0 else 'down'} "
+                         f"{abs(delta) * 100:.0f}% from {first['month']} to {last['month']}"
+                         + ("  (two months of data — not a trend yet)"
+                            if len(b["trend"]) < 4 else ""))
+        L.append("")
+    if any(st["time_of_day"]):
+        L += ["TIME OF DAY (all events, 00–23)", "  " + sparkline(st["time_of_day"]),
+              "  " + "".join(f"{h:<3}" for h in range(0, 24, 3)), ""]
+    return "\n".join(L)
+
+
+# ---------------------------------------------------------- sealed transport
+#
+# The ledger has to reach a phone, and this repository is public. Those two
+# facts meet in exactly one place: `intake/events.enc` — the same log, sealed
+# with the site's passphrase, committed, and readable only by something holding
+# that passphrase. `intake/events.jsonl` stays local and gitignored; the sealed
+# file is the copy that travels.
+#
+# WHY A UNION IS ALWAYS SAFE. The log is append-only and every event carries a
+# ULID, so merging two copies is set union by id. There is no last-writer-wins,
+# no field-level conflict and nothing that can be lost when a phone and a laptop
+# both write — the worst case is that one of them re-reads. Corrections and
+# voids are themselves events, so even a change of mind merges cleanly.
+SEALED = "events.enc"
+
+
+def passphrase(prompt="passphrase: "):
+    """From the environment, or asked for. Never stored, never echoed, never logged."""
+    import getpass
+    pw = os.environ.get("LEVIATHAN_PASSPHRASE")
+    if pw:
+        return pw
+    pw = getpass.getpass(prompt)
+    if not pw:
+        raise LedgerError("no passphrase given")
+    return pw
+
+
+def _crypto():
+    """bin/ is not on the path when this file is loaded by SourceFileLoader."""
+    import importlib
+    here = str(Path(__file__).resolve().parent)
+    if here not in sys.path:
+        sys.path.insert(0, here)
+    return importlib.import_module("aesgcm")
+
+
+# A unit opened, logged and closed in one action — the one-hitter tap in the
+# portal, and every `--single` unit — writes three events carrying the SAME
+# timestamp to the second. Ordering those by id would order them by the random
+# half of a ULID, which is to say arbitrarily, and a log that says a unit was
+# closed before it was opened is one `bin/intake check` rejects outright. So the
+# key ranks by what an event does to a unit before it falls back to the id:
+# a unit is created, then consumed from, then reconciled, then closed. The id
+# stays in the key as the last resort, because two devices merging the same
+# events must produce byte-identical files or every sync is a conflict.
+CAUSAL_RANK = {"substance_added": 0, "unit_created": 1, "intake_logged": 2,
+               "unit_adjusted": 2, "event_corrected": 3, "event_voided": 3,
+               "unit_closed": 4, "unit_reopened": 5}
+
+
+def _merge_key(line):
+    ev = json.loads(line)
+    return (ev.get("timestamp") or "",
+            CAUSAL_RANK.get(ev.get("type"), 2),
+            ev.get("id") or "")
+
+
+def merge_lines(*groups):
+    """Set union by event id, ordered by when each event was recorded."""
+    seen, out = set(), []
+    for group in groups:
+        for line in group:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                eid = json.loads(line).get("id")
+            except json.JSONDecodeError:
+                raise LedgerError(f"unmergeable line in the log: {line[:80]}")
+            if eid in seen:
+                continue
+            seen.add(eid)
+            out.append(line)
+    out.sort(key=_merge_key)
+    return out
+
+
+# ------------------------------------------------------- the analysis surface
+#
+# `intake/units.json` is the queryable projection; `intake/SUMMARY.md` is the
+# same thing in prose. Both are generated, both are committed, and both exist so
+# the wiki can reason about intake without re-deriving it and without opening the
+# raw log. A session asking "what changed for Dan in August 2026" should be able
+# to read one file and get a per-substance account with its coverage attached,
+# rather than parsing JSONL and reimplementing the arithmetic.
+#
+# EVERY FIGURE CARRIES ITS COVERAGE, and that rule does not relax because the
+# reader is a machine. A mean over 10 of 13 events, written into a summary that a
+# synthesis will cite, is more dangerous than the same mean on a screen — nobody
+# is going to re-check it downstream.
+def render_summary(units, stats):
+    L = ["# Intake ledger — summary",
+         "",
+         "GENERATED by `bin/intake`, rewritten on every write. Do not hand-edit.",
+         "`intake/units.json` is the same data as JSON; `intake/events.jsonl` is the",
+         "append-only log both are derived from.",
+         "",
+         "**Read the coverage figure before quoting a mean.** Every quantity below is",
+         "computed only from events that carry a number. Events logged without one are",
+         "real events — they count toward totals, timing and clustering — and they are",
+         "excluded from every quantity figure. A mean over some of the events must never",
+         "be cited as a mean over all of them.",
+         ""]
+    if not units:
+        return "\n".join(L + ["_No units have been opened yet._", ""])
+
+    L += [f"_{len(units)} unit(s), "
+          f"{sum(1 for u in units if u['status'] == 'closed')} closed, "
+          f"{sum(u['analysis']['events']['total'] for u in units)} event(s). "
+          f"Generated {now_iso()}._", ""]
+
+    if stats:
+        L += ["## By substance", ""]
+        for b in stats["substances"]:
+            bu, d = b["unit"], b["dose"]
+            L.append(f"### {b['substance']}")
+            L.append("")
+            L.append("- **Coverage:** " + (
+                f"{b['quantified']} of {b['events']} events carry a quantity; "
+                f"{b['unquantified']} logged without one, and excluded from every figure below."
+                if b["unquantified"] else
+                f"all {b['events']} events carry a quantity — nothing below is extrapolated."))
+            L.append(f"- **Units:** {b['units']} opened, {b['closed']} closed")
+            if b["initial"]["n"]:
+                L.append(f"- **Unit size:** median {fmt_qty(b['initial']['median'], bu)} "
+                         f"(range {fmt_qty(b['initial']['min'], bu)}–"
+                         f"{fmt_qty(b['initial']['max'], bu)})")
+            if b["duration"]["n"]:
+                L.append(f"- **A unit lasts:** median {fmt_dur(b['duration']['median'])}; "
+                         f"{b['under24']} of {b['duration']['n']} closed units gone inside a day")
+            if d["n"]:
+                L.append(f"- **Dose, over {d['n']} quantified event(s):** mean "
+                         f"{fmt_qty(d['mean'], bu)} · median {fmt_qty(d['median'], bu)} · "
+                         f"range {fmt_qty(d['min'], bu)}–{fmt_qty(d['max'], bu)}"
+                         + (f" · CV {d['cv']:.2f}" if d["cv"] is not None else ""))
+            if b["rate"]["n"]:
+                L.append(f"- **Rate:** median {fmt_qty(b['rate']['median'], bu)} / day")
+            if len(b["trend"]) > 1:
+                L.append("- **By month:** " + " · ".join(
+                    f"{t['month']} {fmt_qty(t['mean'], bu)} ×{t['n']}" for t in b["trend"]))
+            L.append("")
+
+    L += ["## Units", "",
+          "| # | substance | opened | status | events | quantified | coverage |",
+          "|---|---|---|---|---|---|---|"]
+    for u in units:
+        a = u["analysis"]
+        L.append(f"| {u['ordinal']} | {u['substance']} | {u['received_at'][:10]} | "
+                 f"{u['status']} | {a['events']['total']} | "
+                 f"{fmt_qty(a['quantified_total'], u['quantity_unit'])} | "
+                 f"{pct(a['coverage']) if a['coverage'] is not None else '—'} |")
+
+    L += ["",
+          "## What this cannot tell you",
+          "",
+          "It records what was **logged**, not what happened. An unlogged night is",
+          "indistinguishable here from a night with nothing in it, and no figure above",
+          "corrects for that. Where a unit closed with quantity unaccounted for, the",
+          "reconciliation names the gap rather than distributing it across the doses that",
+          "were recorded — so a total can be lower than what was actually consumed, and",
+          "the report says which.",
+          ""]
+    return "\n".join(L)
+
+
+# --------------------------------------------------------------------- gate
+# --------------------------------------------------- the public database page
+#
+# `wiki/health/intake-ledger.md` is the ledger rendered as a wiki entry: every
+# unit and every event, visible, on the portal, beside the pages that reason
+# from it. It exists because `intake/SUMMARY.md` and `intake/units.json` are not
+# reachable from the site — the portal's sync reads `wiki/**` and nothing else —
+# so until now the only way to see the record was to open a JSONL file in the
+# repository.
+#
+# It is GENERATED and it is EVIDENCE, and both halves matter. Generated, because
+# a hand-written snapshot of a growing log is wrong the day after it is written
+# and nothing would say so; `check` fails on drift exactly as the skills
+# database's page does. Evidence, because `intake/README.md` is right that the
+# ledger is not a claim: this page states no finding, argues nothing, and draws
+# no conclusion about the person. The findings live on `wiki/health/cocaine.md`
+# and `wiki/health/chemical-architecture.md`, cited back to the unit ids here.
+#
+# EVERY QUANTITY CARRIES ITS COVERAGE, and the one figure this tool computes
+# that reads as evidence and is not — the per-unit `rate_per_day`, which
+# extrapolates a unit's quantity across 24 hours from however long it lived — is
+# deliberately NOT on the page. A number nobody can quote wrongly is better than
+# a number with a caveat beside it.
+INTAKE_PAGE = "wiki/health/intake-ledger.md"
+PAGE_CREATED = "2026-08-31"
+
+
+def _page_hours(units):
+    """Events per hour of the day, over every live event in the ledger."""
+    hours = [0] * 24
+    for u in units:
+        for e in _live(u["intakes"]):
+            hours[dt(e["occurred_at"]).hour] += 1
+    return hours
+
+
+def render_wiki_page(units, stats):
+    """The ledger as a wiki entry. Deterministic: every value comes from the log."""
+    events = sum(u["analysis"]["events"]["total"] for u in units)
+    quantified = sum(u["analysis"]["events"]["measured"]
+                     + u["analysis"]["events"]["estimated"] for u in units)
+    unquantified = sum(u["analysis"]["events"]["unquantified"] for u in units)
+    closed = sum(1 for u in units if u["status"] == "closed")
+    corrections = sum(len(u["corrections"]) + sum(len(i["corrections"]) for i in u["intakes"])
+                      for u in units)
+    dates = sorted(u["received_at"][:10] for u in units) or [PAGE_CREATED]
+    modified = max([u["received_at"][:10] for u in units]
+                   + [(u["closed_at"] or "")[:10] for u in units] + [PAGE_CREATED])
+    hours = _page_hours(units)
+
+    L = ["---",
+         "domain: health",
+         "page_type: dataset",
+         'title: "The Intake Ledger"',
+         'aliases: ["intake ledger", "the ledger", "intake record"]',
+         "status: active",
+         "importance: high",
+         "knowledge: derived",
+         f"date_created: {PAGE_CREATED}",
+         f"date_modified: {modified}"]
+    # A count of events per hour, and nothing else: no score, no weighting, no
+    # threshold chosen for what it would surface.
+    L += ["chart:",
+          "  kind: bar",
+          '  title: "Intake events by hour of day, whole ledger"',
+          '  x: { label: "Hour (local)", type: category }',
+          '  y: { label: "Events logged", type: number }',
+          "  series:",
+          '    - name: "Logged events"',
+          "      points:"]
+    for h in range(24):
+        L.append(f'        "{h:02d}": {hours[h]}')
+    L += ["sources:",
+          "  - intake/events.jsonl"]
+    for u in units:
+        if u["status"] == "closed":
+            L.append(f"  - raw/health/intake/{u['id']}.md")
+    L += ["connections:",
+          "  - page: wiki/health/cocaine",
+          "    type: evidenced-by",
+          '    claim: "The ledger is the first-party dated record the cocaine page\'s '
+          'measured-night section is drawn from; the dosage arc above that section is '
+          'self-report and this is not."',
+          "  - page: wiki/health/chemical-architecture",
+          "    type: evidenced-by",
+          '    claim: "Supplies the first dated measurement behind the two rows of the '
+          'stack table marked Daily — cocaine and cannabis — which were otherwise '
+          'description taken from Dan\'s own account of his system."',
+          "---",
+          "",
+          "# The Intake Ledger",
+          "",
+          "_Generated by `bin/intake page` from `intake/events.jsonl`. Do not hand-edit —",
+          "rerun the tool. The append-only log is the record; this page,",
+          "`intake/units.json` and `intake/SUMMARY.md` are all derived from it._",
+          "",
+          "[[wiki/health/index|health]] · [[wiki/health/cocaine|Cocaine]] · "
+          "[[wiki/health/chemical-architecture|Chemical Architecture]] · "
+          "[[wiki/health/the-configured-body|The Configured Body]]",
+          "",
+          "**This page is evidence, not a claim.** It states no finding and argues",
+          "nothing. It exists because the wiki reasons from what was written down, and",
+          "prose recollection of consumption is the least reliable testimony a person",
+          "gives about themselves — so a dated first-party record is worth having beside",
+          "the pages that describe the same behaviour from memory. The findings drawn",
+          "from it live on [[wiki/health/cocaine]] and",
+          "[[wiki/health/chemical-architecture]], cited back to the unit ids below.",
+          ""]
+
+    L += ["## The record, at a glance",
+          "",
+          "| | |",
+          "|---|---|",
+          f"| Units opened | {len(units)} ({closed} closed) |",
+          f"| Intake events | {events} |",
+          f"| Carrying a quantity | {quantified} |",
+          f"| Logged without one | {unquantified} |",
+          f"| Corrections on the log | {corrections} |",
+          f"| First unit received | {dates[0]} |",
+          f"| Most recent activity | {modified} |",
+          ""]
+
+    cov = "every event carries a quantity" if not unquantified else (
+        f"{quantified} of {events} events carry a quantity")
+    L += [f"**Coverage: {cov}.** Events logged without a number are real events — they",
+          "count toward totals, timing and clustering — and they are excluded from every",
+          "quantity figure on this page. A mean over some of the events is never cited as",
+          "a mean over all of them.",
+          ""]
+
+    L += ["## Units",
+          "",
+          "| # | Substance | Opened | Closed | Opened with | Accounted | Events | Coverage | Disposition |",
+          "|---|---|---|---|---|---|---|---|---|"]
+    for u in units:
+        a = u["analysis"]
+        bu = u["quantity_unit"]
+        cvg = a["coverage"]
+        L.append(
+            f"| {u['ordinal']} | {u['substance']} | {u['received_at'][:16].replace('T', ' ')} | "
+            f"{(u['closed_at'] or '')[:16].replace('T', ' ') or 'still open'} | "
+            f"{fmt_qty(u['initial_quantity'], bu)} | {fmt_qty(a['accounted'], bu)} | "
+            f"{a['events']['total']} | {pct(cvg)} | {u['disposition'] or '—'} |")
+    L.append("")
+
+    L += ["## Every event",
+          "",
+          "One row per logged intake, oldest first. `measured` came off a scale;",
+          "`estimated` did not and carries a confidence; an event with no quantity at all",
+          "shows its descriptor instead and counts toward timing but toward no total.",
+          "",
+          "| Unit | Substance | When | Quantity | How | Note |",
+          "|---|---|---|---|---|---|"]
+    rows = []
+    for u in units:
+        for e in u["intakes"]:
+            rows.append((e["occurred_at"], u, e))
+    for _, u, e in sorted(rows, key=lambda r: r[0]):
+        if e["voided"]:
+            continue
+        qty = (fmt_qty(e["quantity"], e["quantity_unit"] or u["quantity_unit"])
+               if e["quantity"] is not None else "—")
+        how = e["measurement_type"]
+        if e["confidence"]:
+            how += f" ({e['confidence']})"
+        note = e["descriptor"] or e["note"] or ""
+        if e["corrections"]:
+            note = (note + " · " if note else "") + "corrected, see below"
+        note = note or "—"
+        L.append(f"| #{u['ordinal']} | {u['substance']} | "
+                 f"{e['occurred_at'][:16].replace('T', ' ')} | {qty} | {how} | {note} |")
+    L.append("")
+
+    corrected = [(u, tgt, c) for u in units
+                 for tgt, cs in ([("the unit itself", u["corrections"])]
+                                 + [(i["occurred_at"][:16].replace("T", " "), i["corrections"])
+                                    for i in u["intakes"]])
+                 for c in cs]
+    L += ["## Corrections",
+          ""]
+    if not corrected:
+        L += ["No event on this log has been corrected.", ""]
+    else:
+        L += ["Nothing here is ever edited in place. A mistyped value becomes a new record",
+              "naming the original, the correction and the reason — so the ledger shows the",
+              "corrected figure while the log remembers both, and *that* a correction was",
+              "needed is itself evidence about how the logging happens.",
+              "",
+              "| Unit | Target | Changed | Reason |",
+              "|---|---|---|---|"]
+        for u, tgt, c in corrected:
+            moved = {k: v for k, v in c["to"].items() if c["from"].get(k) != v}
+            fields = ", ".join(f"`{k}`: {c['from'].get(k)!r} → {v!r}"
+                               for k, v in (moved or c["to"]).items())
+            L.append(f"| #{u['ordinal']} | {tgt} | {fields} | {c['reason']} |")
+        L.append("")
+
+    if stats and stats.get("substances"):
+        L += ["## By substance",
+              "",
+              "Quantity figures are computed only from events that carry a number, and the",
+              "coverage column says how many that was.",
+              "",
+              "| Substance | Units | Events | Quantified | Median dose | Range |",
+              "|---|---|---|---|---|---|"]
+        for b in stats["substances"]:
+            d = b.get("dose") or {}
+            med = fmt_qty(d.get("median"), b["unit"]) if d.get("median") is not None else "—"
+            rng = (f"{fmt_qty(d['min'], b['unit'])}–{fmt_qty(d['max'], b['unit'])}"
+                   if d.get("min") is not None else "—")
+            L.append(f"| {b['substance']} | {b['units']} | {b['events']} | "
+                     f"{b['quantified']} | {med} | {rng} |")
+        L.append("")
+
+    L += ["## What this cannot tell you",
+          "",
+          "- **It records what was logged, not what happened.** An unlogged night is",
+          "  indistinguishable here from a night with nothing in it, and no figure above",
+          "  corrects for that. The ledger's silence before its first unit is the absence",
+          "  of an instrument, not the absence of use.",
+          "- **A `measured` flag is a claim made at entry, not a guarantee.** Where a",
+          "  quantity exactly matches one of the one-tap presets in",
+          "  `intake/substances.json`, it was plausibly a tap rather than a weighing — and",
+          "  some presets are defined there as *estimated, low confidence* regardless of",
+          "  how the event reached the log. Coverage counts how many events have a number;",
+          "  it does not certify where the number came from.",
+          "- **No rate is published here, and one figure is withheld on purpose.**",
+          "  `bin/intake report` prints a per-unit `Rate of consumption ... g / day` that",
+          "  extrapolates a unit's quantity across a full day from however long that unit",
+          "  actually lasted. For a unit consumed in an evening it reports roughly double",
+          "  what was consumed that day. It is a restatement of the unit's lifespan, it is",
+          "  not a daily rate, and it is kept off this page rather than printed with a",
+          "  caveat beside it.",
+          "- **A closed unit's reconciliation is a recorded decision, never a silent",
+          "  subtraction.** Where quantity was unaccounted for at close, the ledger names",
+          "  what happened to it instead of distributing it across the doses that were",
+          "  recorded — so a total can be lower than what was actually consumed, and the",
+          "  unit says which.",
+          ""]
+    return "\n".join(L) + "\n"
+
+
+def check(ledger):
+    """Integrity of the log, and of the projection derived from it.
+
+    Runs in `bin/wiki-check`'s gate chain. It is clean and silent when there is
+    no ledger, because a repository that never opened a unit has nothing to be
+    wrong about — but the moment there is one, a hand-edited `units.json` or an
+    event referring to a unit that does not exist is a red gate, not a warning.
+    """
+    errors, warnings = [], []
+    if not ledger.events_path.exists():
+        return errors, warnings
+    try:
+        events = ledger.read_events()
+    except LedgerError as exc:
+        return [str(exc)], warnings
+
+    seen, ids = set(), {e.get("id") for e in events}
+    unit_ids, closed_at = set(), {}
+    catalog = {s["id"] for s in ledger.substances()}
+    for n, ev in enumerate(events, 1):
+        where = f"events.jsonl:{n}"
+        for key in ("id", "type", "timestamp", "data", "source"):
+            if key not in ev:
+                errors.append(f"{where} has no {key!r}")
+        if ev.get("id") in seen:
+            errors.append(f"{where} repeats event id {ev['id']}")
+        seen.add(ev.get("id"))
+        if ev.get("type") not in EVENT_TYPES:
+            errors.append(f"{where} has unknown type {ev.get('type')!r}")
+            continue
+        if ev["type"] == "unit_created":
+            unit_ids.add(ev.get("unit_id"))
+            sid = ev["data"].get("substance_id")
+            if sid and sid not in catalog:
+                warnings.append(f"{where} opens a unit of {sid!r}, which is no longer "
+                                f"in intake/substances.json")
+        elif ev["type"] in ("intake_logged", "unit_adjusted", "unit_closed", "unit_reopened"):
+            if ev.get("unit_id") not in unit_ids:
+                errors.append(f"{where} is a {ev['type']} against unknown unit "
+                              f"{ev.get('unit_id')!r}")
+            if ev["type"] == "unit_closed":
+                closed_at[ev["unit_id"]] = ev.get("occurred_at") or ev["timestamp"]
+            elif ev["type"] == "unit_reopened":
+                closed_at.pop(ev["unit_id"], None)
+            elif ev["type"] == "intake_logged" and ev["unit_id"] in closed_at:
+                errors.append(f"{where} logs intake against unit {ev['unit_id']}, "
+                              f"closed at {closed_at[ev['unit_id']]}")
+        elif ev["type"] in ("event_corrected", "event_voided"):
+            if ev["data"].get("target") not in ids:
+                errors.append(f"{where} {ev['type']} names unknown event "
+                              f"{ev['data'].get('target')!r}")
+            if not ev["data"].get("reason"):
+                errors.append(f"{where} {ev['type']} carries no reason")
+
+    if errors:
+        return errors, warnings
+
+    units = ledger.project()
+    if ledger.units_path.exists():
+        try:
+            on_disk = json.loads(ledger.units_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            errors.append(f"intake/units.json is not JSON — {exc}")
+            on_disk = None
+        if on_disk is not None:
+            if on_disk.get("event_count") != len(events) or on_disk.get("units") != units:
+                errors.append("intake/units.json has drifted from intake/events.jsonl — "
+                              "it is generated; run `bin/intake rebuild`")
+    elif units:
+        errors.append("intake/units.json is missing — run `bin/intake rebuild`")
+
+    # There is deliberately NO warning here about the ledger being tracked in a
+    # public repository. It was warned about, twice, and the operator decided:
+    # the record syncs while the repository is public, knowing what that means.
+    # A gate that fires on a settled, documented decision is noise, and noise is
+    # how a gate stops being read. The decision lives in `.gitignore` and
+    # `intake/README.md`, where a reader will actually meet it, and a test keeps
+    # it from being quietly dropped.
+
+    # The page is generated, so a hand-edit is drift and drift is a red gate —
+    # the same rule the skills database runs under. A page absent entirely is
+    # only a warning: a repository with a ledger and no page is behind, not
+    # broken, and the fix is one command that this message names.
+    page_path = ledger.root / INTAKE_PAGE
+    if units:
+        want = render_wiki_page(units, cross_stats(units))
+        if not page_path.exists():
+            warnings.append(f"{INTAKE_PAGE} does not exist yet — run `bin/intake page`")
+        elif page_path.read_text(encoding="utf-8") != want:
+            errors.append(f"{INTAKE_PAGE} has drifted from intake/events.jsonl — "
+                          f"it is generated; run `bin/intake page`")
+
+    for u in units:
+        if u["analysis"]["chronology_error"]:
+            warnings.append(f"unit #{u['ordinal']} ({u['substance']}) has an event dated before "
+                            f"it was received — correct the event or the unit's received_at")
+        if u["analysis"]["overdrawn"]:
+            warnings.append(f"unit #{u['ordinal']} ({u['substance']}) has more logged against "
+                            f"it than it was opened with — correct an event or record an "
+                            f"adjustment")
+        if u["status"] == "closed" and not (u.get("reconciliation") or {}).get("resolution"):
+            warnings.append(f"unit #{u['ordinal']} closed without a recorded reconciliation")
+    return errors, warnings
+
+
+# ---------------------------------------------------------------------- CLI
+def _unit_arg(ap):
+    ap.add_argument("unit", nargs="?", default="active",
+                    help="unit number (#3), id, or a substance name when only one is open")
+
+
+def build_parser():
+    ap = argparse.ArgumentParser(
+        prog="bin/intake",
+        description="The intake ledger — finite units in, discrete events out.")
+    sub = ap.add_subparsers(dest="cmd")
+
+    p = sub.add_parser("new", help="open a unit")
+    p.add_argument("substance", help="a substance id or name from intake/substances.json")
+    p.add_argument("quantity", help="how much arrived, e.g. 3.5g / 180mg / 2tab")
+    p.add_argument("--at", help="when it was received (default: now)")
+    p.add_argument("--source", help="where it came from / the context")
+    p.add_argument("--note")
+
+    p = sub.add_parser("log", help="log one intake against a unit")
+    _unit_arg(p)
+    p.add_argument("quantity", nargs="?", help="e.g. .18g — omit it and give --descriptor")
+    p.add_argument("--descriptor", help="'one line', 'two hits' — logs an unquantified event")
+    p.add_argument("--preset", help="a one-tap preset for this unit's substance "
+                                    "(see `bin/intake substances`)")
+    p.add_argument("--estimated", action="store_true", help="mark the quantity as an estimate")
+    p.add_argument("--confidence", choices=CONFIDENCES)
+    p.add_argument("--at", help="when it happened (default: now)")
+    p.add_argument("--note")
+
+    p = sub.add_parser("adjust", help="record quantity leaving the unit without being consumed")
+    _unit_arg(p)
+    p.add_argument("quantity")
+    p.add_argument("--kind", required=True, choices=ADJUSTMENT_KINDS)
+    p.add_argument("--at")
+    p.add_argument("--note")
+
+    p = sub.add_parser("correct", help="supersede an event's values, keeping both on the record")
+    p.add_argument("event", help="an event id or its last characters")
+    p.add_argument("--quantity")
+    p.add_argument("--substance", help="the unit was opened against the wrong substance "
+                                       "(resolved against the catalog, never invented)")
+    p.add_argument("--at")
+    p.add_argument("--descriptor")
+    p.add_argument("--note")
+    p.add_argument("--reason", required=True)
+
+    p = sub.add_parser("void", help="strike an event that never happened")
+    p.add_argument("event")
+    p.add_argument("--reason", required=True)
+
+    p = sub.add_parser("close", help="end a unit and reconcile what is left")
+    _unit_arg(p)
+    p.add_argument("--disposition", required=True, choices=DISPOSITIONS)
+    p.add_argument("--resolution", choices=RESOLUTIONS,
+                   help="what happened to any unaccounted quantity")
+    p.add_argument("--at")
+    p.add_argument("--note")
+
+    p = sub.add_parser("reopen", help="undo a closure")
+    _unit_arg(p)
+    p.add_argument("--reason", required=True)
+
+    p = sub.add_parser("report", help="the unit report")
+    _unit_arg(p)
+    p.add_argument("--json", action="store_true")
+
+    p = sub.add_parser("units", help="list units")
+    p.add_argument("--all", action="store_true", help="closed ones too")
+
+    p = sub.add_parser("events", help="list events")
+    _unit_arg(p)
+    p.add_argument("--limit", type=int)
+
+    p = sub.add_parser("stats", help="across every unit")
+    p.add_argument("--substance")
+    p.add_argument("--since", help="YYYY-MM-DD, on unit received date")
+    p.add_argument("--until", help="YYYY-MM-DD, on unit received date")
+    p.add_argument("--json", action="store_true")
+
+    p = sub.add_parser("substances", aliases=["substance"],
+                       help="the select box — list or extend the catalog")
+    p.add_argument("action", nargs="?", choices=["list", "add"], default="list")
+    p.add_argument("name", nargs="?")
+    p.add_argument("--category", choices=CATEGORIES, default="other")
+    p.add_argument("--unit", default="g")
+    p.add_argument("--json", action="store_true")
+
+    p = sub.add_parser("seal", help="write intake/events.enc — the sealed copy that travels")
+    p.add_argument("--passphrase", help="default: $LEVIATHAN_PASSPHRASE, else asked for")
+
+    p = sub.add_parser("open", help="merge intake/events.enc back into the local log")
+    p.add_argument("--passphrase")
+
+    sub.add_parser("summary", help="regenerate intake/SUMMARY.md, the wiki's analysis surface")
+    sub.add_parser("rebuild", help="regenerate intake/units.json from the log")
+    sub.add_parser("page", help="regenerate wiki/health/intake-ledger.md, the public database page")
+    p = sub.add_parser("capture", help="file the raw/ archive for closed units that have none")
+    p.add_argument("unit", nargs="?", default=None,
+                   help="a unit number or id; omit it to do every closed unit missing one")
+    sub.add_parser("check", help="gate: the log parses, the projection matches")
+    p = sub.add_parser("export", help="the whole ledger as one JSON document")
+    p.add_argument("--out", help="write here instead of stdout")
+    return ap
+
+
+def main(argv=None):
+    args = build_parser().parse_args(argv)
+    L = Ledger()
+    ops = Ops(L)
+    cmd = args.cmd
+
+    if cmd is None:
+        sys.stdout.write(render_status(L.project(), ops))
+        return 0
+
+    if cmd in ("substances", "substance"):
+        if args.action == "add":
+            if not args.name:
+                raise LedgerError("give the substance a name")
+            entry = ops.L.add_substance(args.name, args.category, args.unit)
+            print(f"added {entry['name']} ({entry['id']}, {entry['category']}, "
+                  f"default {entry['default_unit']})")
+            return 0
+        items = L.substances()
+        if args.json:
+            print(json.dumps(items, indent=2))
+            return 0
+        print(f"THE SELECT BOX — {len(items)} substances in intake/substances.json\n")
+        for sub in items:
+            print(f"  {sub['id']:<16} {sub['name']:<18} {sub['category']:<13} {sub['default_unit']}")
+            for pre in sub.get("presets") or []:
+                print(f"      · {pre['id']:<12} {pre.get('label', ''):<16} "
+                      f"{fmt_qty(pre['quantity'], pre['unit']):>9}  "
+                      f"{pre.get('measurement_type', 'estimated')}"
+                      f"{', ' + pre['confidence'] if pre.get('confidence') else ''}")
+        print("\n  one tap:  bin/intake log <unit> --preset <id>")
+        print("  add one:  bin/intake substance add \"Name\" --category stimulant --unit mg")
+        return 0
+
+    if cmd == "seal":
+        n = ops.seal(args.passphrase)
+        print(f"sealed {n} event(s) into intake/{SEALED} — commit it; "
+              f"the plaintext log stays here and stays ignored")
+        return 0
+
+    if cmd == "open":
+        gained, total = ops.unseal(args.passphrase)
+        print(f"opened intake/{SEALED} — {gained} new event(s), {total} in the log now")
+        return 0
+
+    if cmd == "summary":
+        payload = L.write_projection()
+        print(f"wrote intake/SUMMARY.md and intake/units.json — "
+              f"{len(payload['units'])} unit(s) from {payload['event_count']} event(s)")
+        return 0
+
+    if cmd == "page":
+        units = L.project()
+        text = render_wiki_page(units, cross_stats(units) if units else None)
+        path = L.root / INTAKE_PAGE
+        path.parent.mkdir(parents=True, exist_ok=True)
+        changed = not path.exists() or path.read_text(encoding="utf-8") != text
+        path.write_text(text, encoding="utf-8")
+        print(f"{'wrote' if changed else 'unchanged'} {INTAKE_PAGE} — "
+              f"{len(units)} unit(s), "
+              f"{sum(u['analysis']['events']['total'] for u in units)} event(s)")
+        return 0
+
+    if cmd == "capture":
+        # `close` files the capture, but only the CLI and the local app go
+        # through `close`. The portal and ボスの部屋 write the events straight
+        # to events.jsonl through the contents API, so a unit closed from a
+        # phone — which the README expects to be most of them — reaches the
+        # ledger with no archive entry at all. This backfills those.
+        units = L.project()
+        if args.unit:
+            units = [L.find_unit(args.unit)]
+        wrote = 0
+        for u in units:
+            if u["status"] != "closed":
+                continue
+            if (L.captures / f"{u['id']}.md").exists():
+                continue
+            path = ops.write_capture(u, backfilled=now_iso()[:10])
+            print(f"filed {path.relative_to(L.root)}")
+            wrote += 1
+        if not wrote:
+            print("every closed unit already has its capture.")
+        return 0
+
+    if cmd == "rebuild":
+        payload = L.write_projection()
+        print(f"rebuilt intake/units.json — {len(payload['units'])} unit(s) "
+              f"from {payload['event_count']} event(s)")
+        return 0
+
+    if cmd == "check":
+        errors, warnings = check(L)
+        for w in warnings:
+            print(f"warning: {w}")
+        for e in errors:
+            print(f"ERROR: {e}", file=sys.stderr)
+        n = len(L.project())
+        print(f"intake: {len(errors)} error(s), {len(warnings)} warning(s) over {n} unit(s)")
+        return 1 if errors else 0
+
+    if cmd == "export":
+        payload = {"generated": now_iso(), "substances": L.substances(),
+                   "events": L.read_events(), "units": L.project()}
+        text = json.dumps(payload, indent=2, ensure_ascii=False) + "\n"
+        if args.out:
+            Path(args.out).write_text(text, encoding="utf-8")
+            print(f"wrote {args.out}")
+        else:
+            sys.stdout.write(text)
+        return 0
+
+    if cmd == "new":
+        qty, unit = parse_quantity(args.quantity)
+        u = ops.new_unit(args.substance, qty, unit, args.at, args.source, args.note)
+        print(f"opened unit #{u['ordinal']} — {u['substance']}, "
+              f"{fmt_qty(u['initial_quantity'], u['quantity_unit'])}, "
+              f"received {fmt_when(u['received_at'])}")
+        print(f"  {u['id']}")
+        print(f"  log against it:  bin/intake log {u['ordinal']} <qty>")
+        return 0
+
+    if cmd == "log":
+        if args.preset:
+            ev, u = ops.log_preset(args.unit, args.preset, args.at, args.note)
+            a = u["analysis"]
+            d = ev["data"]
+            print(f"logged {fmt_qty(d['quantity'], d['unit'])} ({d['measurement_type']}"
+                  f"{', ' + d['confidence'] + ' confidence' if d.get('confidence') else ''}) "
+                  f"against unit #{u['ordinal']} {u['substance']} — {ev['id'][-6:]}")
+            print(f"  {a['events']['total']} events · "
+                  f"{fmt_qty(a['quantified_total'], u['quantity_unit'])} logged · "
+                  f"{fmt_qty(a['remaining'], u['quantity_unit'])} left"
+                  + (" (estimate)" if a["remaining_is_estimate"] else ""))
+            return 0
+        qty = unit = None
+        if args.quantity:
+            qty, unit = parse_quantity(args.quantity)
+        mtype = "unquantified" if qty is None else ("estimated" if args.estimated else "measured")
+        ev, u = ops.log_intake(args.unit, qty, unit, mtype, args.confidence,
+                               args.descriptor, args.at, args.note)
+        a = u["analysis"]
+        what = args.descriptor if qty is None else fmt_qty(qty, unit)
+        print(f"logged {what} ({mtype}) against unit #{u['ordinal']} {u['substance']} "
+              f"— {ev['id'][-6:]}")
+        print(f"  {a['events']['total']} events · "
+              f"{fmt_qty(a['quantified_total'], u['quantity_unit'])} logged · "
+              f"{fmt_qty(a['remaining'], u['quantity_unit'])} left"
+              + (" (estimate)" if a["remaining_is_estimate"] else ""))
+        if a["chronology_error"]:
+            print("  warning: this unit now has an event dated before it was received — "
+                  "correct one of the two timestamps.")
+        return 0
+
+    if cmd == "adjust":
+        qty, unit = parse_quantity(args.quantity)
+        ev, u = ops.adjust(args.unit, qty, unit, args.kind, args.note, args.at)
+        print(f"recorded {args.kind} of {fmt_qty(qty, unit)} on unit #{u['ordinal']} "
+              f"— {fmt_qty(u['analysis']['remaining'], u['quantity_unit'])} left")
+        return 0
+
+    if cmd == "correct":
+        fields = {}
+        if args.quantity:
+            q, un = parse_quantity(args.quantity)
+            fields["quantity"], fields["unit"] = q, un
+        if args.substance:
+            # Through the catalog, exactly as `new` does. A free-text substance
+            # forks the ledger silently: `cannibis` and `cannabis` are two
+            # headings in SUMMARY.md, each with its own mean, and neither is
+            # wrong enough to look wrong. Fixing that must not be the one path
+            # that reintroduces free text.
+            sub_ = L.resolve_substance(args.substance)
+            fields["substance"] = sub_["name"]
+            fields["substance_id"] = sub_["id"]
+            fields["category"] = sub_.get("category")
+        if args.at:
+            fields["occurred_at"] = args.at
+        if args.descriptor:
+            fields["descriptor"] = args.descriptor
+        if args.note:
+            fields["note"] = args.note
+        ev = ops.correct(args.event, fields, args.reason)
+        print(f"correction recorded — {ev['id'][-6:]}. The original stands in the log.")
+        return 0
+
+    if cmd == "void":
+        ev = ops.void(args.event, args.reason)
+        print(f"voided — {ev['id'][-6:]}. The event stays in the log, struck.")
+        return 0
+
+    if cmd == "close":
+        u, capture, _ = ops.close_unit(args.unit, args.disposition, args.resolution,
+                                       args.at, args.note)
+        print(render_report(u))
+        print(f"archived to {capture.relative_to(L.root)}")
+        return 0
+
+    if cmd == "reopen":
+        u = ops.reopen(args.unit, args.reason)
+        print(f"unit #{u['ordinal']} is open again.")
+        return 0
+
+    if cmd == "report":
+        u = L.find_unit(args.unit)
+        if args.json:
+            print(json.dumps(u, indent=2, ensure_ascii=False))
+        else:
+            sys.stdout.write(render_report(u))
+            print("\nEVENTS")
+            for line in render_events(u):
+                print(line)
+        return 0
+
+    if cmd == "units":
+        units = L.project()
+        if not args.all:
+            units = [u for u in units if u["status"] == "active"]
+        if not units:
+            print("no units" + ("" if args.all else " open — `bin/intake units --all`"))
+            return 0
+        for u in units:
+            a = u["analysis"]
+            print(f"  #{u['ordinal']:<3} {u['substance']:<18} "
+                  f"{fmt_qty(u['initial_quantity'], u['quantity_unit']):>9}  "
+                  f"{u['status']:<7} {a['events']['total']:>3} events  "
+                  f"{fmt_when(u['received_at'])}  {u['id'][-6:]}")
+        return 0
+
+    if cmd == "events":
+        u = L.find_unit(args.unit)
+        print(f"UNIT #{u['ordinal']} {u['substance']}")
+        for line in render_events(u, args.limit):
+            print(line)
+        return 0
+
+    if cmd == "stats":
+        st = cross_stats(L.project(), args.substance, args.since, args.until)
+        if args.json:
+            print(json.dumps(st, indent=2, ensure_ascii=False))
+        else:
+            sys.stdout.write(render_stats(st))
+        return 0
+
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except LedgerError as exc:
+        print(f"intake: {exc}", file=sys.stderr)
+        sys.exit(1)
+    except KeyboardInterrupt:
+        sys.exit(130)

@@ -1,0 +1,89 @@
+---
+
+domain: interests
+
+page_type: entity
+
+status: stable
+
+date_created: 2026-08-01
+
+date_modified: 2026-09-04
+
+sources:
+
+- "raw/self/concerts/table.csv"
+
+- "raw/self/twitter/archive.jsonl"
+
+related: []
+
+tags: [music-production, digital-footprint]
+
+connections:
+
+- page: wiki/interests/concert-record/festivals/the-bamboozle-2011
+
+type: component-of
+
+claim: "Lil Wayne performed at The Bamboozle 2011 on Apr 29 - May 1, 2011 (New Meadowlands Stadium, East Rutherford, NJ)."
+
+- page: wiki/self/twitter/2011
+
+type: evidenced-by
+
+claim: "He publicly called the artist stupid three months before seeing him: 'the stupid just keeps oozing out of this guy' (19 January 2011) against a Bamboozle bill Lil Wayne headlined on 29 April - 1 May — which is the concert record's own stated principle in action, that the unit of attendance is the event and you get whoever is on it."
+
+---
+
+# Lil Wayne
+
+Lil Wayne is an act Dan Frank saw live 1 time between 2011, per the concert log he kept (preserved in the corpus). This page records those appearances and the details attached to each in the source.
+
+## Live appearances
+
+All dates, venues, cities, and notes below are taken from the source table and preserved in full, including tentative or unconfirmed items.
+
+| Date | Show / Context | Venue | City | Note |
+
+|------|---------------|-------|------|------|
+
+| Apr 29 - May 1, 2011 | The Bamboozle 2011 | New Meadowlands Stadium | East Rutherford, NJ | Festival edition. Lineup included Lil Wayne, Motley Crue, Taking Back Sunday, A Day to Remember. |
+
+## Notes per appearance
+
+- **Apr 29 - May 1, 2011** — [[wiki/interests/concert-record/festivals/the-bamboozle-2011|The Bamboozle 2011]], New Meadowlands Stadium, East Rutherford, NJ. Festival edition. Lineup included Lil Wayne, Motley Crue, Taking Back Sunday, A Day to Remember.
+
+## He had gone on record against him three months earlier
+
+**2011-01-19**, quoting a Pitchfork item: *"the stupid just keeps oozing out of
+
+this guy @pitchforkmedia: Lil Wayne says he enjoyed reading the Bible in jail:
+
+'It was deep!'"*
+
+The Bamboozle 2011 festival ran **29 April – 1 May**, Lil Wayne on the bill.
+
+Fourteen weeks separate the two, and nothing in the archive marks a change of
+
+mind.
+
+This is worth keeping because it is the clearest small illustration of what
+
+[[wiki/interests/concert-record/index]] states as a principle: **the unit of
+
+attendance is the event, not the artist.** A festival ticket is a claim about a
+
+weekend, not an endorsement of everyone on the poster, and reading an artist
+
+page as a favorites list will get this backwards. A later, gentler mention on
+
+Halloween 2011 — a stranger's *"Barry Bonds / Freddy Kreuger / Lil Wayne hybrid
+
+costume"* — and a 2014 hour spent making distorted images of him suggest an
+
+ongoing amused attention rather than either fandom or contempt.
+
+---
+
+**Up:** [[wiki/interests/index|Interests]] › [[wiki/interests/favorites/index|Favorites]] › [[wiki/interests/favorites/music|Music]]

@@ -1,0 +1,367 @@
+---
+
+domain: people
+
+page_type: entity
+
+status: active
+
+date_created: 2026-06-24
+
+date_modified: 2026-08-20
+
+date_range_start: 2026-05-31
+
+date_range_end: 2026-08-19
+
+sources:
+
+- raw/self/message-csv/imessage_export_7248123683_20260624.csv
+
+- raw/self/message-csv/THE END FIGHT.csv
+
+- raw/self/captures/2026-07-19_operator-note-oct2019-mmf-video.md
+
+- raw/self/dox-md/end-fight-notebooklm-podcast-transcript.md
+
+- raw/people/captures/2026-08-08_190122_identity-of-the-interloper.md
+
+- raw/people/captures/2026-08-09-tuquick-unnamed-man-correction.md
+
+- raw/self/message-csv/imessage_export_7248123683_20260820.csv
+
+related:
+
+- wiki/people/annie-ulmer
+
+- wiki/timeline/events/end-fight
+
+- wiki/timeline/events/group-chat-closure
+
+tags: [relationships, trauma-bond, ai-collaboration, addiction-recovery]
+
+infobox:
+
+name: "Jerel Wayne Coles (Tuquick 17248123683)"
+
+relationship_to_dan: unknown
+
+location: nyc
+
+first_contact: 2026-05-31
+
+known_for: "Tuquick is the interloper: the man [[wiki/people/annie-ulmer|Annie]] left Dan for, and the counterpart of the terminal g"
+
+connections:
+
+- page: wiki/timeline/events/august-2026-morgantown-call
+
+type: evidences
+
+claim: "This page declared the thread CLOSED on 2026-06-16. It reopened on 2026-08-17 with 97 further messages from the same handle, which makes the closure a dormancy rather than an exit and puts this number back in the live record."
+
+- page: wiki/people/suzanne-frank
+
+type: evidences
+
+claim: "The reported three-hour harassment call to Dan's mother five days before the End Fight is the clearest instance of Tuquick's script being aimed outside the relationship, and the second distinct actor to reach her directly in 2026."
+
+- page: wiki/people/the-unnamed-man
+
+type: co-occurs
+
+claim: "Confirmed by operator statement (2026-08-09) to be the same person as this page's subject — the corpus carried them as two separate people from 2026-08-02 until this correction."
+
+- page: wiki/mind/synthesis/dan-annie-fallout-verdict
+
+type: evidences
+
+claim: "The June 15 defection is the verdict's independent-validation exhibit: convergence on Dan's read within 14 days of attacking it."
+
+- page: wiki/mind/psychosexual/arrangement-history
+
+type: evidences
+
+claim: "Tuquick's closure-night taunts prove the October 2019 MMF video circulated to Annie's next partner and was repurposed as humiliation — the arrangement era's intimate media outliving the arrangement as a weapon."
+
+- page: wiki/people/bryan-5088682461
+
+type: co-occurs
+
+claim: "The video of the encounter with Bryan is the material Tuquick deployed as humiliation on closure night 2026 — Bryan's one documented appearance in the corpus made him ammunition six and a half years later."
+
+- page: wiki/people/jerel-coles
+
+type: component-of
+
+claim: "The phone number in this page's own title is the identifier that closed the identification on 2026-08-08; wiki/people/jerel-coles is now the canonical entity page and carries the fuller identity record and criminal-history table."
+
+- page: wiki/people/the-unnamed-man
+
+type: contradicts
+
+claim: "The two pages held incompatible accounts of the same broken-finger claim — contested here (Tuquick denies it in the May 31 group chat), uncontested there — because the wiki did not yet know they described one man. Resolved 2026-08-09: one claim, one man, denied then re-asserted. See wiki/people/jerel-coles."
+
+---
+
+# Tuquick (+17248123683)
+
+> **Status: REOPENED 2026-08-17.** This handle went quiet after 2026-06-16 and
+
+> this page recorded it as closed for two months. It is not closed: 97 more
+
+> messages ran between Dan and this number from 2026-08-17 11:54 to 2026-08-19
+
+> 01:09, including Dan's home address sent unprompted and a written conditional
+
+> threat naming [[wiki/people/suzanne-frank|Suz]]. The canonical account is on
+
+> [[wiki/people/jerel-coles]] §August 2026 and
+
+> [[wiki/timeline/events/august-2026-morgantown-call]]; this page retains the
+
+> End Fight and the June 15 defection, which stay filed here.
+
+>
+
+> Role: the relationship Annie left for + the June 2026 End Fight sequence.
+
+> **REVISED [2026-07-13]:** Operator correction: Tuquick is not a "stranger inserted into the situation" — he is who Annie left Dan for. He may or may not be "Target G"; unknown.
+
+> **REVISED [2026-08-08]:** The interloper's real-world identity has been unmasked through a background-check capture filed to `raw/people/captures/2026-08-08_190122_identity-of-the-interloper.md` (FOREWARN database). He is **Jerel Wayne Coles**, age 36, with a current address of 106 Nassau St, Uniontown, PA 15401 — and a documented criminal history spanning 2008–2025 (traffic violations, two DUI arrests, disorderly conduct, harassment, and a 2025 criminal mischief charge). He is NOT target G; whether he is also the July 2026 unnamed interloper was, at the time this line was written, a separate open question — see the block below for how that closed.
+
+> **REVISED [2026-08-09] — CONFIRMED, and canonical page moved.** The operator
+
+> states directly: "They are the same person — tuquick and unnamed" (filed at
+
+> [[raw/people/captures/2026-08-09-tuquick-unnamed-man-correction]]). Tuquick
+
+> is [[wiki/people/the-unnamed-man]]. [[wiki/people/jerel-coles]]
+
+> is now the canonical entity page for all three identities: the fuller identity
+
+> record (both phone numbers, address history, the FOREWARN provenance note),
+
+> the de-duplicated criminal-history table, and the July 2026 material all live
+
+> there. This page is retained rather than redirected because it is
+
+> the primary account of the End Fight and the June 15 defection, which stay
+
+> filed here.
+
+## Identity
+
+Tuquick is the interloper: the man [[wiki/people/annie-ulmer|Annie]] left Dan for, and the counterpart of the terminal group chat that closed the relationship on June 1, 2026 (the [[wiki/timeline/events/end-fight]]). Associated with the email `Tuquick3@hotmail.com` and phone number `+172****3683`.
+
+**His real name is Jerel Wayne Coles** (born circa 1990), identified via a background-check capture that pulled his full record from Pennsylvania court databases (FOREWARN). Coles is a Uniontown-area resident with a documented criminal history (see the `## Criminal record` section below), including two DUI arrests, prior harassment and disorderly-conduct convictions, and a 2025 criminal mischief charge. He is **not** [[wiki/people/eli]] (the 2024–Feb 2025 NYC affair). Whether he is "Target G" — the married man from the January 2026 "Suzy" call and ten-day blackout (see [[wiki/people/annie-ulmer]] §Target G, [[wiki/self/chats/gemini-07]]) is unresolved; the Gemini-_07 forensics name the Target G figure "Caitlin's husband," a description not otherwise confirmed as Coles.
+
+During the May 31/June 1 confrontation he aggressively defended Annie, hurling extreme insults at Dan.
+
+## Criminal record
+
+The background-check capture (FOREWARN, sourced from Pennsylvania court databases) collapses 64 raw court records into **9 distinct incident clusters** spanning 2008–2025:
+
+| Date | Incident | Charges | Outcome |
+
+|---|---|---:|---|
+
+| 10/31/2008 | Traffic (turning movements) | 1 | Unknown |
+
+| 11/20/2008 | Disorderly conduct / fighting | 1 | Guilty plea |
+
+| 06/13/2009 | Vehicle equipment | 1 | Guilty plea |
+
+| 07/19/2009 | Harassment (physical contact) | 1 | Guilty |
+
+| 06/06/2010 | Traffic (license expired, signals) | 2 | Guilty / guilty plea |
+
+| 07/07/2010 | Traffic (no inspection, obstructed window) | 2 | 1 guilty plea, 1 not guilty |
+
+| 02/03/2019 | DUI + traffic (BAC ≥ .16) | 6 | ARD County |
+
+| 06/29/2024 | DUI + traffic (5 counts) | 5 | Guilty pleas |
+
+| 04/05/2025 | Criminal mischief / property damage | 1 | Unknown |
+
+**Pattern:** 2008–2010 establishes a baseline of traffic violations plus two interpersonal/public-order offenses (fighting, harassment involving physical contact). The 2019 DUI includes a BAC ≥ .16 charge (aggravated), processed through ARD. The 2024 DUI shows the same pattern with a clean guilty-plea disposition. The 2025 criminal mischief charge is the first non-traffic criminal matter, representing a shift in offense type. See `raw/people/captures/2026-08-08_190122_identity-of-the-interloper.md` for the full capture and the de-duplication reasoning.
+
+## Role in the End Fight (May 31 - June 1, 2026)
+
+Tuquick served as the attack vector during the group chat confrontation, demonstrating the active defamation campaign running in Annie's peer network.
+
+- Hurled extreme insults at Dan, centering on "junkie," "cuck," and "molester" framing.
+
+- Acted as Annie's proxy and protector during the escalation that resulted in Annie's final "sic semper lupanis" text.
+
+- Dan attempted to engage him on geopolitical topics (Israel/Palestine) to derail the hostility, but Tuquick remained focused on the attack.
+
+> **REVISED [2026-07-20]:** A separate NotebookLM-style podcast dramatization
+
+> of the same message logs (see
+
+> [[raw/self/dox-md/end-fight-notebooklm-podcast-transcript.md]]) supplies a
+
+> more granular account than the summary above and revises the "remained
+
+> focused on the attack" characterization — Tuquick's hostility broke down
+
+> *within the same May 31 exchange*, not only at the later June 15
+
+> defection. The trigger for the escalation was mundane: Dan had dropped a
+
+> blue folder containing drugs Annie had requested into a mailbox for her;
+
+> moments after she retrieved it, Tuquick — using an unknown number in the
+
+> group chat — opened a roughly two-hour barrage of slurs, threats, and a
+
+> demand to meet in person. **Five days earlier (~May 26, 2026), per the
+
+> same account, Tuquick had spent three hours harassing
+
+> [[wiki/people/suzanne-frank|Suzanne Frank]] by phone** — repeated calls,
+
+> the same insults and aggressive script he later used on Dan, and
+
+> mentioning Annie by name several times; when Dan raised the incident with
+
+> Annie afterward, she declined to explain or intervene. See
+
+> [[wiki/people/suzanne-frank]] for the standalone fact.
+
+>
+
+> Dan's counter-strategy, per the podcast's read of the logs, was
+
+> deliberate absurdist derailment rather than defense or silence: ALL-CAPS
+
+> non sequiturs ("TRANS RIGHTS ARE HUMAN RIGHTS"), a tangent on Carthaginian
+
+> mercenary geography, a review of his Spotify Discover Weekly, and the
+
+> blunt question "Israel: Good or bad?" — followed, when Tuquick reacted,
+
+> by "I'm kind of autistic as fuck and really not embarrassed to ask you if
+
+> you support the genocidal nation-state or not." Tuquick's hostility broke
+
+> partway through: he laughed at a crude line from Dan ("holy shit" plus
+
+> laughing emoji), then laughed again at the Israel non sequitur, and by
+
+> the end extended what the podcast frames as a de-escalation handshake —
+
+> "no hard feelings towards you" — a full two weeks before the June 15
+
+> defection already documented below.
+
+>
+
+> Two false claims from Annie inside the same window are also newly
+
+> documented: a claim that Tuquick had broken her finger (debunked in the
+
+> same thread by Tuquick himself — "Her finger isn't broken" — undercutting
+
+> her own implied-abuse framing), and, at 23:54, the specific false
+
+> accusation — "I have recorded videos of me obviously passed out still
+
+> being touched" — that group-chat-closure.md's "rape narrative framing"
+
+> already names generically but without this verbatim or timestamp. Dan is
+
+> recorded explicitly separating this one claim from the surrounding
+
+> absurdism mid-conversation: "This is all a big joke except for that."
+
+> Before the escalation, Annie is also recorded texting Dan privately,
+
+> "Just do me a favor and disregard anything I say after this" — read as
+
+> advance signaling that she was about to perform for the group rather than
+
+> communicate with him directly.
+
+>
+
+> Tuquick's mid-fight de-escalation and the earlier mother-harassment call
+
+> are not corroborated anywhere else in the corpus yet — the podcast is an
+
+> AI dramatization of underlying logs the wiki has not independently
+
+> re-verified line-by-line, unlike the primary-recount discipline applied
+
+> elsewhere in the End Fight material (see
+
+> [[wiki/mind/synthesis/dan-annie-fallout-verdict]]). Treat as
+
+> plausible-and-specific rather than confirmed pending a raw-row check.
+
+**The October 2019 video as weapon.** Tuquick's most personal ammunition
+
+was the video of the [[wiki/mind/psychosexual/arrangement-history|October
+
+20, 2019 filmed MMF threesome]] with
+
+[[wiki/people/bryan-5088682461|Bryan]] — Dan's sole bisexual experience
+
+(oral only, per the operator), which Annie had evidently shared with him. He
+
+deployed it twice in the closure-night barrage: folded into a
+
+degradation-narrative at 23:07:06 ("38 year old junkie that lives with his
+
+mom … sucked a dick , for you to get drugs , ran out of money so he had to
+
+move back , just got fired") — a causally false framing, since the corpus
+
+dates the encounter to a filmed session inside the autumn-2019 paid-model
+
+window, not a drug transaction — and again at 23:17:25 as a direct taunt:
+
+"Or the video of her sucking dick and you're in the back ground watching
+
+🤣🤣🤣," alongside repeated "Wanna see the video" offers. Dan's in-thread
+
+response was to claim the material as work ("Oh cool you've seen our
+
+work! I love meeting fans"). The exchange documents both that intimate
+
+media from the arrangement era circulated to Annie's next partner and how
+
+it was repurposed as rhetorical humiliation.
+
+## Post-Closure Defection (June 15, 2026)
+
+On June 15, Dan sent an AI model fine-tuned on the raw text logs of their fight, along with a custom Spotify crate, to Tuquick and Annie. By this point, a severe reversal had occurred.
+
+Within two weeks of aggressively defending Annie, Tuquick defected and turned on her, independently arriving at the exact same conclusions Dan had documented:
+
+- **Verbatim:** "She’s a compulsive liar with a drug addiction"
+
+- **Verbatim:** "you can have her back something is seriously wrong with her in her thirties still texting her ex that had her fuck his friends because he can’t pay for drugs and it turns him on , and you’d never talk to me like this in person"
+
+- **Verbatim:** "You can have her back ? She’s no good 🤣 trauma bond to the cuck"
+
+This defection serves as an independent, third-party validation of the manipulation patterns (compulsive lying, trauma bonding) documented in the [[wiki/mind/concepts/attachment-model]]. Tuquick, despite his hostility toward Dan, experienced the exact same reality distortion from Annie and exited the dynamic almost immediately.
+
+## Corpus Dimensions
+
+| Metric | Value |
+
+|---|---|
+
+| Total messages (June 15-16 extension) | ~2,993 rows in combined export |
+
+| Key Pattern | Extreme hostility toward Dan (May 31) -> Extreme hostility toward Annie (June 15) |
+
+## Notes
+
+Jerel Coles (Tuquick) is not Eli. He is the relationship Annie left for, the catalyst and counterpart of the final [[wiki/timeline/events/group-chat-closure|group chat closure]] on June 1, and subsequently an independent witness to Annie's behavioral architecture on June 15. He is also confirmed (2026-08-09, operator statement) to be the July 2026 unnamed interloper — see [[wiki/people/the-unnamed-man]] and the canonical page [[wiki/people/jerel-coles]].
+
+---
+
+**Up:** [[wiki/people/index|People]]

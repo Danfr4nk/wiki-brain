@@ -1,0 +1,662 @@
+#!/usr/bin/env python3
+"""wiki-work — the one list of outstanding work, and it is mandatory.
+
+    bin/wiki-work            what is outstanding, highest priority first
+    bin/wiki-work scan       regenerate WORK.md from the repository
+    bin/wiki-work next       the top item, and the operation that clears it
+    bin/wiki-work check      one block for the gate banner; always exits 0
+
+WHY THIS EXISTS
+
+Outstanding work in this repository was scattered across six files and two
+frontmatter flags, and every one of them relied on somebody remembering to
+look. `operator-log.md` says "read this at the start of a session"; so does
+`LLM_HANDOFF.md`; `queue.md`, `connection-queue.md`, `synthesis-queue.md` and
+`BACKLOG.md` each hold their own backlog in their own shape. A session that read
+four of the six was indistinguishable from a session that read all six, and the
+failure was silent in both directions.
+
+Then the portal grew a question box (`sage/`), which made the problem
+load-bearing rather than untidy: somebody outside this repository can now ask a
+question and be told it will be answered, and nothing but a list nobody is
+obliged to read stands between that promise and the answer.
+
+So: one aggregator, one file, one required step. This tool does not replace the
+six sources — each stays the right place to *record* its own kind of work. It
+replaces the assumption that anyone will read them all.
+
+OBLIGATIONS, THEN STANDING WORK
+
+The distinction this tool draws is the one that makes a list drainable.
+
+An **obligation** has somebody or something waiting on it: a parked question, an
+answer the wiki is holding but has not absorbed, a synthesis whose premise moved
+under it, a page a human edited in the app that no pass has normalised. There
+are usually a handful. They are listed one by one, and draining them is what
+CLAUDE.md requires at the end of a session.
+
+**Standing work** is the campaign — the ingest queue, the mined edge and cluster
+candidates, the backlog. There are hundreds, they are worked top-down by choice
+rather than drained, and each already lives in a file built for it. Listing them
+individually here would produce a 130-row table that duplicates four other files
+and rots the moment one of them is edited. They are rolled up to one line each,
+with a count and a pointer.
+
+NOTHING HERE IS A SECOND SOURCE OF TRUTH
+
+Every item is a live condition in the repository, computed on every run. There is
+no ledger, no checkbox and no `done` command, because a list that can be marked
+complete independently of the thing it describes is a list that can lie — and the
+first lie it would tell is that a question somebody is waiting on has been
+answered. You discharge an item by changing what it points at: answer the
+question, integrate the staged answer, re-check the stale premise, strike the
+queue line. Then you record what you did in `log.md`, which is where this
+repository has always kept its history.
+
+LOUD, NEVER BLOCKING
+
+`check` always exits 0, and `bin/wiki-lint` prints its summary at the end of
+every run. An item outstanding since Tuesday must not block Thursday's typo fix —
+a gate that blocks unrelated work is a gate that gets an escape hatch, and an
+escape hatch is how a mandatory step stops being one.
+
+Pure stdlib. Reads files, writes WORK.md, shells to `bin/wiki-climb check` for
+staleness and to nothing else.
+"""
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+WIKI = ROOT / "wiki"
+SAGE = ROOT / "sage" / "questions"
+WORK = ROOT / "WORK.md"
+
+# The staging flags. `pending_ingest` is written by bin/wiki-gaps and holds an
+# operator's own answer; `sage_pending` is written by an ANSWER pass and holds a
+# finding derived from one. They are separate keys because the source tiers are
+# not the same thing — one is T0 first-person testimony, the other is synthesis
+# about it — and a page must never let the second be mistaken for the first.
+FLAG_OPERATOR = "pending_ingest"
+FLAG_SAGE = "sage_pending"
+
+# kind -> (priority, the CLAUDE.md operation that discharges it)
+#
+# Priority is the order a drain works in, and it is not negotiable per session: a
+# parked question outranks everything because somebody outside this repository is
+# waiting on it, and staged answers outrank mined candidates because the evidence
+# is already here and only the pass is missing.
+OBLIGATIONS = {
+    "gate":       (0, "fix the gate before anything else"),
+    "sage":       (1, "ANSWER"),
+    "close":      (2, "CLOSE"),
+    "sage-close": (2, "CLOSE"),
+    "stale":      (3, "LINT — re-read the premise, never bump the date"),
+    "edit":       (4, "LINT — normalise formatting and frontmatter"),
+    "skill":      (4, "LEARN — validate and promote, or leave it and say why"),
+}
+STANDING = {
+    "ingest":  (5, "INGEST"),
+    "connect": (6, "CONNECT"),
+    "climb":   (6, "CLIMB"),
+    "backlog": (7, "as the entry states"),
+}
+KINDS = dict(OBLIGATIONS, **STANDING)
+
+HEADER = [
+    "# WORK — the one list, and it is mandatory",
+    "",
+    "_Generated by `bin/wiki-work scan`. **Do not hand-edit** — it is rebuilt from",
+    "the repository on every scan, so an edit to it is erased. Every row is a live",
+    "condition, not a checkbox: an item leaves this list when the thing it points",
+    "at changes, and never before._",
+    "",
+    "**This file is a required session step, not a suggestion.** Per CLAUDE.md:",
+    "read `LLM_HANDOFF.md` and `operator-log.md`, run `bin/wiki-work`, do what the",
+    "operator actually asked for, then come back and drain the obligations from the",
+    "top. Anything still outstanding when the session ends goes into",
+    "`LLM_HANDOFF.md` with a reason — never silently.",
+    "",
+    "Nothing here blocks a commit. The gates print what is outstanding and pass",
+    "anyway; a question asked on Tuesday must not stand in the way of Thursday's",
+    "typo fix.",
+    "",
+]
+
+TABLE_HEAD = ["| P | Kind | What | Where | Since |", "|---|---|---|---|---|"]
+OBLIGATIONS_TITLE = "## Obligations"
+STANDING_TITLE = "## Standing work"
+
+
+def read(path):
+    return path.read_text(encoding="utf-8", errors="replace")
+
+
+def flatten(text):
+    """One line, links unwrapped, safe to put in a markdown table cell."""
+    s = re.sub(r"\[\[[^\]|]+\|([^\]]+)\]\]", r"\1", text)
+    s = re.sub(r"\[\[([^\]]+)\]\]", lambda m: m.group(1).rstrip("/").split("/")[-1], s)
+    s = re.sub(r"^\s*(?:[-*]|\d+\.)\s+", "", s)
+    s = re.sub(r"^\s*\[[ xX]\]\s*", "", s)
+    s = re.sub(r"[*_`]", "", s)
+    s = s.replace("|", "\\|")
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def clip(s, n=92):
+    return s if len(s) <= n else s[: n - 1].rstrip() + "…"
+
+
+def field(text, name):
+    m = re.search(r"^%s:[ \t]*(.*)$" % re.escape(name), text, re.M)
+    return m.group(1).strip().strip("\"'") if m else ""
+
+
+def frontmatter(text):
+    """The leading `---` block, or "" when the file has none."""
+    if not text.startswith("---"):
+        return ""
+    end = text.find("\n---", 3)
+    return text[4:end] if end != -1 else ""
+
+
+def rel(path):
+    return str(path.relative_to(ROOT))
+
+
+class Item:
+    """One live condition in the repository."""
+
+    def __init__(self, kind, what, where, since="", detail=""):
+        self.kind = kind
+        self.what = what
+        self.where = where
+        self.since = since or ""
+        self.detail = detail
+        self.priority, self.operation = KINDS[kind]
+
+    def row(self):
+        return "| %d | %s | %s | `%s` | %s |" % (
+            self.priority, self.kind, clip(self.what), self.where, self.since or "—")
+
+    def sort_key(self):
+        # Oldest first inside a priority band: the thing that has been waiting
+        # longest is the thing most likely to have been forgotten.
+        return (self.priority, self.since or "9999", self.what)
+
+
+# ---------------------------------------------------------------------------
+# obligations
+#
+# Each detector returns a list of Item and swallows its own failures: this tool
+# runs inside the lint gate, and one unreadable optional file must never take the
+# gate down with it.
+
+
+def find_sage():
+    """Questions parked by the portal and not yet answered."""
+    if not SAGE.is_dir():
+        return []
+    items = []
+    for path in sorted(SAGE.glob("*.md")):
+        text = read(path)
+        if (field(text, "status") or "pending") != "pending":
+            continue
+        asker = field(text, "asker")
+        asked = (field(text, "asked") or "")[:10]
+        body = text.split("## Question", 1)[-1].split("\n## ", 1)[0]
+        gist = flatten(next((ln for ln in body.splitlines() if ln.strip()), path.stem))
+        items.append(Item(
+            "sage",
+            "%s%s" % (gist, " — asked by %s" % asker if asker else " — unsigned"),
+            rel(path), asked,
+            detail="Answer it per CLAUDE.md's ANSWER section: cite every claim, quote "
+                   "the record directly, and say where it cuts the other way.",
+        ))
+    return items
+
+
+def find_staged(flag, kind):
+    """Pages carrying a staging flag: an answer the wiki holds but has not absorbed."""
+    if not WIKI.is_dir():
+        return []
+    items = []
+    for path in sorted(WIKI.rglob("*.md")):
+        when = field(frontmatter(read(path)), flag)
+        if not when:
+            continue
+        slug = rel(path)[len("wiki/"):-len(".md")]
+        items.append(Item(
+            kind, "staged answer on %s, not integrated" % slug, rel(path), when,
+            detail="Integrate it into the argument, cascade into every page that "
+                   "inherited the gap, then clear the flag.",
+        ))
+    return items
+
+
+def find_failing_gates():
+    """A gate that is red, which outranks everything else on this list.
+
+    This detector exists because of a specific incident and would have caught it
+    on the first run after it happened. On 2026-08-21 a portal save on
+    `wiki/people/annie-ulmer.md` was made from a snapshot of the 08-13 page and
+    written back over three later passes, deleting ~30KB of body prose, the whole
+    infobox, and the type and claim of all 56 typed edges. `bin/wiki-connect
+    check` caught it immediately and failed with 70 errors — and sat red on
+    `main`, because nothing obliged anyone to run it and nothing surfaced the
+    result if they did not.
+
+    `bin/wiki-lint` is deliberately not run here: it is this tool's usual caller,
+    and checking it would recurse. Its own exit code is the thing a session sees
+    anyway.
+    """
+    items = []
+    for name, why in (("wiki-connect", "typed edges are missing a type or a claim"),
+                      ("wiki-climb", "a synthesizes: block does not resolve"),
+                      ("wiki-lessons", "a skill is malformed, unrouted or unrecorded"),
+                      ("wiki-skills", "the capability registry, its projection and its page disagree")):
+        tool = ROOT / "bin" / name
+        if not tool.exists():
+            continue
+        try:
+            done = subprocess.run([sys.executable, str(tool), "check"], cwd=str(ROOT),
+                                  capture_output=True, text=True, timeout=180)
+        except (OSError, subprocess.SubprocessError):
+            continue
+        if done.returncode == 0:
+            continue
+        n = sum(1 for ln in done.stdout.splitlines() if ln.startswith("ERROR"))
+        items.append(Item(
+            "gate", "bin/%s check is failing — %d error(s), %s" % (name, n, why),
+            "bin/%s" % name,
+            detail="A red gate blocks every commit in this repository, so it is the "
+                   "only thing on this list that stops other work. Run it and read the "
+                   "errors; a large sudden count usually means a page lost content "
+                   "rather than that many pages went wrong at once — check `git log` on "
+                   "the named page before rewriting anything by hand.",
+        ))
+    return items
+
+
+def find_skill_candidates():
+    """Lessons captured in `skills/INBOX.md` that no pass has validated.
+
+    An inbox candidate is the same shape as a staged answer: the evidence is
+    already in the repository and only the pass that acts on it is missing. It
+    is listed here because `skills/` shipped on 2026-08-30 as a section nothing
+    read — the README declared mandatory session behavior that `CLAUDE.md` never
+    routed anyone to — and an unread inbox is how a corpus of instructions
+    accumulates entries that were never tested against a second reader.
+
+    Deliberately NOT an error anywhere: PROTOCOL.md §3 is explicit that a
+    candidate promoted before its evidence arrives is worse than one left in the
+    inbox, because the index vouches for it. So this surfaces the candidate and
+    says so; it never pushes anyone to promote it.
+    """
+    # Derived from ROOT at call time, not frozen at import: the tests repoint
+    # ROOT at a temp tree, and a detector reading past it reports on the wrong
+    # repository.
+    inbox = ROOT / "skills" / "INBOX.md"
+    if not inbox.is_file():
+        return []
+    text = read(inbox)
+    body = re.split(r"^##\s+Seed candidates\s*$", text, maxsplit=1, flags=re.M)
+    body = body[1] if len(body) > 1 else text
+    items = []
+    for block in re.split(r"^###\s+", body, flags=re.M)[1:]:
+        head = block.splitlines()[0].strip()
+        m = re.match(r"^(\d{4}-\d{2}-\d{2})\s*[\u2014-]\s*(.+)$", head)
+        if not m:
+            continue
+        status = re.search(r"\*\*Status:\*\*\s*([A-Za-z |]+)", block)
+        value = (status.group(1).strip().lower() if status else "")
+        value = value.split("|")[0].strip() if "|" in value else value
+        if value not in ("inbox", "provisional"):
+            continue
+        items.append(Item(
+            "skill", "unvalidated skill candidate — %s" % flatten(m.group(2)),
+            rel(inbox), m.group(1),
+            detail="Promote it only when it has explained the same failure twice, a "
+                   "command validates it, or a governing spec already implies it "
+                   "(skills/PROTOCOL.md \u00a73). Otherwise leave it in the inbox and "
+                   "record what evidence is still missing \u2014 an instruction promoted "
+                   "early is worse than one still parked, because the index vouches "
+                   "for it. `bin/wiki-lessons next` lists these.",
+        ))
+    return items
+
+
+def find_stale():
+    """Syntheses whose premises moved after them.
+
+    Shelled to `bin/wiki-climb check` rather than reimplemented. Two
+    implementations of staleness would be two chances to disagree about which
+    pages are stale, and the wrong answer here is the move CLAUDE.md calls the
+    one that corrupts the system quietly. The `STALE ` sentinel in that tool's
+    warning lines is load-bearing — see the comment beside it there.
+    """
+    climb = ROOT / "bin" / "wiki-climb"
+    if not climb.exists():
+        return []
+    try:
+        out = subprocess.run([sys.executable, str(climb), "check"], cwd=str(ROOT),
+                             capture_output=True, text=True, timeout=180).stdout
+    except (OSError, subprocess.SubprocessError):
+        return []
+    items = []
+    for line in out.splitlines():
+        m = re.match(r"^warning STALE (\S+) \(([\d-]+)\) reasons from (\S+) \(([\d-]+)\)", line)
+        if not m:
+            continue
+        page, page_date, premise, premise_date = m.groups()
+        items.append(Item(
+            "stale", "premise %s moved %s, after this page's %s" % (premise, premise_date, page_date),
+            page, premise_date,
+            detail="Re-read what changed in the premise and decide whether the "
+                   "conclusion survives. Bumping the date without doing that is the "
+                   "one move CLAUDE.md forbids outright.",
+        ))
+    return items
+
+
+def find_portal_edits():
+    """Pages edited in the app since the last lint pass swept the repository.
+
+    A portal edit is authoritative content written by a human in a hurry, and
+    CLAUDE.md's standing instruction is to normalise its formatting and
+    frontmatter on the next pass. LINT is the operation that does that sweep, so
+    an edit older than the newest `lint` entry in `log.md` has had its pass and is
+    not listed. That is a heuristic, and it is the honest one available: the
+    alternative is showing six edits from July 2026 as outstanding forever because
+    nothing ever recorded the sweeps that plainly happened.
+    """
+    log = ROOT / "log.md"
+    if not log.exists():
+        return []
+    text = read(log)
+    lints = re.findall(r"^## \[(\d{4}-\d\d-\d\d)\] [\w+]*lint", text, re.M | re.I)
+    swept = max(lints) if lints else ""
+    items = []
+    for when, page in re.findall(
+            r"^## \[(\d{4}-\d\d-\d\d)\] edit \| [^|]+\| human edit via app: (\S+)", text, re.M):
+        if when <= swept:
+            continue
+        items.append(Item(
+            "edit", "portal edit to %s — normalise formatting and frontmatter" % page,
+            page, when,
+            detail="Treat the content as authoritative; only the formatting and "
+                   "frontmatter need the pass.",
+        ))
+    return items
+
+
+# ---------------------------------------------------------------------------
+# standing work
+#
+# Counted, never enumerated. Each of these files is the right place to read the
+# work itself; this is only the reminder that it is there and how much of it.
+
+
+def count_queue():
+    path = ROOT / "queue.md"
+    if not path.exists():
+        return 0, []
+    open_items = [flatten(ln) for ln in read(path).splitlines()
+                  if re.match(r"^\s*-\s*\[ \]\s*\S", ln)]
+    return len(open_items), open_items
+
+
+def count_connection_queue():
+    """Mined edge pairs nobody has typed or rejected yet."""
+    path = ROOT / "connection-queue.md"
+    if not path.exists():
+        return 0, []
+    open_items, current, worked = [], None, False
+
+    def flush():
+        if current and not worked:
+            open_items.append(current)
+
+    for line in read(path).splitlines():
+        if line.startswith("## "):
+            flush()
+            current = flatten(line[3:])
+            worked = bool(re.search(r"\((?:DONE|RETIRED|CLIMBED)\b", line, re.I))
+        elif current and not worked and re.match(r"^\s*(rejected:|-\s*(\[.\]\s*)?type:\s*\S)", line, re.I):
+            # A typed or rejected pair is finished; the blank template
+            # (`- [ ] type: ______`) is not, and reads as unfinished here.
+            if "______" not in line:
+                worked = True
+    flush()
+    return len(open_items), open_items
+
+
+def count_synthesis_queue():
+    """Scored clusters with nothing climbed or rejected against them.
+
+    The work items in this file are the rows of the scored table `bin/wiki-climb
+    candidates` writes — `| n | score | domains | members |` — and a row is
+    finished when it carries a `CLIMBED ->` or `REJECTED` verdict. The prose
+    around the table is commentary on climbs already taken, not queue entries,
+    which is why this reads rows and not headings.
+    """
+    path = ROOT / "synthesis-queue.md"
+    if not path.exists():
+        return 0, []
+    open_items = []
+    for line in read(path).splitlines():
+        m = re.match(r"^\|\s*(\d+)\s*\|\s*([\d.]+)\s*\|\s*([^|]+)\|\s*([^|]+)", line)
+        if not m:
+            continue
+        if re.search(r"\b(CLIMBED|REJECTED|RETIRED)\b", line):
+            continue
+        n, score, domains, members = m.groups()
+        open_items.append("cluster %s (score %s, %s): %s"
+                          % (n, score, domains.strip(), flatten(members)))
+    return len(open_items), open_items
+
+
+def count_backlog():
+    path = ROOT / "BACKLOG.md"
+    if not path.exists():
+        return 0, []
+    leads = [flatten(ln) for ln in read(path).splitlines() if re.match(r"^\s*-\s+\*\*", ln)]
+    return len(leads), leads
+
+
+STANDING_SOURCES = [
+    ("ingest", "queue.md", "sources ingested partially or not at all", count_queue),
+    ("connect", "connection-queue.md", "mined edge pairs, untyped and unrejected", count_connection_queue),
+    ("climb", "synthesis-queue.md", "clusters unclimbed and unrejected", count_synthesis_queue),
+    ("backlog", "BACKLOG.md", "standing campaign entries", count_backlog),
+]
+
+
+def standing():
+    out = []
+    for kind, where, what, counter in STANDING_SOURCES:
+        try:
+            n, examples = counter()
+        except Exception as exc:
+            print("wiki-work: could not read %s (%s)" % (where, exc), file=sys.stderr)
+            continue
+        if not n:
+            continue
+        item = Item(kind, "%d %s" % (n, what), where)
+        item.count = n
+        item.examples = examples[:3]
+        out.append(item)
+    out.sort(key=Item.sort_key)
+    return out
+
+
+OBLIGATION_DETECTORS = [
+    find_failing_gates,
+    find_sage,
+    lambda: find_staged(FLAG_OPERATOR, "close"),
+    lambda: find_staged(FLAG_SAGE, "sage-close"),
+    find_stale,
+    find_portal_edits,
+    find_skill_candidates,
+]
+
+
+def obligations():
+    items = []
+    for detector in OBLIGATION_DETECTORS:
+        try:
+            items.extend(detector())
+        except Exception as exc:  # a broken detector must not take the gate down
+            print("wiki-work: a detector failed (%s)" % exc, file=sys.stderr)
+    items.sort(key=Item.sort_key)
+    return items
+
+
+# ---------------------------------------------------------------------------
+# WORK.md
+
+
+def write_work(duties, standing_items):
+    out = list(HEADER)
+    out.append("%s (%d)" % (OBLIGATIONS_TITLE, len(duties)))
+    out.append("")
+    if duties:
+        out.append("Somebody or something is waiting on each of these. Drain from the top.")
+        out.append("")
+        out.append("Priority: **0** failing gate · **1** parked question · **2** staged answer ·")
+        out.append("**3** stale premise · **4** unnormalised portal edit.")
+        out.append("")
+        out.extend(TABLE_HEAD)
+        out.extend(i.row() for i in duties)
+    else:
+        out.append("None. No question is parked, no answer is staged, no premise has moved")
+        out.append("under a page that reasons from it, and every portal edit has had its pass.")
+    out += ["", "%s (%d)" % (STANDING_TITLE, sum(i.count for i in standing_items)), ""]
+    out.append("The campaign. Worked top-down by choice rather than drained, and each line")
+    out.append("below is a pointer — the file named is where the work itself is written, and")
+    out.append("the only place to strike an entry.")
+    out.append("")
+    if standing_items:
+        out.extend(["| P | Kind | Open | Where | What |", "|---|---|---|---|---|"])
+        for i in standing_items:
+            out.append("| %d | %s | %d | `%s` | %s |" % (
+                i.priority, i.kind, i.count, i.where, i.what.split(" ", 1)[1]))
+    else:
+        out.append("Every standing queue is empty.")
+    out.append("")
+    WORK.write_text("\n".join(out), encoding="utf-8")
+
+
+# ---------------------------------------------------------------------------
+# commands
+
+
+def cmd_list():
+    duties, standing_items = obligations(), standing()
+    if not duties:
+        print("wiki-work: no obligations outstanding.")
+    else:
+        print("wiki-work: %d obligation(s) — somebody is waiting on each of these\n" % len(duties))
+        band = None
+        for item in duties:
+            if item.priority != band:
+                band = item.priority
+                print("  [%d] %s" % (band, item.operation))
+            print("      %s" % clip(item.what, 100))
+            print("      %s%s" % (item.where, " · since %s" % item.since if item.since else ""))
+    if standing_items:
+        print("\n  standing work")
+        for item in standing_items:
+            print("      %-24s %s" % (item.where, item.what.split(" ", 1)[1] + ": %d" % item.count))
+    print("\n  bin/wiki-work next   the top item and how to clear it")
+    return 0
+
+
+def cmd_scan():
+    duties, standing_items = obligations(), standing()
+    write_work(duties, standing_items)
+    print("wiki-work: %d obligation(s), %d standing -> WORK.md"
+          % (len(duties), sum(i.count for i in standing_items)))
+    return 0
+
+
+def cmd_next():
+    duties, standing_items = obligations(), standing()
+    queue = duties or standing_items
+    if not queue:
+        print("wiki-work: nothing outstanding.")
+        return 0
+    item = queue[0]
+    print("wiki-work: next up\n")
+    print("  what        %s" % item.what)
+    print("  where       %s" % item.where)
+    if item.since:
+        print("  since       %s" % item.since)
+    print("  operation   %s" % item.operation)
+    print("  protocol    CLAUDE.md, the %s section" % item.operation.split(" ")[0])
+    if item.detail:
+        print("\n  %s" % item.detail)
+    if not duties:
+        print("\n  No obligations outstanding — this is standing work, so open the file and")
+        print("  choose. Examples at the top:")
+        for line in getattr(item, "examples", []):
+            print("      · %s" % clip(line, 92))
+    else:
+        print("\n  %d other obligation(s) behind it." % (len(duties) - 1))
+    print("\n  It leaves this list when %s changes. There is no way to mark it done." % item.where)
+    return 0
+
+
+def cmd_check():
+    """The gate banner. Prints, never fails — see the module docstring."""
+    duties, standing_items = obligations(), standing()
+    if not duties:
+        total = sum(i.count for i in standing_items)
+        print("wiki-work: no obligations outstanding (%d standing)." % total)
+        return 0
+    by_kind = {}
+    for item in duties:
+        by_kind[item.kind] = by_kind.get(item.kind, 0) + 1
+    breakdown = ", ".join("%d %s" % (n, k) for k, n in
+                          sorted(by_kind.items(), key=lambda kv: KINDS[kv[0]][0]))
+    print("OUTSTANDING WORK — %d obligation(s): %s" % (len(duties), breakdown))
+    for item in duties[:3]:
+        print("  [%d] %s  (%s)" % (item.priority, clip(item.what, 84), item.where))
+    if len(duties) > 3:
+        print("  … and %d more" % (len(duties) - 3))
+    print("  bin/wiki-work next   ·   advisory, never blocks a commit")
+    return 0
+
+
+USAGE = __doc__.split("WHY THIS EXISTS")[0].strip()
+
+
+def main(argv):
+    cmd = argv[0] if argv else "list"
+    if cmd in ("-h", "--help", "help"):
+        print(USAGE)
+        return 0
+    if cmd == "scan":
+        return cmd_scan()
+    if cmd == "next":
+        return cmd_next()
+    if cmd == "check":
+        return cmd_check()
+    if cmd in ("list", "ls"):
+        return cmd_list()
+    if cmd == "done":
+        # Named explicitly because it is the first thing anybody will reach for,
+        # and silence would read as "the command exists and did nothing".
+        print("wiki-work: there is no `done`. Every item is a live condition —")
+        print("  answer the question, integrate the staged answer, re-check the premise,")
+        print("  or strike the queue line, and the next scan drops it on its own.")
+        print("  Record what you did in log.md, which is where the history lives.")
+        return 2
+    print("wiki-work: unknown command %r\n" % cmd)
+    print(USAGE)
+    return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

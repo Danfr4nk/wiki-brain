@@ -1,0 +1,253 @@
+---
+
+domain: self
+
+page_type: period
+
+status: stable
+
+date_created: 2026-09-02
+
+date_modified: 2026-09-03
+
+knowledge: mixed
+
+date_range_start: 2025-01-05
+
+date_range_end: 2025-10-02
+
+title: "Twitter / X — 2025"
+
+sources:
+
+- "raw/self/twitter/archive.jsonl"
+
+- "raw/self/twitter/tweet-archive.xlsx"
+
+tags: [music-production, digital-footprint]
+
+connections:
+
+- page: wiki/self/twitter
+
+type: component-of
+
+claim: 'The 2025 originals are one year of the @danfrank public record filed under the twitter hub.'
+
+- page: wiki/self/twitter/2024
+
+type: follows
+
+claim: '2025 continues the @danfrank original-tweet record from 2024 without a break in the account.'
+
+- page: wiki/self/twitter/2026
+
+type: precedes
+
+claim: '2025 is the immediately previous year of originals before 2026 on the same account.'
+
+---
+
+# Twitter / X — 2025
+
+**Thirteen posts, and the year's finding is which eleven months are missing.**
+
+The account posts nine times in January and February, once on 27 February, and
+
+then **nothing at all until 2 October** — a single music post — and nothing
+
+after. 2025 is the emptiest year on the account since it opened.
+
+## The silence covers the founding of this project
+
+April 2025 is when Dan's documented AI turn begins: the ChatGPT session that
+
+[[wiki/self/concepts/chatgpt]] treats as the origin of the work, and the start of
+
+the sustained self-analysis that this wiki is the product of. **None of it is
+
+on this account.** The public record goes quiet in February and does not
+
+meaningfully return.
+
+This is the second time it has happened, and the pair is the point.
+
+[[wiki/self/twitter/2015]] records a five-month blackout across the most
+
+turbulent stretch of his adult life. 2025 is an eleven-month blackout across the
+
+most *generative* one. The feed is not a diary that reflects what is happening;
+
+**it goes quiet in both directions — under pressure and under absorption.**
+
+Anyone reading these nineteen pages as a life record needs that stated plainly:
+
+the two years in which most happened are the two years with least on them, and
+
+the correlation runs the wrong way for the naive reading.
+
+## What the eleven posts contain
+
+The January material is ordinary political commentary of a piece with 2024 —
+
+the Hegseth confirmation hearing (*"He weaseled his way out of answering
+
+everything. Democratic Senators offered few, if any questions of substance"*,
+
+14 January), Republicans *"pretending not to know what Q Anon is"* (16 January),
+
+and a genuinely puzzled post about opposition to conditioning foreign aid
+
+(5 January). On 1 February he posts four times about a plane crash in
+
+Philadelphia going uncovered — *"A plane fell out of the sky onto a residential
+
+neighborhood in a major city and…noting?"*, then *"Update: 3 hours later and
+
+still nothing"*, then tagging both papers. The media-monitoring reflex, intact
+
+and unchanged since Sandy.
+
+Two personal ones matter more than their length.
+
+**7 January**: *"My self-teaching piano lesson tonight is figuring out a bunch
+
+songs from criminally under-appreciated national treasure @NickLutsko."*
+
+[[wiki/self/twitter/2016]] records the inherited alto sax, clarinet and mandolin,
+
+and his own forecast that *"the amount of time I'm gonna spend becoming mediocre
+
+at them will be crzy."* Nine years later he is teaching himself piano, by ear,
+
+from a comedy musician's songs. The forecast was accurate about the activity and
+
+this page cannot say whether it was accurate about the outcome.
+
+**27 February**: *"Now that I have my title I'm ready to write my memoir 'Other
+
+Things, and Other Things Other than That'."*
+
+The **fourth** memoir-title joke in the archive — after *"GO READ A BOOK OR
+
+SOMETHING"* (2014) and the two of 2017. Four times in eleven years he has
+
+announced a title for an autobiography and written nothing. It is a joke every
+
+time, and it is the same joke, and the thing it is about is a book about
+
+himself. This corpus is what he built instead.
+
+## What would change this reading
+
+The blackout claim depends on 2025 being archived as completely as the export
+
+suggests, and 2016 is proof the export can drop rows. A live-scrape pass over
+
+March–September 2025 is the specific thing that would settle it, and it is worth
+
+running: eleven months missing from the most consequential year in the recent
+
+record is either a real finding or a serious hole, and nothing on this page can
+
+tell which.
+
+## Coverage
+
+| | |
+
+|---|---|
+
+| Originals on this page | 13 |
+
+| From operator spreadsheet | 13 |
+
+| From live X scrape | 0 |
+
+| Pure reposts | omitted by rule (no @danfrank quote text) |
+
+This page is the text archive. Every original and every quote-tweet with Dan's own text that has been retrieved for the year is below, oldest first. Pure reposts with no @danfrank quote content are omitted.
+
+## The record
+
+**2025-01-05 09:02:09 UTC** · [1875830132516245561](https://x.com/danfrank/status/1875830132516245561)
+
+*likes 0 · replies 0 · reposts 0*
+
+> This is one of the only takes that exists across the spectrum as a legitimate, ‘reasonable’ policy position that I truly can’t understand how or why anyone could possibly think this is a good idea.   It’s absolutely bizarre to actively oppose any conditioning for ANY foreign aid
+
+**2025-01-07 00:56:32 UTC** · [1876432696978940209](https://x.com/danfrank/status/1876432696978940209)
+
+*likes 9 · replies 1 · reposts 1*
+
+> My self-teaching piano lesson tonight is figuring out a bunch songs from criminally under-appreciated national treasure  @NickLutsko
+
+**2025-01-09 00:01:10 UTC** · [1877143539588452437](https://x.com/danfrank/status/1877143539588452437)
+
+*likes 4 · replies 1 · reposts 0*
+
+> Can we get an accuracy check on this from the man himself  @MCStrawberryCh
+
+**2025-01-14 19:36:59 UTC** · [1879251386418032686](https://x.com/danfrank/status/1879251386418032686)
+
+*likes 0 · replies 0 · reposts 0*
+
+> The Hegseth hearing was an all-around shit show. He weaseled his way out of answering everything. Democratic Senators offered few, if any questions of substance. Republicans used their time to grandstand about ‘woke DEI generals’  What a fucking disgrace lol
+
+**2025-01-14 19:39:46 UTC** · [1879252085788840182](https://x.com/danfrank/status/1879252085788840182)
+
+*likes 0 · replies 0 · reposts 0*
+
+> This is like a 5th grade level geography question. How the FUCK any adult, let alone a potential secdef, could answer this so badly is truly astonishing
+
+**2025-01-16 04:12:28 UTC** · [1879743497181311321](https://x.com/danfrank/status/1879743497181311321)
+
+*likes 0 · replies 0 · reposts 0*
+
+> The rich tradition of Republicans, pretending not to know what Q Anon is alive and well
+
+**2025-02-01 01:14:20 UTC** · [1885496873365963256](https://x.com/danfrank/status/1885496873365963256)
+
+*likes 0 · replies 0 · reposts 0*
+
+> I’m sorry but, come on - this is really funny.
+
+**2025-02-01 02:24:34 UTC** · [1885514551027806258](https://x.com/danfrank/status/1885514551027806258)
+
+*likes ? · replies 1 · reposts 0*
+
+> So NYT & WaPo still have zero coverage of the Philly crash story. Wild.
+
+**2025-02-01 06:24:55 UTC** · [1885575036670447963](https://x.com/danfrank/status/1885575036670447963)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Update: 3 hours later and still nothing.  A plane fell out of the  sky onto a residential neighborhood in a major city and…noting?
+
+**2025-02-01 06:27:11 UTC** · [1885575605502017987](https://x.com/danfrank/status/1885575605502017987)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Nothing?  @nyt   @washingtonpost
+
+**2025-02-19 02:16:55 UTC** · [1892035604835148239](https://x.com/danfrank/status/1892035604835148239)
+
+*likes 0 · replies 0 · reposts 0*
+
+> I can’t think of any other music that I was so stuck with and mesmerized by as a kid more than this    https:// youtu.be/qLrnkK2YEcE?si =NEk0E4v8ctbSyDLW …
+
+**2025-02-27 06:17:41 UTC** · [1894995298180833713](https://x.com/danfrank/status/1894995298180833713)
+
+*likes 2 · replies 0 · reposts 0*
+
+> Now that I have my title I’m ready to write my memoir “Other Things, and Other Things Other than That”
+
+**2025-10-02 05:37:07 UTC** · [1973623257216721405](https://x.com/danfrank/status/1973623257216721405)
+
+*likes 0 · replies 0 · reposts 0*
+
+> #𝕤𝕠𝕟𝕘𝕤2𝕕𝕚𝕖4  |||  Yeke Yeke - PEEKABO  |||
+
+---
+
+**Up:** [[wiki/self/index|Self]] › [[wiki/self/twitter|Twitter]] · **Previous:** [[wiki/self/twitter/2024|2024]] · **Next:** [[wiki/self/twitter/2026|2026]]

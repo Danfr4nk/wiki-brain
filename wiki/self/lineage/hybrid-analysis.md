@@ -1,0 +1,118 @@
+
+---
+domain: self
+page_type: synthesis
+knowledge: mixed
+status: active
+date_created: 2026-07-25
+date_modified: 2026-08-14
+sources:
+  - raw/self/ancestry/dna-reports/Ancestry Composition - 23andMe.pdf
+  - raw/self/ancestry/dna-reports/chromosome.pdf
+  - raw/self/ancestry/dna-reports/health.pdf
+  - raw/self/ancestry/extracted/Daniel Frank family tree.txt
+synthesizes:
+  - wiki/mind/synthesis/ancestral-dialectic
+  - wiki/self/ancestry
+  - wiki/self/lineage/23andme-genomics
+  - wiki/self/lineage/family-tree
+tags:
+  - family
+  - personality-profile
+connections:
+  - page: wiki/mind/synthesis/ancestral-dialectic
+    type: component-of
+    claim: "This page is the dialectic's evidentiary workings — where the genomic and documentary records are set against each other — and it flags its own conclusions as an interpretive frame rather than a clinical finding."
+  - page: wiki/self/ancestry
+    type: component-of
+    claim: "This analysis is one of three sub-reports under the ancestry hub, providing the cross-referenced correlation between the 23andMe genomic data and the documentary family tree."
+  - page: wiki/self/lineage/23andme-genomics
+    type: evidenced-by
+    claim: "The 23andMe ancestry composition, haplogroups, and Neanderthal data are one of the two evidentiary streams this page cross-references against the documentary family tree."
+  - page: wiki/self/lineage/family-tree
+    type: evidences
+    claim: "The 515-individual GEDCOM is the second evidentiary stream this page cross-references against the genomic data."
+---
+
+# Hybrid Lineage Analysis
+
+This page cross-references the 23andMe genomic data against the Ancestry.com documentary record to map the interaction between biological inheritance and cultural identity. It explicitly frames these intersections as an interpretive framework rather than clinical psychiatric findings.
+
+## Corroboration of DNA and Paper Records
+
+The intersection of genomic data and the GEDCOM family tree shows structural alignment at the macro level:
+
+| Metric | Documentary Record | 23andMe Result | Alignment |
+|---|---|---|---|
+| Ashkenazi Jewish | One fully-Jewish grandparent (Morley Jay Frank) = ~25% expected | 21.4% | Within normal recombination variance |
+| British & Irish | Maternal Gillingham/Lewellen/Shrum lines (English, Scots-Irish) | 55.8% | Higher than expected |
+| French & German | Maternal Shrum/Van Voorhis/Coldren lines (German, Dutch) | 22.2% | Lower than expected |
+| Sub-Saharan African | None documented | 0.2% (trace) | Anomalous |
+| Maternal haplogroup | Appalachian Protestant (expected: H, U, K, T, J, V) | R0 | Anomalous |
+| Paternal haplogroup | Ashkenazi Jewish (expected: J1, J2, E1b1b, R1b) | R-Z93 | Anomalous |
+
+### Where the Two Streams Agree
+
+1. **Dan is overwhelmingly European** — 99.7% European composition matches the documentary record of exclusively European ancestry.
+
+2. **The Ashkenazi signal is present and significant** — 21.4% Ashkenazi Jewish matches the known paternal Jewish immigrant line (David J. Frank from Russia, Sadie Harris from Austria).
+
+3. **The maternal lines are Northwestern European** — 78.3% Northwestern European matches the known maternal lines (Gillingham, Lewellen, Shrum, Van Voorhis, Coldren, Thomas, Conwell) that have been rooted in Pennsylvania and West Virginia since the 1700s.
+
+4. **The geographic concentration is real** — The GEDCOM shows 45 birth/death/residence instances in Pennsylvania, 5 in West Virginia, 4 in New York. The 23andMe ancestry timeline places the Ashkenazi ancestor 1–3 generations ago (consistent with David J. Frank and Sadie Harris as great-grandparents) and the British & Irish and French & German ancestors 1–4 generations ago (consistent with the maternal lines).
+
+5. **The Neanderthal percentage is a novel data point** — The 95th-percentile Neanderthal variant load is not accessible via paper genealogy and adds a genuinely new fact to the ancestry record.
+
+### Where the Two Streams Diverge
+
+1. **Ashkenazi deficit** — 21.4% vs. ~25% expected. This 3.6-point variance is within normal DNA recombination range (a grandparent typically contributes 18–32% of DNA) but could also indicate mixed ancestry in the Frank line.
+
+2. **British & Irish overperformance** — 55.8% vs. ~30% expected. This likely reflects 23andMe's reference panel classifying most German and Pennsylvania Dutch ancestry as "British & Irish" rather than "French & German."
+
+3. **French & German underperformance** — 22.2% vs. ~30% expected. The German ancestry documented in the Shrum, Van Voorhis, Coldren, and Whyel lines is being classified as "British & Irish" by 23andMe's algorithm.
+
+4. **Sub-Saharan African trace** — 0.2% with no documentary counterpart. May be statistical noise or a real ancestor 7–8 generations back.
+
+5. **Maternal haplogroup R0** — Unusual for an Appalachian Protestant line. May indicate a distant Jewish, Middle Eastern, or Central Asian ancestor on the maternal line.
+
+6. **Paternal haplogroup R-Z93** — More common in Central/South Asia than typical Ashkenazi populations. May indicate the Levite lineage, Central Asian ancestry, or a non-paternity event.
+
+## Novel Contributions of Genomic Data
+
+The genomic reports introduce data points inaccessible via paper records:
+
+1. **Neanderthal variant load** — Dan is in the 95th percentile of 23andMe customers for Neanderthal-introgressed variants. This is a biological fact that paper genealogy cannot provide.
+
+2. **Haplogroup predictions** — The maternal R0 and paternal R-Z93 haplogroups add a deep-time layer (thousands of years) that the documentary record (which extends back only 5–7 generations) cannot reach.
+
+3. **Health predispositions** — The 14 health predisposition reports, 46+ carrier status reports, 8 wellness reports, and 37+ trait reports provide biological data that the documentary record does not contain.
+
+4. **Ancestry timeline** — 23andMe estimates the number of generations back to the most recent ancestor from each population, providing an independent check on the documentary record.
+
+5. **Chromosome painting** — The visual distribution of ancestry across all 22 autosomes plus X and Y chromosomes provides a granular look at ancestry assignment, though no raw SNPs are available in the PDF export.
+
+## Speculative Interpretations
+
+This analysis is fundamentally interpretive. The integration of these two datasets — the Ashkenazi signal and the Appalachian roots — has been conceptualized as an [[wiki/mind/synthesis/ancestral-dialectic]], contrasting "Ashkenazi hypervigilance" with "Appalachian numbness." It is crucial to note that while this forms a coherent psychological and biographical reading of the data, it is a speculative narrative frame and not a substantiated clinical or scientific conclusion.
+
+The haplogroup anomalies (maternal R0, paternal R-Z93) raise questions that neither dataset answers definitively:
+
+- **R0 on the maternal line** may indicate a distant Jewish ancestor entering through the Van Voorhis Dutch colonial line, the Conwell Appalachian line, or the Thomas West Virginia line. It may also reflect the deep-time distribution of R0 across Europe, or an undocumented adoption/non-paternity event.
+
+- **R-Z93 on the paternal line** may indicate the Ashkenazi Levite lineage, Central Asian ancestry predating the Ashkenazi bottleneck, or a non-paternity event in the Frank line within the last few generations.
+
+- **The 0.2% Sub-Saharan African trace** may be statistical noise at the detection threshold, or it may indicate a single ancestor 7–8 generations back on any line. Without chromosome location and segment size data, this cannot be resolved.
+
+## Gaps
+
+- Clinical validation of the speculative links between Neanderthal variants and behavioral traits like mood disorders or addiction.
+- Further granular reconciliation of the chromosome painting segments with specific ancestors in the GEDCOM tree.
+- The Harris paternal line is completely undocumented beyond Sadie Harris herself — research into Czech immigration records could resolve the 12.5% of Dan's DNA from this line.
+- The maternal R0 haplogroup's origin is unexplained — research into the Conwell, Zearly, and Amelia lines could resolve this.
+- The paternal R-Z93 haplogroup's origin is unexplained — Y-DNA testing (e.g., FamilyTreeDNA) could confirm or refine the 23andMe prediction.
+- The 0.2% Sub-Saharan African trace cannot be resolved without chromosome location and segment size data.
+- Two health predisposition results (Age-Related Macular Degeneration, Hereditary Thrombophilia) were not fully extracted from the PDF.
+- The Prostate Cancer (BRCA1/BRCA2) report is locked behind an incomplete questionnaire.
+- Inverse connections to this page from [[wiki/self/ancestry]], [[wiki/self/lineage/23andme-genomics]], and [[wiki/self/lineage/family-tree]] need to be added to those pages' frontmatter.
+
+

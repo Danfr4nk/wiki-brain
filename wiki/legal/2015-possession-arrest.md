@@ -1,0 +1,320 @@
+
+---
+domain: legal
+page_type: event
+title: "The 2015 Possession Arrest"
+aliases: ["the real arrest", "the lemon run", "the residue bag arrest", "February 2015 arrest"]
+status: closed
+knowledge: mixed
+importance: high
+date_created: 2026-08-03
+date_modified: 2026-09-03
+date_range_start: 2015-02-17
+date_range_end: 2016-02-17
+sources:
+  - raw/legal/documents/2015-02_fayette-court-blotter-possession-charges.md
+  - raw/legal/captures/2026-08-02_200741_the-arrest-the-real-one.md
+  - raw/people/captures/2026-08-27_223406_gap-alexis-armel.md
+  - raw/self/dox-scan/all_imessages_complete_dump.txt
+  - raw/self/message-csv/imessage_ALL_both_all_now.csv
+tags: [legal, addiction-recovery, family, uniontown-era]
+connections:
+  - page: wiki/health/cocaine
+    type: evidences
+    claim: "This arrest is cocaine's only legal consequence in the record, and the diagnostic detail is the quantity: a bag corner saved for a 10% bump produced a Class B count and a DA policy fight, out of the smallest amount documented anywhere in the corpus."
+  - page: wiki/places/155-virginia-ave
+    type: contradicts
+    claim: "The blotter fixes the arrest to February 2015 while that page dates the move here to January 2015, which is incompatible with Dan's account of the night happening before the move and while Alexis was still being concealed at 337."
+  - page: wiki/people/christo-coan
+    type: contradicts
+    claim: "His October 2017 thread carries Dan saying 'I already got a DUI', which cannot be reconciled with this page's account of an arrest that produced no DUI and with the operator's statement that this was his first and only real arrest."
+  - page: wiki/mind/synthesis/the-embedded-objective
+    type: evidences
+    claim: "The corpus's densest record of acquiring an assigned outcome and its thinnest record of serving one: five dated contemporaneous events for the ARD deal against a single retrospective clause for the six months of probation."
+  - page: wiki/timeline/events/uniontown-hospital-vape-alarm
+    type: parallels
+    claim: "The 2018 hospital summons was filed before the same magistrate, Michael M. Metros of MDJ-14-1-01 — so the blotter is no longer his only appearance in the corpus, and the magisterial district, not the offence, is what Dan's two documented charging events have in common."
+  - page: wiki/legal/2015-retail-theft-arrest
+    type: precedes
+    claim: "The Combos retail theft happened a few weeks after this and is a separate legal matter; until 2026-08-03 the wiki carried the two as one event, attributing this arrest's lawyer, ARD and hearing to a snack-food theft."
+  - page: wiki/people/suzanne-frank
+    type: caused-by
+    claim: "The 2am request for lemons, sent from a pool hall in the thick of her gambling addiction, is the proximate cause of the only real arrest in Dan's record — and the clearest single instance of her habit generating errands that carried his risk."
+  - page: wiki/people/jack-connor
+    type: caused-by
+    claim: "The DA's standing policy denied ARD to anyone charged with a cocaine misdemeanor, residue or not, so the diversion that kept Dan's record clean is entirely attributable to his lawyer defeating a categorical bar."
+  - page: wiki/people/lucy
+    type: co-occurs
+    claim: "Suz's elderly blind Jack Russell was in Dan's arms at the moment of arrest and was returned to Suz by the troopers en route to the barracks, which is why the police detoured to the pool hall."
+  - page: wiki/people/alexis-armel
+    type: co-occurs
+    claim: "The arrest is dated by Alexis being secretly housed at 337 Saratoga at the time — a roughly four-month concealment that places the event before the November 2015 bond switch."
+  - page: wiki/mind/concepts/acquisition-drive
+    type: evidences
+    claim: "The diagnostic detail is that the drive was running on almost nothing: a bag corner saved for a 10% bump and one hitter's worth of weed, carried on a 3am errand for no reason, which is what produced a felony-adjacent charge out of the smallest quantity in the record."
+  - page: wiki/mind/synthesis/vertical-authority-skepticism
+    type: evidences
+    claim: "The troopers told Suz they knew something was wrong because Dan was unnaturally polite and accommodating — deference read as a tell, which is the concrete origin of a lifelong refusal to perform compliance for authority."
+  - page: wiki/people/rick-frank
+    type: co-occurs
+    claim: "The stop happened in downtown Uniontown within sight of Rick's store, and the February 2016 hearing produced the sharpest snapshot of the post-2005 family geometry — Rick assuming he would be unwelcome, Suz playing the connected parent."
+  - page: wiki/people/fran-coldren
+    type: co-occurs
+    claim: "The car Dan was driving was Fran's — uninspected, expired registration, bald tires, unused since she stopped driving — and its condition is what gave the troopers the impound that produced the inventory search."
+  - page: wiki/self/twitter/2015
+    type: co-occurs
+    claim: 'The public account goes dark from 2015-07-16 to 2015-12-04, five months spanning this arrest and the concurrent housing arrangement, in a year with no archival gap to explain it.'
+---
+
+# The 2015 Possession Arrest
+
+Dan's only real arrest happened in **February 2015**, in downtown Uniontown at
+roughly 3am, and it was for drug possession — not for stealing snacks. He
+was pulled over by the Pennsylvania State Police returning from delivering
+lemons to his mother at a pool hall, driving
+[[wiki/people/fran-coldren|Fran's]] disused car with an expired
+registration and bald tires, carrying his mother's blind dog and a
+narcotics pack containing, by his own account, the smallest quantity of
+drugs he could possibly have had. The car was impounded, the impound
+produced an inventory search, and the inventory search produced three
+charges: possession of a controlled substance for **the residue in an empty
+cocaine bag**, possession of a small amount of marijuana, and possession of
+drug paraphernalia for the one-hitter. The substance that produced the
+load-bearing count has its own page at [[wiki/health/cocaine]].
+
+This page exists because the wiki had the event wrong for three weeks. The
+lawyer, the ARD program, the Judge Wagner hearing and the family drama
+around it were all filed under
+[[wiki/legal/2015-retail-theft-arrest|the Combos incident]] — a genuinely
+separate retail theft that happened **a few weeks later**. Both are real.
+Only this one was an arrest.
+
+## The night
+
+The sequence is a chain of small decisions, each individually trivial,
+which is what makes it the corpus's cleanest illustration of
+[[wiki/mind/concepts/acquisition-drive|the acquisition drive]] running at
+almost zero stakes. At around 2am [[wiki/people/suzanne-frank|Suz]] — then,
+in Dan's phrasing, in the thick of her gambling addiction — texted from
+KJ's, better known as Anytime Billiards on Route 51, asking him to bring
+lemons so she could make lemon drops. He went. He took the car that was
+available, which was Fran's, unused since she stopped driving and unsafe on
+at least three counts. He took [[wiki/people/lucy|Lucy]], Suz's elderly and
+fully blind Jack Russell terrier. And he took the narcotics pack, which he
+flags in his own telling as inexplicable: he had no substances that night
+beyond a saved corner of a plastic bag good for "a 10% bump" and enough
+marijuana for perhaps one hitter. His summary of the setup is not
+self-flattering — "In other words, I was asking for it."
+
+The stop happened between his father's store and the import shop Romeo's
+across the street, in front of a hairdresser. Two details from it matter
+beyond the anecdote.
+
+**The politeness was the tell.** The troopers later told Suz that what
+alerted them was how *unnaturally polite and accommodating* Dan was being.
+This is the corpus's earliest documented instance of deference itself
+reading as guilt, and it is the concrete floor under
+[[wiki/mind/synthesis/vertical-authority-skepticism|his refusal to perform
+compliance]] — the lesson available from that night is not that authority
+is dangerous when resisted but that it is unsatisfiable when accommodated.
+
+**No sobriety testing was performed.** Dan states plainly that he was never
+asked to do field sobriety tests or a roadside breath test. This
+contradicts the account the wiki has carried since 2026-07-13; see the
+contradiction block below.
+
+Denied consent, the troopers went around him: the car was not in his name,
+so they sought permission from its custodian. That produced what Dan calls
+one of the stupidest and funniest conversations of his life — Suz, fully
+aware he was pulled over, repeating "well just let them search it" while he
+tried to remind her that this was the opposite of what she had taught him.
+Consent never came. The search happened anyway, through a route that
+required no consent at all: the car was declared undriveable, then declared
+badly parked — by roughly three feet — and therefore impounded, and an
+impounded vehicle is inventoried as a matter of policy.
+
+The arrest itself came after he had been released. Told to take the dog and
+go, Dan did not hurry, knowing what was in the car. Fewer than ten steps
+away he heard a trooper ask "Hey how do you turn this on?", turned around,
+and was cuffed with the dog still in his arms.
+
+En route to the barracks the troopers detoured to the pool hall — partly, Dan
+believes, to verify the improbable claim that his mother was out at 4am on a
+weeknight, and partly to hand off Lucy.
+
+## The charges, and why the disposition was not routine
+
+| Charge, as printed | Basis, per Dan |
+|---|---|
+| Possession of a controlled substance | **Residue** in an empty cocaine bag |
+| Possession of a small amount of marijuana | Roughly one hitter's worth |
+| Possession of drug paraphernalia | The one-hitter |
+
+The three charges are **confirmed by primary documentation**: a Fayette/Greene
+county newspaper court blotter covering filings from February 17–19 lists
+"Daniel Gillingham Frank, 26, of Uniontown … charged with possession of a
+controlled substance, possession of a small amount of marijuana and possession
+of drug paraphernalia," under Magisterial District Judge **Michael Metros**.
+The charge list matches Dan's account exactly, ten years after the fact and
+with no access to the clipping while telling it.
+
+The third row is the one that made the case serious. The Fayette County
+District Attorney of the period held a categorical policy of refusing ARD —
+Pennsylvania's first-offender diversion track — to anyone charged with a
+cocaine or heroin misdemeanor, **residue or not**. On the face of it Dan was
+ineligible for the outcome he ultimately received.
+
+That he got it anyway is attributable to one person.
+[[wiki/people/jack-connor|Jack Connor]] defeated the bar, at a cost Dan puts
+at several thousand dollars, and Dan's assessment is unqualified in a corpus
+where almost nothing is: "my fucking absolute LEGEND of a lawyer." The
+contemporaneous message record independently describes the same manoeuvring
+without naming what it was against — "Jack had to do some wheeling and
+dealing to make it happen."
+
+## Case timeline
+
+The arrest and the charge filing are documented; everything from December 2015
+onward is reconstructed from the message archive, which begins November 28,
+2015 and therefore postdates the arrest by nine months.
+
+| Date | Event |
+|---|---|
+| On or shortly before Feb 17, 2015 | Arrest (PA State Police, downtown Uniontown, ~3am) |
+| Feb 17–19, 2015 | Charges filed before Magisterial District Judge Michael Metros; printed in the county court blotter |
+| Dec 9–11, 2015 | Barracks trips to replace case paperwork the barracks had lost; ARD application filed |
+| Jan 20, 2016 | ARD office visit to check application status |
+| Jan 25, 2016 | First fine installment paid ("$70 more to pay a month from now") |
+| Feb 17, 2016 | Hearing before Judge Wagner — ARD approved; remaining fines paid |
+| ~Aug 2016 | Expected end of six-month probation → expungement eligibility |
+
+**The dating, settled by primary evidence.** The blotter covers charges filed
+in Fayette and Greene counties **between February 17 and February 19**, and it
+gives Dan's age as **26**. Born November 1, 1988, he is 26 only between
+November 2014 and November 2015 — which fixes the filing to **February 2015**
+and the arrest to on or shortly before February 17, 2015.
+
+> **REVISED [2026-08-03] — a wiki inference was wrong and the operator's
+> capture was right.** When this page was written earlier the same day, it
+> judged the capture's opening line ("It's sometime in early 2015") to be
+> "almost certainly too early," on the reasoning that a February arrest would
+> leave a nine-month gap before the December 2015 barracks trips. That
+> reasoning is now falsified by the clipping. A twelve-month interval from
+> arrest to ARD admission is ordinary in Pennsylvania — magisterial filing,
+> preliminary hearing, formal arraignment, then the ARD application in December
+> 2015 and admission in February 2016 — so the gap the inference treated as
+> implausible is simply what the process takes. The lesson is recorded rather
+> than quietly patched: the capture's own dating was accurate to the month, and
+> the corpus's correction instinct, calibrated on the Fran captures being off by
+> exactly one year, over-fired here.
+
+The February 2015 date is independently consistent with the one constraint the
+capture supplies from inside the story: [[wiki/people/alexis-armel|Alexis]] was
+secretly living at 337 Saratoga at the time, hidden for roughly four months
+after being thrown out, which places the night well before the November 2015
+switch to [[wiki/people/annie-ulmer|Annie]]
+([[wiki/mind/synthesis/bond-switch-2015]]).
+
+> **CONTRADICTION [2026-08-03] — the February date collides with the 155
+> Virginia Ave timeline.** The capture places the arrest firmly *before* the
+> move to [[wiki/places/155-virginia-ave|155 Virginia Ave]] — Alexis was still
+> being hidden at 337 Saratoga, "before we made it to her 155 virginia ave
+> house where she let me and lex live together." But that page dates the
+> residence from **January 2015**, a month before the blotter filing. One of
+> the three is wrong: the 155 start date, the capture's sequencing, or the
+> reading that the concealment ended at the move. The most economical
+> reconciliation is that the roughly four-month concealment ran to about
+> January 2015 and the arrest fell just *after* the move rather than just
+> before it, which would make the capture off by weeks rather than by the era
+> — but the blotter only fixes the arrest, not the move, and this page does not
+> pick a winner. Resolving it needs the lease or a dated message from the
+> move.
+
+> **A second, differently-dated account complicates rather than resolves
+> this, per a 2026-08-28 ingest.** A 2026-08-27 operator capture (full
+> account on [[wiki/people/alexis-armel]]) describes a similarly-shaped
+> thrown-out/hidden episode — Suz evicting Alexis after a washing-machine
+> incident, months of concealment — but dates it a full year earlier, to
+> **March–August 2014**, and adds an intermediate residence (Leah Tedesco's)
+> between the concealment and the eventual move to 155 Virginia Ave "by
+> Christmas 2014." That is close to but still weeks before this page's
+> January 2015 lease date. Both operator accounts are T0 testimony of
+> different specificity; this page does not adopt one over the other. What
+> would actually settle both this contradiction and the one above is the
+> same missing document: a lease, or a dated message from the move.
+
+> **An unexplained date coincidence, recorded not resolved.** February 17
+> appears three times in Dan's record: the blotter window opens on it in 2015,
+> the ARD hearing is dated to it in 2016, and `wiki/self/index.md` gives
+> February 17, 2010 as the start of the daily Suboxone regimen. The 2015 and
+> 2016 dates could be a real anniversary of docket scheduling, or one of the
+> later two could be an artifact propagated through earlier passes. No source
+> read so far explains it, and it is worth a look before any of the three is
+> relied on.
+
+> **CONTRADICTION [2026-08-03]:** This page's earlier form stated that
+> during the stop Dan "consented to a breath search — a decision he later
+> credited with saving his driver's license," citing a March 2026 message:
+> "I would have lost mine if I hadn't consented to the breath search when I
+> got arrested." The capture states the opposite in direct terms: "I was
+> never asked to complete field sobriety tests or take a roadside PBT." Both
+> are Dan's own testimony, ten years apart, and the wiki does not resolve
+> them. The most economical reading is that the 2026 message refers to a
+> *chemical* test administered later at the barracks rather than to roadside
+> testing, which would make both statements true — but that is an inference
+> and no source states it.
+
+> **CONTRADICTION (carried forward):** An October 19, 2017 message to
+> [[wiki/people/christo-coan|Christo Coan]] — "hell yeah I already got a DUI
+> I'm not getting any more of those :D" — indicates a separate, otherwise
+> undocumented DUI. The capture's flat statement that this arrest is "my
+> first and only real arrest" sharpens rather than settles the puzzle: a DUI
+> can be issued by citation without a booking arrest, which would make both
+> claims compatible, but nothing in the corpus dates or locates it.
+
+## What it left behind
+
+Dan's own verdict is that the arrest taught him "not to take stupid chances,"
+a lesson he describes as still potent a decade later — and the corpus bears
+that out in a specific and slightly odd form. The risk-aversion it produced
+attached to **vehicles and police contact** rather than to drugs: he still
+describes himself as "an absolute fucking neurotic mess about car stuff," and
+in September 2025 he was coaching [[wiki/people/kristin|Kristin]] to "run the
+cost/benefit analysis about what you're getting from that kind of risk
+exposure." The supply architecture documented at
+[[wiki/mind/synthesis/supply-network]] continued without interruption for the
+next eleven years. What changed was the transport layer, not the appetite.
+
+## Gaps
+
+The exact arrest date within the days before February 17, 2015 is not known,
+nor is the arresting barracks, the docket number, or whether the expungement
+was ever completed. The blotter prints the charges without grading them; Dan's
+own telling calls the residue count a "class B controlled substance," which is
+recorded here as his description rather than as a documented grade. The nine months between the
+February 2015 filing and the first surviving message about the case in December
+2015 contain the preliminary hearing and arraignment and are entirely
+undocumented.
+
+> **CORRECTION [2026-08-22]:** This section previously read *"Magisterial
+> District Judge **Michael Metros** appears once, in the blotter, and has no
+> other trace in the corpus."* He appears twice. The April 2018 summons behind
+> [[wiki/timeline/events/uniontown-hospital-vape-alarm]] — docket
+> MJ-14101-NT-0000082-2018, filed 4/5/2018 — names **Honorable Michael M.
+> Metros**, MDJ-14-1-01, 88 North Gallatin Avenue, Uniontown, and gives the
+> district's telephone number and address that the blotter did not. Both of
+> Dan's documented charging events ran through the same magisterial district
+> three years apart, which is unremarkable for a man living in Uniontown and
+> is still the only thing they have in common. It does not supply this case's
+> docket number, which remains unknown: MDJS dockets are per-case, and knowing
+> the court is not knowing the case.
+
+Whether the fines referenced in January and February 2016 belong to this case,
+to [[wiki/legal/2015-retail-theft-arrest|the Combos matter]], or to both
+running concurrently is not determinable from the message record — the
+"combos are paid off" phrasing suggests at least some of that money was the
+theft fine. The identity of the DA holding the no-ARD-for-cocaine policy is
+not named. And Dan's claim that he completed ARD "without incident" is the
+only account of the six-month probation that exists anywhere in the corpus.
+
+

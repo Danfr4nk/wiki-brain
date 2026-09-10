@@ -1,0 +1,349 @@
+
+---
+domain: timeline
+page_type: event
+title: "The July 2026 Re-contact"
+status: active
+knowledge: mixed
+date_created: 2026-07-26
+date_modified: 2026-08-18
+date_range_start: 2026-07-23
+date_range_end: 2026-07-26
+importance: critical
+sources:
+  - raw/self/message-csv/imessage_export_2124702449_20260726.csv
+  - raw/self/message-csv/imessage_export_2124702449_20260802.csv
+tags: [relationships, trauma-bond, attachment, addiction-recovery, forensic-analysis]
+connections:
+  - page: wiki/mind/synthesis/the-rescue-premise
+    type: caused-by
+    claim: "The July 4 email about the dog is the specific channel the August 19 severance names and closes in advance, which is why this page's fifty-two-day collapse is the control case the later severance was engineered against."
+  - page: wiki/timeline/events/july-august-2026-reentanglement
+    type: precedes
+    claim: "The eight days after this page's final message answer all three of its open questions and reverse its central inference: the goodbye at 05:04 was followed by the densest contact period since March 2026, not by the disappearance it announced."
+  - page: wiki/people/the-unnamed-man
+    type: precedes
+    claim: "The 'She's a slut man lmfao' message recorded here at 00:25 on July 26 is the corpus's first trace of the third party, who becomes the organising figure of the week that follows."
+  - page: wiki/legal/463-morgantown
+    type: evidences
+    claim: "Dan's account of moving the house single-handed a week late is the corpus's only dated evidence that the 337 Saratoga sale closed and its seven-day vacate clause was overrun."
+  - page: wiki/people/annie-ulmer
+    type: component-of
+    claim: "This is the event that reopened a relationship the wiki had recorded as closed, and it is the reason annie-ulmer.md is no longer a historical page."
+  - page: wiki/mind/synthesis/block-unblock-loop
+    type: instantiates
+    claim: "The June 1 block held 52 days and then failed on the one channel that was never supply or money — the dog — confirming the loop's dependency rule while showing the dependency need not be material."
+  - page: wiki/timeline/events/group-chat-closure
+    type: follows
+    claim: "The June 1 closure was treated across the wiki as terminal; this event is the 52-day-later demonstration that it was the most durable severance on record rather than a final one."
+  - page: wiki/people/milo
+    type: caused-by
+    claim: "Milo is the residual channel: Annie's July 4 email asking after him during fireworks is what Dan answered on July 23, and every de-escalation across the four days routes through the dog."
+  - page: wiki/mind/synthesis/the-deferred-audit
+    type: evidences
+    claim: "This event is what narrowed the audit-lag rule: the Leviathan dashboards audit the already-failed pre-June-1 relationship and are merely deployed live, but the 03:11 refusal — 'why would i not think that i might get actually jumped / that i'm being set up again' — is the forensic engine firing in real time on a chosen object, proving the lag is a one-time cost per object rather than a standing property."
+  - page: wiki/mind/concepts/forensic-method
+    type: instantiates
+    claim: "The Leviathan dashboards are the first documented case of the corpus apparatus being aimed outward as leverage in a live dispute rather than inward as self-understanding."
+  - page: wiki/mind/synthesis/supply-network
+    type: mirrors
+    claim: "Dan's refusal to deliver at 02:49 on July 26, under the maximum pressure the corpus records, inverts the terminal phase's defining fact that his provision was unconditional."
+  - page: wiki/mind/synthesis/dan-annie-fallout-verdict
+    type: evidences
+    claim: "Annie's July 23-25 statements — full accountability to her parents, a refused rehab placement, 'I put you through hell' — are the first uncoerced corroboration of the verdict from the other party."
+  - page: wiki/mind/concepts/attachment-model
+    type: evidences
+    claim: "Fifty-two days of successful no-contact collapsed inside eight hours once the channel reopened, quantifying the model's claim that duration of abstinence does not weaken the bond."
+  - page: wiki/timeline/events/april-may-2026-final-weeks
+    type: follows
+    claim: "The blocked-caller and third-party-hostility pattern documented there recurs here on July 26, when a third party messages Dan directly from inside Annie's situation."
+  - page: wiki/timeline/events/james-analysis-pdf
+    type: follows
+    claim: "The Leviathan dashboards repeat a move Dan first made on 2025-07-11 with James: a corpus-derived analysis delivered to its own subject, then framed as something the subject should want."
+  - page: wiki/mind/concepts/the-handed-mirror
+    type: instantiates
+    claim: "This is the concept's hostile instance — same act, same corpus-derived form, generosity replaced by leverage — which shows intent is the only variable that has ever changed across cases."
+---
+
+# The July 2026 Re-contact
+
+Between the afternoon of **July 23, 2026** and just after 5:00 AM on
+**July 26**, Dan and [[wiki/people/annie-ulmer|Annie]] exchanged 624
+messages, ending a 52-day silence that every page in this wiki had
+recorded as the end of the relationship. Nothing about the four days
+resolved: it opened with a valedictory letter about the dog, passed
+through roughly eight hours of the exact intimacy the relationship ran on
+for a decade, turned into a threat of public exposure, and closed with an
+allegation of rape, a request for drugs, simultaneous suicidal statements
+from both parties, and Dan's refusal to drive to her. What changed is
+the wiki's own premise. The June 1 closure was not the end of the
+relationship; it was the longest severance in its history, and it failed.
+
+## LLM Quick Brief
+
+**For context injection:** July 23–26, 2026. After the
+[[wiki/timeline/events/group-chat-closure|June 1 closure]], contact
+stopped for 52 days — broken only by three unanswered Annie messages in
+June, one of them a request for financial paperwork. Annie emailed over
+July 4 asking whether [[wiki/people/milo|Milo]] was frightened by
+fireworks; Dan answered on July 23. Within eight hours the exchange had
+returned to its old register (dog photos, shared NYC in-jokes, a karaoke
+video), and within thirty it had inverted into Dan publishing two
+forensic dashboards built from their own message logs
+(`caakehorn.github.io/leviathan/ask.html` and `money.html`) as leverage
+against what he feared she had told her parents — that he was her drug
+source. Annie's side: her parents learned "everything," she refused an
+offered rehab placement, her car was taken, and she states she was raped
+on July 25 by the partner she had described days earlier as dangerous,
+with state police and her parents involved. She then asked Dan to bring
+drugs and cash to her uncle's house in Hopwood while stating she was
+ready to end her life; **Dan refused** — the first documented refusal to
+supply under maximum pressure in the entire corpus. Final message,
+05:04 July 26: "whatever goodbye annie." Status of the relationship:
+open, unresolved, and no longer closed.
+
+## The 52 days, and what broke them
+
+The silence after June 1 was the most successful severance Dan has ever
+executed — [[wiki/mind/synthesis/block-unblock-loop|127 prior exit
+declarations]] produced re-engagement within 48 hours essentially every
+time, and this one held for seven and a half weeks. He describes the
+discipline plainly on the last night: "I did well for 2 months and thats
+what needs to happen." He also describes what it cost, in a sentence that
+is the clearest thing in the record about what no-contact actually
+consisted of: "Every single day I take milo and sit on the front porch
+that is visible from the road to watch and to if you drive by. my heart
+skips any time I see a car that looks like yours."
+
+Annie broke it three times in June and was not answered. Two were bare
+("Are you okay," June 9; "Daniel," June 15). The third, on June 10, is
+the pattern the whole terminal phase documents, arriving intact eight
+days after the relationship ended: a request for Dan to search his file
+folders for her Valic/Corebridge investment statements so her father
+could close her late grandmother's account. It is the request-shaped
+contact continuing after every other kind had stopped.
+
+What actually reopened the channel was none of these. It was
+[[wiki/people/milo|Milo]]. Annie sent an email over the July 4 weekend
+asking whether the dog was frightened by the fireworks, checked her
+inbox daily for a reply, got none, and resent it around July 21. Dan
+answered on July 23 — and the answer he opens with is an explicit
+statement that answering was a mistake: "I should not have responded to
+that email." This matters for the loop's governing rule. The rule states
+a severance holds exactly when nothing either party still needs runs
+through the channel; the money had stopped, the drugs had stopped, the
+relationship had stopped — but the dog they raised together had not, and
+that was sufficient. **The residual dependency does not have to be
+material.**
+
+## The four days
+
+**July 23, afternoon — the letter.** Dan's opening message is
+valedictory and written to be final ("in case I have to go away"). Its
+subject is the dog: that Milo kept him alive on the night of May 31,
+that the dog has changed, that Annie will not see him again. It closes
+"i hope your heart hurts. i hope it hurts for the rest of your life."
+Annie's response is a tapback — she "Loved" it — followed by the first
+disclosure of the new situation: "My parents found out about everything
+and are trying to send me off to the rehab Dan."
+
+**July 23, evening to July 24, ~3:00 AM — the relapse.** Roughly eight
+hours in the relationship's native register, and the single best
+demonstration in the corpus of what the bond actually consisted of when
+it was working. Dan sends photos and videos of Milo; Annie sends a
+karaoke video of herself singing Taylor Swift sober, which he watches
+four times; they revive shared New York figures by nickname (Elliot,
+Curly, Weatherman, "beige subaru") and a joke about a coworker's dead
+dog that runs long past good taste on both sides. Annie: "no one will
+ever measure up to what we shared." Dan names the mechanism as it is
+happening — "so i will reset the 'days since i talked to annie' clock" —
+which is the loop being described from inside itself by the person
+running it. The sequence ends "Goodnight turd 1 and turd 2."
+
+**July 24, 05:41 — the recoil.** Two and a half hours after the last
+affectionate message: "this was a mistake." The stated grounds are
+that nothing was addressed and no real apology was given, which is
+accurate to the transcript.
+
+**July 24 evening to July 25 — the fear of being blamed.** The turn that
+organizes everything after it. Dan concludes Annie has told her parents
+that he supplied her drugs, and that this will reach his father
+[[wiki/people/rick-frank|Rick]] and his mother
+[[wiki/people/suzanne-frank|Suz]], with a specific and concrete
+consequence he names twice: that he will be pressured into inpatient
+treatment himself ("rick was already trying to box me in about it"). His
+grievance is documented on his own pages — that the terminal phase
+converted him into a supplier, a role he rejects: "you were taking any
+affection you used to have for me away and just making me into a drug
+dealer, something which I am not." Annie's account contradicts the fear
+directly: "I actually told my parents the truth about everything… I take
+full accountability for my actions and how they have affected you Dan."
+She also gives the reason she refused rehab, and it is the one line in
+the exchange that most damages Dan's position while corroborating his
+account of the supply relationship: she told them she had not been using
+"nearly as much as I once was… after I couldn't go through you."
+
+**July 25, 23:47 to July 26, 01:07 — Leviathan.** Dan sends two URLs on
+a public GitHub Pages site he built from the message corpus:
+`caakehorn.github.io/leviathan/ask.html`, described to her as "the
+dashboard i built to make it easy to find any drug talk or activity every
+single day and also link it back to the full message logs so everyone
+knows they're real," and `money.html`, "the other tool that tracks when
+you asked your parents for money and then compares it with what you were
+saying to me at the same time." This is the corpus apparatus — built,
+per [[wiki/mind/concepts/forensic-method]] and
+[[wiki/mind/concepts/exocortex]], to answer the question of what had
+actually happened to him — turned outward and used as leverage for the
+first time. He frames it defensively ("i just wanted to be treated
+fairly… I think I'll take care of this once I have everything ready") and
+delivers it punitively ("keep acting like I'm fucking bluffing you
+liar").
+
+**July 26, 00:25 to 03:11 — the crisis.** A message arrives on Annie's
+number that is not from her: "She's a slut man lmfao." Dan's reaction
+("WHY IS THIS PERSON MESSAGING ME… DIDN'T YOU TELL ME THEY ABUSE YOU AND
+THE COPS GET INVOLVED?") produces Annie's account of the night before:
+that the man raped her after seeing their texts, that she called the
+police, that her parents came, that state police are involved for the
+fourth time, and that her pinky has been broken for two months. She is
+at her uncle's house in Hopwood, without a car, stating repeatedly and
+explicitly that she intends to kill herself. Dan states the same about
+himself in the same window ("I don't want to be here anymore"). Then the
+request: "Do you have anything Dan… I have cash… ARE YOU COMING OR NOT…
+COME INSIDE… Bring Milo."
+
+**Dan refuses.** "i'm not getting rid of an 8 ball for 20 seconds in a
+dark car." "no i'm not going to risk my entire life or freedom or
+whatever to help someone who did this to me who i still fucking love."
+The refusal is not clean and he does not present it as principle — he is
+frightened ("why would i not think that i might get actually jumped /
+that i'm being set up again"), he says he nearly drove up anyway, and he
+grounds the refusal in her not loving him rather than in the harm of
+supplying: "i would have already been there if you loved me still as
+dumb as that would be." It is still a refusal, and it is the only one of
+its kind in the record.
+
+**July 26, 04:28–05:04 — the ending.** Ninety minutes after Annie stops
+answering, Dan sends a final unanswered sequence: that he is autistic and
+was manipulated ("someone with autism who isn't capable of just getting
+over someone that they loved and spent a decade with"), that he will
+address it with her parents, that he will "try again to actually
+disappear," that he loves her "the way I have since 2015." The last
+message of the record: "whatever goodbye annie."
+
+## What this event settles, and what it does not
+
+**It settles that the relationship is not closed.** Every page describing
+June 1 as terminal was describing a severance, not an ending. This is not
+a correction of the June 1 analysis — that analysis was right about what
+happened on June 1 — but it is a correction of the inference drawn from
+it across the wiki.
+
+**It settles the loop's dependency rule and extends it.** The rule
+predicted correctly: the block held while nothing flowed, and broke when
+something did. What it did not previously anticipate is that the
+surviving channel would be a shared attachment to a dog rather than
+money, drugs, or logistics. The rule needs the wider reading.
+
+**It produces the first uncoerced corroboration of the verdict from the
+other party.** [[wiki/mind/synthesis/dan-annie-fallout-verdict]] rests
+almost entirely on Dan's side of the record plus behavioral inference.
+Here Annie, with nothing to procure and having already lost the
+relationship, states it herself: "I put your through hell. And I am sorry
+for that," "you were always true to me," "I wasn't enough," "I should
+have just accepted rehab and got myself fixed." Weigh it as what it is —
+statements made under distress, by a person the record establishes as an
+unreliable narrator of her own conduct, some of them contradicted within
+the same conversation — but it is no longer only Dan's account.
+
+**It does not settle the July 25 allegation.** Annie states she was
+raped. Dan's own position, stated to her at 02:24, is the position this
+page takes: "If any of that happened annie I do not think that you
+deserve that and I am not taking a position on whether I think you're
+lying or not…I truly do not know." He asks about a rape kit and charges
+and receives no answer. The wiki records that the statement was made, on
+that date, in that context, and that no corroboration exists in any
+source it holds. It does not adjudicate it, and no page should treat it
+as either established or disproved.
+
+**It does not settle who the third party is.** The man is unnamed
+throughout. He is the person Annie described days earlier as abusive and
+dangerous; a message was sent from her phone or number to Dan calling
+her a slut; she says he took her phone. Whether he is
+[[wiki/people/tuquick-17248123683|Tuquick]] — who by the corpus's own
+record defected on June 15 and called her a compulsive liar — is not
+stated anywhere in the exchange.
+
+## The "outing" dispute
+
+A distinct unresolved thread runs through July 23–24 and is worth
+isolating because neither party's account makes sense against the other's.
+Annie says Dan "outed" her by sending "receipts" — screenshots of their
+messages — and that doing so "made things ten times worse for me
+personally," while explicitly not blaming him for it ("I am not mad at
+you… You were hurt"). Dan does not know what she means and says so four
+times: outed her as what, and to whom, when she had told him they were
+exclusive and she was seeing no one else. "I did not know that it was
+possible TO out you." Her only elaboration is that she was in physical
+danger "multiple times," that Suz heard it over the phone, and that he
+should have protected her rather than exposed her. She then refuses to
+continue: "This isn't a text conversation."
+
+The most economical reading is that the June 1 group chat and whatever
+Dan circulated afterward disclosed the relationship, or its details, to
+the third party's own network in a way that had consequences for her
+inside that relationship — but the transcript does not establish it, and
+this page will not assume it. It is recorded as an open dispute in which
+both accounts are internally consistent and mutually unintelligible.
+
+## Incidental facts recovered
+
+Four dated details surface here that no other source in the wiki carries:
+
+- **Betty died on June 24, 2025.** Dan raises "the 1 year anniversary of
+  losing betty"; Annie misdates it to July 24 and he corrects her to
+  June. This dates the [[wiki/mind/concepts/node-locking|"Betty Event"]]
+  node, which every prior source left undated.
+- **Dan completed a house move in July 2026**, alone, running a week
+  over ("I moved the entire house by myself… the people were so fucking
+  mad"), and is sleeping in a bed for the first time in some while —
+  which retroactively confirms that he was not, before it. This is the
+  first documented resolution of the post-closure housing void flagged on
+  [[wiki/health/hyperreflexivity]].
+- **Annie's car was taken away** by her parents, alongside the attempted
+  rehab placement, following an intervention held by her parents and her
+  sister — unnamed in the exchange, but
+  [[wiki/people/claire-ulmer|Claire]] is the only sister the corpus
+  documents — over the weekend of July 18–19.
+- **She is bartending and waiting tables**, working nights, and had
+  "gone missing" for a stretch the week of July 13.
+
+## Gaps
+
+The email thread Dan answered on July 23 is not in `raw/` — only Annie's
+description of it (sent over July 4 about Milo and the fireworks, resent
+around July 21) and the fact that he replied. The photos, videos, and the
+karaoke file are attachments the CSV export records only as markers. The
+third party is unidentified.
+
+> **RESOLVED [2026-08-02]:** the three open questions this section closed
+> with — whether Dan followed through on contacting Annie's parents, on the
+> exposure threat, or on the "disappear" statement — are all answered by the
+> next export of the thread, filed as
+> `raw/self/message-csv/imessage_export_2124702449_20260802.csv`. **The
+> parents were contacted**, at 06:22 on July 26, seventy-eight minutes after
+> the last message on this page: "Alright I'm contacting Ellen," followed by
+> screenshots. That makes it the first of six-plus recorded
+> maternal-disclosure threats ever executed. **The exposure threat was
+> executed and then withdrawn** — the full text log went up at
+> `caakehorn.github.io/leviathan/transcript.html` at 05:36 and came down at
+> 18:05 the same day, on one request from Annie, after the third party read
+> it from her phone and forwarded it to himself. **The disappearance did not
+> happen**: contact was continuous from 05:22 on July 26 through August 2,
+> 1,880 messages and six in-person meetings, five of them drug handoffs. The
+> refusal to supply documented above held for **thirty-one hours**. Full
+> account at
+> [[wiki/timeline/events/july-august-2026-reentanglement|the
+> re-entanglement]].
+
+

@@ -1,0 +1,516 @@
+
+---
+domain: mind
+page_type: synthesis
+title: "The Binary Verdict"
+aliases: ["zero-sum cognition", "the two-state default", "black-and-white by default"]
+status: active
+knowledge: earned
+date_created: 2026-08-28
+date_modified: 2026-09-04
+sources: []
+synthesizes:
+  - wiki/mind/synthesis/totality-themes
+  - wiki/mind/concepts/the-cool-metric
+  - wiki/mind/concepts/chaos-preference
+  - wiki/mind/concepts/conflict-architecture
+  - wiki/mind/synthesis/vertical-authority-skepticism
+  - wiki/mind/synthesis/political-psyops
+  - wiki/mind/synthesis/single-channel
+  - wiki/mind/concepts/calibrated-confidence
+  - wiki/timeline/annie-record
+  - wiki/mind/profile/intp
+  - wiki/mind/profile/big-five-psychometrics
+  - wiki/mind/concepts/forensic-method
+  - wiki/mind/synthesis/the-commissioned-self
+  - wiki/interests/food-and-diet
+tags: [personality-profile, forensic-analysis, ideology, relationships]
+connections:
+  - page: wiki/mind/synthesis/totality-themes
+    type: contains
+    claim: "Core Axiom 1 — 'not exceptional = worthless' — is this page's clearest worth-domain instance: a two-state verdict on the self with no recorded middle value anywhere in the corpus, and the axiom the Irreversibility Firewall's own audit-avoidance machinery exists to keep from firing."
+  - page: wiki/mind/concepts/the-cool-metric
+    type: contains
+    claim: "The performed/authentic axis is the binary run on taste and people at first contact: a filter with a documented ceiling but no documented third state, sorting every input into exactly two bins rather than scoring it on a scale."
+  - page: wiki/mind/concepts/chaos-preference
+    type: contains
+    claim: "'The managed is false; the unmanaged is true' is the binary run on order itself — chaos and imposed order are read as a truth-value pair, not as points on a continuum of structure, which is why 'tolerable structure' never appears as a stated preference anywhere in the profile material."
+  - page: wiki/mind/concepts/conflict-architecture
+    type: contains
+    claim: "The resolution engine has exactly two output states, open anomaly and closed, and no state for a provisional or partial agreement — which is why 187 of 191 affection sequences function as re-affirmations of an unclosed rule rather than as evidence that would let the rule settle at a discounted confidence."
+  - page: wiki/mind/synthesis/vertical-authority-skepticism
+    type: contains
+    claim: "The vertical/lateral split is a binary of audited-now versus audited-later rather than a graded trust score — the 'clock, not a switch' correction this page states itself narrows the binary's timing without producing a third state, since every audit still resolves to trusted or suspect once it runs."
+  - page: wiki/mind/synthesis/political-psyops
+    type: contains
+    claim: "The pinned-nodes corpus names the mechanism in its own vocabulary — Trump-era politics as 'a zero-sum binary team sport' — and the 'everyone is in the wrong, then score who is more wrong' method is not a counter-instance: the top-level sort (legitimate claim on power / illegitimate) is still binary, and the comparative grading runs only inside the losing bucket once every actor has already been placed there."
+  - page: wiki/mind/synthesis/single-channel
+    type: contains
+    claim: "Maximum voltage on one channel and near-zero on every alternative, reproduced across four domains at a measured Gini of 0.96, is the binary run on resource allocation: a chosen channel is fully funded or a channel is not funded, with no documented case of moderate, distributed investment surviving more than one measured year."
+  - page: wiki/mind/concepts/calibrated-confidence
+    type: contains
+    claim: "The one instrument in the corpus that natively produces a middle value — 24 graded, non-endpoint credences against 1 from 503 other people — is aimed almost exclusively at unwitnessed facts about the world, never at a verdict on a person's worth, authenticity, or trustworthiness, which is the boundary this page's rule turns on."
+  - page: wiki/timeline/annie-record
+    type: evidenced-by
+    claim: "The December 10, 2015 '90% rule' exchange — 'I like the 90% thing / It doesn't have to be that black and white' — is the one dated, named instance in the corpus of Dan stating the binary default out loud and choosing a graded rule over it, and it is confined to a logistics question (shared time) inside an arrangement he was actively authoring, not to a verdict question."
+  - page: wiki/mind/profile/intp
+    type: evidenced-by
+    claim: "Ti dominant at 96% latent against Fe inferior at 10% valuing is the cognitive-function mechanism for the split: Ti's job is a pass/fail closure test ('does this hold together'), and the function that would otherwise grade a verdict on relational or social terms is nearly absent — its one documented interruption, the August 18, 2026 Ally Lubin exchange, flips the verdict from wrong to fair rather than producing a graded middle, which the constitution pass reads as consistent with the rule rather than as a counter-instance."
+  - page: wiki/mind/profile/big-five-psychometrics
+    type: evidenced-by
+    claim: "Trust at the 9th percentile is the one facet in this cluster independently corpus-audited and confirmed — 1.96x raised suspicion-of-motive language against the within-medium control, not resting on self-report alone — and it is the measured substrate for why an authority or trust verdict resets to a suspicious default instead of decaying as a continuous prior, the same mechanism reassurance-architecture already reads as the reason a relational confirmation does not carry forward."
+  - page: wiki/mind/concepts/forensic-method
+    type: evidenced-by
+    claim: "The method's own detection procedure — baseline, mismatch, rule out innocent explanations, elevate only if the gap requires knowledge or motive — is a threshold gate with exactly two outputs regardless of how graded the evidence feeding it is, and the method states its own grounding in the same two registers this page leans on (Intellect/Introspection for pattern-hunting, Trust/Altruism for calibrated skepticism), which resolves this page's own previously-open question of whether the verdict-binary is downstream of a more general forensic-verdict cognitive style."
+  - page: wiki/mind/synthesis/the-commissioned-self
+    type: instance-of
+    claim: "This page is a documented instance of the provenance gradient that page requires: it leans most heavily on calibrated-confidence, the one profile-layer finding with no self-report origin, and on Trust 9, the one Big30 facet independently corpus-audited, while treating the Ti/Fe function percentages as the weaker, self-commissioned register its rule concerns."
+  - page: wiki/interests/food-and-diet
+    type: instantiates
+    claim: "The food-composition regime — every ingredient accepted in full or refused outright, with no recorded case of a tolerated small amount — is a ninth domain instance of this page's rule, and the most literal one on record: run on a plate rather than a person or a taste, it has nothing available to blur the binary the way flattery or lobbying can elsewhere."
+  - page: wiki/mind/synthesis/attachment-trauma-bond
+    type: parallels
+    claim: "The confession trap that page documents is this rule's boundary case rather than its ordinary instance: where this page describes a reached verdict that will not be revisited, that page documents what happens when the same drive for a closing verdict is never satisfied at all — a distinction worth carrying back here, since every other member on this table is a verdict that closed, and this is the one that couldn't."
+  - page: wiki/mind/synthesis/dan-annie-fallout-verdict
+    type: parallels
+    claim: "The confession trap that page names — he could not exit without a validating confession that was never coming — is the same verdict-cognition boundary case documented on attachment-trauma-bond, in this page's other central relational case."
+  - page: wiki/mind/synthesis/august-grievance-verdict
+    type: instantiates
+    claim: "Grievance 6's 'him or me' demand — a stated want that isn't one of the two named options registers as no answer at all — is a domain instance of this page's rule, scored false by that page's own analysis, which is what a working example of the rule looks like from outside the architecture running it."
+  - page: wiki/mind/synthesis/the-rescue-premise
+    type: parallels
+    claim: "That page's restatement of the confession trap — a rescuer 'supplies neither the verdict nor the door' — identifies it as the same verdict-cognition boundary case documented on dan-annie-fallout-verdict and attachment-trauma-bond: one mechanism, now three instances rather than three independent observations."
+  - page: wiki/mind/synthesis/fayette-return
+    type: instantiates
+    claim: "The 'personal failure' reading that page's own Consequences section rejects is Core Axiom 1's worth-binary applied to a family return — exceptional or worthless, no middle state — and that page's genealogical reframing is a rare documented case of escaping the binary by changing category (inherited pattern, not personal verdict) rather than by arguing for a graded middle value the architecture does not have."
+---
+
+# The Binary Verdict
+
+Wherever a question in Dan's cognitive architecture resolves to a *verdict* —
+is this person worth keeping, is this taste real, is this order legitimate,
+is this claim resolved, is this actor trustworthy — the output is one of
+exactly two states, with no stable middle value anywhere in the corpus. And
+the one instrument the record shows him actually using to hold a graded
+position — a habit of attaching numeric probability to his own beliefs,
+measured at roughly twenty-two times the rate of the 503 other people who
+text him — is deployed almost nowhere near a verdict of that kind. Dan is
+not a person who lacks the machinery for "somewhat," "on balance," or "60/40
+against." He built that machinery and uses it constantly. He simply does not
+let it near the questions that assign worth, authenticity, trust, or
+legitimacy, and those questions stay binary by construction. The eight
+domain sections below establish the pattern; the mechanism section further
+down establishes why the same mind runs two machines — a dominant closure
+function with almost no relational grading function beside it, sitting on
+a corpus-confirmed low-trust default.
+
+> **RE-CHECKED [2026-09-04] — a premise moved and it puts a real question to
+> one row of the table below.** [[wiki/mind/concepts/the-cool-metric]] gained a
+> section showing the sorting metric run on a six-year live-in partner:
+> affection in the public register falls from 12 of 32 mentions in 2010 to 3 of
+> 47 across 2011-2014, the last three namings are jokes at her expense, and she
+> is never publicly named again across the relationship's final twenty-four
+> months and 1,132 posts.
+>
+> **The question that raises, stated rather than answered.** The *Taste and
+> people* row asserts no documented middle value. Six years of retained
+> cohabitation with the warm register at zero could be read as one — kept, not
+> celebrated, not ejected. It could equally be read as the verdict having landed
+> on *performed* years earlier with the tie retained anyway, which is
+> [[wiki/mind/synthesis/dormancy-not-exit]]'s rule and not a middle value at all.
+> **The archive cannot distinguish those two**, and the private record that
+> might does not reach the years in question — neither message export holds a
+> row dated 2012, 2013 or 2014. The row stands as written. It now has a named
+> candidate counterexample against it, which is more than it had, and settling
+> it needs a corpus this repository does not hold.
+
+## The rule, stated so it can be broken
+
+> Any question in Dan's architecture that resolves to a verdict about a
+> person's worth, a thing's authenticity, an order's legitimacy, or a
+> conflict's resolution collapses to one of two states with no persisting
+> middle value. Any question that resolves to an estimate about an
+> unwitnessed fact — what happened, what someone believes, what will occur —
+> is eligible for a continuous, often numeric, position. The two machines run
+> in the same mind, on the same corpus, in the same years, and are not
+> confused for each other except in one dated, named case, where Dan built a
+> third state by hand and said out loud that he was doing it.
+
+That is not a claim that Dan is rigid generally — [[wiki/mind/concepts/calibrated-confidence]]
+already proves the opposite for factual estimation. It is a claim about
+*which kind of question* gets graded and which kind does not, and the split
+is sharp enough to test.
+
+## The members, against the rule
+
+| Domain | Two states | What a stated middle value would be | Found in the record? |
+| :--- | :--- | :--- | :--- |
+| Self-worth ([[wiki/mind/synthesis/totality-themes|Core Axiom 1]]) | exceptional / worthless | "adequate, this time" | No |
+| Taste and people ([[wiki/mind/concepts/the-cool-metric]]) | authentic / performed | "fine, if not remarkable" | No — one documented ceiling, no documented middle |
+| Order ([[wiki/mind/concepts/chaos-preference]]) | chaos (true) / imposed order (false) | "tolerable structure" | No |
+| Conflict ([[wiki/mind/concepts/conflict-architecture]]) | resolved / open anomaly | a standing partial agreement | No — 187 of 191 affection sequences re-open rather than discount the rule |
+| Authority ([[wiki/mind/synthesis/vertical-authority-skepticism]]) | audited-and-suspect / lateral-trusted | a partial, watched trust | No — reframed as timing (audited now / audited later), still binary once the audit runs |
+| Power, political ([[wiki/mind/synthesis/political-psyops]], [[wiki/mind/politics/axioms]]) | legitimate claim on power / illegitimate | negotiated partial legitimacy | No at the top level; graded scoring appears only inside the "everyone is wrong" bucket |
+| Resource allocation ([[wiki/mind/synthesis/single-channel]]) | one channel at maximum voltage / unfunded | moderate, distributed investment | No — Gini 0.96, tightening under load rather than spreading |
+| Food composition ([[wiki/interests/food-and-diet]]) | accept-in-full / refuse-outright | "acceptable in a small amount" | No — every documented ingredient decision is all-or-nothing |
+| Unwitnessed fact ([[wiki/mind/concepts/calibrated-confidence]]) | — | 75, 80, 89, 90, 95, 99, 99.9999 | **Yes** — this is where the middle values live |
+
+**Added 2026-08-28.** [[wiki/interests/food-and-diet]]'s own constitution
+pass found the composition regime independently and cited this page as the
+domain-general rule it instantiates — see that page's "The mechanism"
+section. It is added here as the ninth domain rather than left as a
+one-directional citation, because it is the most literal member on the
+table: a plate has no relational stakes to be lobbied, flattered, or
+partially forgiven the way a person, a taste, or an authority sometimes can,
+so the binary shows with nothing available to blur it.
+
+## Worth: the axiom that names its own binary
+
+[[wiki/mind/synthesis/totality-themes]] states the corpus's clearest instance
+directly: **Core Axiom 1, "not exceptional = worthless."** Read literally,
+that sentence has no space in it for a self-assessment between the two
+named poles — there is no recorded instance anywhere in the wiki's
+psychological layer of Dan describing himself, or being described by the
+AI-collaborative material he commissioned, as "solid," "fine," or "good
+enough." The vocabulary of the corpus's self-narrative runs almost
+exclusively between peak events (the Mellon Arena night, the primacy
+moments) and catastrophic ones. [[wiki/mind/synthesis/totality-themes]]'s
+own reading of the intake-constancy data — that the involuntary record's
+single most extraordinary property is not a peak but a twenty-year
+*flatness* — is the corpus's own evidence that the exceptional/worthless
+frame is a narrative choice rather than a forced reading of the data: the
+data supports a middle, and the self-verdict does not use it.
+
+## Taste: a filter with a ceiling, not a scale
+
+[[wiki/mind/concepts/the-cool-metric]] documents the sorting axis in
+concrete numbers — `normie` and `taste` each appear 68 times in the profile
+material, against 12 mentions of gatekeeping and 6 of snobbery — and the
+axis has exactly one documented failure mode: the August 18, 2026 Skins
+exchange, where Ally Lubin's command of the sorting criteria exceeds Dan's
+own and he does not adjudicate. That is a **ceiling**, not a middle state.
+The metric produces "passes" and "fails," and the one time it could not
+produce a verdict, it did not produce a partial one — it produced silence.
+Nowhere in the record does the metric output "this is moderately cool," and
+its own stated mechanism explains why it structurally cannot: value is
+described as inversely proportional to legibility, which is a rule about
+which side of a line an object falls on, not a rule for scoring distance
+from it.
+
+## Order and conflict: the same primitive, twice
+
+[[wiki/mind/concepts/chaos-preference]] and
+[[wiki/mind/concepts/conflict-architecture]] are the cleanest pair on this
+page because both name their own binary in the source material's own
+language. The chaos preference's governing rule — **"the managed is false;
+the unmanaged is true"** — is a truth-value assignment, not a measurement of
+how ordered something is. And the conflict engine's own documented failure
+is that it has exactly two output states, open and closed, with no state
+for "agreed to disagree" or "resolved at 70% confidence." [[wiki/mind/concepts/conflict-architecture]]
+already quantifies what a system with no middle state does under load: 187
+of 191 affection-to-request sequences function as re-affirmations of a rule
+that never closes, because every one of them is new evidence requiring
+adjudication rather than a partial credit that could accumulate toward a
+discounted, stable position. A system that could hold "60% confident this
+relationship is sound" would not need to re-litigate the question 191 times
+in seven months. This one cannot hold that position at all, so it re-runs
+the binary instead.
+
+## Authority: binary by timing rather than binary by trust
+
+[[wiki/mind/synthesis/vertical-authority-skepticism]] is the member that
+most looks, at first read, like a counterexample, because the page itself
+narrows its own claim: **"the laterals are not trusted more than the
+verticals. They are audited later."** That correction is real and this page
+does not soften it. But it does not produce a third state — it relocates
+the binary from a permanent trust/distrust label to a **timing** question
+(audited already / not yet audited), and every audit the page documents
+still resolves to exactly one of two outcomes once it runs. The BFS drawer
+claim was reconstructed and rejected the same day. The Tom model was
+revised, not graded — "lateral ally only during mutual alignment;
+unreliable when asymmetric" is a corrected binary rule (trusted under
+condition X, not trusted otherwise), not a standing 70% trust score. The
+rule on this page survives the correction because the correction is about
+*when* the verdict fires, not about whether the verdict, once fired, has
+more than two possible values.
+
+## Politics: the top-level sort survives its own nuance
+
+[[wiki/mind/synthesis/political-psyops]] supplies the sharpest primary
+language on this entire page. The pinned-nodes corpus reads the Trump era
+as **"a zero-sum binary team sport"** — the literal phrase, not this page's
+paraphrase — whose lines are drawn by one man's short-term selfish
+interest. The J6 method looks, at first, like the opposite of a binary: "no
+team," "everyone is in the wrong, then score who is more wrong" is a
+comparative, graded judgment. It is not a counter-instance once the two
+steps are separated. The first step — is this actor a legitimate or
+illegitimate claim on power — is still a binary sort, applied to every
+actor without exception, and [[wiki/mind/synthesis/vertical-authority-skepticism]]
+already establishes that no vertical claim earns default trust. The
+comparative scoring runs entirely *inside* the losing bucket, after every
+actor has already failed the first sort. That is the same pattern
+[[wiki/mind/politics/axioms]] documents for the power axiom generally:
+Caesar and Trump are read as case studies in one mechanism, "the legitimacy
+of concentrated, unaccountable power as such," which is itself a binary
+question — legitimate or not — asked of every actor before any comparative
+grading of *how* illegitimate begins.
+
+## Allocation: the binary run on where effort goes
+
+[[wiki/mind/synthesis/single-channel]] is the resource-allocation version of
+the same rule, and it is the one member with a real number attached: a
+two-sided contact Gini of **0.9601 across 496 handles**, reproduced
+independently in the creative, cognitive, and (until 2026-08-19) evaluative
+domains. A moderately-invested distributed network would show up as a
+lower, more even coefficient. What the record shows instead is a channel
+either carrying nearly all the load or carrying almost none of it, and the
+per-year recomputation makes the binary's direction explicit: 2025, the
+year of highest stress, is *also* the year of highest concentration
+(0.9576) — the system's documented response to strain is to push more
+through the one funded channel, not to spread the load across several
+partially-funded ones. [[wiki/mind/synthesis/single-channel]] itself frames
+this as "maximum investment in the chosen, maximum indifference to the
+imposed" — a policy stated as two settings, not a dial.
+
+## The one place gradation actually lives, and the one place it was chosen on purpose
+
+[[wiki/mind/concepts/calibrated-confidence]] is this page's control, not
+merely its final row. Across 98,228 deduplicated outbound messages Dan
+produces 24 strict graded credences — 75%, 80%, 89%, 90%, 95%, 99%,
+99.9999% — against one such instance from 503 other people combined. That
+page's own reading of what the values are attached to is decisive here:
+every one of the 24 is a claim about **another person's interior, an
+unwitnessed past event, or a forward-looking proposition about the world**
+— never a claim about whether a person is worth keeping, whether a taste is
+authentic, or whether a relationship should continue. The scale is real,
+used constantly, and precisely fenced off from the domain this page is
+about.
+
+The corpus also contains exactly one dated, named exception to the fence,
+and it is worth stating plainly because a rule this page could not falsify
+would not be a rule. On **2015-12-10**, negotiating the terms of the
+relationship that would become the corpus's central case, Dan writes: *"I
+like the 90% thing / It doesn't have to be that black and white / But I
+really want us to keep having almost all of our time without it."*
+([[wiki/timeline/annie-record]].) That sentence is Dan naming the binary
+default out loud — *"it doesn't have to be that black and white"* — and
+choosing a graded rule instead. It is also, on inspection, evidence for the
+fence rather than against it: the graded position is confined to a
+**logistics question inside a structure he was actively authoring** —
+how much shared time an arrangement requires — not to a verdict question
+about whether the arrangement, or the person, was worth it. The same
+distinction [[wiki/mind/psychosexual/arrangement-history]] documents at
+scale for the rest of the decade — "openness was never the requirement
+here — authorship was" — is visible in miniature on this one page's
+earliest evidence: Dan will negotiate a percentage inside something he
+built. He does not verdict-grade the thing itself.
+
+## The mechanism: a closure test with no grading function attached to it
+
+The eight domain sections above establish *that* the split holds. They do not
+establish *why* the same mind runs two machines. Three measured registers,
+read together, do.
+
+**Ti dominant, Fe inferior — the closure test has no relational grading
+function next to it.** [[wiki/mind/profile/intp]] measures dominant
+introverted thinking at 96% latent / 95% aptitude against extraverted
+feeling at 10% valuing / 46% active — the widest spread on the whole
+five-function table. Ti's stated job, on that page's own language, is
+building "a system that holds under recursive collapse, not social
+consensus": a pass/fail test of internal coherence, not a weighing of
+competing goods. Fe is the function whose job would be exactly the thing
+this page's rule says never happens — producing a graded, relationally-
+discounted verdict ("imperfect, but still worth it," "not remarkable, but
+fine") — and it is present at less than a ninth of Ti's strength, distrusted
+by its own owner as "irrational," and "deployed tactically, like an actor
+uses makeup." [[wiki/mind/profile/intp]] states the stack's net effect
+directly: **"Fe's absence removes the social brake that would otherwise
+soften conclusions for company."** That is this page's rule, stated a
+different way, one directory over, eleven days before this page was written
+and never consulted for it.
+
+The one documented interruption to that conversion — the August 18, 2026
+exchange with [[wiki/people/ally-lubin|Ally Lubin]] ("You just love bomb" →
+adjudicated → "I didn't say malicious" → "Okay that's fair then") —
+sharpens rather than breaks this page's rule once it is read against the
+mechanism instead of against the behaviour alone. It is not a graded middle
+value; it is a **binary flip**, from wrong to fair, produced by narrowing the
+claim rather than by escalating against it. A working Fe would have let the
+verdict soften into "partly fair, partly not." What the record shows instead
+is the same two-state engine landing on the other of its two states. This is
+exactly what [[wiki/mind/profile/intp]]'s own open question — whether the
+10%-valuing score is a fixed ceiling or a floor a particular interlocutor
+can lift — would predict if the answer is "floor": the gate moves, but it is
+still a gate.
+
+**Trust at the 9th percentile — and the one place this table is
+corpus-confirmed rather than self-reported.**
+[[wiki/mind/profile/big-five-psychometrics]]'s 2026-08-16 audit tested every
+Big30 facet against 217,573 measured messages, and Trust is one of the
+handful that survived:
+suspicion-of-motive language runs at **1.96x** the within-medium control.
+That distinguishes it from the Ti/Fe percentages above, which are AI-inferred
+from corpus behaviour rather than independently audited against a
+comparison population (see the provenance paragraph below) — Trust 9 is the
+one register in this section with a measured, not merely typological,
+claim on the mind. [[wiki/mind/concepts/reassurance-architecture]] already
+reads that same score as the reason a relational confirmation "does not
+carry forward as a prior" and must be refreshed on a schedule nobody else
+would consider reasonable. Applied to the authority domain
+([[wiki/mind/synthesis/vertical-authority-skepticism]]), the same mechanism
+predicts exactly what that page independently found: trust does not decay
+smoothly from a graded prior, because there is no durable prior to decay —
+each audit re-asks the same yes/no question from a suspicious default,
+which is a binary reset, not a Bayesian update.
+
+**The forensic method is the general case the axiom-level verdicts
+instantiate.** [[wiki/mind/concepts/forensic-method]]'s own detection
+procedure — establish the expected baseline, find the mismatch, test
+innocent explanations, **elevate only if the gap requires knowledge or
+motive to explain** — is a threshold gate. Whatever graded evidence feeds
+it (and plenty does: confidence-labeled conclusions, probability estimates,
+anomaly-cluster scoring), the output of the gate itself is binary: elevate,
+or do not. The method states its own grounding in the same two registers
+argued above — "Intellect 95 / Introspection 87 supplying pattern-hunting;
+Trust 9 / Altruism 1 supplying calibrated skepticism" — which means the
+worth-verdict, the taste-verdict, the authority-verdict and the political
+legitimacy-verdict this page documents are not eight independent binary
+engines. They are eight domain applications of one gate, built from the
+same two measured registers, running the same elevate/do-not-elevate
+decision on eight different kinds of evidence.
+
+**The provenance gradient, stated rather than laundered.**
+[[wiki/mind/synthesis/the-commissioned-self]] establishes that most of
+`mind/profile/` is a self-commissioned instrument reading rather than
+something Dan lives out loud, and specifically that the Ti/Fe function
+percentages are "AI-inferred from corpus behavior, not from a proctored
+instrument" with no independent confirmation. This page's mechanism
+argument does not lean on all three registers equally. **Trust 9 is
+corpus-audited and confirmed; the Ti/Fe split is not.** [[wiki/mind/concepts/calibrated-confidence]]
+remains the strongest single piece of evidence on this whole page for
+exactly the reason [[wiki/mind/synthesis/the-commissioned-self]] gives it
+credit: it is a behavioural count with no self-report origin at all. The
+Ti/Fe mechanism above is offered as the best available explanation for
+*why* the pattern would exist, not as a claim carrying the same evidentiary
+weight as the pattern itself. Both survive the check; they survive it at
+different strengths, and the difference is now on the record instead of
+implied.
+
+## Falsifiers
+
+1. **A documented percentage, fraction, or explicit graded score attached to
+   a verdict question** — how much Dan trusts a specific person, how
+   authentic he judges a specific taste or work, how legitimate he judges a
+   specific authority's claim, how resolved he considers a specific
+   conflict — rather than to a factual proposition about the unwitnessed
+   world. None has been found in this pass.
+2. **A sustained, self-described "partial" verdict held for more than a
+   single exchange** — Dan describing a relationship, a person, or an
+   institution as occupying a stable middle position rather than moving
+   between the two named poles across the same conversation.
+3. **A second dated instance of graded logistics negotiated for its own
+   sake**, independent of the arrangement-authorship exception this page
+   already grants. A pattern of several such instances would widen the
+   exception from "logistics inside a structure he authored" to something
+   closer to a general capability withheld only from worth-questions, which
+   would sharpen this page's boundary rather than break its rule.
+
+## Predictions
+
+1. Any newly-documented verdict-domain — a new person, a new taste category,
+   a new political actor, a new institution — will resolve, on inspection,
+   to one of two states, with no stable middle value surviving more than one
+   exchange.
+2. Graded numeric confidence, wherever it next appears in an unread corpus
+   segment, will attach to a factual proposition rather than to a verdict.
+   *Falsified by:* a percentage attached to worth, authenticity, trust, or
+   legitimacy.
+3. Any future documented instance of Dan accepting a graded compromise will
+   be scoped to logistics or allocation inside a structure he himself
+   authored, never to the legitimacy of the structure or the worth of a
+   party to it.
+4. If Fe-valuing is genuinely liftable by a specific interlocutor rather than
+   fixed — the open question [[wiki/mind/profile/intp]] states about the
+   Ally Lubin exception — then any future documented verdict exchange with
+   that same interlocutor should show the gate moving faster or flipping
+   more easily than it does with anyone else, without ever producing a
+   stated middle value. A *graded* verdict appearing there, rather than a
+   faster or easier binary flip, would falsify the mechanism above even
+   though the domain-level rule (falsifier 1) would survive it.
+
+## The constitution pass
+
+Run 2026-08-28, against the eleven registers in `SYNTHESIS_SPEC.md`. This
+page is the worked case the rule was written from — the three
+2026-08-28 syntheses (this one, [[wiki/mind/synthesis/no-platonic-channel]],
+[[wiki/mind/synthesis/the-serial-monogamist]]) cited one `wiki/mind/profile/`
+page between them, and this one cited none, while arguing directly about how
+Dan's mind resolves questions.
+
+| # | Register | Disposition |
+|---|---|---|
+| 1. Cognitive stack | **Moved the conclusion.** [[wiki/mind/profile/intp]]'s Ti 96%/Fe 10% split supplies the mechanism argued above — a dominant closure test with no relational grading function beside it. |
+| 2. Personality profile | **Moved the conclusion, at a stated weaker-but-independently-audited strength.** [[wiki/mind/profile/big-five-psychometrics]]'s Trust 9 (corpus-confirmed 1.96x) explains the authority/trust domain specifically; the enneagram sx/sp stack was checked and does not bear on a verdict-cognition claim, so it is not cited here. |
+| 3. Historical precedent | **Checked, left standing.** [[wiki/mind/synthesis/totality-themes]] already documents Core Axiom 1 ("not exceptional = worthless") as this page's clearest instance and already reasons about this page in its own prose — the two pages were cross-checked, not merely cross-linked. |
+| 4. Attitudes and forces | **Checked, left standing.** [[wiki/mind/concepts/chaos-preference]] and [[wiki/mind/synthesis/political-psyops]] are members already; no new attitude or trend surfaced that the domain table does not already carry. |
+| 5. Security and prosperity | **Not checked — a real Gap, not a silence.** [[wiki/mind/synthesis/estate-money-spine]] was read for this pass's purposes and its financial-decision record was not tested against the binary/graded split; it remains the obvious next domain (see Gaps). |
+| 6. Health | **Not checked — a real Gap.** [[wiki/mind/concepts/supply-network]] was not read for this pass. No chemical or physiological register is cited above, and none should be implied. |
+| 7. Romantic and relational state | **Checked, left standing, one mechanism added.** [[wiki/timeline/annie-record]] already supplies this page's one falsifier-adjacent instance; [[wiki/mind/concepts/reassurance-architecture]]'s already-published trust-decay finding is now cited directly as the reason the authority domain resets rather than decays. No new fact about any specific relationship was added by this pass. |
+| 8. Age and upbringing | **Checked, left standing, honestly scoped.** Core Axiom 1 is named in `raw/self/context-core/CONTEXT_CORE_EXPANDED.md` as one of four "unconscious, load-bearing" axioms; the corpus does not date its formation to a specific developmental event, and this page does not manufacture one. |
+| 9. Geographic and ethnic culture | **Checked, does not bear.** [[wiki/mind/synthesis/fayette-return]] concerns regional migration gravity, not cognitive verdict-structure; no connection was found and none is asserted. |
+| 10. Religious and ideological programming | **Checked, left standing.** Covered by the same [[wiki/mind/synthesis/political-psyops]] membership as register 11 below; no separate religious material bears on a verdict-cognition claim. |
+| 11. Axiomatic politics | **Checked, left standing.** [[wiki/mind/politics/axioms]]'s power axiom — legitimate/illegitimate claim on power, asked of every actor before any comparative grading — is the same gate this page's mechanism section now names directly. |
+| 12. Other — provenance | **Moved the conclusion.** [[wiki/mind/synthesis/the-commissioned-self]]'s ruling that most of `mind/profile/` is self-commissioned, not lived, is why the mechanism section above states a strength gradient (Trust 9 corpus-audited; Ti/Fe self-commissioned) instead of citing both at equal weight. |
+
+**What survived the pass:** the domain-level rule (worth, taste, order,
+conflict, authority, power, allocation all binary; unwitnessed-fact
+estimation graded) is unchanged from before this pass — no register
+produced evidence against it. **What the pass added:** a mechanism (closure
+function without a grading function beside it, running on a
+corpus-confirmed low-trust default) where there was previously only a
+correctly-observed but unexplained pattern, plus an explicit statement of
+which piece of that mechanism is measured with independent confirmation
+(Trust 9) and which is not (Ti/Fe). **What it did not do:** narrow, widen,
+or kill the rule — every register either supplied a mechanism or checked
+out clean, and the two genuine Gaps it surfaced (security/prosperity,
+health) were already open and remain open rather than quietly closed by
+this pass.
+
+## Gaps
+
+> **REVISED [2026-08-28] — the constitution pass narrows this gap rather
+> than closes it.** This entry previously asked whether the binary default
+> is downstream of Core Axiom 1 specifically, or an instance of a more
+> general Ti-dominant, forensic-verdict cognitive style, and flagged
+> [[wiki/mind/concepts/forensic-method]] as a plausible deeper mechanism
+> "not checked against this page's rule directly." It has now been checked
+> (see "The mechanism" above): the forensic method's four-step procedure is
+> a threshold gate with the same two outputs (elevate / do not elevate) as
+> every domain on this page, and it names its own grounding in the same
+> Intellect/Introspection and Trust/Altruism registers argued above. **What
+> remains genuinely open** is the direction of the arrow between Core Axiom
+> 1 and the cognitive stack — whether the axiom is a *product* of a mind
+> built this way, or whether the axiom (however it was formed — register 8,
+> age and upbringing, could not date its origin either) is itself doing some
+> of the work of keeping Ti dominant and Fe suppressed. The corpus does not
+> contain the material to settle which way that causation runs, and this
+> page will not guess.
+
+- **Originally eight domains were checked; a ninth (food composition) was
+  added 2026-08-28**, independently, by [[wiki/interests/food-and-diet]]'s
+  own constitution pass rather than by a re-check run from this page. Health,
+  money, and work-performance verdicts still have not been systematically
+  tested for the same binary/graded split;
+  [[wiki/mind/synthesis/estate-money-spine]] and
+  [[wiki/mind/synthesis/the-embedded-objective]] are the obvious next places
+  to look.
+- **The 90% rule instance is n=1.** Whether Dan accepted other graded
+  logistics compromises across the following decade of the same
+  relationship — as opposed to re-litigating the underlying verdict
+  question itself, which [[wiki/mind/concepts/conflict-architecture]]
+  documents happening 191 times — has not been checked. A `bin/mine-messages`
+  pass for other stated percentages tied to relationship logistics, rather
+  than to belief, would settle whether the exception is a pattern or a
+  single dated concession.
+
+

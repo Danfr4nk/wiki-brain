@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Timeline diagram">
+  <rect width="200" height="200" fill="#fff5e6"/>
+  <line x1="30" y1="100" x2="170" y2="100" stroke="#d97706" stroke-width="3"/>
+  <g fill="#d97706">
+    <circle cx="55" cy="100" r="7"/><circle cx="100" cy="100" r="7"/><circle cx="145" cy="100" r="7"/>
+  </g>
+  <g stroke="#d97706" stroke-width="2">
+    <line x1="55" y1="93" x2="55" y2="70"/><line x1="100" y1="107" x2="100" y2="130"/>
+    <line x1="145" y1="93" x2="145" y2="70"/>
+  </g>
+  <text x="100" y="192" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#202122">Timeline</text>
+</svg>

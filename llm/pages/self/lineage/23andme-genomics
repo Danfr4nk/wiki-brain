@@ -1,0 +1,429 @@
+---
+
+domain: self
+
+page_type: report
+
+knowledge: mixed
+
+status: active
+
+date_created: 2026-07-25
+
+date_modified: 2026-08-14
+
+sources:
+
+- raw/self/ancestry/dna-reports/Ancestry Composition - 23andMe.pdf
+
+- raw/self/ancestry/dna-reports/chromosome.pdf
+
+- raw/self/ancestry/dna-reports/health.pdf
+
+tags: [family, physical-health]
+
+connections:
+
+- page: wiki/mind/synthesis/ancestral-dialectic
+
+type: evidences
+
+claim: "The Ashkenazi signal at 21.4% and the sub-regional European mapping are the biological corroboration of the dialectic's two source-lines, confirming from DNA what the paper trail already showed."
+
+- page: wiki/self/lineage/family-tree
+
+type: parallels
+
+claim: "The 99.7% European composition with 21.4% Ashkenazi mirrors the documentary record's dual heritage — Russian and Austrian Jewish immigration on the paternal side against deep Appalachian roots on the maternal."
+
+- page: wiki/health/chemical-architecture
+
+type: contextualizes
+
+claim: "The 95th-percentile Neanderthal variant load and the wellness report on caffeine consumption and sleep depth are offered as background to the chemical architecture rather than causes of it."
+
+- page: wiki/self/lineage/hybrid-analysis
+
+type: evidences
+
+claim: "This page supplies the genomic data that the hybrid analysis cross-references against the documentary family tree, including the haplogroups and Neanderthal percentage."
+
+- page: wiki/self/ancestry
+
+type: component-of
+
+claim: "This page is a detailed sub-report under the ancestry hub, holding the genomic data that complements the family tree and hybrid analysis pages."
+
+---
+
+# 23andMe Genomics
+
+The full extraction of Dan Frank's 23andMe genomic profile — ancestry composition, haplogroups, chromosome painting, Neanderthal ancestry, health predispositions, carrier status, wellness reports, and trait reports — provides a biological cross-reference to the documentary family tree held in [[wiki/self/lineage/family-tree]]. Where the GEDCOM record shows Russian and Austrian Jewish immigration on the paternal side against deep Appalachian roots on the maternal, the DNA confirms the same two lines independently: 21.4% Ashkenazi Jewish against 78.3% Northwestern European. This page records every data point extractable from the three source PDFs (Ancestry Composition, Chromosome Painting, Health Report), all exported from 23andMe on 2025-03-31 and last updated by the service on 2024-10-25.
+
+> **CORRECTED [2026-08-14]:** The previous version of this page claimed the source PDFs were "image-based without an extractable text layer" and that "specific percentage values are not digitally recorded." This was wrong. All three PDFs contain a full text layer and were extracted via pymupdf for this revision. Every percentage, haplogroup, and health result below comes directly from that extraction.
+
+## Ancestry Composition
+
+The primary ethnicity estimate breaks down as follows:
+
+| Category | Percentage | Sub-regions |
+
+|---|---|---|
+
+| **Northwestern European** | **99.7%** | 78.3% in defined sub-regions |
+
+| British & Irish | 55.8% | North Central England, Central and Northern Ireland (+19 additional regions) |
+
+| French & German | 22.2% | Central Swabia (+2 additional regions) |
+
+| Broadly Northwestern European | 0.3% | — |
+
+| **Ashkenazi Jewish** | **21.4%** | Central European and Western Ukrainian Jews |
+
+| **Sub-Saharan African** | **0.2%** | West African (0.2%), Ghanaian/Liberian/Sierra Leonean (0.2%) |
+
+| Trace Ancestry | 0.2% | — |
+
+| Unassigned | 0.1% | — |
+
+Additional ancestry regions flagged as reflecting mixed ancestry or recent migration: Tidal Potomac River Early British/Irish Americans, European Diaspora.
+
+The 21.4% Ashkenazi figure is slightly below the ~25% expected from one fully-Jewish grandparent ([[wiki/people/morley-frank|Morley Jay Frank]], whose parents were both Jewish immigrants). This is within normal variation for DNA inheritance — a grandparent contributes on average 25% of DNA but the actual amount varies due to recombination. The 55.8% British & Irish and 22.2% French & German together account for the maternal Appalachian and Anglo-Protestant lines, with the French & German component likely reflecting the Pennsylvania Dutch and German settler heritage on the Gillingham/Shrum side.
+
+The 0.2% Sub-Saharan African trace is small enough to be statistical noise or a distant ancestor several generations back. It does not appear in the documentary record and cannot be assigned to a specific line without further investigation.
+
+## Ancestry Timeline
+
+23andMe estimates the number of generations back to the most recent ancestor from each population:
+
+| Population | Generations Ago | Approximate Year |
+
+|---|---|---|
+
+| Ashkenazi Jewish | 1–3 | 1900–1960 |
+
+| British & Irish | 1–3 | 1900–1960 |
+
+| French & German | 2–4 | 1870–1930 |
+
+The Ashkenazi 1–3 generation range is consistent with the documentary record: [[wiki/people/david-j-frank|David J. Frank]] (b. 1892) and [[wiki/people/sadie-harris|Sadie Harris]] (b. 1900) are Dan's paternal great-grandparents, placing them 3 generations back. The British & Irish 1–3 range reflects the deep multi-generational presence of the Gillingham/Shrum/Coldren lines in Pennsylvania. The French & German 2–4 range is consistent with 18th- and 19th-century German Palatine and Pennsylvania Dutch immigration.
+
+## Haplogroups
+
+| Line | Haplogroup | Notes |
+
+|---|---|---|
+
+| Maternal (mtDNA) | **R0** | Ancient haplogroup, ancestor of H and V; found across Europe and the Middle East; relatively rare in European populations |
+
+| Paternal (Y-DNA) | **R-Z93** | Subclade of R1a; found in Central/South Asia and some Ashkenazi Jewish populations |
+
+The maternal haplogroup R0 is the more surprising of the two. R0 is relatively uncommon in Northern Europe and is found at higher frequencies in the Arabian Peninsula, the Middle East, and among some Ashkenazi Jewish populations. On the maternal line (mother's mother's mother's line: Suzanne → Diane → Fran → ...), this is unexpected for a supposedly purely Appalachian Protestant lineage. However, mitochondrial haplogroups are ancient (thousands of years old) and do not necessarily indicate recent Jewish or Middle Eastern ancestry on the maternal side. R0 has been found at low frequencies across Europe for millennia.
+
+The paternal haplogroup R-Z93 is a subclade of R1a that is found in some Ashkenazi Jewish populations, particularly associated with the Levite lineage and other Jewish groups with Central Asian connections. This is consistent with the Frank line's Ashkenazi heritage, though R-Z93 is not exclusively Jewish and is also found in non-Jewish European and Central Asian populations.
+
+## Chromosome Painting
+
+The chromosome painting PDF (`chromosome.pdf`, 199 KB, 2 pages) visualizes ancestry assignments across all 22 autosomes plus the X and Y chromosomes. The PDF contains a legend and chromosome numbered 1–22, X, and Y, but the actual segment-level ancestry assignments are visual only — the text layer lists chromosome numbers but does not encode which segments map to which ancestry. A "chromosome copy.pdf" of identical size (204,233 bytes) exists in the raw directory and appears to be a duplicate.
+
+23andMe notes that the full ancestry chromosomal data is available for download in CSV format from the Scientific Details page, but this export was not part of the PDF dump in `raw/self/ancestry/dna-reports/`. The chromosome painting therefore remains a visual reference only; no per-segment data is digitally recorded in this wiki.
+
+## Neanderthal Ancestry
+
+Dan's Neanderthal-ancestry percentage places him in the **95th percentile of 23andMe customers** — he carries more Neanderthal-introgressed variants than 95% of the 23andMe customer base. The report flags this as a notable outlier result.
+
+The scientific literature (PheWAS studies) has linked some Neanderthal-introgressed variants to population-level associations with mood disorders, nicotine addiction, and chronotype, but these are correlational findings, not causal claims about an individual. The 95th percentile is offered here as a biological data point and as symbolic reinforcement of an identity Dan already holds — an outsider even at the species level — rather than as a clinical finding. The wellness report's finding that Dan is "less likely to be a deep sleeper" and "likely to consume less caffeine" may intersect with chronotype research on Neanderthal variants, but no direct causal link is established.
+
+## Health Predisposition Reports
+
+The health report PDF (`health.pdf`, 1,032 KB, 11 pages) contains 14+ health predisposition reports. Results are categorized as "Variant detected, not likely at increased risk," "Variants not detected," "Typical likelihood," or "Complete tasks to view result."
+
+| Condition | Result |
+
+|---|---|
+
+| Alpha-1 Antitrypsin Deficiency | Variant detected, not likely at increased risk |
+
+| Celiac Disease | Variants not detected |
+
+| Chronic Kidney Disease (APOL1-Related) | Variants not detected |
+
+| Colorectal Cancer (MUTYH-Associated Polyposis) | Variants not detected |
+
+| Familial Hypercholesterolemia | Variants not detected |
+
+| G6PD Deficiency | Variants not detected |
+
+| Hereditary Amyloidosis (TTR-Related) | Variants not detected |
+
+| Hereditary Hemochromatosis (HFE-Related) | Variants not detected |
+
+| Late-Onset Alzheimer's Disease | Variant not detected |
+
+| Parkinson's Disease | Variants not detected |
+
+| Prostate Cancer (BRCA1/BRCA2 Selected Variants) | Complete tasks to view result |
+
+| Type 2 Diabetes | Typical likelihood |
+
+| Age-Related Macular Degeneration | Listed (result not specified in extracted text) |
+
+| Hereditary Thrombophilia | Listed (result not specified in extracted text) |
+
+The single detected variant — Alpha-1 Antitrypsin Deficiency — is flagged as "not likely at increased risk," meaning the variant present is not the high-risk combination. The "Complete tasks to view result" status for the BRCA report means Dan did not complete the questionnaire required to unlock that result. The two conditions listed without clear results (Age-Related Macular Degeneration, Hereditary Thrombophilia) appear in the summary but their specific outcomes were not captured in the text extraction.
+
+## Carrier Status Reports
+
+The carrier status section covers 46+ conditions. A single variant was detected:
+
+| Condition | Result |
+
+|---|---|
+
+| **ARSACS** | **Variant detected** |
+
+| Agenesis of the Corpus Callosum with Peripheral Neuropathy | Variant not detected |
+
+| Autosomal Recessive Polycystic Kidney Disease | Variant not detected |
+
+| Beta Thalassemia and Related Hemoglobinopathies | Variant not detected |
+
+| Bloom Syndrome | Variant not detected |
+
+| Canavan Disease | Variant not detected |
+
+| Congenital Disorder of Glycosylation Type 1a (PMM2-CDG) | Variant not detected |
+
+| Cystic Fibrosis | Variant not detected |
+
+| D-Bifunctional Protein Deficiency | Variant not detected |
+
+| Dihydrolipoamide Dehydrogenase Deficiency | Variant not detected |
+
+| Familial Dysautonomia | Variant not detected |
+
+| Familial Hyperinsulinism (ABCC8-Related) | Variant not detected |
+
+| Familial Mediterranean Fever | Variant not detected |
+
+| Fanconi Anemia Group C | Variant not detected |
+
+| GRACILE Syndrome | Variant not detected |
+
+| Gaucher Disease Type 1 | Variant not detected |
+
+| Glycogen Storage Disease Type Ia | Variant not detected |
+
+| Glycogen Storage Disease Type Ib | Variant not detected |
+
+| Hereditary Fructose Intolerance | Variant not detected |
+
+| Leigh Syndrome, French Canadian Type | Variant not detected |
+
+| Limb-Girdle Muscular Dystrophy Type 2D | Variant not detected |
+
+| Limb-Girdle Muscular Dystrophy Type 2E | Variant not detected |
+
+| Limb-Girdle Muscular Dystrophy Type 2I | Variant not detected |
+
+| MCAD Deficiency | Variant not detected |
+
+| Maple Syrup Urine Disease Type 1B | Variant not detected |
+
+| Mucolipidosis Type IV | Variant not detected |
+
+| Neuronal Ceroid Lipofuscinosis (CLN5-Related) | Variant not detected |
+
+| Neuronal Ceroid Lipofuscinosis (PPT1-Related) | Variant not detected |
+
+| Tyrosinemia Type I | Variant not detected |
+
+| Niemann-Pick Disease Type A | Variant not detected |
+
+| Nijmegen Breakage Syndrome | Variant not detected |
+
+| Nonsyndromic Hearing Loss and Deafness, DFNB1 (GJB2-Related) | Variant not detected |
+
+| Pendred Syndrome and DFNB4 Hearing Loss (SLC26A4-Related) | Variant not detected |
+
+| Phenylketonuria and Related Disorders | Variant not detected |
+
+| Pompe Disease | Variant not detected |
+
+| Primary Hyperoxaluria Type 2 | Variant not detected |
+
+| Pyruvate Kinase Deficiency | Variant not detected |
+
+| Rhizomelic Chondrodysplasia Punctata Type 1 | Variant not detected |
+
+| Salla Disease | Variant not detected |
+
+| Severe Junctional Epidermolysis Bullosa (LAMB3-Related) | Variant not detected |
+
+| Sickle Cell Anemia | Variant not detected |
+
+| Sjögren-Larsson Syndrome | Variant not detected |
+
+| Tay-Sachs Disease | Variant not detected |
+
+| Usher Syndrome Type 1F | Variant not detected |
+
+| Usher Syndrome Type 3A | Variant not detected |
+
+| Zellweger Spectrum Disorder (PEX1-Related) | Variant not detected |
+
+ARSACS (Autosomal Recessive Spastic Ataxia of Charlevoix-Saguenay) is a rare neurodegenerative disorder. Being a carrier means Dan has one copy of the variant but does not have the disease (which requires two copies). This is relevant for family planning — if Dan's partner is also a carrier, there is a 25% chance of an affected child. The ARSACS variant is most commonly associated with the Charlevoix-Saguenay region of Quebec, but carrier status in a person of mixed European ancestry is not unprecedented.
+
+## Wellness Reports
+
+| Trait | Result |
+
+|---|---|
+
+| Alcohol Flush Reaction | Unlikely to flush |
+
+| Caffeine Consumption | Likely to consume less |
+
+| Deep Sleep | Less likely to be a deep sleeper |
+
+| Genetic Weight | Predisposed to weigh about average |
+
+| Muscle Composition | Common in elite power athletes |
+
+| Sleep Movement | Likely average or less movement |
+
+| Lactose Intolerance | Likely tolerant |
+
+| Saturated Fat and Weight | Likely similar weight |
+
+The "likely to consume less caffeine" and "less likely to be a deep sleeper" results are notable given the [[wiki/health/chemical-architecture]] page's documentation of Dan's stimulant use and sleep patterns. The "common in elite power athletes" muscle composition result is a population-level association with fast-twitch muscle fiber genetics, not a claim about Dan's actual athletic ability.
+
+## Trait Reports
+
+The traits section covers 37+ genetically-influenced characteristics. Results are organized by category:
+
+**Physical Appearance**
+
+| Trait | Result |
+
+|---|---|
+
+| Eye Color | Likely brown or hazel |
+
+| Hair Texture | Likely straight or wavy |
+
+| Hair Thickness | Less likely to have thick hair |
+
+| Light or Dark Hair | Likely light |
+
+| Red Hair | Likely no red hair |
+
+| Hair Photobleaching | More likely to experience |
+
+| Freckles | Likely little freckling |
+
+| Skin Pigmentation | Likely lighter skin |
+
+| Back Hair | Likely little upper back hair |
+
+| Bald Spot | Likely no bald spot |
+
+| Early Hair Loss | Likely no hair loss |
+
+| Newborn Hair | Likely little baby hair |
+
+| Stretch Marks | Less likely to have stretch marks |
+
+| Unibrow | Likely at least a little unibrow |
+
+| Widow's Peak | Likely no widow's peak |
+
+**Sensory and Perceptual**
+
+| Trait | Result |
+
+|---|---|
+
+| Bitter Taste | Likely can't taste |
+
+| Asparagus Odor Detection | Likely can smell |
+
+| Cilantro Taste Aversion | Slightly higher odds of disliking |
+
+| Photic Sneeze Reflex | Likely no |
+
+| Misophonia | Average odds of hating chewing sounds |
+
+**Body Structure**
+
+| Trait | Result |
+
+|---|---|
+
+| Flat Feet | More likely than average |
+
+| Bunions | Less likely than average |
+
+| Cleft Chin | Likely no cleft chin |
+
+| Cheek Dimples | Likely no dimples |
+
+| Earlobe Type | Likely detached earlobes |
+
+| Earwax Type | Likely wet earwax |
+
+| Finger Length Ratio | Likely ring finger longer |
+
+| Toe Length Ratio | Likely big toe longer |
+
+**Behavioral and Preferences**
+
+| Trait | Result |
+
+|---|---|
+
+| Sweet vs. Salty | Likely prefers salty |
+
+| Ice Cream Flavor Preference | About 50/50 vanilla or chocolate |
+
+| Fear of Heights | Less likely than average |
+
+| Fear of Public Speaking | Less likely |
+
+| Mosquito Bite Frequency | Likely bitten as often as others |
+
+| Motion Sickness | Less likely to experience |
+
+| Ability to Match Musical Pitch | About 50/50 chance |
+
+| Wake-Up Time | Likely to wake up around 8:34 am |
+
+The "likely ring finger longer" result (lower 2D:4D digit ratio) is associated in some studies with higher prenatal testosterone exposure. The "likely prefers salty" and "likely to consume less caffeine" results align with the wellness section. The 8:34 am wake-up time prediction is notably specific and likely reflects chronotype genetics.
+
+## Cross-References and Interpretation
+
+The genomic data on this page functions as the biological half of the [[wiki/mind/synthesis/ancestral-dialectic]]'s interpretive frame. The dialectic proposes two incompatible inherited "operating systems" — Ashkenazi hypervigilance and Appalachian numbness — and the DNA data corroborates the two source-lines independently: 21.4% Ashkenazi Jewish against 78.3% Northwestern European, with the sub-regional breakdown mapping onto the documentary record's Russian/Austrian immigration and Pennsylvania settler heritage.
+
+The [[wiki/self/lineage/hybrid-analysis]] page treats this genomic data as one of two evidentiary streams (the other being the GEDCOM family tree) and flags the resulting synthesis as interpretive rather than clinical. The haplogroup data — particularly the maternal R0 and paternal R-Z93 — adds a deep-time layer that the documentary record cannot reach, though the interpretation of these haplogroups in the context of Dan's recent ancestry is speculative.
+
+The Neanderthal 95th-percentile result and the wellness report's sleep and caffeine findings are offered as background to [[wiki/health/chemical-architecture]] rather than as causes of it. The PheWAS links to mood, nicotine, and chronotype are population-level associations, not individual findings.
+
+## Gaps
+
+- The chromosome painting PDFs contain no extractable segment-level data — the per-chromosome ancestry assignments are visual only. The full CSV download from 23andMe's Scientific Details page was not part of the export in `raw/self/ancestry/dna-reports/`.
+
+- Two health predisposition results (Age-Related Macular Degeneration, Hereditary Thrombophilia) appear in the summary but their specific outcomes were not captured in the text extraction.
+
+- The Prostate Cancer (BRCA1/BRCA2) report is locked behind an incomplete questionnaire ("Complete tasks to view result").
+
+- The "chromosome copy.pdf" in the raw directory appears to be an identical duplicate of "chromosome.pdf" (both 204,233 bytes) — one should be flagged for deduplication.
+
+- The maternal haplogroup R0 is unusual for a supposedly purely Appalachian Protestant line and warrants further investigation — it may indicate a distant non-European ancestor on the maternal line, or it may simply reflect the deep-time distribution of R0 across Europe.
+
+- The paternal haplogroup R-Z93 is consistent with Ashkenazi heritage but is not exclusively Jewish; its presence in the Frank line could be investigated further with more detailed Y-DNA testing.
+
+- Inverse connections to this page from [[wiki/self/lineage/family-tree]], [[wiki/self/lineage/hybrid-analysis]], and [[wiki/self/ancestry]] need to be added to those pages' frontmatter (the `bin/wiki-connect check` lint will flag these as missing inverses).
+
+---
+
+**Up:** [[wiki/self/index|Self]] › [[wiki/self/lineage/index|Lineage]]

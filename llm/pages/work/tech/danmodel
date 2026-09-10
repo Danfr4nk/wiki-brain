@@ -1,0 +1,297 @@
+---
+
+domain: work
+
+page_type: concept
+
+title: "DANMODEL — a voice-cloning ML pipeline trained on Dan's own texts"
+
+status: stub
+
+date_created: 2026-07-20
+
+date_modified: 2026-07-20
+
+sources:
+
+- raw/self/danmodel/PIPELINE_NOTES.md
+
+- raw/self/danmodel/extraction_summary.txt
+
+- raw/self/danmodel/reaction_pairs_heldout.jsonl
+
+tags: [ai-collaboration, digital-footprint]
+
+connections:
+
+- page: wiki/mind/concepts/exocortex
+
+type: instantiates
+
+claim: "DANMODEL's CATO_COMPACT block is the exocortex thesis made mechanical — instead of a hand-written bootloader, it's a compressed system-prompt of Dan's own texting voice, extracted algorithmically from his message corpus rather than authored by introspection."
+
+- page: wiki/work/tech/mneme/overview
+
+type: parallels
+
+claim: "Both are independently-built self-modeling infrastructure projects running the same 'extract once, stop re-deriving' thesis this wiki itself is built on — mneme for memory/context, DANMODEL for voice and output."
+
+- page: wiki/mind/synthesis/ai-collaborative-analysis
+
+type: instance-of
+
+claim: "The pure-retrieval Jaccard baseline versus the TF-IDF-plus-generation RAG simulator recreates the CATO/MAX dual-engine split (forensic retrieval vs. adversarial generation) inside a single narrow tool."
+
+- page: wiki/people/annie-ulmer
+
+type: evidences
+
+claim: "Annie (early) alone accounts for 15,723 of the corpus's 39,378 extracted stimulus-response pairs — 40% of Dan's entire measured reaction history to a single person from a single era, an independent mechanical confirmation of her centrality."
+
+- page: wiki/mind/concepts/contact-gini
+
+type: evidences
+
+claim: "The by-contact breakdown (Annie early 40%, unmapped 35%, Annie NYC 12%, five other named contacts splitting the remainder) is a structurally similar concentration pattern to the 0.961 message-corpus Gini coefficient, independently reproduced in a different metric (reaction pairs, not raw message counts)."
+
+- page: wiki/mind/synthesis/ai-collaborative-analysis
+
+type: instantiates
+
+claim: "DANMODEL's dual retrieval-vs-generation architecture (Jaccard baseline vs. TF-IDF RAG simulator) recreates the CATO/MAX forensic-retrieval-vs-adversarial-generation split inside one narrow voice-cloning tool."
+
+---
+
+# DANMODEL — a voice-cloning ML pipeline trained on Dan's own texts
+
+DANMODEL is a from-scratch machine-learning pipeline, found unfiled in a
+
+Google Drive folder (`~~DOCS/DANMODEL`), that does something no other
+
+project in this corpus does: it tries to build an AI that texts *as* Dan,
+
+trained entirely on his own message history, and then designs a blind test
+
+to check whether the fake is distinguishable from the real thing. It is
+
+pure Python standard library plus numpy — five scripts, no framework, run
+
+locally — and it is the most literal, mechanized instance of the
+
+self-modeling theme that runs through the rest of this wiki's `work/tech/`
+
+material (CATO/MAX, [[wiki/work/tech/mneme/overview|mneme]]): those
+
+projects extract Dan's *reasoning*; this one extracts his *voice*.
+
+## What it does
+
+**Extraction** (`reaction_extractor.py`): parses a full message-corpus CSV
+
+into `(stimulus -> Dan's actual response)` pairs — every time someone
+
+texted him something and he replied, across however many individual
+
+messages either side sent in that turn. It restricts to 1:1 threads only,
+
+explicitly to avoid a "v1 defect" where group-chat exports echoed Dan's own
+
+sent messages back mislabeled as "Received" from a third party — the same
+
+direction-field unreliability documented independently elsewhere in this
+
+wiki's people pages. The run on file produced **39,378 pairs**, split
+
+34,808 train / 4,570 held-out (12%, deterministic hash-based split, never
+
+shown to the model). Two baseline models were then built against that
+
+data: a naive Jaccard word-overlap retriever that just replays the closest
+
+historical response verbatim (`reaction_model.py`), and an upgraded TF-IDF
+
++ metadata-boosted retriever (`retriever.py`) that feeds a proper
+
+generation step.
+
+**Generation** (`rag_simulator.py`): retrieves the 8 most relevant
+
+historical exchanges for a new stimulus, assembles them as few-shot
+
+exemplars behind a compressed persona prompt — `CATO_COMPACT` — and calls
+
+a free-tier OpenRouter model (Llama 3.2 3B) to generate a synthetic
+
+response in Dan's voice. `CATO_COMPACT` is itself worth reading in full
+
+(preserved verbatim in `raw/self/danmodel/PIPELINE_NOTES.md`): a
+
+self-authored description of his own texting signature — short 3–7
+
+message bursts, 80%+ lowercase, one ALL-CAPS word per cluster for
+
+emphasis, "..." as a breath rather than a trail-off, pivot words
+
+("actually," "honestly," "literally"), no terminal period unless finality
+
+is intended, and an explicit engagement rule to simulate him as "a senior
+
+analyst peer, not a user to protect — no sycophancy, no performed concern,
+
+no acceptability filter." Its own comment credits the compression to
+
+"CONTEXT_CORE_EXPANDED + PHENOMENOLOGY_LENS + voice analysis" — this is a
+
+downstream artifact of the same exocortex/CATO bootloader material
+
+documented on [[wiki/mind/concepts/exocortex]] and
+
+[[wiki/work/tech/max-framework/overview]], repurposed from an input-side
+
+reasoning aid into an output-side voice clone.
+
+**Evaluation** (`eval_harness.py`): the most rigorous piece. For each
+
+held-out stimulus it generates three candidate responses — the RAG
+
+simulator's output, the pure-Jaccard replay, and the real historical
+
+response — shuffles them into neutrally-labeled "Candidate A/B/C," and
+
+asks an LLM judge which one is most plausibly written by the same author,
+
+never telling it which is which. A runtime assertion checks that no
+
+held-out pair leaked into the training index or the judge's exemplars. The
+
+two headline metrics it's built to report: the RAG-vs-baseline win rate,
+
+and a **confusion rate** — how often the judge does *not* pick the real
+
+response as most plausible. The script's own comment names this the
+
+interesting number: a high confusion rate would mean the synthetic Dan is
+
+being judged more "Dan-like" than the actual, historical Dan.
+
+## What the results actually show — nothing, yet
+
+No `eval_results_*.jsonl` file — the output the eval harness writes every
+
+run — exists anywhere in the Drive folder. Compiled bytecode for
+
+`rag_simulator.py` and `retriever.py` (but conspicuously not for the other
+
+three scripts) sits in the folder's `__pycache__`, both dated June 10,
+
+2026, which is consistent with the RAG pipeline having been exercised at
+
+least once — but there is no surviving record of a completed blind eval,
+
+a win rate, or a confusion rate. **The single question the whole project
+
+was engineered to answer — can an AI trained on Dan's own texts pass for
+
+him under blind judgment — is, per the evidence on disk, unanswered.**
+
+This is a real, notable gap rather than a negative result: the harness
+
+exists, is methodologically careful (leakage assertions, neutral labels,
+
+train-only retrieval), and was apparently at least partially run, but
+
+whatever it found was not saved to Drive.
+
+## What the extraction data shows on its own
+
+Independent of whether generation or evaluation ever finished, the
+
+extraction pass is itself a real corpus statistic, verified by recount
+
+(`extraction_summary.txt`, cross-checked against the 4,570-row held-out
+
+file):
+
+| Metric | Value |
+
+|--------|-------|
+
+| Total reaction pairs | 39,378 (34,808 train / 4,570 held-out) |
+
+| Domain mix | other 67.3% · relational 15.6% · logistical 5.3% · supply 4.0% · music 3.4% · financial 2.5% · technical 1.3% · political 0.6% |
+
+| Top contact | Annie (early) — 15,723 pairs (40% of the entire corpus) |
+
+| Second | unmapped — 13,761 (35%, no hardcoded identity) |
+
+| By year (peaks) | 2018: 9,728 · 2025: 8,034 |
+
+| Dan's burst size | mean 2.13 msgs/turn, median 2.0, max 412 |
+
+| Response latency | median 0.6 min, mean 31.0 min |
+
+The `other` domain dominating at 67% is a limitation of the keyword-scoring
+
+heuristic (a transparent argmax over hand-picked term lists per domain,
+
+falling back to "other" when nothing scores), not a claim that two-thirds
+
+of Dan's texting is topic-less — it means the heuristic is coarse, not
+
+that the content is. The year distribution independently corroborates two
+
+periods already established elsewhere in the wiki on separate evidence:
+
+2018 as a documented high-volume "deep cycle" and 2025 as the collapse
+
+year — this dataset reproduces both peaks from a completely different
+
+extraction method (reaction-pair counting rather than raw message
+
+counting). The 40% single-contact concentration on Annie (early) alone,
+
+before her NYC-era number is even added, is a striking independent number
+
+for the corpus's already-documented extreme centralization (see
+
+[[wiki/mind/concepts/contact-gini]]'s 0.961 Gini coefficient) — measured
+
+here in a completely different unit (extracted conversational turns, not
+
+raw message volume) and still landing at a comparably extreme skew.
+
+## Gaps
+
+Whether `eval_harness.py`'s blind test was ever run to completion, and
+
+what it found, is unknown — the most interesting question the project
+
+raises is also the one it left unanswered on disk. The full 34,808-row
+
+`reaction_pairs_train.jsonl` (~16MB) exceeds this session's download
+
+tooling limit and was not filed; the 4,570-row held-out file was
+
+successfully filed and verified byte-accurate against the summary count,
+
+and is representative of the same extraction (same domains, same contact
+
+map, same era). The five Python scripts themselves are not filed
+
+byte-for-byte in `raw/` — a transcription attempt corrupted during manual
+
+reconstruction — but their full logic is preserved faithfully in
+
+`raw/self/danmodel/PIPELINE_NOTES.md`, including the `CATO_COMPACT` prompt
+
+verbatim; the originals remain retrievable from the cited Google Drive
+
+file IDs if byte-exact source is ever needed. No date is recoverable for
+
+when this project was built beyond the June 10, 2026 `__pycache__`
+
+timestamps; it is not referenced anywhere else in the corpus mined so far.
+
+---
+
+**Up:** [[wiki/work/index|Work]] › [[wiki/work/tech/index|Tech]]

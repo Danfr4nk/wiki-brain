@@ -1,0 +1,133 @@
+#!/usr/bin/env python3
+"""ingest-pack — bundle one inbox item into a paste-anywhere LLM prompt.
+
+Usage:
+  bin/ingest-pack                  pack the oldest inbox item
+  bin/ingest-pack <inbox-file>     pack a specific item (name or path)
+
+Writes exports/ingest-prompt.md. Paste its contents into any LLM chat,
+save the full response to a file, then run: bin/ingest-apply <response>
+"""
+import re
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+INBOX = ROOT / "inbox"
+MAX_ITEM_CHARS = 60_000
+
+
+def read(p):
+    return p.read_text(encoding="utf-8", errors="replace")
+
+
+def find_targets(text):
+    m = re.search(r"^targets:\s*\[(.*?)\]", text, re.M)
+    if not m:
+        return []
+    return [t.strip() for t in m.group(1).split(",") if t.strip()]
+
+
+def mentioned_pages(text):
+    """Pages whose slug words appear in the note body, ranked by hit count."""
+    low = text.lower()
+    scored = []
+    for p in sorted((ROOT / "wiki").rglob("*.md")):
+        slug = p.stem.lower()
+        if len(slug) <= 3 or slug in ("index", "overview") or "/contacts/" in str(p):
+            continue
+        # match the slug's words (e.g. "fran-whyel" -> "fran whyel") on boundaries
+        phrase = slug.replace("-", " ")
+        n = len(re.findall(r"\b" + re.escape(phrase) + r"\b", low))
+        if not n and "-" not in slug:
+            n = len(re.findall(r"\b" + re.escape(slug) + r"\b", low))
+        if n:
+            scored.append((n, p))
+    scored.sort(key=lambda x: -x[0])
+    return [p for _, p in scored[:6]]
+
+
+def main(argv):
+    if argv and argv[0] in ("-h", "--help"):
+        print(__doc__)
+        return
+    items = sorted(p for p in INBOX.glob("*") if p.is_file() and not p.name.startswith("."))
+    if not items:
+        print("inbox is empty — nothing to pack")
+        return
+    if argv:
+        cand = INBOX / Path(argv[0]).name
+        if not cand.exists():
+            print(f"not found in inbox: {argv[0]}")
+            return
+        item = cand
+    else:
+        item = items[0]
+
+    is_text = item.suffix.lower() in {".md", ".txt", ".csv", ".html", ".json", ".rtf"}
+    body = read(item)[:MAX_ITEM_CHARS] if is_text else ""
+    truncated = is_text and len(read(item)) > MAX_ITEM_CHARS
+
+    targets = find_targets(body) if is_text else []
+    target_pages = []
+    for t in targets:
+        p = ROOT / t
+        if p.exists():
+            target_pages.append(p)
+    context_pages = target_pages or (mentioned_pages(body) if is_text else [])
+
+    parts = []
+    parts.append("# WIKI INGESTION TASK\n")
+    parts.append("You are the maintenance agent for a personal wiki about Dan Frank. "
+                 "Ingest ONE source item into the wiki, following the protocol and "
+                 "style guide below exactly. Think as long as you need, but your "
+                 "final answer must contain ONLY the response blocks specified.\n")
+    parts.append("## Response format (mandatory)\n")
+    parts.append(
+        "For every wiki page you create or update, output the COMPLETE new file:\n\n"
+        "===FILE: wiki/<path>.md===\n<entire file content including frontmatter>\n===END===\n\n"
+        "Then exactly one of each:\n\n"
+        f"===MOVE: inbox/{item.name} -> raw/<domain>/<collection>/{item.name}===\n"
+        "===LOG: ingest | <domain> | <one-line description>===\n"
+        "===COMMIT: ingest: <short description>===\n\n"
+        "Never output diffs or partial files. Never modify raw/ paths other than "
+        "the MOVE line. Update the domain index FILE too if you add a new page.\n")
+    parts.append("## Ingestion rules (from CLAUDE.md)\n")
+    claude = read(ROOT / "CLAUDE.md")
+    m = re.search(r"### INGEST.*?(?=### QUERY)", claude, re.S)
+    parts.append(m.group(0) if m else "")
+    parts.append("\n## Style guide (binding)\n")
+    parts.append(read(ROOT / "STYLE_GUIDE.md"))
+    parts.append("\n## Master index (for orientation)\n```\n" + read(ROOT / "index.md") + "\n```\n")
+
+    parts.append(f"\n## THE SOURCE ITEM — `inbox/{item.name}`\n")
+    if is_text:
+        parts.append("````\n" + body + "\n````\n")
+        if truncated:
+            parts.append(f"\n(NOTE: truncated at {MAX_ITEM_CHARS} chars of "
+                         f"{item.stat().st_size:,} bytes — synthesize what is shown and "
+                         "note the truncation in queue.md via a FILE block.)\n")
+    else:
+        parts.append(f"(Binary file, {item.stat().st_size:,} bytes — file it with the MOVE "
+                     "line and create/update pages from its filename and context only.)\n")
+
+    if context_pages:
+        parts.append("\n## CURRENT CONTENT OF RELEVANT PAGES\n")
+        parts.append("These are the pages the item targets or mentions. Apply corrections "
+                     "to them FIRST; preserve all existing facts you are not correcting.\n")
+        for p in context_pages:
+            rel = p.relative_to(ROOT)
+            parts.append(f"\n===CURRENT: {rel}===\n````\n{read(p)}\n````\n")
+
+    out = ROOT / "exports" / "ingest-prompt.md"
+    out.parent.mkdir(exist_ok=True)
+    text = "\n".join(parts)
+    out.write_text(text, encoding="utf-8")
+    print(f"packed: inbox/{item.name}")
+    print(f"  -> {out.relative_to(ROOT)}  ({len(text):,} chars, ~{len(text)//4:,} tokens)")
+    print(f"  context pages: {', '.join(str(p.relative_to(ROOT)) for p in context_pages) or 'none'}")
+    print("paste its contents into any LLM, save the reply, then: bin/ingest-apply <reply-file>")
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

@@ -1,0 +1,147 @@
+---
+
+domain: people
+
+page_type: entity
+
+title: "Joe Croftcheck"
+
+status: stub
+
+knowledge: mixed
+
+date_created: 2026-08-02
+
+date_modified: 2026-08-02
+
+sources:
+
+- raw/people/captures/2026-08-02_004832_franki-and-the-fireworks.md
+
+tags: [uniontown-era, addiction-recovery, legal]
+
+connections:
+
+- page: wiki/timeline/events/franki-fireworks-day-2013
+
+type: supplies
+
+claim: "The quarter ounce bought with $350 of Suz's money on the fireworks day is the only dated transaction with him in the record, and the earliest dated purchase from a named supplier anywhere in the corpus."
+
+- page: wiki/mind/synthesis/supply-network
+
+type: component-of
+
+claim: "The network's earliest and structurally strangest node: a supplier Dan describes as 'the family plug' — inherited rather than sought — which makes the first documented link in the chain the one thing the rest of the network never is."
+
+- page: wiki/people/johnny-dealer
+
+type: precedes
+
+claim: "Croftcheck predates the 2018 deep-cycle primary node by five years and occupies a different structural position: a household-level connection rather than a peer-sourced one."
+
+infobox:
+
+name: "Joe Croftcheck"
+
+relationship_to_dan: "Supplier — described by Dan as 'the family plug'"
+
+location: uniontown
+
+known_for: "Uniontown-area cocaine supplier described as the family's connection; named in federal drug-conspiracy and asset-forfeiture reporting from the mid-2010s."
+
+---
+
+# Joe Croftcheck
+
+Joe Croftcheck is the supplier Dan names as **"the family plug"** — the
+
+Uniontown connection the household used, and the source of the quarter ounce of
+
+cocaine bought on [[wiki/timeline/events/franki-fireworks-day-2013|the Franki
+
+fireworks day]] in early July 2013 with $350 taken from
+
+[[wiki/people/suzanne-frank|Suz]]'s ATM card. That single transaction is the
+
+only dated dealing with him anywhere in the record, and it is the **earliest
+
+dated purchase from a named supplier in the entire corpus** — five years before
+
+[[wiki/people/johnny-dealer|Johnny]], who [[wiki/mind/synthesis/supply-network]]
+
+had treated as the chain's first documented node.
+
+The phrase Dan uses is what makes the page worth writing. Every other node in
+
+the supply network is sought, peer-sourced, or friendship-embedded — Johnny,
+
+Teddy, Tom, Menore, Sam, Vaughn. Croftcheck is described as **the family's**,
+
+which places the earliest link in the chain in the one category the rest of the
+
+network never occupies: **inherited rather than selected**. Whether that phrase
+
+means the household as a whole had an established relationship with him, or
+
+simply that he was locally known and available, the capture does not say, and
+
+it should not be assumed.
+
+## The federal cases
+
+The capture cites three published news items — a 2015 *Herald-Standard* report
+
+on a federal forfeiture action against money seized from a Uniontown
+
+businessman in a drug raid, a Department of Justice release on 46 southwestern
+
+Pennsylvania residents charged in a Fayette County-based cocaine and heroin
+
+conspiracy, and a January 2016 *Post-Gazette* report on 19 indicted on federal
+
+cocaine and heroin charges.
+
+**These have not been verified against the sources themselves**, and the capture
+
+does not state which case names him or in what role. What is recorded here is
+
+therefore the operator's own association of Croftcheck with that enforcement
+
+wave, dated to the mid-2010s and to Fayette County — not a finding about charges,
+
+conviction, or any specific person named in those filings. The distinction
+
+matters: an unverified association with a federal drug case is exactly the kind
+
+of claim that should not harden by being repeated inside a wiki.
+
+## Gaps
+
+- **Nothing is verified.** No message thread, no court record, and no direct
+
+corroboration of any kind exists on disk for this person. The whole page rests
+
+on one 2026 capture describing a 2013 event.
+
+- **"The family plug" is unexplained.** Whether the relationship ran through
+
+Suz, through Rick, through the wider household, or was simply the local
+
+option, is unknown, and the answer would materially change what this node
+
+means for [[wiki/mind/synthesis/supply-network]].
+
+- **The date range of the relationship is unknown.** One transaction is
+
+documented; whether it was the first, the only, or one of many is not.
+
+- **The news citations are unchecked.** Reading the three linked articles would
+
+establish whether he is named at all, which is the single cheapest thing that
+
+could be done to this page.
+
+---
+
+**Up:** [[wiki/people/index|People]]

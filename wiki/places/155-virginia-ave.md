@@ -1,0 +1,170 @@
+
+---
+domain: places
+page_type: entity
+title: "155 Virginia Ave"
+status: closed
+date_created: 2026-07-13
+date_modified: 2026-08-28
+sources:
+  - raw/self/context-core/CONTEXT_CORE_EXPANDED.md
+  - raw/self/dox-md/operating_manual.md
+  - raw/self/dansynth/DANSYNTH.txt
+  - raw/self/dansynth/dansynth-scrape-phases-2-7.md
+  - raw/people/captures/2026-08-27_223406_gap-alexis-armel.md
+related:
+  - wiki/people/alexis-armel
+  - wiki/people/annie-ulmer
+  - wiki/timeline/periods/2017-poverty-floor
+  - wiki/timeline/periods/2018-deep-cycle
+  - wiki/places/337-saratoga-drive
+tags: [financial-stress, housing, relationships, uniontown-era, legal]
+connections:
+  - page: wiki/people/alexis-armel
+    type: co-occurs
+    claim: "Leased in January 2015 during the end of the Alexis relationship and inherited by Annie eleven months later, this address is the spatial form of the single-bond switch: the container held while the occupant changed."
+  - page: wiki/places/117-belmont-circle
+    type: co-occurs
+    claim: "Dan's own February 2026 statement puts this house on the lot adjacent to Fran's — so the four-year residence and the caregiving job that defined the era were a property line apart on the same fairway."
+  - page: wiki/people/jacob-bacharach
+    type: co-occurs
+    claim: "This house is the setting of the novel at the centre of the Uniontown Glitch, but the message record breaks the usual framing: The Bend of the World was published in 2014 and Dan's tenancy begins in January 2015, so he moved into the book's setting after the book existed."
+  - page: wiki/legal/2015-possession-arrest
+    type: contradicts
+    claim: "This page dates the residence from January 2015, but Dan's account of the February 2015 arrest places that night while Alexis was still hidden at 337 Saratoga and before the move here — so either the start date or the sequencing is off by weeks."
+  - page: wiki/timeline/events/franki-fireworks-day-2013
+    type: evidenced-by
+    claim: "Alexis was housed here for five days in July 2013 — eighteen months before the January 2015 lease this page dates itself from — so the address was already under Suz's control and already performing the displaced-partner function that the lair-continuity finding describes."
+  - page: wiki/mind/synthesis/dormancy-not-exit
+    type: evidences
+    claim: "Lair-continuity — the apartment leased for Alexis becoming the apartment Annie moves into — is the spatial signature of retaining the container while swapping the occupant."
+  - page: wiki/timeline/periods/uniontown-return-2013-2015
+    type: component-of
+    claim: "The January 2015 move here happens inside the Uniontown-return period, and the lair-continuity it seeds is that period's pivotal physical fact."
+  - page: wiki/mind/synthesis/bond-switch-2015
+    type: evidences
+    claim: "The lair-continuity documented at this address is spatial proof the switch was a swap, not a relocation."
+  - page: wiki/people/zachariah-harshman
+    type: evidenced-by
+    claim: "From January 2015 the address is Zach's consistent handoff location ('front door is open, i'm in the kitchen'), placing the earliest documented Uniontown supply node inside this same house — and inside the same month the Alexis-to-Annie transfer he later reacts to takes place."
+  - page: wiki/people/diane-moore
+    type: caused-by
+    claim: "The 2018-03-29 eviction notice terminating Dan's residency and demanding the keys was served by 'Dian V. Moore' — identified 2026-08-18 as Dan's maternal grandmother, carried here until then as an unexplained actor."
+  - page: wiki/places/the-unpapered-address
+    type: component-of
+    claim: "The March 2018 eviction notice is one of only two housing instruments in sixteen years, served mid-vigil by Dan's own maternal grandmother demanding the keys — and a court summons seven days later carries 337 Saratoga as his address, so the document moved his paper residence even where the record cannot show it moved him."
+  - page: wiki/timeline/events/fran-death-vigil
+    type: co-occurs
+    claim: "The March 29 eviction notice terminating Dan's residency landed mid-vigil — the estate moving on the house while he was holding the 24/7 line."
+  - page: wiki/people/lukyan-mraz
+    type: co-occurs
+    claim: "Lukyan's visits are staged around the same household as Zach's supply handoffs ('wanted to see if Zach was there'), and a lent lap-quilting book and 'the room' with 'equipment' point to a small cannabis-grow attempt run out of the same Uniontown social circle."
+  - page: wiki/people/zachariah-harshman
+    type: co-occurs
+    claim: "Nearly every documented handoff in the 2014–15 supply relationship happens at the house — 'front door is open, i'm in the kitchen,' 'side door to garage' — placing Zach inside the same lair-continuity the bond-switch thesis tracks."
+---
+
+
+# 155 Virginia Ave
+
+155 Virginia Ave, Uniontown PA was Dan's residence from January 2015 to
+February 2019 — the address where the two defining relationships of his
+adult life handed off, and where the hardest documented years of his life
+happened. Context-core calls it "the Alexis lair": leased during the end
+of the [[wiki/people/alexis-armel|Alexis]] relationship, and then — in a
+move the record flags as self-preservation lair-continuity —
+[[wiki/people/annie-ulmer|Annie]] moved into the same apartment when the
+new relationship began after Thanksgiving 2015. The MOGZART era, the
+"smashonista" couples-camming period, the 2016 politicization, the 2017
+poverty floor (water shut off, DJing for free, cam income, drug-fronts as
+credit — [[wiki/timeline/periods/2017-poverty-floor]]), and the 2018 "deep
+cycle" (peak chaos and output, multiple dealers, ~40k messages/year —
+[[wiki/timeline/periods/2018-deep-cycle]]) all played out at this address.
+He left it for Manhattan in February 2019.
+
+The DANSYNTH ingest added the address's deepest layer: 155 Virginia sits
+**adjacent to [[wiki/places/117-belmont-circle|117 Belmont Circle]]** —
+Fran's house on the Uniontown Country Club fairway — on a boundary the
+Frank/Whyel and Ulmer families shared for fifty-plus years. Living there
+put Dan and Annie next door to the caregiving job that defined the era:
+they were Fran's caregivers until her March 2018 fall — paid full-time for roughly the last six months of it
+([[wiki/timeline/events/fran-death-vigil]]). On March 29, 2018 — during
+the terminal vigil — Dan was served an eviction notice for 155 Virginia by
+Dian V. Moore, demanding the keys.
+
+> **GAP CLOSED [2026-08-22]:** This page read, until now, *"the residence
+> timeline has him staying until February 2019, so the notice's outcome is
+> undocumented."* It is documented. A Fayette County summary summons filed
+> **April 5, 2018** — seven days after the notice — gives the defendant's
+> address as **337 Saratoga Dr, Uniontown PA 15401**
+> ([[wiki/timeline/events/uniontown-hospital-vape-alarm]], docket
+> MJ-14101-NT-0000082-2018). Whatever else the notice did or did not
+> accomplish, the address the Commonwealth held for Dan one week later was his
+> mother's house, not this one. That is a narrow finding and worth keeping
+> narrow: an address on court paper is an address **of record**, which can lag
+> or lead a place of sleep, and [[wiki/places/117-belmont-circle]] documents him
+> using a third house across the same spring. The residence timeline's
+> "155 Virginia until February 2019" cannot stand unqualified — but the
+> correction it needs is that the tenancy's paper life ended in March 2018
+> while its lived life may not have, which is the same shape this page already
+> argues about the instrument itself.
+
+The reading that survives both facts is the one in the typed edge below: the
+notice *is* one of only two housing instruments in sixteen years, and it did
+change something after all — the paperwork. Whether it changed where he slept
+is a separate question the corpus still cannot answer.
+
+> **REVISED [2026-07-13]:** Resolved — novelist
+> [[wiki/people/jacob-bacharach]] used this house's exterior only (never
+> set foot inside it) as a fictional rental setting; the interior details
+> in the book are invented. This is unrelated to the Bacharach family's
+> actual former home at
+> [[wiki/places/337-saratoga-drive|337 Saratoga Drive]], down the street
+> from the Franks — two separate facts that an earlier pass had
+> conflated into a false contradiction. Full account at
+> [[wiki/people/jacob-bacharach]].
+>
+> **REVISED [2026-08-08]:** Two corrections to the above. The novel is
+> named as *The Bend of the World* in every retelling, but Bacharach's own
+> February 2021 message identifies a different book as his Uniontown novel
+> and the reading record backs him; the contradiction is open and is
+> documented on his page. And the chronology usually attached to the story
+> — that he was writing the house while Dan was living in it — does not
+> survive this page's own dates: *The Bend of the World* was published in
+> 2014 and the tenancy here begins in **January 2015**. Dan moved into the
+> setting after the book existed.
+
+The address is also the physical anchor of the record's bleakest quantified
+period, and its four years contain the relationship genesis whose closure
+in 2026 the whole corpus orbits. The [[wiki/legal/2015-possession-arrest|February 2015 possession
+arrest]] and the ARD process that followed also fall in its first months —
+though the arrest sits awkwardly against this page's January 2015 start date,
+because Dan's own account places that night while Alexis was still being hidden
+at 337 Saratoga and *before* the move here. The contradiction is recorded on
+the arrest page; a lease or a dated message from the move would settle it.
+
+> **A second, differently-dated account of a similarly-shaped episode
+> surfaced 2026-08-28, and it complicates rather than settles the
+> contradiction above.** A 2026-08-27 operator capture
+> (`raw/people/captures/2026-08-27_223406_gap-alexis-armel.md`, full account
+> on [[wiki/people/alexis-armel]]) describes Suz throwing Alexis out of the
+> house over a March **2014** washing-machine incident, followed by five
+> months of Dan secretly housing her — thrown out, hidden, months long, the
+> same shape as the account above, but dated a full year earlier and adding
+> an intermediate residence (a Leah Tedesco cohabitation) this page's account
+> never mentions before arriving at 155 Virginia Ave "by Christmas 2014."
+> Christmas 2014 is close to, but still a few weeks earlier than, this
+> page's own January 2015 lease date. Both accounts are T0 operator
+> testimony of different specificity, not a primary record against
+> testimony, so neither is adopted over the other here. What would actually
+> settle it — a lease, a dated message from the move, or a primary record of
+> which eviction is which — is still missing.
+
+**Gaps:** lease details, rent, and who held the lease across the
+Alexis→Annie transition are undocumented; the physical layout appears
+nowhere in the record. Whether the 2014 and late-2014/early-2015
+eviction/concealment accounts (see above) describe one event remembered at
+different resolutions or two separate episodes is now the page's most
+consequential open question.
+
+

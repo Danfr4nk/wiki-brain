@@ -1,0 +1,333 @@
+
+---
+domain: people
+page_type: entity
+title: "Diane Moore (Rebecca Diane Van Voorhis)"
+aliases: ["Diane", "Dian", "Dian V. Moore", "Diane Moore", "Rebecca Diane Van Voorhis", "Diane Shrum"]
+status: stable
+knowledge: mixed
+date_created: 2026-08-02
+date_modified: 2026-08-18
+sources:
+  - raw/self/captures/2026-08-02_031532_the-fall-of-fran-frank-s-fumes-force-four-fire.md
+  - raw/self/captures/2026-08-02_041331_fall-of-fran-alternate-version-ignore-glyph-fo.md
+  - raw/people/captures/2026-08-17_230820_gap-diane-shrum.md
+  - raw/self/ancestry/23andme-ancestry-family-tree-20260623.zip
+  - raw/self/dox-scan/all_imessages_complete_dump.txt
+  - raw/self/dox-md/_Photo Thread PT II_ Grand Finale Calibration .md
+tags: [family, grief, uniontown-era, financial-stress]
+infobox:
+  name: "Rebecca Diane Van Voorhis Moore"
+  dob: 1939-01-30
+  sex: female
+  location: unknown
+  relationship_to_dan: family
+  known_for: "The spring 2018 instrument that barred Dan from Fran's house and demanded the keys under a trespassing clause, served while Fran was dying"
+connections:
+  - page: wiki/people/dave-moore
+    type: co-occurs
+    claim: "Dave is her second husband and, on Dan's reading of the document, the man who actually drafted the exclusion letter — and in the vigil's final week he spoke to hospital social workers on her behalf while she could not be reached by anyone."
+  - page: wiki/people/fred-adams
+    type: co-occurs
+    claim: "The two authorities over Fran's final weeks acted in the same direction from different seats: Adams set the 24-hour rotation, this instrument decided who was eligible for it, and neither was held by anyone doing the caregiving."
+  - page: wiki/people/fran-coldren
+    type: component-of
+    claim: "Diane is Fran's only documented child — the GEDCOM records exactly one, born 1939 to Fran and her first husband Emmet Graden Van Voorhis — which makes the estate's whole intergenerational path run through a single person who was hostile to the grandson doing the caregiving."
+  - page: wiki/timeline/events/fran-death-vigil
+    type: causes
+    claim: "The March 29 notice and the letter Dan read on April 3 are why the two people who had kept Fran at home for three years held no assigned shift in the mandated rotation — and Annie, contrary to the earlier account, was never sent one of her own."
+  - page: wiki/places/155-virginia-ave
+    type: causes
+    claim: "The eviction notice terminating Dan's residency and demanding the keys was served by 'Dian V. Moore' on 2018-03-29 — the same person this page is about, carried by the wiki as an unidentified actor until 2026-08-18."
+  - page: wiki/mind/synthesis/estate-money-spine
+    type: contextualizes
+    claim: "She is the grandmother Dan asked the estate attorney about in August 2020 as a possible objector, and the corpus now settles it: Suz told him in June 2020 that the scheduled court date was not a challenge and that Diane would not bring one, and none appears in five further years of record."
+  - page: wiki/people/suzanne-frank
+    type: causes
+    claim: "Diane's rejection of her daughter is the documented cause of Suz's stated organizing principle as a parent, and the vigil's central conflict runs inside one maternal line: the daughter enforcing institutional distance from a distance while the granddaughter's household held the house."
+  - page: wiki/mind/synthesis/vertical-authority-skepticism
+    type: evidences
+    claim: "The exclusion instrument is the family-scale instance of the template: authority exercised through paperwork and a trespassing clause by people who — on Dan's account and Vicki's — did not visit Fran once."
+---
+
+# Diane Moore (Rebecca Diane Van Voorhis)
+
+Diane is Dan's maternal grandmother, [[wiki/people/suzanne-frank|Suz's]]
+mother, and the only documented child of [[wiki/people/fran-coldren|Fran
+Coldren]]. She appears in the corpus almost entirely as an antagonist and
+almost entirely at one moment: the spring of 2018, while Fran was dying, when
+a letter reached Dan setting rules for his presence in Fran's house, demanding
+the keys, and closing with the sentence *"any violation of the rules will be
+considered trespassing."* Dan's objection to it was never that it
+inconvenienced him. It was that "nothing would have made Fran more upset and
+furious than this."
+
+She is also the case that shows how a wiki loses a person while holding her
+records. Until 2026-08-18 this page carried her under an inferred married name
+she is not called anywhere in the corpus, while the message dump named her
+plainly and three other pages carried her second identity as an unexplained
+actor.
+
+> **CORRECTED [2026-08-18] — her married name is Moore, and the wiki already
+> had it.** This page previously titled her *"Diane (Rebecca Diane Van Voorhis
+> Shrum)"* and stated outright that the surname was *"given here as Shrum on
+> the strength of the documented marriage rather than a record naming her that
+> way."* The message corpus names her twice, on 2018-04-01: **"diane moore
+> hasn't been able to be reached by anyone. dave is 'speaking on her
+> behalf'"** and **"the social workers are talking to dave moore about the
+> day-to-day stuff."** George Dixon Shrum Jr. is Suz's father and Diane's
+> *first* husband; she remarried [[wiki/people/dave-moore|Dave Moore]].
+>
+> The same correction merges a second entity. `wiki/places/155-virginia-ave`,
+> `wiki/timeline/events/fran-death-vigil` and `wiki/timeline/master-timeline`
+> all record that on 2018-03-29 Dan was served an eviction notice for 155
+> Virginia Avenue **"by Dian V. Moore,"** and the vigil page listed *"Dian V.
+> Moore's role/relation to the estate"* as an open gap. That is this
+> grandmother. The wiki held the antagonist under one name and the instrument
+> under another, three pages apart, and asked itself who the second one was.
+
+## The operator's answer
+
+The page's standing gap asked, among other things, who the "grandparents who
+already hated you" were in Dan's account of the earlier keno-morning fall —
+the fear that stopped him overriding Suz and calling an ambulance for eight
+hours. The wiki guessed **Diane and George**. The operator's answer, filed
+2026-08-17, is two words:
+
+> **"Dian and Dave"**
+
+> **GAP CLOSED [2026-08-18].** The gap, as this page stated it: *"The
+> 'grandparents who already hated you' that Dan feared during the earlier
+> keno-morning fall are presumably Diane and George, but he never names them in
+> that passage."* They are **Dian and Dave** — his grandmother and her second
+> husband, not his biological grandfather. The correction matters more than a
+> name swap: the couple Dan feared was the couple that then issued the
+> exclusion instrument, sold the Florida condo, and communicated with the
+> hospital through Dave rather than Diane. It is one adversary throughout, and
+> the earlier fear was a correct forecast of it rather than free-floating
+> family dread.
+>
+> The answer also settles the spelling in the family's usage. Suz, her
+> daughter, writes it **without the "e"** and says so explicitly on
+> 2018-03-14: *"Dian...no 'e' is irate and irrational."* The GEDCOM legal
+> record and Dan's own usage both spell it *Diane*, which is why the page
+> keeps the legal form in the title and records *Dian* as the family form.
+> This is corroborated testimony, not testimony alone: the operator's two
+> words agree with a 2016 message, a 2018 message and a 2020 message written
+> years before anyone asked.
+
+## Who she is in the line
+
+The 23andMe genealogy export settles a descent the wiki previously had wrong.
+Fran married three times; her only recorded child came from the first
+marriage.
+
+| | Person | Born |
+|---|---|---|
+| Fran's first husband | Emmet Graden Van Voorhis | 1917-08-01, Dilliner, PA |
+| Their daughter | **Rebecca Diane Van Voorhis** | 1939-01-30, West Virginia |
+| Diane's first husband | George Dixon Shrum Jr. | 1937-06-14, Pittsburgh |
+| Their daughter | Suzanne Whyel Shrum | 1962-09-15, Pittsburgh |
+| Diane's second husband | [[wiki/people/dave-moore]] | not in the record |
+
+The April 1940 census places Emmet, Fran and the fourteen-month-old Diane
+together in Smithfield, Fayette County — Fran's arrival in the county that
+becomes the family's terminus. The same record set shows Diane living in
+**Farmington Hills, Michigan between 1985 and 2010** — and, per the GEDCOM
+extraction on [[wiki/self/ancestry]], in **Stanwood, Michigan from 2013 to
+2020**. That is thirty-five documented out-of-state years, putting her out of
+state for most of Dan's childhood. Nothing in the message corpus contradicts or
+confirms either span, and by 2016 she is close enough to be a live threat to
+*"come to town and start accusing everyone of 'abusing' gram."*
+
+> **CORRECTED [2026-08-18]:** this paragraph called Farmington Hills *"the only
+> geographic fact the corpus supplies about her adult life."* It had not been
+> the only one since 2026-08-14, when the ancestry rewrite added Stanwood
+> 2013–2020 from the same GEDCOM. The page went four days declaring a scarcity
+> the corpus had already relieved.
+>
+> The addition is load-bearing outside this page.
+> [[wiki/mind/synthesis/fayette-return]] argues that everyone in this family
+> ends up within twenty miles of Uniontown; **Diane is the tree's one documented
+> departure from the Pennsylvania/West Virginia region with no attested
+> return**, and she is still living, so no terminus exists for her at all. She
+> does not falsify that page's rule, which is stated over the paternal Frank
+> line — but she is the sharpest available test of whether the rule describes a
+> lineage or a county, and the two readings have so far made identical
+> predictions. Her eventual terminus is the datum that separates them.
+
+> **CORRECTED [2026-08-02]:** [[wiki/self/lineage/family-tree]] drew Fran's
+> descent through **George Dixon Shrum Jr.**, Dan's maternal *grandfather*.
+> The GEDCOM family records show the opposite: Fran's daughter is Rebecca
+> Diane Van Voorhis, Dan's maternal *grandmother*, and George Shrum Jr. is a
+> Shrum by birth with his own separate parents (G Dixon Shrum and Erma K
+> Shrum). The Whyel/Coldren money and the Whyel middle name descend to Suz
+> through her mother, not her father. The tree page has been corrected.
+
+## The instrument, as the corpus actually records it
+
+The wiki's earlier account of the letters came from a 2026 capture, and the
+message corpus corrects it on three points of fact. What follows is the
+contemporaneous record.
+
+| Date (2018) | Record | Speaker |
+|---|---|---|
+| 03-29 | Eviction notice served terminating Dan's residency at 155 Virginia and demanding the keys, attributed to **"Dian V. Moore"** (`IMG_4647.jpg`) | vigil sources |
+| 03-29 12:38 | *"Delivery of email to Dian failed"* | Suz |
+| 04-01 21:32 | *"meanwhile diane moore hasn't been able to be reached by anyone. dave is 'speaking on her behalf' and it's very unusual stuff"* | Dan |
+| 04-01 21:50 | *"the social workers are talking to dave moore about the day-to-day stuff lol"* | Dan |
+| 04-03 17:49 | *"I'm going to need that letter"* | Suz |
+| 04-03 18:01 | *"Annie is really upset about that letter"* | Dan |
+| 04-03 18:53 | *"We will need a lawyer for Dian too"* | Annie |
+| 04-03 21:32 | *"i think dave wrote it — read the last paragraph. 'any violation of the rules will be considered trespassing' ....so if i violated the rules by not leaving the key i would be trespassing?"* | Dan |
+| 04-03 21:32 | *"lol also if they are writing such professional correspondence why wouldn't Annie get her own letter"* | Dan |
+| 04-04 | Fran dies | — |
+
+**Annie never received a letter.** The previous version of this page, and
+[[wiki/timeline/events/fran-death-vigil]], both stated that Dan and Annie
+*"each received a letter."* Dan's own message on the evening of April 3 says
+the opposite in as many words — *why wouldn't Annie get her own letter* — and
+his other message an hour earlier locates her reaction correctly: she was
+upset about **that** letter, the one he received. Both pages are corrected.
+The error had a consequence worth naming: it doubled the apparent scope of the
+exclusion and made it look like a decision about the household when the
+document was addressed to one person.
+
+**Dan believed Dave wrote it.** That is a first-person read of the prose, not
+proof of authorship, and it is the only evidence the corpus offers on the
+question the page has been asking — whether the letter came from Diane alone,
+from her jointly with a husband, or from an attorney. It came out under her
+name and, on the reading of the man who held it, in her husband's voice.
+
+**The timing is tighter than "well before."** The earlier account, from Dan's
+2026 capture, has the letters sent *"well before"* the final hospitalization.
+The contemporaneous record has the eviction notice served **2018-03-29**,
+three days before the April 1 move to the pediatric wing, and the letter being
+read, forwarded and lawyered on **2018-04-03**, the day before Fran died. The
+two accounts are not necessarily in conflict — there may have been an earlier
+visitation instrument that the corpus does not capture — but the document the
+messages describe, with the key demand and the trespassing clause, is a
+terminal-week document. Where they disagree, the messages govern.
+
+> **CONTRADICTION:** Dan's 2026 recollection dates the exclusion to *"well
+> before"* the final admission; his own 2018 messages date the operative
+> instrument to the last week of Fran's life. Held rather than resolved: the
+> capture may be describing a separate, earlier letter about supervised
+> visits, and the March 29 / April 3 documents may be the escalation of it.
+> One sentence from the operator distinguishing "the visiting rules letter"
+> from "the eviction notice" would settle it.
+
+## What it cost, and who was in the room
+
+The consequence was concrete. When Judge [[wiki/people/fred-adams|Fred
+Adams]] mandated that someone be with Fran twenty-four hours a day in the
+pediatric wing, shifts were assigned — and Dan and Annie were not given any.
+Dan's own note on this is characteristically flat: "I wasn't really
+complaining." They went anyway, on their own, and were the two people in the
+room when she died ([[wiki/timeline/events/fran-death-vigil]]).
+
+Diane was not. Dan's summary three weeks later is the harshest sentence about
+her in the corpus and the one with the most in it:
+
+> "she didn't come in to see gram at all before she died, but she went to
+> florida to take over her condo down there and sell it and keep the profits
+> herself"
+
+The Florida property runs through the record for two years before that. In
+January 2017 Suz reports *"Dian is putting the brakes on the trip to
+Florida"* — Fran's own trip, to her own condo. In March 2018, mid-collapse,
+Dan's line to Suz is *"diane deserves the house in florida for sure"* and
+Suz's entire reply is *"Fuck Dian."* And in April 2019, a year after the
+death, Suz sets the sale against her own labor on Fran's remaining estate:
+*"fucking Dian, if she wants a cut, she will have to give me a cut of what she
+got for selling Florida."* The condo is the one asset in the whole estate
+sequence that appears to have moved outside the distribution, and it moved to
+the one heir who did not attend.
+
+## Diane, Suz, and the muzzle
+
+The picture of her from inside the family is not simply hostile-and-absent; it
+is hostile, absent, and demanding. During the final admission she was calling
+Suz, and Suz's account on 2018-03-14 is the fullest description of her the
+corpus contains:
+
+> "Dian...no 'e' is irate and irrational and thinks she's going to demand that
+> her mother be released and sent home with 24 hr care and that's that. The
+> problem is, it isn't that simple. Even if she could go home right now,
+> someone, not Vicki, has to be taking care of all of the things it takes to
+> have her at home. **My mother doesn't know what she's talking about and she
+> needs to shut the fuck up.**"
+
+Six days later Suz reports having *"put a muzzle on Dian,"* and Dan's reply is
+the most politically alert thing anyone says during the vigil — a warning to
+his own mother not to let a temporary alignment become a bloc: *"probably
+doesn't need to be said but just be careful that you don't foster the idea
+that there's a new 'diane and suzanne' faction."* He had already logged the
+same person as *"a useful idiot right now"* and noted, with visible relief,
+*"at least diane isn't trying to take charge."* The demand Diane was making —
+send the 97-year-old home with round-the-clock care — is, read cold, the same
+outcome Dan and Annie had spent three years producing. The disagreement was
+never about the goal. It was about who would do it and who would be permitted
+near the house while they did.
+
+Fran's own view is recorded once, at one remove. On 2017-12-30 Dan tells
+Vicki: *"She's the best I've seen her in years today so I got her talking and
+she said something interesting referring to Diane. At the end mostly."* What
+Fran actually said is not in the corpus. It is the single most valuable
+missing sentence on this page.
+
+## The 2020 question, settled
+
+In August 2020, negotiating his $144,069.31 estate distribution, Dan asked the
+estate attorney what the odds were that his grandmother would contest it. The
+wiki has carried both the identity of that grandmother and the outcome as open.
+Both close here.
+
+The identity is Diane: she is the estate's direct heir, she is the grandmother
+the corpus documents, and she had already moved formally against him two years
+earlier. The question was not paranoid.
+
+The outcome is on the record two months before he asked. On 2020-06-22, told
+that the estate had an **August 17 court date**, Dan's first reaction was
+exactly this fear — *"does a court case mean diane challenged it"* — and Suz
+answered in three messages:
+
+> "No" · "This is when that would happen. She isn't going to do that. Rod
+> talks to her. See what he says"
+
+So the read that Diane would not contest was **Suz's**, sourced through the
+attorney's own channel to her, and it held: no objection appears anywhere in
+the corpus through its end on 2025-08-10, and the distribution completed.
+Dan asked the attorney a question his mother had already answered, which is
+its own small datum about whose assurances he treats as load-bearing.
+
+The last trace of her is a 2020-03-28 message from Dan to a friend, at the
+opening of the pandemic: *"i hope diane and dave both drown in their own vomit
+after simultaneously contracting coronavirus."* Twenty-three months after the
+funeral, still a pair, still present tense.
+
+## Gaps
+
+- **Which document is which.** The corpus shows a March 29 eviction notice and
+  an April 3 letter with a trespassing clause; the 2026 capture describes
+  visiting rules sent "well before." Are these one instrument, two, or three?
+  The operator held all of them.
+- **What Fran said about Diane** on 2017-12-30, in the one lucid conversation
+  Dan managed to get out of her. He recorded that it happened and not what it
+  was.
+- **The Florida condo's actual disposition.** Dan and Suz both assert Diane
+  sold it and kept the proceeds; no document, price or date is in the corpus,
+  and whether it was hers to sell — Fran's, or already transferred — is
+  unknown.
+- **The memorial.** Whether she attended the May 6, 2018 service at the
+  Uniontown Country Club is still unrecorded. Dan's April 1 line — that he
+  would love to speak but *"i don't know if anyone wants a 45 minute roasting
+  of diane and dave"* — implies he expected them there.
+- **Whether she is alive.** Born 1939-01-30; she would be 87. The corpus's last
+  mention of her is 2020, and nothing since records a death, an illness, or
+  contact of any kind.
+- **Any direct exchange.** She still sends and receives no message in the
+  corpus, has no phone handle and no photograph. Every word about her is
+  someone else's.
+
+

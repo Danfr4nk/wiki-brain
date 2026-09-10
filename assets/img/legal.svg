@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Legal diagram">
+  <rect width="200" height="200" fill="#eef0f2"/>
+  <g fill="none" stroke="#54595d" stroke-width="3">
+    <rect x="72" y="50" width="56" height="68" rx="4"/>
+    <line x1="100" y1="50" x2="100" y2="118"/>
+    <path d="M72 134 H128 M72 146 H128 M72 158 H112"/>
+  </g>
+  <text x="100" y="192" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#202122">Legal</text>
+</svg>

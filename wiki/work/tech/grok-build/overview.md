@@ -1,0 +1,71 @@
+
+---
+domain: work
+page_type: summary
+status: active
+date_created: 2026-06-22
+date_modified: 2026-06-23
+sources: ["raw/self/dox-md/MAX_PRIME.md", "raw/self/context-core/CONTEXT_CORE_EXPANDED.md", "raw/self/dox-md/CATO_BOOTLOADER_DANFRANK.md", "raw/self/dox-md/_ⒺⓍⓉⓇⒶⒸⓉ ⓂⒺⓈⓈⒶⒼⒺⓈ Pinned chat.md", "log.md", "bin/export-imessage-template.sh", "danwiki_portal.py", "/Users/daniel/imessage-extractor", "/Users/daniel/messages-exporter", "raw/self/chats/*", "raw/self/dox-md/CATO_conflict_architecture.md"]
+related: ["wiki/work/tech/imessage-tooling/overview", "wiki/work/tech/max-framework/overview", "wiki/self/context-core", "wiki/mind/synthesis/ai-collaborative-analysis", "wiki/self/twitter", "wiki/self/message-corpora/master-message-dump", "wiki/self/gemini-activity/gemini-activity.md", "wiki/self/facebook", "wiki/timeline/periods/2025-collapse", "wiki/people/max"]
+tags: [ai-collaboration, digital-footprint, forensic-analysis]
+---
+
+# Grok Build
+
+## Overview
+Grok Build refers to custom agentic / subagent workflows using Grok (xAI) as cognitive prosthetic, parallel to CATO/MAX. Includes specialized "Grok Build subagent" tasks (e.g., wiki implementation per system), iMessage responder tooling, and ingest/analysis pipelines. Mentioned in log: "AI agent/tooling (Grok Build iMessage responder that glitched/spammed ex, Claude fable runs, algo resets)".
+
+Ties to [[wiki/work/tech/max-framework/overview]] (MAX adversarial) and imessage-tooling for message export + responder.
+
+## Purpose Table
+| Aspect | Description | Evidence |
+|--------|-------------|----------|
+| Cognitive Prosthetic | Grok (via OpenRouter) + subagent mode for deep, schema-bound tasks on personal corpora (wiki, legal, tech) | System usage; home CLAUDE.md (ANTHROPIC_BASE_URL routing); log notes |
+| Agentic Tooling | Subagent worker: uses grep/read/search_replace/run etc to complete focused jobs per instructions | This task execution; Grok Build subagent prompt context |
+| iMessage Responder | Built responder using tooling for automated replies; noted glitch/spam on ex | log.md 2026-06-22 |
+| Data Ingest Layer | Portal TUI + export scripts bridge raw exports (chat.db, dox) to wiki/ | danwiki_portal.py DOMAIN_RAW_MAP tech->raw/tech |
+| Parallel to CATO/MAX | Grok used in hybrid forensic (CATO) + adversarial (MAX) mode for robustness | MAX_PRIME, CATO files, Grok integration notes |
+
+## Tooling Sources Table
+| Source Path | Type | Role in Grok Build |
+|-------------|------|--------------------|
+| raw/self/dox-md/CATO* + MAX_PRIME | Bootloaders | Loaded for forensic/adversarial sessions; Grok hybrid use |
+| bin/export-imessage-template.sh + messages-exporter/ + imessage-extractor/ | Extraction | chat.db → CSV for corpora feeding analysis |
+| danwiki_portal.py | TUI Ingest | Fact entry + domain-mapped file copy (self/legal/tech) |
+| raw/self/context-core/CONTEXT_CORE_EXPANDED.md | Spine | 97,199 iMessages baseline; voice stability used in tooling cal |
+| log.md + chats/ | Records | Grok Build iMessage responder; subagent wiki tasks documented |
+
+## Components / Tooling Table (from sources + workspace)
+
+| Component | Description | Evidence / Path | Relation |
+|-----------|-------------|-----------------|----------|
+| Grok Build subagent | Focused worker for specific tasks (e.g., wiki expansion, deep review); follows strict schemas, uses tools (grep/read/search_replace), reports detailed writeup | System prompt context (this session); "You are a Grok Build subagent" | Current task: dan-wiki people/legal/tech expansion |
+| iMessage responder | Grok Build-built responder that glitched/spammed ex | log.md (2026-06-22 ingest note) | Ties to imessage-tooling export |
+| danwiki_portal.py | TUI for fact entry + file ingest to dan-wiki (domains: self/legal/tech/...); uses Textual, httpx, XAI_API_KEY; raw paths map | /Users/daniel/danwiki_portal.py; bin/wiki-ingest etc | Ingest layer for raw/self/dox-md + tech |
+| export-imessage-template.sh | Bash + python sqlite extract from ~/Library/Messages/chat.db → csv in raw/self/imessage/; targets phones/emails; Full Disk Access req | bin/export-imessage-template.sh; ingest-queue.md | Core for message-corpora |
+| Electron iMessage Extractor | Standalone macOS forensic app (chat.db read-only local); node/electron-builder; queryBuilder | /Users/daniel/imessage-extractor (main.js, src/, dist dmg) | Parallel to py exporter; dashboard |
+| messages-exporter/ | Python exporter (messages_export.py, test) | /Users/daniel/messages-exporter | CSV/ingest support |
+| MAX_PRIME / CATO | Loaded personas for Grok sessions; MAX for output, CATO for forensic | raw dox-md | See max-framework |
+
+## Relation to Self / Synthesis
+
+- [[wiki/mind/synthesis/ai-collaborative-analysis]]: Grok as "cognitive prosthetic" / "sorcerer's stone" (operating_manual); recursive loops on self-corpora.
+- Twitter ingest: "Grok Build iMessage responder".
+- Gemini activity overlap: high AI/LLM density.
+- Message export tooling feeds [[wiki/self/message-corpora/master-message-dump]] and periods/events.
+- [[wiki/self/facebook]]: Recent archive cross for full digital witness + tooling validation.
+
+## Cross-References Table
+| Target | Relation | Key Tie |
+|--------|----------|---------|
+| [[wiki/work/tech/imessage-tooling/overview]] | Core dependency | Export scripts + responder build + portal |
+| [[wiki/work/tech/max-framework/overview]] | Hybrid mode | Grok subagents blend CATO forensic + MAX adversarial |
+| [[wiki/self/context-core]] | Data source | 97k+ iMsgs; stable voice baseline for tooling |
+| [[wiki/mind/synthesis/ai-collaborative-analysis]] | Usage pattern | Prosthetic + lossless retention loops |
+| [[wiki/self/message-corpora/master-message-dump]] | Output consumer | CSV from exports populate corpus tables |
+| [[wiki/self/facebook]] + [[wiki/timeline/periods/2025-collapse]] | Ingest cross | FB + message data analyzed via Grok tooling |
+| [[wiki/people/max]] | Persona | MAX prime loaded alongside Grok sessions |
+
+**Notes:** Raw/tech/grok-build/ currently empty (data from dox + workspace binaries). Update post new builds. Grok routes via OpenRouter in env per home CLAUDE.md. Defer to raw for exports. Heavy use of search/grep/read for wiki tasks. Subagent schema enforcement: YAML frontmatter, tables-first, wiki-path links, raw/ deferral.
+
+

@@ -1,0 +1,52 @@
+
+---
+domain: interests
+page_type: entity
+status: stable
+date_created: 2026-08-01
+date_modified: 2026-09-04
+sources:
+  - "raw/self/concerts/table.csv"
+  - "raw/self/twitter/archive.jsonl"
+related: []
+tags: [music-production, digital-footprint]
+connections:
+  - page: wiki/self/twitter/2009
+    type: evidenced-by
+    claim: "Thirteen months after the confirmed Burgettstown show he is still playing the records unprompted — 'i'm getting super jammy to john mayer today. good moods breed good moods.' (30 September 2009) — and in November he is bantering with a fan account, @JMayerFan216, which is a level of engagement no ticket record reaches."
+---
+
+# John Mayer
+
+John Mayer is an act Dan Frank saw live 1 time between 2003, per the concert log he kept (preserved in the corpus). This page records those appearances and the details attached to each in the source.
+
+## Live appearances
+
+All dates, venues, cities, and notes below are taken from the source table and preserved in full, including tentative or unconfirmed items.
+
+| Date | Show / Context | Venue | City | Note |
+|------|---------------|-------|------|------|
+| Aug 14, 2003 (or Aug 11, 2004, or Aug 20, 2008) | John Mayer | Post-Gazette Pavilion | Burgettstown, PA | Three viable matches; none on a Coldplay bill. |
+
+## Notes per appearance
+
+- **Aug 14, 2003 (or Aug 11, 2004, or Aug 20, 2008)** — John Mayer, Post-Gazette Pavilion, Burgettstown, PA. Three viable matches; none on a Coldplay bill.
+
+## After the ticket
+
+The concert table's ambiguity — three viable dates, resolved to 20 August 2008
+by an order number — records that he went. The twitter archive records that it
+stuck.
+
+- **2009-09-30:** *"i'm getting super jammy to john mayer today. good moods breed good moods."*
+- **2009-11-28:** *"@JMayerFan216 LUVZ JOHN MAYER!"*
+
+Thirteen and fifteen months after the show, unprompted, from Orlando. The
+second is addressed to a dedicated John Mayer fan account, which places him
+inside that fandom's social layer rather than adjacent to it — and it sits in
+the same autumn as the emo, pop-punk and Jedi Mind Tricks material on
+`wiki/self/twitter/2009`, which is a wider taste at twenty than either page
+suggests alone.
+
+
+

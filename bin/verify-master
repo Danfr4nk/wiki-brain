@@ -1,0 +1,541 @@
+#!/usr/bin/env python3
+"""verify-master — the promotion gate for a candidate master message corpus.
+
+Pure stdlib, no dependencies, per repo convention.
+
+Why this exists
+---------------
+A file named `imessage_master.csv` is a *hypothesis* that it is complete, not a
+property of the file. This repo has been wrong about exactly that three times:
+
+  - `imessage_7243667777_both_all_now.csv` — name says all time, holds 42 of
+    Rick's 1,600+ messages. Published a "decade of silence" that was false.
+  - `imessage_export_deep_20260813.csv` — a whole-device export, and still
+    **lossy**: 41.8% of `all_imessages_complete_dump.txt`'s records have no row
+    in it, plus an 833-day zero window that is an export artifact, not silence.
+  - 18 of 52 indexed sources overstate their coverage in their filename. The
+    `_all_now` / `_all_time` suffix is unreliable *as a class*.
+
+So a candidate does not become the corpus's first stop by being filed. It
+becomes the first stop by beating every incumbent on the four properties that
+have actually caused published errors here — range, attribution, direction and
+timezone — and by being a genuine superset rather than merely a large file.
+
+This tool runs that gate and prints a verdict. It reads only; it never writes
+to raw/ and never merges anything.
+
+Subcommands
+-----------
+  profile PATH              schema, rows, true date range, direction split,
+                            handle coverage, per-year volume
+  superset CAND INCUMBENT   what fraction of the incumbent's uniquely
+                            text-matchable records are missing from CAND
+  tz CAND REFERENCE         offset distribution against a known-local source,
+                            by the method README_20260813_exports.md documents
+  gate CAND                 the full promotion gate: profile, superset against
+                            every incumbent that matters, timezone, and the
+                            post-2025-08-10 ceiling test
+
+Reads .csv, .db/.sqlite (chat.db or a custom schema), and the pipe-delimited
+.txt whole-device dump.
+"""
+import argparse
+import csv
+import datetime
+import os
+import re
+import sqlite3
+import sys
+import unicodedata
+from collections import Counter, defaultdict
+
+csv.field_size_limit(10 ** 9)
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MSG = os.path.join(ROOT, "raw", "self", "message-csv")
+DOX = os.path.join(ROOT, "raw", "self", "dox-scan")
+
+# The incumbents a candidate must beat, and the property each one owns today.
+# A master that does not cover these has not replaced them.
+INCUMBENTS = [
+    (os.path.join(DOX, "all_imessages_complete_dump.txt"),
+     "direction-reliable, 2011-03-18 -> 2025-08-10, NO handle column"),
+    (os.path.join(MSG, "imessage_export_deep_20260813.csv"),
+     "attributed + 499 handles, runs to 2026-08-13, UTC, lossy pre-2026"),
+    (os.path.join(MSG, "imessage_ALL_both_all_now.csv"),
+     "attributed + 498 handles, 2011-03-18 -> 2026-06-06, local time"),
+]
+
+# The ceiling test. all_imessages_complete_dump.txt ends 2025-08-10 and reports
+# out-of-window queries as zero matches rather than as an error, which is how a
+# 22,018-message relationship stayed invisible to bin/mine-messages for two
+# months (see source-coverage-index.md). A real master answers these.
+CEILING = [
+    ("3307038747", "Kristin", "2025-09-01", "2025-12-10", 20009),
+    ("2124702449", "Annie (NYC handle)", None, None, None),
+]
+CEILING_DATE = "2025-08-10"
+
+# Direction split measured on the one file whose direction field is trusted.
+KNOWN_SENT, KNOWN_RECV = 106629, 110944
+
+TXT_HEADER = re.compile(
+    r"^(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2})\|(Sent|Received)\|([^|]*)\|([^|]*)\|(.*)$")
+TXT_TRAILING = 6
+
+DATE_COLS = ("date/time", "datetime", "local_datetime", "datetime_local", "timestamp",
+             "date", "time_sent", "message_date", "sent_at")
+DIR_COLS = ("sent or received", "direction", "sender", "kind", "is_from_me", "from_me")
+HANDLE_COLS = ("handle", "contact_handle", "contact", "chat id", "address", "phone",
+               "handle_id", "counterparty", "chat_identifier")
+TEXT_COLS = ("message content", "text", "message", "body", "content", "message_text")
+
+APPLE_EPOCH = 978307200  # 2001-01-01 in Unix seconds
+
+
+def norm(s):
+    """Normalise for matching.
+
+    NFKC first: the Kristin Messenger capture stores strings in mathematical-
+    monospace Unicode, so a plain match for LONELY LOSER returns nothing while
+    the string is present. Then curly quotes, which outnumber straight ones
+    28,904 to 19,978 in Dan's sent text.
+    """
+    s = unicodedata.normalize("NFKC", s)
+    return (s.replace("’", "'").replace("‘", "'")
+             .replace("“", '"').replace("”", '"')
+             .replace("—", "--").replace("￼", " ")
+             .lower().strip())
+
+
+def pick(header, wanted):
+    """Return the index of the first column whose name matches, else None."""
+    low = [(h or "").strip().lower() for h in header]
+    for w in wanted:
+        if w in low:
+            return low.index(w)
+    for w in wanted:                       # substring fallback
+        for i, h in enumerate(low):
+            if w in h:
+                return i
+    return None
+
+
+def parse_dt(v):
+    """Parse the date formats this archive actually contains."""
+    if v is None:
+        return None
+    v = str(v).strip()
+    if not v:
+        return None
+    if v.isdigit():                        # Apple epoch, ns or s
+        n = int(v)
+        if n > 10 ** 15:
+            n = n // 10 ** 9
+        if n > 10 ** 9:                    # already Unix
+            try:
+                return datetime.datetime.utcfromtimestamp(n)
+            except (ValueError, OSError):
+                return None
+        try:
+            return datetime.datetime.utcfromtimestamp(n + APPLE_EPOCH)
+        except (ValueError, OSError):
+            return None
+    v = v.replace("T", " ").replace("/", "-")
+    v = re.sub(r"[+-]\d{2}:?\d{2}$", "", v).strip()
+    v = re.sub(r"\s*(AM|PM|am|pm)$", lambda m: " " + m.group(1).upper(), v)
+    for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M", "%Y-%m-%d",
+                "%Y-%m-%d %I:%M:%S %p", "%Y-%m-%d %I:%M %p",
+                "%m-%d-%Y %H:%M:%S", "%m-%d-%Y %H:%M"):
+        try:
+            return datetime.datetime.strptime(v[:len(fmt) + 6], fmt)
+        except ValueError:
+            continue
+    m = re.match(r"(20\d{2})-(\d{2})-(\d{2})", v)
+    if m:
+        try:
+            return datetime.datetime(*map(int, m.groups()))
+        except ValueError:
+            return None
+    return None
+
+
+def direction_of(v):
+    """Fold every direction encoding in this archive to sent/received."""
+    s = str(v).strip().lower()
+    if s in ("1", "true", "me", "sent", "outgoing", "from_me"):
+        return "sent"
+    if s in ("0", "false", "them", "received", "incoming"):
+        return "received"
+    if "sent" in s or s == "me":
+        return "sent"
+    if "receiv" in s or "them" in s:
+        return "received"
+    return ""
+
+
+# ---------------------------------------------------------------- readers
+
+def _finish_txt(cur):
+    """Strip the 6 trailing pipe fields from the WHOLE record, not the first line.
+
+    bin/mine-messages strips them off the header line's remainder, which is
+    correct only for single-line messages: on a multi-line record the metadata
+    sits at the end of the LAST line and survives, so the text carries a
+    `||imessage|4704775060000` tail that matches nothing in any CSV. That
+    inflated this tool's own first superset run to 43.3% against the 41.8% the
+    archive documents — found by disbelieving the output.
+    """
+    parts = cur["text"].split("|")
+    cur["text"] = "|".join(parts[:-TXT_TRAILING]) if len(parts) > TXT_TRAILING else parts[0]
+    return cur
+
+
+def read_txt(path):
+    cur = None
+    with open(path, encoding="utf-8", errors="replace") as fh:
+        for line in fh:
+            m = TXT_HEADER.match(line.rstrip("\n"))
+            if m:
+                if cur:
+                    yield _finish_txt(cur)
+                d, t, direction, handle, _chat, rest = m.groups()
+                cur = {"dt": parse_dt(f"{d} {t}"), "dir": direction.lower(),
+                       "handle": handle, "text": rest}
+            elif cur is not None:
+                cur["text"] += "\n" + line.rstrip("\n")
+    if cur:
+        yield _finish_txt(cur)
+
+
+def read_csv(path):
+    with open(path, encoding="utf-8", errors="replace", newline="") as fh:
+        rd = csv.reader(fh)
+        try:
+            header = next(rd)
+        except StopIteration:
+            return
+        di = pick(header, DATE_COLS)
+        xi = pick(header, DIR_COLS)
+        hi = pick(header, HANDLE_COLS)
+        ti = pick(header, TEXT_COLS)
+        if ti is None:                     # last resort: widest column
+            ti = len(header) - 1
+        for row in rd:
+            if not row:
+                continue
+            g = lambda i: row[i] if i is not None and i < len(row) else ""
+            yield {"dt": parse_dt(g(di)), "dir": direction_of(g(xi)),
+                   "handle": g(hi), "text": g(ti)}
+
+
+def _best_table(con):
+    """Find the table that holds messages, chat.db or custom schema alike."""
+    tabs = [r[0] for r in con.execute(
+        "SELECT name FROM sqlite_master WHERE type='table'")]
+    best, best_score = None, -1
+    for t in tabs:
+        try:
+            cols = [r[1] for r in con.execute(f'PRAGMA table_info("{t}")')]
+            n = con.execute(f'SELECT COUNT(*) FROM "{t}"').fetchone()[0]
+        except sqlite3.Error:
+            continue
+        if not n:
+            continue
+        score = sum(2 for group in (DATE_COLS, TEXT_COLS, DIR_COLS, HANDLE_COLS)
+                    if pick(cols, group) is not None)
+        score += min(n / 100000.0, 3)
+        if score > best_score:
+            best, best_score = (t, cols, n), score
+    return best
+
+
+def read_db(path):
+    con = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
+    con.text_factory = lambda b: b.decode("utf-8", "replace")
+    tabs = {r[0] for r in con.execute(
+        "SELECT name FROM sqlite_master WHERE type='table'")}
+    if {"message", "handle"} <= tabs:      # a real chat.db copy
+        q = ("SELECT m.date, m.is_from_me, COALESCE(h.id,''), COALESCE(m.text,'') "
+             "FROM message m LEFT JOIN handle h ON m.handle_id = h.ROWID")
+        for d, isme, hid, text in con.execute(q):
+            yield {"dt": parse_dt(d), "dir": direction_of(isme),
+                   "handle": hid, "text": text}
+        con.close()
+        return
+    found = _best_table(con)
+    if not found:
+        con.close()
+        raise SystemExit(f"no message-like table found in {path}")
+    t, cols, _ = found
+    di, xi, hi, ti = (pick(cols, DATE_COLS), pick(cols, DIR_COLS),
+                      pick(cols, HANDLE_COLS), pick(cols, TEXT_COLS))
+    sys.stderr.write(f"  [db] reading table {t!r} ({', '.join(cols)})\n")
+    for row in con.execute(f'SELECT * FROM "{t}"'):
+        g = lambda i: row[i] if i is not None and i < len(row) else ""
+        yield {"dt": parse_dt(g(di)), "dir": direction_of(g(xi)),
+               "handle": str(g(hi) or ""), "text": str(g(ti) or "")}
+    con.close()
+
+
+def records(path):
+    ext = os.path.splitext(path)[1].lower()
+    if ext in (".db", ".sqlite", ".sqlite3"):
+        return read_db(path)
+    if ext == ".txt":
+        return read_txt(path)
+    return read_csv(path)
+
+
+# ---------------------------------------------------------------- analysis
+
+def digits(h):
+    d = re.sub(r"\D", "", h or "")
+    return d[-10:] if len(d) >= 10 else d
+
+
+def keys(path, minlen=14):
+    """Text keys that are unique within the file — the matchable subset.
+
+    Short messages ('ok', 'lol') collide across years and cannot identify a
+    record, so they are excluded rather than counted as matches.
+    """
+    seen, dupe = {}, set()
+    for r in records(path):
+        t = norm(r["text"])
+        if len(t) < minlen:
+            continue
+        k = t[:80]
+        if k in seen:
+            dupe.add(k)
+        else:
+            seen[k] = r["dt"]
+    for k in dupe:
+        seen.pop(k, None)
+    return seen
+
+
+def profile(path):
+    n = dated = 0
+    lo = hi = None
+    dirs, handles, years = Counter(), Counter(), Counter()
+    for r in records(path):
+        n += 1
+        if r["dt"]:
+            dated += 1
+            lo = r["dt"] if lo is None or r["dt"] < lo else lo
+            hi = r["dt"] if hi is None or r["dt"] > hi else hi
+            years[r["dt"].year] += 1
+        if r["dir"]:
+            dirs[r["dir"]] += 1
+        d = digits(r["handle"])
+        if d:
+            handles[d] += 1
+    return {"rows": n, "dated": dated, "lo": lo, "hi": hi,
+            "dirs": dirs, "handles": handles, "years": years}
+
+
+def fmt(d):
+    return d.strftime("%Y-%m-%d") if d else "—"
+
+
+def cmd_profile(argv):
+    ap = argparse.ArgumentParser(prog="verify-master profile")
+    ap.add_argument("path")
+    a = ap.parse_args(argv)
+    p = profile(a.path)
+    print(f"\n{os.path.basename(a.path)}")
+    print(f"  rows           {p['rows']:,}  ({p['dated']:,} with a parseable date)")
+    print(f"  range          {fmt(p['lo'])} -> {fmt(p['hi'])}")
+    s, r = p["dirs"].get("sent", 0), p["dirs"].get("received", 0)
+    if s + r:
+        print(f"  direction      {s:,} sent / {r:,} received  ({s / (s + r) * 100:.1f}% sent)")
+        if s and r and (s / (s + r) < 0.15 or s / (s + r) > 0.85):
+            print("                 ** LOPSIDED — this is what a broken direction "
+                  "field looks like (cf. MASTER_MESSAGES_DB_DUMP.csv)")
+    else:
+        print("  direction      NONE — cannot say who spoke")
+    if p["handles"]:
+        print(f"  handles        {len(p['handles']):,} distinct")
+        top = ", ".join(f"{h}:{c:,}" for h, c in p["handles"].most_common(5))
+        print(f"  top            {top}")
+    else:
+        print("  handles        NONE — cannot attribute any message to any person")
+    if p["years"]:
+        print("  per year")
+        for y in sorted(p["years"]):
+            print(f"      {y}  {p['years'][y]:>8,}")
+    return p
+
+
+def cmd_superset(argv):
+    ap = argparse.ArgumentParser(prog="verify-master superset")
+    ap.add_argument("candidate")
+    ap.add_argument("incumbent")
+    a = ap.parse_args(argv)
+    return superset(a.candidate, a.incumbent, verbose=True)
+
+
+def superset(candidate, incumbent, verbose=False):
+    ik = keys(incumbent)
+    ck = keys(candidate)
+    if not ik:
+        print(f"  {os.path.basename(incumbent)}: no matchable records")
+        return None
+    ckset = set(ck)
+    missing = [k for k in ik if k not in ckset]
+    pct = len(missing) / len(ik) * 100
+    print(f"  vs {os.path.basename(incumbent)}")
+    print(f"     {len(ik):,} uniquely matchable records in the incumbent")
+    print(f"     {len(missing):,} of them ({pct:.1f}%) have NO row in the candidate")
+    if missing:
+        by_year = Counter(ik[k].year for k in missing if ik[k])
+        if by_year:
+            worst = ", ".join(f"{y}:{c:,}" for y, c in sorted(by_year.items()))
+            print(f"     missing by year: {worst}")
+    verdict = "SUPERSET" if pct < 1.0 else ("NEAR" if pct < 5.0 else "NOT A SUPERSET")
+    print(f"     -> {verdict}")
+    if verbose and missing:
+        for k in missing[:5]:
+            print(f"        e.g. [{fmt(ik[k])}] {k[:70]}")
+    return pct
+
+
+def cmd_tz(argv):
+    ap = argparse.ArgumentParser(prog="verify-master tz")
+    ap.add_argument("candidate")
+    ap.add_argument("reference", nargs="?",
+                    default=os.path.join(MSG, "imessage_ALL_both_all_now.csv"))
+    a = ap.parse_args(argv)
+    return tz_check(a.candidate, a.reference)
+
+
+def tz_check(candidate, reference):
+    """Offset distribution against a known-local source.
+
+    The method README_20260813_exports.md documents: match on unique message
+    text, then read the timestamp delta. That validation found 23,158 pairs at
+    exactly +5.00h (EST) and 19,692 at +4.00h (EDT) — i.e. UTC.
+    """
+    ck, rk = keys(candidate), keys(reference)
+    deltas = Counter()
+    for k, dt in rk.items():
+        c = ck.get(k)
+        if c and dt:
+            deltas[round((c - dt).total_seconds() / 3600.0)] += 1
+    print(f"  timezone vs {os.path.basename(reference)}")
+    if not deltas:
+        print("     no matched pairs — cannot determine")
+        return None
+    total = sum(deltas.values())
+    for off, n in deltas.most_common(4):
+        print(f"     {off:+d}h  {n:,} pairs  ({n / total * 100:.1f}%)")
+    mode = deltas.most_common(1)[0][0]
+    if mode == 0:
+        print("     -> America/New_York, same as the archive default")
+    elif mode in (4, 5):
+        print("     -> UTC. CONVERT before comparing to any published figure.")
+    else:
+        print(f"     -> offset {mode:+d}h — unexplained, do not cite until resolved")
+    return mode
+
+
+def cmd_gate(argv):
+    ap = argparse.ArgumentParser(prog="verify-master gate")
+    ap.add_argument("candidate")
+    ap.add_argument("--skip-superset", action="store_true",
+                    help="profile and ceiling only (much faster)")
+    a = ap.parse_args(argv)
+
+    print("=" * 72)
+    print("PROMOTION GATE —", os.path.basename(a.candidate))
+    print("=" * 72)
+    print("\n[1/4] PROFILE")
+    p = cmd_profile([a.candidate])
+
+    print("\n[2/4] CEILING TEST — the failure this candidate exists to fix")
+    print(f"      all_imessages_complete_dump.txt ends {CEILING_DATE} and returns")
+    print("      zero matches rather than an error past it.")
+    after = sum(c for y, c in p["years"].items() if y >= 2026)
+    print(f"      records dated 2026 or later: {after:,}")
+    ok_ceiling = True
+    for h, who, lo, hi, expect in CEILING:
+        got = p["handles"].get(digits(h), 0)
+        note = f"  (expected ~{expect:,} for {lo} -> {hi})" if expect else ""
+        print(f"      handle {h} [{who}]: {got:,}{note}")
+        if expect and got < expect * 0.9:
+            print("        ** BELOW the count the archive already documents — "
+                  "this candidate is missing messages a smaller file has")
+            ok_ceiling = False
+        if not got:
+            ok_ceiling = False
+    print(f"      -> {'CEILING CLEARED' if ok_ceiling else 'CEILING NOT CLEARED'}")
+
+    print("\n[3/4] SUPERSET — against every incumbent that owns a property")
+    losses = []
+    if a.skip_superset:
+        print("      skipped (--skip-superset)")
+    else:
+        for path, why in INCUMBENTS:
+            if not os.path.exists(path):
+                print(f"  vs {os.path.basename(path)}: NOT PRESENT in this checkout")
+                continue
+            print(f"     [{why}]")
+            pct = superset(a.candidate, path)
+            if pct is not None:
+                losses.append((os.path.basename(path), pct))
+
+    print("\n[4/4] TIMEZONE")
+    ref = os.path.join(MSG, "imessage_ALL_both_all_now.csv")
+    mode = tz_check(a.candidate, ref) if os.path.exists(ref) else None
+
+    print("\n" + "=" * 72)
+    print("VERDICT")
+    print("=" * 72)
+    s, r = p["dirs"].get("sent", 0), p["dirs"].get("received", 0)
+    checks = [
+        ("attributes (has a handle column)", bool(p["handles"])),
+        ("direction present and not lopsided",
+         bool(s and r and 0.15 < s / (s + r) < 0.85)),
+        ("reaches past the 2025-08-10 ceiling", ok_ceiling),
+        ("timezone determined", mode is not None),
+    ]
+    if losses:
+        checks.append(("superset of every incumbent (<1% loss)",
+                       all(pct < 1.0 for _, pct in losses)))
+    for label, ok in checks:
+        print(f"  [{'PASS' if ok else 'FAIL'}] {label}")
+    if all(ok for _, ok in checks):
+        print("\n  PROMOTE. File it, rerun bin/source-index scan, then make it the")
+        print("  bin/mine-messages default and take down the ceiling warning at the")
+        print("  head of source-coverage-index.md.")
+    else:
+        print("\n  DO NOT PROMOTE YET. File it as one more indexed source — that is")
+        print("  still worth doing — but leave bin/mine-messages pointed where it is.")
+        print("  A file that is trusted as complete and is not is the single most")
+        print("  expensive object this archive can contain.")
+    return 0
+
+
+def main():
+    if len(sys.argv) < 2:
+        print(__doc__)
+        return 1
+    cmd, rest = sys.argv[1], sys.argv[2:]
+    if cmd == "profile":
+        cmd_profile(rest)
+        return 0
+    if cmd == "superset":
+        cmd_superset(rest)
+        return 0
+    if cmd == "tz":
+        cmd_tz(rest)
+        return 0
+    if cmd == "gate":
+        return cmd_gate(rest)
+    print(__doc__)
+    return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

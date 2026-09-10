@@ -1,0 +1,211 @@
+---
+
+domain: mind
+
+page_type: concept
+
+title: "Emotional Imprinting"
+
+status: stable
+
+date_created: 2026-07-14
+
+date_modified: 2026-07-19
+
+knowledge: mixed
+
+sources:
+
+- raw/self/dox-scan/Dan Profile.txt
+
+tags: [relationships, trauma-bond, attachment, personality-profile]
+
+connections:
+
+- page: wiki/mind/concepts/attachment-model
+
+type: parallels
+
+claim: "'Crush activation on contact' with no off switch and the attachment model's no-counter-rule architecture are structurally identical claims reached from different source bases — dossier theory and primary corpus converging on rapid, irreversible activation."
+
+- page: wiki/timeline/events/eli-incident
+
+type: contextualizes
+
+claim: "The imprinting mechanism is the cluster's account of the Eli betrayal's disproportionate severity — 'temple desecration' rather than romantic disappointment, the violation of an absorbed internal map."
+
+- page: wiki/mind/psychosexual/orchestration-and-voyeurism
+
+type: mirrors
+
+claim: "The two mechanisms sit in documented tension: total imprinting on contact does not obviously predict years of orchestrated exposure — unless authorship over the boundary routes around the imprinting channel, which remains the framework's open structural question."
+
+- page: wiki/mind/psychosexual/taboo-and-boundary-testing
+
+type: mirrors
+
+claim: "Both mechanisms trace to the same 'Pattern Mapping' section of Dan Profile.txt and both have since gained real corroboration from outside that single document — this page from the independently-built attachment model, taboo-and-boundary-testing from the Bryan MMF — so neither is single-sourced any longer, though both remain thin."
+
+- page: wiki/mind/synthesis/no-platonic-channel
+
+type: component-of
+
+claim: "'Crush activation on contact' with no off switch supplies the mechanism a friendship-to-romance conversion pattern needs: if sustained, high-investment attention to another person is the trigger regardless of the register it starts in, a trusted female friendship is structurally the same input as a romantic overture."
+
+---
+
+# Emotional Imprinting
+
+Both dossier sources make the same claim in nearly the same language:
+
+"unemotional sex is a myth" for Dan. Every high-investment sexual or
+
+romantic encounter is described as producing immediate attachment
+
+activation — `Dan Profile.txt` calls it "crush activation on contact" —
+
+rather than staying casual or contained. The report frames this as the
+
+direct mechanism behind two otherwise-separate facts already documented
+
+elsewhere in the wiki: the intensity of Dan's relationship attachments,
+
+and the disproportionate severity of the [[wiki/people/eli|Eli]] betrayal's
+
+psychological impact. In this framing, the Eli incident wasn't processed
+
+as ordinary romantic disappointment — it's described as a "temple
+
+desecration," the violation of something categorically sacred rather than
+
+merely painful.
+
+## The mechanism as described
+
+The claim has two parts. First, that encounters — not just relationships,
+
+but individual high-investment sexual encounters — trigger what the
+
+report calls "emotional imprinting": the other person is "absorbed and
+
+mapped into his internal architecture" essentially on contact, not
+
+gradually. Second, that this absorption is what makes betrayal or
+
+disappointment catastrophic rather than merely disappointing: "contamination
+
+occurs when reality fails to align with this idealized map," producing
+
+what the same report elsewhere calls the shift from a partner as "chaotic
+
+mirror" to "dissociated saboteur" — the exact language independently used
+
+to describe the Eli incident's effect on how Dan modeled
+
+[[wiki/people/annie-ulmer|Annie]] afterward (see
+
+[[wiki/timeline/events/eli-incident]]).
+
+## Where this converges with independently-documented material
+
+> **REVISED [2026-08-10]:** This section previously contrasted this
+
+> mechanism's "real convergent support" against
+
+> [[wiki/mind/psychosexual/taboo-and-boundary-testing]], described as
+
+> having none. That contrast is now only partly true: the taboo page's
+
+> orientation-violation claim gained a documented primary-source instance
+
+> (the October 2019 Bryan MMF) on 2026-08-02, though it remains a single
+
+> dated event rather than a body of cases. The distinction that still
+
+> holds is the *kind* of convergence — this page's support comes from an
+
+> independently-built quantitative model (41,073 messages, an
+
+> activation-asymmetry finding reached without reference to this dossier),
+
+> while taboo-and-boundary-testing's support is one confirmed real-world
+
+> event. Both are corroborated; neither is corroborated the same way.
+
+This mechanism has real convergent support, even though it originates in
+
+the same single-source dossier. [[wiki/mind/concepts/attachment-model]] — built from a much
+
+broader evidence base, including the primary message corpus rather than a
+
+single AI report — independently documents an attachment-activation
+
+asymmetry: nothing before Annie is recorded as triggering full attachment
+
+activation, and once triggered, no natural mechanism existed in Dan's own
+
+behavior to close the loop without an explicit severance signal from the
+
+other person. That is a structurally identical claim to "crush activation
+
+on contact" with no off switch, arrived at from different source material.
+
+The Fe-starvation profile on [[wiki/mind/profile/intp]] (Fe 10% valuing,
+
+46% active — the weak-but-craved feeling function) provides a plausible mechanism for why
+
+this would be true: a system starved of the feeling function it needs
+
+would be expected to over-attach rapidly to whatever supplies it, rather
+
+than titrate exposure gradually the way a securely-resourced Fe user
+
+might.
+
+## What this does not explain
+
+The emotional-imprinting claim, taken at face value, sits in some tension
+
+with the orchestration/voyeurism pattern documented on
+
+[[wiki/mind/psychosexual/orchestration-and-voyeurism]]: if every
+
+high-investment encounter triggers total imprinting, the mechanism doesn't
+
+obviously predict why Dan would then structure years of his primary
+
+relationship around watching his partner have exactly those
+
+high-investment encounters with other people, rather than avoiding the
+
+exposure. The dossier doesn't resolve this tension explicitly — the
+
+closest it comes is the claim that orchestration lets Dan extract meaning
+
+from the *fact* of the encounter (authorship over the boundary) rather
+
+than from direct sensory/emotional participation, which would in theory
+
+route around the imprinting mechanism rather than triggering it. This is
+
+plausible but unconfirmed by any primary source; it should be read as an
+
+open structural question in the framework, not a resolved one.
+
+**Gaps:** as with the rest of this cluster, the imprinting claim itself is
+
+single-sourced to AI-authored analysis. Its convergence with
+
+[[wiki/mind/concepts/attachment-model]] is real and independently
+
+supported, but that convergence is at the level of *pattern* (rapid,
+
+irreversible attachment activation), not at the level of the specific
+
+"crush activation on contact" or "temple desecration" language, which
+
+remains interpretive framing rather than primary-source fact.
+
+---
+
+**Up:** [[wiki/mind/index|Mind]] › [[wiki/mind/psychosexual/index|Psychosexual]]

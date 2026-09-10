@@ -1,0 +1,1224 @@
+#!/usr/bin/env python3
+"""wiki-plain — the READER'S DIGEST layer: one plain-language twin per page.
+
+WHAT THIS IS. Every page in `wiki/` is written for a reader who already knows
+the corpus: typed edges, register tables, falsifier lists, provenance
+disclosures, `knowledge: earned` and the rest. That is the correct register for
+the technical wiki and it is unreadable to somebody who walked in off the
+street. So each page may carry a twin under `plain/` — the same finding, at the
+same altitude, told to a person who has never read anything else here.
+
+    wiki/mind/synthesis/fayette-return.md   the entry
+    plain/mind/synthesis/fayette-return.md  the same entry, in plain English
+
+The portal serves the pair as two MODES behind one switch. `plain/` is not a
+second wiki and its files are not pages: no typed edges, no `synthesizes:`, no
+Gaps section, no page in the index, nothing to cite. A `plain/` file is a
+RENDERING of a page and has no standing of its own.
+
+WHY `plain/` AND NOT `digest/`. `bin/wiki-digest` and `DIGEST.md` already exist
+and mean something completely different — the generated ledger of recent
+activity. A second thing called "digest" in the same repository is a thing a
+future session will conflate with the first, and `bin/wiki-digest` WRITES
+files. The reader-facing name is "Reader's Digest" because that is what the
+operator asked for; the path is `plain/` so nothing here can be mistaken for
+the ledger.
+
+WHY IT IS OUTSIDE `wiki/`. `bin/wiki-lint` globs `wiki/**/*.md` and every page
+it finds is a page: it wants frontmatter, typed edges, an index entry, and it
+counts toward the master index. A twin living in `wiki/` would double the page
+count, orphan-warn forever, and — worst — become citable, so a later synthesis
+could reason from a simplification instead of from the finding. Outside `wiki/`
+it cannot.
+
+---- THE ONE RULE THAT MATTERS -----------------------------------------------
+
+**A translation records the version it was made from, and goes stale when that
+version moves.** `source_modified:` in a `plain/` file is the `date_modified:`
+of the page it was written against. When the page is revised, the twin is
+stale, `check` says so, and it stays said until somebody re-reads the page and
+re-translates it.
+
+This is the same discipline as `bin/wiki-climb check` and it exists for the
+same reason. A simplification that silently lags its source is worse than no
+simplification: it is a confident, readable, WRONG account of what the wiki
+says, served to exactly the reader least equipped to catch it. Never clear a
+stale twin by bumping `source_modified:` — re-read the page, decide whether the
+plain version survives the change, rewrite what moved.
+
+---- THE MORATORIUM IS ENFORCED HERE, NOT REMEMBERED -------------------------
+
+`CLAUDE.md` carries a standing operator directive: no new narrative about Annie
+enters this repository. A plain-language retelling of an Annie page is new
+narrative about Annie — it adds no facts, but it is new prose about a living
+person in a situation the operator has called dangerous, written to be read by
+people who could not read the original. That is squarely inside what the
+directive stops.
+
+So it is not left to a session to remember. It is TWO mechanical rules, and the
+second is the one that actually guarantees the outcome:
+
+  1. A page SUBSTANTIALLY about her gets no twin at all. `check` fails if one
+     exists; `new` refuses; `next` never proposes it. "Substantially" is
+     mechanical: named anywhere in the frontmatter (title, aliases, tags,
+     sources, `synthesizes:`, a typed-edge target or claim), or more than
+     `INCIDENTAL` mentions in the body.
+  2. **No `plain/` file may mention her at all, ever, whatever its source.**
+     `check` fails on any twin that does. This is the guarantee: rule 1 draws
+     a line somebody could argue about, and rule 2 means no new prose about
+     her can enter this layer regardless of where the line fell.
+
+Rule 1 is not merely rule 2 applied earlier. A page can be *about* her while
+mentioning her a handful of times, and translating one by quietly eliding her
+would produce a twin that passes rule 2 and MISREPRESENTS THE PAGE — a reader
+told a version of a finding with its subject removed has been misled more
+efficiently than by any error. So: a page with an incidental mention is
+eligible, and the twin simply does not carry that sentence. If leaving it out
+would change what the page says, the page is not translatable — decline it, and
+say so where the next session will read it. That judgment belongs to a reader;
+the tool only holds the floor under it.
+
+Lifting any of this is the operator's call and nobody else's — it is one
+regex and one integer, `MORATORIUM` and `INCIDENTAL`, directly below.
+
+Missing twins are NOT errors. Coverage is standing campaign work, worked
+top-down like every other queue in this repository, and a page with no plain
+version simply serves the technical one with a note saying so. Only a BROKEN
+twin — stale, orphaned, or forbidden — is a gate failure.
+
+    bin/wiki-plain status          # coverage, by domain, and what is stale
+    bin/wiki-plain check           # the gate: 0 = clean, 1 = broken twin
+    bin/wiki-plain next [n]        # the n densest pages with no twin yet
+    bin/wiki-plain new <slug>      # scaffold a twin, frontmatter filled in
+    bin/wiki-plain task [slug]     # one page's whole writing task, for an agent
+    bin/wiki-plain audit [slug]    # the anti-slop referee: is this twin any good?
+"""
+import argparse
+import os
+import re
+import sys
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+WIKI = os.path.join(ROOT, "wiki")
+PLAIN = os.path.join(ROOT, "plain")
+
+# The standing directive in CLAUDE.md, as code. See the two rules in the module
+# docstring. Only the operator lifts either of these.
+# Leading word boundary only, and no trailing one. `\bannie\b` looks tighter and
+# is wrong: it misses `annie_metadata_24h.csv`, the filename this material is
+# cited by throughout, because `_` is a word character and kills the boundary.
+# read-receipt-forensics carries that filename twice and read as eligible until
+# this was fixed. The surname rides along for the same reason — the guard should
+# not depend on which of the two a given page happens to use.
+MORATORIUM = re.compile(r"\b(annie|ulmer)", re.I)
+
+# How many body mentions a page may carry and still count as incidental rather
+# than as being about her. Two: a page that names somebody three times is
+# talking about them. The 2026-08-28 distribution over 518 pages — 277 at zero,
+# 24 at one, 32 at two, then a long tail — puts the natural break here.
+INCIDENTAL = 2
+
+# Archived artifacts are pinned oversized things nobody updates; they are exempt
+# from budgets in wiki-lint and they are exempt from translation here too.
+SKIP_DIRS = {".obsidian", "archive"}
+
+# ---- THE TWO LANES ---------------------------------------------------------
+#
+# Two writers work this backlog at once and they are not interchangeable: a
+# strong model on the dense findings, a weak free one on the short pages. Left
+# to itself `next` ranks by word count and hands both of them the same page, so
+# the split is arithmetic here rather than a convention each is trusted to
+# remember. The lanes are disjoint by construction and together they are every
+# eligible untranslated page outside the holdouts below.
+#
+# The boundary is 900 words. Above it a twin is a day's careful reading; below
+# it the page fits in a small model's context beside the rules and the whole of
+# `task`'s output, which is the actual constraint on the free lane.
+MAJOR_MIN_WORDS = 900
+
+# And a floor under the free lane, which is the boundary that actually had to be
+# measured. Ordering the lane smallest-first walked it straight into
+# `interests/favorites/books/topics/war` — 16 words, one sentence, `status:
+# archived` — and then into a run of concert records that are a date, a venue and
+# a lineup table. Neither has a finding to restate: a table is already plain, and
+# a one-sentence stub translated is the same sentence. Worse, neither carries
+# falsifiers, so `audit`'s honest-half rule fails every attempt and the agent
+# burns its three tries and gives up, per PLAIN_AGENT.md.
+#
+# 300 sits below every twin that has worked (the shortest is 393 words) and above
+# the point where pages stop being arguments. It takes the free lane from 106
+# pages to 44, and that is the trade being made deliberately: a twin of a stub is
+# work nobody needed, done by the writer least able to tell.
+FREE_MIN_WORDS = 300
+
+# The free lane is worked SMALLEST FIRST and the major lane densest first. That
+# is not symmetry for its own sake. A weak model's failure on a long page is
+# silent — it returns a fluent summary of the first three paragraphs, which is
+# the one defect `audit` cannot see — so the free lane is ordered to keep it on
+# pages it can finish.
+LANE_ORDER = {"major": lambda p: -p.words, "free": lambda p: p.words}
+
+# Page types that are not findings, and therefore have nothing to translate.
+#
+# `dataset` pages are GENERATED — `wiki/meta/skills` by `bin/wiki-skills page`,
+# `wiki/health/intake-ledger` by `bin/intake page` — and rewritten on every
+# write. A twin of one is stale the next time its generator runs, forever, and
+# `CLAUDE.md` is explicit that the ledger "is evidence, not a claim": TRANSLATE
+# renders a finding, and a database is not one. `index` pages are navigation;
+# they carry no falsifiers, so `audit`'s honest-half rule fails every attempt at
+# one. Both are recorded in `plain/DECLINED.md` with the reasoning. Excluded
+# from the lanes rather than from `check`, so an existing twin is never
+# retroactively made a gate failure by this list.
+NOT_TRANSLATABLE = {"dataset", "index"}
+
+# Held out of both lanes, and this one is a judgement rather than a mechanism.
+# The moratorium protects exactly one living person by name; the other 92 people
+# pages have no guard at all. Plain-English prose about a living person, written
+# for a public site by whichever model is cheapest, is the one mistake here that
+# cannot be taken back — so `people/` waits for a decision rather than for a
+# free run. Lift it by emptying this set.
+LANE_HOLDOUT_DOMAINS = {"people"}
+
+
+def bookkeeping(slug):
+    """Is this a `plain/` file that is not a twin of anything?
+
+    `plain/DECLINED.md` records pages considered and declined. It sits at the
+    root of the tree with an ALL-CAPS name, the same convention the repository
+    root already uses to separate meta files (`CLAUDE.md`, `WORK.md`,
+    `BACKLOG.md`) from content — so it is bookkeeping, not an orphaned twin.
+    Twins are always lowercase slugs one or more directories deep.
+    """
+    return "/" not in slug and slug.isupper()
+
+
+def read(path):
+    with open(path, encoding="utf-8") as fh:
+        return fh.read()
+
+
+def frontmatter(text):
+    """The shapes these files use — flat `key: value` only. Twins have no lists."""
+    if not text.startswith("---"):
+        return {}
+    end = text.find("\n---", 3)
+    if end == -1:
+        return {}
+    meta = {}
+    for line in text[4:end].split("\n"):
+        m = re.match(r"^([A-Za-z0-9_]+):\s*(.*)$", line)
+        if m and m.group(2).strip():
+            meta[m.group(1)] = m.group(2).strip().strip("\"'")
+    return meta
+
+
+def body_of(text):
+    """Everything after the frontmatter block."""
+    if not text.startswith("---"):
+        return text
+    end = text.find("\n---", 3)
+    if end == -1:
+        return text
+    nl = text.find("\n", end + 1)
+    return text[nl + 1:] if nl != -1 else ""
+
+
+def words(text):
+    return len(body_of(text).split())
+
+
+def walk(root):
+    """Slugs (`domain/path/name`, no extension) under a tree, skipping SKIP_DIRS."""
+    out = []
+    if not os.path.isdir(root):
+        return out
+    for dirpath, dirs, files in os.walk(root):
+        dirs[:] = [d for d in dirs if d not in SKIP_DIRS and not d.startswith(".")]
+        for f in sorted(files):
+            if not f.endswith(".md"):
+                continue
+            rel = os.path.relpath(os.path.join(dirpath, f), root)
+            out.append(rel.replace(os.sep, "/")[:-3])
+    return sorted(out)
+
+
+class Page:
+    """One wiki page and whatever the Reader's Digest layer has to say about it."""
+
+    def __init__(self, slug):
+        self.slug = slug
+        self.src_path = os.path.join(WIKI, *slug.split("/")) + ".md"
+        self.twin_path = os.path.join(PLAIN, *slug.split("/")) + ".md"
+        src = read(self.src_path)
+        self.meta = frontmatter(src)
+        self.domain = slug.split("/")[0]
+        self.page_type = self.meta.get("page_type", "")
+        self.modified = self.meta.get("date_modified", "")
+        self.words = words(src)
+
+        # MORATORIUM RULE 1, judged on the source text rather than on the slug:
+        # a page can be titled for somebody else entirely and still be carrying
+        # her narrative. Frontmatter counts at any density — a name in
+        # `synthesizes:`, in a typed-edge claim or in `sources:` means the page
+        # is built on that material however sparingly the body says so.
+        head = src[: src.find("\n---", 3)] if src.startswith("---") else ""
+        self.excluded = bool(MORATORIUM.search(head)) or (
+            len(MORATORIUM.findall(body_of(src))) > INCIDENTAL
+        )
+
+        self.twin = os.path.exists(self.twin_path)
+        twin_src = read(self.twin_path) if self.twin else ""
+        self.twin_meta = frontmatter(twin_src) if self.twin else {}
+        self.twin_words = words(twin_src) if self.twin else 0
+        # MORATORIUM RULE 2 — the guarantee. Nothing in this layer names her.
+        self.twin_names_her = bool(MORATORIUM.search(twin_src)) if self.twin else False
+
+    @property
+    def stale(self):
+        """The page moved after the twin was written against it."""
+        if not self.twin:
+            return False
+        against = self.twin_meta.get("source_modified", "")
+        return bool(self.modified) and against != self.modified
+
+    @property
+    def ratio(self):
+        return (self.twin_words / self.words) if self.words and self.twin else 0.0
+
+
+def load():
+    return [Page(s) for s in walk(WIKI)]
+
+
+def lane_eligible(p, lane):
+    """Is this page in `lane`? The moratorium is checked before anything else."""
+    if p.excluded or p.domain in LANE_HOLDOUT_DOMAINS:
+        return False
+    if p.page_type in NOT_TRANSLATABLE:
+        return False
+    # `status: archived` is a pinned artifact nobody updates — exempt from budgets
+    # in wiki-lint, and exempt from translation for the same reason. `SKIP_DIRS`
+    # already catches the ones filed under `archive/`; this catches the rest.
+    if p.meta.get("status") == "archived":
+        return False
+    if lane == "major":
+        return p.words >= MAJOR_MIN_WORDS
+    return FREE_MIN_WORDS <= p.words < MAJOR_MIN_WORDS
+
+
+def below_floor(pages):
+    """Eligible, untranslated, and too thin for any lane — visible, not dropped."""
+    return [
+        p for p in pages
+        if not p.twin and not p.excluded
+        and p.domain not in LANE_HOLDOUT_DOMAINS
+        and p.page_type not in NOT_TRANSLATABLE
+        and p.meta.get("status") != "archived"
+        and p.words < FREE_MIN_WORDS
+    ]
+
+
+def lane_queue(pages, lane):
+    """The untranslated pages of one lane, in the order that lane is worked."""
+    todo = [p for p in pages if not p.twin and lane_eligible(p, lane)]
+    return sorted(todo, key=LANE_ORDER[lane])
+
+
+# ---------------------------------------------------------------------------
+
+
+def cmd_check(_args):
+    """The gate. Broken twins only — a missing twin is work, not a defect."""
+    pages = load()
+    by_slug = {p.slug: p for p in pages}
+    errors = []
+
+    for p in pages:
+        # Rule 2 first: it is the guarantee, and it holds even where rule 1
+        # decided the source page was fine to work from.
+        if p.twin_names_her:
+            errors.append(
+                f"{p.slug}: plain/{p.slug}.md names a person under the standing "
+                f"moratorium in CLAUDE.md. No file in this layer may, whatever "
+                f"its source page says. Remove the passage — and if removing it "
+                f"changes what the page means, delete the twin instead and "
+                f"record the page as one that cannot be translated."
+            )
+        if p.twin and p.excluded:
+            errors.append(
+                f"{p.slug}: has a plain/ twin but the page is under the standing "
+                f"moratorium in CLAUDE.md. Delete plain/{p.slug}.md — a plain-"
+                f"language retelling is new narrative, and only the operator "
+                f"lifts this."
+            )
+        if p.stale:
+            errors.append(
+                f"{p.slug}: twin is STALE — written against "
+                f"{p.twin_meta.get('source_modified') or '(nothing)'}, page is now "
+                f"{p.modified}. Re-read the page and re-translate what moved. "
+                f"Never just bump source_modified:."
+            )
+        if p.twin and p.twin_meta.get("plain_of") != f"wiki/{p.slug}":
+            errors.append(
+                f"{p.slug}: twin's plain_of: is "
+                f"'{p.twin_meta.get('plain_of', '(missing)')}', expected "
+                f"'wiki/{p.slug}'."
+            )
+
+    # A twin with no page above it: the page was renamed or deleted and the
+    # translation was left behind pointing at nothing.
+    for slug in walk(PLAIN):
+        if bookkeeping(slug):
+            continue
+        if slug not in by_slug:
+            errors.append(
+                f"{slug}: plain/{slug}.md is an ORPHAN — no wiki/{slug}.md above "
+                f"it. The page was renamed or removed; move or delete the twin."
+            )
+
+    # The campaign page is generated. A hand-edit is a claim about coverage that
+    # nothing computed, published on a public site — the same failure mode
+    # `bin/wiki-skills check` guards, for the same reason.
+    if os.path.exists(report_page()):
+        if read(report_page()) != render_report(pages):
+            errors.append(
+                "wiki/meta/readers-digest.md is behind the tree — run "
+                "`bin/wiki-plain report`. It is generated; do not hand-edit it."
+            )
+
+    for e in errors:
+        print(f"  ERROR  {e}")
+    covered = sum(1 for p in pages if p.twin)
+    eligible = sum(1 for p in pages if not p.excluded)
+    print(
+        f"\nwiki-plain: {len(errors)} error(s) · {covered}/{eligible} eligible "
+        f"pages have a Reader's Digest twin"
+    )
+    return 1 if errors else 0
+
+
+# ---------------------------------------------------------------------------
+# AUDIT — the anti-slop referee
+#
+# `check` answers "is this twin BROKEN?" — stale, orphaned, forbidden. `audit`
+# answers a different and harder question: "is this twin any GOOD?"
+#
+# It exists because the twins are the one layer of this repository a weak or
+# careless writer can degrade without leaving a trace. A wrong synthesis
+# contradicts a page somebody can go read. A slop twin reads fine, cites
+# nothing, and is served to the reader least equipped to notice — and the
+# writer, asked whether it is slop, will say no. So nothing here asks anyone's
+# opinion. Every rule below is arithmetic over two files.
+#
+# The load-bearing one is FABRICATED NUMBERS. A twin may only contain numbers
+# that appear in the page it translates. Simplifying the language is the job;
+# inventing a quantity is manufacturing evidence, and it is the single most
+# damaging thing a translator can do here, because a number reads as proof.
+# Single digits are exempt (ordinary prose counts things: "two origins"); every
+# multi-digit number, year and percentage is checked against the source.
+
+# Numbers, dates and quantities. Commas stripped so "2,000" matches "2000".
+NUMBER = re.compile(r"\d[\d,]*(?:\.\d+)?%?")
+
+# A page often spells a quantity out ("thirty-five years", "Twenty-five works")
+# where the twin quite properly writes the digits. That is a rendering choice,
+# not an invented number, so the source's spelled forms are resolved to digits
+# before anything is called fabricated. Only what a page plausibly spells out.
+UNITS = {
+    "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7,
+    "eight": 8, "nine": 9, "ten": 10, "eleven": 11, "twelve": 12,
+    "thirteen": 13, "fourteen": 14, "fifteen": 15, "sixteen": 16,
+    "seventeen": 17, "eighteen": 18, "nineteen": 19,
+}
+TENS = {
+    "twenty": 20, "thirty": 30, "forty": 40, "fifty": 50,
+    "sixty": 60, "seventy": 70, "eighty": 80, "ninety": 90,
+}
+SPELLED = re.compile(
+    r"\b(" + "|".join(list(TENS) + list(UNITS)) + r")(?:[-\s](" + "|".join(UNITS) + r"))?\b",
+    re.I,
+)
+
+
+def spelled_numbers(text):
+    """Digit strings for every number the text spells out in words."""
+    out = set()
+    for m in SPELLED.finditer(text):
+        head, tail = m.group(1).lower(), (m.group(2) or "").lower()
+        if head in TENS:
+            out.add(str(TENS[head] + UNITS.get(tail, 0)))
+        else:
+            out.add(str(UNITS[head]))
+    return out
+
+# Machinery that belongs to the technical edition and must not survive into the
+# plain one. A reader who has never been here does not need a `raw/` path.
+APPARATUS = [
+    (re.compile(r"\[\[[^\]]+\]\]"), "a [[wiki/...]] link"),
+    (re.compile(r"\braw/[a-z0-9_./-]+", re.I), "a raw/ source path"),
+    (re.compile(r"^\s*(synthesizes|connections|page_type|knowledge|date_range_\w+|tags|aliases):", re.M), "a frontmatter key that belongs to the page, not the twin"),
+    (re.compile(r"\b(typed edge|instantiates|component-of|evidenced-by|constitution pass|provenance disclosure)\b", re.I), "wiki-maintenance vocabulary"),
+    (re.compile(r"\bknowledge:\s*(earned|derived|mixed)\b", re.I), "a knowledge: value"),
+]
+
+# The house style of a model writing to fill space. Not a taste judgement —
+# every one of these is a phrase that adds no claim, and a twin is 100% claims.
+SLOP = [
+    r"\bit'?s (important|worth) (to note|noting|remembering)\b",
+    r"\bit should be noted\b",
+    r"\bdelve[sd]? into\b",
+    r"\ba (rich )?tapestry\b",
+    r"\bnavigat(e|ing) the (complexit|landscape|nuance)",
+    r"\bmultifacet(ed)?\b",
+    r"\bplays? a (crucial|key|vital|significant) role\b",
+    r"\bin (today'?s|the modern) world\b",
+    r"\bin conclusion\b",
+    r"\bthis (article|document|page) (will )?(explore|examine|discuss)",
+    r"\bfurthermore,",
+    r"\bmoreover,",
+    r"\bit is (clear|evident) that\b",
+    r"\ba testament to\b",
+    r"\bunderscore[sd]? the importance\b",
+    r"\bsheds? light on\b",
+    r"\bat the end of the day\b",
+    r"\bwhen it comes to\b",
+]
+
+# The page admits what it does not know, and so must the twin.
+SOURCE_HONESTY = re.compile(r"^#{2,3}\s+.*\b(gaps?|falsifiers?|what would|open questions|unresolved)\b", re.I | re.M)
+TWIN_HONESTY = re.compile(r"^#{2,3}\s+.*(prove this wrong|don'?t know|not sure|unknown|gaps?|falsif|gets? this wrong|missing)\b", re.I | re.M)
+
+POINTER = re.compile(r"(full|technical|complete)\s+(entry|page|version)", re.I)
+
+# `new` and `task` leave angle-bracket prompts in the scaffold. A twin still
+# carrying one was abandoned mid-write, and the tree should say so rather than
+# publish a template.
+PLACEHOLDER = re.compile(r"<[A-Z][^>\n]{12,}>")
+
+
+def sentences(text):
+    return [s for s in re.split(r"[.!?]+(?:\s|$)", text) if s.strip()]
+
+
+def syllables(word):
+    """Good enough for a grade level; this is a smoke alarm, not a linguist."""
+    word = re.sub(r"[^a-z]", "", word.lower())
+    if not word:
+        return 0
+    groups = re.findall(r"[aeiouy]+", word)
+    n = len(groups)
+    if word.endswith("e") and n > 1 and not word.endswith(("le", "ee")):
+        n -= 1
+    return max(1, n)
+
+
+def grade_level(text):
+    """Flesch-Kincaid. The plain edition is for people who have not read the wiki."""
+    prose = re.sub(r"^\s*\|.*$", "", text, flags=re.M)          # tables are not prose
+    prose = re.sub(r"[*_`#>\[\]]", " ", prose)
+    words = re.findall(r"[A-Za-z][A-Za-z'-]*", prose)
+    sents = sentences(prose)
+    if not words or not sents:
+        return 0.0
+    syl = sum(syllables(w) for w in words)
+    return 0.39 * (len(words) / len(sents)) + 11.8 * (syl / len(words)) - 15.59
+
+
+def audit_page(p):
+    """(errors, warnings) for one translated page. Arithmetic, never opinion."""
+    errors, warnings = [], []
+    src = read(p.src_path)
+    twin = read(p.twin_path)
+    src_body, twin_body = body_of(src), body_of(twin)
+
+    # -- 1. fabricated numbers ------------------------------------------------
+    norm = lambda m: m.group(0).replace(",", "").rstrip(".")
+    src_nums = {norm(m) for m in NUMBER.finditer(src_body)}
+    src_nums |= spelled_numbers(src_body)
+    # A four-digit year licenses its own shorthand: a page writing "2011-2012"
+    # and a twin writing "2011-12" are the same date, not a new one.
+    src_nums |= {n[2:] for n in list(src_nums) if len(n) == 4 and n.isdigit() and n.startswith(("18", "19", "20"))}
+    invented = sorted(
+        {
+            norm(m)
+            for m in NUMBER.finditer(twin_body)
+            if len(norm(m).rstrip("%").replace(".", "")) > 1 and norm(m) not in src_nums
+        },
+        key=lambda v: (len(v), v),
+    )
+    if invented:
+        errors.append(
+            "FABRICATED NUMBERS — these appear in the twin but nowhere in the page: "
+            + ", ".join(invented[:12])
+            + ". Every quantity must be traceable to the page. Delete it or use the "
+            "page's own figure; do not round, convert, total or estimate."
+        )
+
+    # -- 2. evidence quietly dropped -----------------------------------------
+    kept = len({n for n in src_nums if n in {norm(m) for m in NUMBER.finditer(twin_body)}})
+    big_src = {n for n in src_nums if len(n.rstrip("%").replace(".", "")) > 1}
+    if big_src:
+        keep_rate = len({n for n in big_src if n in twin_body.replace(",", "")}) / len(big_src)
+        if keep_rate < 0.25:
+            warnings.append(
+                f"only {keep_rate * 100:.0f}% of the page's figures survive into the twin "
+                "— check you are simplifying the language and not the evidence"
+            )
+
+    # -- 3. apparatus that should have been stripped --------------------------
+    for pattern, what in APPARATUS:
+        m = pattern.search(twin)
+        if m:
+            errors.append(
+                f"APPARATUS LEAKED — {what}: {m.group(0)[:60]!r}. That is machinery for "
+                "maintaining the wiki, not part of the finding. Remove it."
+            )
+
+    # -- 4. slop ---------------------------------------------------------------
+    for pattern in SLOP:
+        m = re.search(pattern, twin_body, re.I)
+        if m:
+            errors.append(
+                f"FILLER PHRASE — {m.group(0)!r}. It carries no claim. Cut the sentence "
+                "or replace it with what actually happened."
+            )
+
+    # -- 5. the honest half ----------------------------------------------------
+    if SOURCE_HONESTY.search(src_body) and not TWIN_HONESTY.search(twin_body):
+        errors.append(
+            "MISSING THE HONEST HALF — the page states its gaps or what would prove it "
+            "wrong, and the twin does not. A reader shown only the confident half is "
+            "being sold something. Add those sections in plain words."
+        )
+
+    # -- 6. length band --------------------------------------------------------
+    if p.words and p.twin_words:
+        ratio = p.twin_words / p.words
+        if ratio < 0.18:
+            errors.append(
+                f"TOO SHORT — {p.twin_words} words against the page's {p.words} "
+                f"({ratio * 100:.0f}%). That is a summary, not a translation. A twin "
+                "carries the same finding at the same altitude."
+            )
+        elif ratio > 0.95:
+            warnings.append(
+                f"barely shorter than the page ({ratio * 100:.0f}%) — check the apparatus "
+                "was actually dropped"
+            )
+
+    # -- 7. reading level ------------------------------------------------------
+    grade = grade_level(twin_body)
+    if grade > 12.5:
+        errors.append(
+            f"TOO HARD TO READ — Flesch-Kincaid grade {grade:.1f}, target 12 or below. "
+            "Shorten the sentences and swap the long words. Keep every fact."
+        )
+
+    # -- 8. an abandoned scaffold ---------------------------------------------
+    m = PLACEHOLDER.search(twin_body)
+    if m:
+        errors.append(
+            f"UNFILLED TEMPLATE — the scaffold prompt {m.group(0)[:50]!r} is still here. "
+            "Either finish the twin or delete the file; a half-written one blocks the gate "
+            "on purpose."
+        )
+
+    # -- 9. the way back -------------------------------------------------------
+    if not POINTER.search(twin_body):
+        errors.append(
+            "NO POINTER BACK — close with the standard line telling the reader the full "
+            "entry exists and carries the sources."
+        )
+
+    return errors, warnings
+
+
+def cmd_audit(args):
+    pages = [p for p in load() if p.twin]
+    if args.slug:
+        want = args.slug.removeprefix("wiki/").removesuffix(".md")
+        pages = [p for p in pages if p.slug == want]
+        if not pages:
+            print(f"No twin at plain/{want}.md", file=sys.stderr)
+            return 2
+
+    failed = 0
+    for p in pages:
+        errors, warnings = audit_page(p)
+        grade = grade_level(body_of(read(p.twin_path)))
+        if errors or warnings or args.slug:
+            print(f"\n{p.slug}  ({p.words} -> {p.twin_words} words, grade {grade:.1f})")
+        for e in errors:
+            print(f"  FAIL  {e}")
+        for w in warnings:
+            print(f"  warn  {w}")
+        if errors:
+            failed += 1
+        elif args.slug:
+            print("  PASS  nothing mechanical to object to.")
+
+    print(f"\nwiki-plain audit: {len(pages)} twin(s), {failed} failing")
+    return 1 if failed else 0
+
+
+def cmd_status(args):
+    pages = load()
+    eligible = [p for p in pages if not p.excluded]
+    covered = [p for p in pages if p.twin]
+    stale = [p for p in pages if p.stale]
+
+    print("READER'S DIGEST COVERAGE\n")
+    print(f"  pages in wiki/          {len(pages)}")
+    print(f"  eligible                {len(eligible)}")
+    print(f"  withheld (moratorium)   {len(pages) - len(eligible)}")
+    print(f"  translated              {len(covered)}")
+    print(f"  stale                   {len(stale)}")
+    if eligible:
+        print(f"  coverage                {100 * len(covered) / len(eligible):.1f}%")
+
+    print("\n  BY DOMAIN")
+    for d in sorted({p.domain for p in pages}):
+        rows = [p for p in pages if p.domain == d]
+        el = [p for p in rows if not p.excluded]
+        cv = [p for p in rows if p.twin]
+        print(f"    {d:<12} {len(cv):>3}/{len(el):<4} translated   ({len(rows)} pages)")
+
+    if covered:
+        print("\n  TRANSLATED")
+        for p in sorted(covered, key=lambda p: p.slug):
+            flag = "  ** STALE **" if p.stale else ""
+            print(
+                f"    {p.slug:<48} {p.words:>6} -> {p.twin_words:<6} "
+                f"({p.ratio * 100:.0f}%){flag}"
+            )
+
+    if stale:
+        print("\n  STALE — re-read the page, then re-translate what moved:")
+        for p in stale:
+            print(
+                f"    {p.slug}  (twin written against "
+                f"{p.twin_meta.get('source_modified') or '(nothing)'}, "
+                f"page now {p.modified})"
+            )
+    return 0
+
+
+# ---------------------------------------------------------------------------
+# REPORT — the campaign, derived rather than asserted
+#
+# Two writers work this backlog and the operator is on a phone. Both facts point
+# at the same thing: a progress report nobody has to maintain, published where
+# the portal can serve it.
+#
+# Every figure here is computed from the tree and from the git log. There is no
+# ledger, no checkbox and no `done` — the same reasoning `WORK.md` carries. A
+# list that can be marked complete independently of the thing it describes is a
+# list that can lie, and the lie this one would tell is that a page has a twin
+# when it does not.
+#
+# Attribution is by the LAST commit to touch a twin, not the first. It answers
+# "who is answerable for what is there now", which is the question worth asking
+# when one of the two writers is a free model whose work gets corrected.
+# ---------------------------------------------------------------------------
+
+REPORT_CREATED = "2026-09-02"
+
+
+def report_page():
+    """Resolved on every call, not frozen at import.
+
+    `WIKI` is rebound to a temp tree by the tests and could be by anything else
+    that drives this module. A path captured at import time then points at the
+    real corpus while everything around it points somewhere else — which is
+    exactly the shape of bug that makes a gate report a failure in a tree it was
+    never asked about.
+    """
+    return os.path.join(WIKI, "meta", "readers-digest.md")
+
+
+def git_out(*args):
+    import subprocess
+
+    try:
+        return subprocess.run(
+            ["git", "-C", ROOT, *args], capture_output=True, text=True, check=True
+        ).stdout
+    except Exception:
+        return ""
+
+
+def shallow():
+    """A shallow clone's log does not reach the commit that wrote most twins."""
+    return git_out("rev-parse", "--is-shallow-repository").strip() == "true"
+
+
+def translators():
+    """`slug -> (author, date)` for every twin the log can account for.
+
+    One pass over the log rather than one `git log` per twin: the campaign ends
+    with a few hundred of them, and 250 subprocesses to render one page is the
+    kind of thing that gets a report quietly stopped being run.
+    """
+    if shallow():
+        return {}
+    out = git_out(
+        "log", "--format=%x01%an%x02%ad", "--date=short", "--name-only", "--", "plain/"
+    )
+    seen, author, date = {}, None, None
+    for line in out.splitlines():
+        if line.startswith("\x01"):
+            author, _, date = line[1:].partition("\x02")
+            continue
+        if not line.strip() or not line.startswith("plain/") or not line.endswith(".md"):
+            continue
+        slug = line[len("plain/"):-len(".md")]
+        seen.setdefault(slug, (author, date))  # newest first, so the first wins
+    return seen
+
+
+def render_report(pages):
+    """The published page. Deterministic — every value comes from the tree.
+
+    The report is excluded from its own figures. It is a page in `wiki/` like any
+    other, so counting itself would put the render in a loop: writing the file
+    changes the page count, which changes what the file should say, which fails
+    the drift check on the very next run. It is also simply not a subject of the
+    campaign — same reasoning as `bookkeeping()` one tree over.
+    """
+    pages = [p for p in pages if p.src_path != report_page()]
+    covered = sorted((p for p in pages if p.twin), key=lambda p: p.slug)
+    eligible = [p for p in pages if not p.excluded]
+    who = translators()
+    modified = max((p.twin_meta.get("date_modified", "") for p in covered), default="")
+
+    # Every point is a count of entries, taken over the whole tree with nothing
+    # weighted and no threshold chosen for what it would surface. The six states
+    # are exhaustive and disjoint: every eligible entry is in exactly one.
+    states = [
+        ("Translated", len(covered)),
+        ("Major lane", len(lane_queue(pages, "major"))),
+        ("Free lane", len(lane_queue(pages, "free"))),
+        ("Held (people)", len([p for p in pages if not p.excluded and not p.twin
+                               and p.domain in LANE_HOLDOUT_DOMAINS])),
+        ("Too thin", len(below_floor(pages))),
+        ("Withheld", len(pages) - len(eligible)),
+    ]
+
+    L = ["---", "domain: meta", "page_type: dataset", 'title: "The Reader\'s Digest"',
+         "status: active", "knowledge: derived", f"date_created: {REPORT_CREATED}",
+         f"date_modified: {modified or REPORT_CREATED}"]
+    L.append("chart:")
+    L.append("  kind: bar")
+    L.append('  title: "Entries by plain-edition state"')
+    L.append('  x: { label: "State", type: category }')
+    L.append('  y: { label: "Entries", type: number }')
+    L.append("  series:")
+    L.append('    - name: "Entries"')
+    L.append("      points:")
+    for label, n in states:
+        if n:
+            L.append(f'        "{label}": {n}')
+    L.append("sources: []")
+    L.append("---")
+    L.append("")
+    L.append("# The Reader's Digest")
+    L.append("")
+    L.append("_Generated by `bin/wiki-plain report` from the tree and the git log.")
+    L.append("Do not hand-edit — rerun the tool. Every figure is a count of files")
+    L.append("that exist; nothing here is asserted by hand._")
+    L.append("")
+    L.append("[[wiki/meta/index|meta]] · [[wiki/meta/digest|Digest]] · "
+             "[[wiki/meta/recent-activity|Recent]] · [[wiki/meta/skills|Skills]]")
+    L.append("")
+    L.append("Every entry in this wiki is written for a reader who already knows the")
+    L.append("corpus. The Reader's Digest is the same finding told to somebody who has")
+    L.append("never read anything else here — the same facts, the same numbers, the")
+    L.append("same admissions of what is not known, with the machinery taken out. The")
+    L.append("EDITION switch in the header is where you read it.")
+    L.append("")
+    L.append("This page is the campaign to write one for every entry.")
+    L.append("")
+    L.append("## Coverage")
+    L.append("")
+    L.append("| | |")
+    L.append("|---|---|")
+    L.append(f"| Entries with a plain-English edition | **{len(covered)}** |")
+    L.append(f"| Entries eligible for one | {len(eligible)} |")
+    L.append(f"| Withheld under the standing directive | {len(pages) - len(eligible)} |")
+    if eligible:
+        L.append(f"| Coverage | {100 * len(covered) / len(eligible):.1f}% |")
+    L.append("")
+    L.append("## The two lanes")
+    L.append("")
+    L.append("The backlog is split so two writers can work it at once without")
+    L.append("colliding, and so neither is handed work of the wrong shape. The split")
+    L.append(f"is arithmetic in `bin/wiki-plain`: {MAJOR_MIN_WORDS} words is the boundary.")
+    L.append("")
+    L.append("| Lane | What is in it | Outstanding |")
+    L.append("|---|---|---|")
+    for lane, desc in (
+        ("major", f"entries of {MAJOR_MIN_WORDS} words or more — the dense findings"),
+        ("free", f"entries under {MAJOR_MIN_WORDS} words, worked smallest first"),
+    ):
+        L.append(f"| `{lane}` | {desc} | {len(lane_queue(pages, lane))} |")
+    L.append("")
+    held = [p for p in pages if not p.excluded and not p.twin
+            and p.domain in LANE_HOLDOUT_DOMAINS]
+    if held:
+        L.append(f"A further **{len(held)}** eligible entries about other people are in")
+        L.append("neither lane. They are held back deliberately, pending a decision about")
+        L.append("who writes plain-English prose about living people for a public site.")
+        L.append("")
+    thin = below_floor(pages)
+    if thin:
+        L.append(f"**{len(thin)}** more are under {FREE_MIN_WORDS} words — stubs, and")
+        L.append("records like a concert date with its lineup. A table is already plain")
+        L.append("and a one-sentence entry translated is the same sentence, so these get")
+        L.append("no plain edition until the entry itself has an argument in it. They are")
+        L.append("counted here rather than dropped, because an entry nobody will translate")
+        L.append("and an entry nobody has got to should not look the same from outside.")
+        L.append("")
+    if who:
+        L.append("## Who wrote them")
+        L.append("")
+        L.append("By the last commit to touch each file.")
+        L.append("")
+        L.append("| Writer | Editions |")
+        L.append("|---|---|")
+        tally = {}
+        for slug, (author, _) in who.items():
+            tally[author] = tally.get(author, 0) + 1
+        for author in sorted(tally, key=lambda a: (-tally[a], a)):
+            L.append(f"| {author} | {tally[author]} |")
+        L.append("")
+    elif covered:
+        L.append("## Who wrote them")
+        L.append("")
+        L.append("_Not available: this is a shallow clone, so the log does not reach the")
+        L.append("commits that wrote these files. `git fetch --unshallow` for an answer._")
+        L.append("")
+    L.append("## What has an edition")
+    L.append("")
+    if covered:
+        for p in covered:
+            title = p.twin_meta.get("title", p.slug.split("/")[-1]).strip("\"'")
+            stamp = ""
+            if p.slug in who:
+                stamp = f" — {who[p.slug][1]}, {who[p.slug][0]}"
+            L.append(f"- [[wiki/{p.slug}|{title}]]{stamp}")
+    else:
+        L.append("_Nothing yet._")
+    L.append("")
+    L.append("## Next up")
+    L.append("")
+    for lane in ("major", "free"):
+        queue = lane_queue(pages, lane)
+        L.append(f"**{lane}** — {len(queue)} outstanding")
+        L.append("")
+        for p in queue[:5]:
+            L.append(f"- [[wiki/{p.slug}]] ({p.words} words)")
+        if not queue:
+            L.append("- _nothing outstanding_")
+        L.append("")
+    L.append("Entries considered and deliberately given no plain edition are recorded")
+    L.append("in `plain/DECLINED.md`, with the reasoning, rather than left looking")
+    L.append("like work nobody got to.")
+    return "\n".join(L) + "\n"
+
+
+def cmd_report(args):
+    all_pages = load()
+    page = render_report(all_pages)
+
+    if not args.check_only:
+        os.makedirs(os.path.dirname(report_page()), exist_ok=True)
+        with open(report_page(), "w", encoding="utf-8") as fh:
+            fh.write(page)
+
+    # Same exclusion as the render, and for the same reason — see render_report.
+    pages = [p for p in all_pages if p.src_path != report_page()]
+    covered = [p for p in pages if p.twin]
+    eligible = [p for p in pages if not p.excluded]
+    who = translators()
+
+    print("READER'S DIGEST CAMPAIGN\n")
+    pct = f"{100 * len(covered) / len(eligible):.1f}%" if eligible else "—"
+    print(f"  {len(covered)} of {len(eligible)} eligible entries translated ({pct})")
+    print()
+    for lane in ("major", "free"):
+        queue = lane_queue(pages, lane)
+        done = [p for p in pages if p.twin and lane_eligible(p, lane)]
+        print(f"  {lane:<6} {len(done):>3} done · {len(queue):>3} outstanding")
+        for p in queue[:3]:
+            print(f"           next  {p.words:>5}w  {p.slug}")
+    held = [p for p in pages if not p.excluded and not p.twin
+            and p.domain in LANE_HOLDOUT_DOMAINS]
+    if held:
+        print(f"\n  {len(held)} eligible pages held out of both lanes "
+              f"({', '.join(sorted(LANE_HOLDOUT_DOMAINS))}/)")
+    thin = below_floor(pages)
+    if thin:
+        print(f"  {len(thin)} under {FREE_MIN_WORDS}w — stubs and records, no lane")
+    if who:
+        tally = {}
+        for _, (author, _d) in who.items():
+            tally[author] = tally.get(author, 0) + 1
+        print("\n  BY WRITER (last commit to touch the file)")
+        for author in sorted(tally, key=lambda a: (-tally[a], a)):
+            print(f"    {tally[author]:>3}  {author}")
+    elif covered:
+        print("\n  Writer attribution needs a full clone (git fetch --unshallow).")
+    print(f"\n  {'would write' if args.check_only else 'wrote'} "
+          f"wiki/meta/readers-digest.md · read it at /brain/meta/readers-digest")
+    return 0
+
+
+def cmd_next(args):
+    """Densest eligible pages with no twin — the queue, worked top-down."""
+    lane = getattr(args, "lane", None)
+    if lane:
+        todo = lane_queue(load(), lane)
+    else:
+        todo = [p for p in load() if not p.twin and not p.excluded]
+        todo.sort(key=lambda p: -p.words)
+    if args.synthesis:
+        todo = [p for p in todo if p.page_type == "synthesis"]
+    if not todo:
+        print("Nothing eligible is untranslated." if not lane
+              else f"Nothing outstanding in the {lane} lane.")
+        return 0
+    order = "smallest first" if lane == "free" else "densest first"
+    where = f"{lane} lane, " if lane else ""
+    print(f"NEXT {min(args.n, len(todo))} — {where}{order}, {len(todo)} outstanding\n")
+    for p in todo[: args.n]:
+        kind = p.page_type or "-"
+        print(f"  {p.words:>6}w  {kind:<12} {p.slug}")
+    print("\n  bin/wiki-plain new <slug>   to scaffold one")
+    return 0
+
+
+SCAFFOLD = """---
+plain_of: wiki/{slug}
+title: "{title}"
+reading_level: general
+date_modified: {today}
+source_modified: {source_modified}
+---
+
+# {title}
+
+**The short version.** <One or two sentences. What would you tell somebody in
+an elevator? No jargon, no citations, no hedging — the finding itself.>
+
+## <A plain heading, phrased as what a reader would ask>
+
+<Write it the way you would explain it to a smart person who has never read
+this wiki. Keep every fact and every number. Drop the apparatus: typed edges,
+register tables, provenance disclosures and `knowledge:` values are machinery
+for maintaining the wiki, not part of the finding.>
+
+## What would prove this wrong
+
+<The technical page's falsifiers, in plain words. Keep them. A reader who is
+only shown the confident half is being sold something.>
+
+## What we still don't know
+
+<The gaps, in plain words. Same reason.>
+"""
+
+
+TASK_RULES = """\
+RULES — the tool enforces these; you cannot talk your way past them.
+
+  1. Write ONE file: plain/{slug}.md. Touch nothing else. Never edit wiki/.
+  2. Every number, date and quantity in what you write MUST appear in the page
+     above. Do not round, convert, total, estimate or add a denominator. If you
+     cannot point at it in the page, delete it.
+  3. Keep the falsifiers and the gaps. Put them under plain headings a stranger
+     would use: "What would prove this wrong" and "What we still don't know".
+     A reader shown only the confident half is being sold something.
+  4. Drop the apparatus: [[wiki/...]] links, raw/ paths, typed edges,
+     synthesizes:, knowledge:, register tables, provenance notes.
+  5. Explain jargon, do not delete the concept. "Ti-dominance with no
+     Fe-mediated grading function" becomes "his sense of his own worth runs on
+     an on/off switch with nothing in between".
+  6. Short sentences. Target US grade 12 or below. Keep every fact.
+  7. Aim for 30-60% of the page's length. Shorter than 18% is a summary, and a
+     summary is not what this is.
+  8. Close with a line telling the reader the full entry exists and carries the
+     sources.
+  9. Do not invent a finding, soften a conclusion, or add an opinion the page
+     does not make. You are re-wording an argument, not having one.
+
+THEN, and this is not optional:
+
+    bin/wiki-plain audit {slug}
+
+Fix every FAIL it prints and run it again. When it prints PASS, run
+`bin/wiki-check` and commit. If you cannot get it to PASS in three tries,
+delete plain/{slug}.md, say why in one line, and move to the next page.
+"""
+
+
+def cmd_task(args):
+    """Everything a writer needs for one page, in one blob.
+
+    Written for an agent that will not remember the rules from last time and
+    will not go and read a spec. The rules ride along with every task, and the
+    whole page is printed rather than named — a twin written from the first
+    three paragraphs is a summary, and that is the most common way this goes
+    wrong.
+    """
+    if args.slug:
+        slug = args.slug.removeprefix("wiki/").removesuffix(".md")
+        pages = [p for p in load() if p.slug == slug]
+        if not pages:
+            print(f"No such page: wiki/{slug}.md", file=sys.stderr)
+            return 2
+        p = pages[0]
+        if p.excluded:
+            print(
+                f"REFUSED: wiki/{slug}.md is withheld under the standing "
+                f"moratorium in CLAUDE.md. Pick another page.",
+                file=sys.stderr,
+            )
+            return 2
+        # A lane is a refusal too, and for the same reason the moratorium is one:
+        # it is checked here rather than trusted to the caller. An agent told to
+        # work the free lane and handed a 4,900-word synthesis will attempt it.
+        if args.lane and not lane_eligible(p, args.lane):
+            print(
+                f"REFUSED: wiki/{slug}.md is not in the {args.lane} lane "
+                f"({p.words} words, {p.page_type or 'no type'}, {p.domain}).\n"
+                f"Run `bin/wiki-plain next --lane {args.lane}` for what is.",
+                file=sys.stderr,
+            )
+            return 2
+    else:
+        if args.lane:
+            todo = lane_queue(load(), args.lane)
+        else:
+            todo = [p for p in load() if not p.twin and not p.excluded]
+            todo.sort(key=lambda p: -p.words)
+        if args.synthesis:
+            todo = [p for p in todo if p.page_type == "synthesis"]
+        if not todo:
+            print("NOTHING TO DO — every eligible page has a twin.")
+            return 0
+        p = todo[0]
+
+    if not p.twin:
+        os.makedirs(os.path.dirname(p.twin_path), exist_ok=True)
+        import datetime
+
+        with open(p.twin_path, "w", encoding="utf-8") as fh:
+            fh.write(
+                SCAFFOLD.format(
+                    slug=p.slug,
+                    title=p.meta.get("title", p.slug.split("/")[-1]).strip("\"'"),
+                    today=datetime.date.today().isoformat(),
+                    source_modified=p.modified,
+                )
+            )
+        scaffolded = "scaffolded just now"
+    else:
+        scaffolded = "already exists — you are revising it"
+
+    bar = "=" * 72
+    print(f"{bar}\nTASK: write the plain-English twin of wiki/{p.slug}.md")
+    print(f"WRITE TO: plain/{p.slug}.md   ({scaffolded})")
+    print(f"LENGTH: the page is {p.words} words. Aim for {int(p.words * 0.3)}-{int(p.words * 0.6)}.")
+    print(bar)
+    print(TASK_RULES.format(slug=p.slug))
+    print(bar)
+    print(f"THE PAGE — read all of it before you write a word.\n{bar}\n")
+    print(read(p.src_path))
+    print(bar)
+    return 0
+
+
+def cmd_new(args):
+    slug = args.slug.removeprefix("wiki/").removesuffix(".md")
+    src = os.path.join(WIKI, *slug.split("/")) + ".md"
+    if not os.path.exists(src):
+        print(f"No such page: wiki/{slug}.md", file=sys.stderr)
+        return 2
+
+    page = Page(slug)
+    if page.excluded:
+        print(
+            f"REFUSED: wiki/{slug}.md is under the standing moratorium in "
+            f"CLAUDE.md.\nA plain-language retelling is new narrative about a "
+            f"living person. Only the operator lifts this.",
+            file=sys.stderr,
+        )
+        return 2
+    if page.twin:
+        print(f"plain/{slug}.md already exists.", file=sys.stderr)
+        return 2
+
+    import datetime
+
+    os.makedirs(os.path.dirname(page.twin_path), exist_ok=True)
+    with open(page.twin_path, "w", encoding="utf-8") as fh:
+        fh.write(
+            SCAFFOLD.format(
+                slug=slug,
+                title=page.meta.get("title", slug.split("/")[-1]).strip("\"'"),
+                today=datetime.date.today().isoformat(),
+                source_modified=page.modified,
+            )
+        )
+    print(f"Wrote plain/{slug}.md  (source is {page.words} words)")
+    print("Read the whole page before you translate it. Keep every number.")
+    return 0
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    sub = ap.add_subparsers(dest="cmd")
+
+    sub.add_parser("check", help="gate: broken twins only")
+
+    a = sub.add_parser("audit", help="anti-slop referee: is this twin any good?")
+    a.add_argument("slug", nargs="?")
+    sub.add_parser("status", help="coverage report")
+
+    r = sub.add_parser("report", help="campaign progress; writes wiki/meta/readers-digest.md")
+    r.add_argument("--check-only", action="store_true", help="print without writing")
+
+    n = sub.add_parser("next", help="densest untranslated pages")
+    n.add_argument("n", nargs="?", type=int, default=10)
+    n.add_argument("--synthesis", action="store_true", help="synthesis pages only")
+    n.add_argument("--lane", choices=sorted(LANE_ORDER), help="one lane's queue")
+
+    w = sub.add_parser("new", help="scaffold a twin")
+    w.add_argument("slug")
+
+    t = sub.add_parser("task", help="one page's full writing task, rules and page included")
+    t.add_argument("slug", nargs="?")
+    t.add_argument("--synthesis", action="store_true", help="synthesis pages only")
+    t.add_argument("--lane", choices=sorted(LANE_ORDER), help="take from this lane only")
+
+    args = ap.parse_args()
+    return {
+        "check": cmd_check,
+        "audit": cmd_audit,
+        "status": cmd_status,
+        "report": cmd_report,
+        "next": cmd_next,
+        "new": cmd_new,
+        "task": cmd_task,
+        None: cmd_status,
+    }[args.cmd](args)
+
+
+if __name__ == "__main__":
+    # `status` is long and gets piped to `head` constantly. Without this that is
+    # a BrokenPipeError traceback instead of output.
+    try:
+        sys.exit(main())
+    except BrokenPipeError:
+        os.dup2(os.open(os.devnull, os.O_WRONLY), sys.stdout.fileno())
+        sys.exit(0)

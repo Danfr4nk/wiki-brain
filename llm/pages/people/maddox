@@ -1,0 +1,99 @@
+---
+
+domain: people
+
+page_type: entity
+
+status: active
+
+date_created: 2026-06-23
+
+date_modified: 2026-07-20
+
+sources:
+
+- raw/self/dox-md/BFS_BOOTLOADER_v2.md
+
+- raw/self/dox-md/BFS Anita Quagmire strategy and legal exposure.md
+
+- raw/self/chats/Drawer shortage dispute with assistant manager (1).md
+
+tags: [career]
+
+infobox:
+
+name: "Maddox"
+
+relationship_to_dan: unknown
+
+known_for: "Little Caesars employee who volunteered a first-person account of Anita's Timmy blame-pivot during the May 21, 2026 sidewalk recording"
+
+connections:
+
+- page: wiki/work/bfs-foods
+
+type: evidenced-by
+
+claim: "Maddox's unprompted sidewalk testimony is the corpus's fullest direct-witness account of the Timmy blame-pivot, and directly challenges the $50 demand's procedural legitimacy."
+
+- page: wiki/people/dakota
+
+type: parallels
+
+claim: "Maddox's account independently corroborates the same blame-pivot sequence Dakota had disclosed to Dan earlier by word of mouth."
+
+---
+
+# Maddox
+
+Maddox is a Little Caesars employee at the BFS Foods building. On May
+
+21, 2026, he joined a sidewalk conversation between Dan and
+
+[[wiki/people/brandon-hill|Brandon Hill]] — unsolicited and apparently
+
+just passing by — and ended up delivering the corpus's fullest
+
+first-person account of how [[wiki/people/anita|Anita]] constructed and
+
+pivoted blame during the Timmy episode (told in full on
+
+[[wiki/work/bfs-foods]]). Maddox opens with an unprompted character
+
+read — "She's always making shit so crazy and dramatic over there I
+
+don't get it" — then reconstructs the sequence in real time: "It wasn't
+
+even that. Anita said it was Kim. He confronted Kim and Kim said it...
+
+AND KIM SAID TO TIMMY 'it wasn't me' and so he asked Anita and Anita
+
+told him 'it was Daniel.'" Maddox then turns the same directness on the
+
+$50 drawer-shortage demand itself, rejecting its legitimacy on
+
+procedural grounds without needing to know Dan personally: "Yeah that's
+
+not what it is you can't do that to him if you don't even know what
+
+went wrong." Brandon, present for all of it, doesn't contest the
+
+account.
+
+The conversation was recorded on a public sidewalk during business
+
+hours with a third party present — legally clean under Pennsylvania's
+
+wiretap statute, which requires an expectation of privacy the setting
+
+didn't carry. No documented message thread exists between Dan and
+
+Maddox outside this one encounter.
+
+**Gaps:** how Dan and Maddox know each other beyond the shared
+
+building; no contact before or after the May 21 recording.
+
+---
+
+**Up:** [[wiki/people/index|People]]

@@ -1,0 +1,195 @@
+# The return leg of the portal loop.
+#
+# The loop was built in one direction only. `caakehorn/home` fires `sage-asked`
+# at this repository when somebody types into the question box, so a parked
+# question does not wait for the next scheduled drain — and its own
+# `sync-wiki.yml` has listened for `wiki-updated` from the beginning. **Nothing
+# here ever sent it.** The only thing that did was `requestResync()` in the
+# portal's browser code, which fires when a page is edited or a question asked
+# *from the site*. An answer written by a session in this repository and merged
+# through a pull request involves no browser, so nothing was nudged and the
+# snapshot waited for the hourly cron.
+#
+# That is not a theoretical gap. On 2026-08-21 the answer to the second sage
+# question was corrected twice and merged at 23:17 and 23:32; the snapshot being
+# served was generated at **22:39**, and the 23:17 cron had fired fifty-one
+# seconds before the first merge, seen nothing, and committed nothing. The
+# person who asked would have read the retracted version for another forty
+# minutes. `sage/README.md` is explicit that the latency of an answer is the
+# design; the latency of *publishing* one is not.
+#
+# So: push to `main`, tell the portal, and let its existing dispatch handler do
+# the rest. The paths are the ones the portal's `sync-wiki.mjs` actually reads
+# from this repository — `wiki/`, `sage/questions/`, `plain/` and
+# `lexicon/words/` — so a commit that only touches `log.md` or `WORK.md` does
+# not wake a build that would find nothing.
+#
+# `plain/` was added 2026-08-28 with the READER'S DIGEST layer. It is a third
+# read path rather than part of `wiki/`, so leaving it off this list would have
+# meant a merged translation sitting invisible until the hourly cron — the exact
+# latency this file was written to remove, reintroduced for the one edition
+# aimed at the readers least likely to come back and check.
+#
+# `lexicon/words/` was the fourth read path and was missing from this list until
+# 2026-08-30, while the comment above already claimed the list was complete. A
+# word submitted through the portal's own box was fine — the browser calls
+# `requestResync()` directly — but a word *analysed* by a session here, which is
+# the half that turns a parked word into a finding, merged into a snapshot that
+# would not notice for up to an hour. The lesson is the one this file already
+# carries: a read path added on one side has to be added on the other, and the
+# way to check is `grep 'join(SOURCE' scripts/sync-wiki.mjs` in the portal.
+#
+# ---- re-enabled 2026-08-31, because the trade it was switched off for stopped
+# ---- holding -----------------------------------------------------------------
+#
+# It was switched off from roughly 2026-08-31T00:02 to later the same day on the
+# reasoning directly below: the portal's own schedule, moved to every five
+# minutes, would cover the gap without needing this cross-repository credential.
+# That reasoning assumed GitHub actually runs a `*/5 * * * *` schedule every five
+# minutes. It does not, reliably, at this frequency: checked the same day against
+# `caakehorn/home`'s Actions history, the schedule-triggered runs of
+# `sync-wiki.yml` after the interval was tightened were **05:29, 14:13, then
+# 20:07** — gaps of 8h44m and 5h54m, not 5–15 minutes. That is worse than the
+# hourly cron it replaced, not better, and it means the portal was silently
+# running on nothing but scheduled luck for most of that day, with the "sync
+# behind" banner as the only visible symptom, on the one page a visitor would
+# have to know to go looking for.
+#
+# So the push trigger is back, and the fallback is now what it was originally
+# meant to be — a backstop for the schedule's own bad days, not the only
+# mechanism. Nothing about the "it used to ship inert" failure below is
+# reopened: the loud `exit 1` on a missing token stays exactly as it was, so if
+# `PORTAL_DISPATCH_TOKEN` is not present this job goes red on the next matching
+# push rather than lying green. That is deliberate and it is not a regression —
+# see the section below. A red run here right now means exactly one thing: the
+# secret still needs to be added. To finish closing the loop:
+#   1. add PORTAL_DISPATCH_TOKEN to this repository's secrets — a fine-grained
+#      PAT on caakehorn/home with Contents: read and write
+# The `push:` block below no longer needs uncommenting — that step is done.
+#
+# ---- it used to ship inert, and that is the bug this file now carries -------
+#
+# `GITHUB_TOKEN` is scoped to the repository it runs in and cannot dispatch to
+# another one, so this needs a real token in `PORTAL_DISPATCH_TOKEN` — a
+# fine-grained PAT on `caakehorn/home` with **Contents: read and write**, which
+# is the permission `repository_dispatch` sits under.
+#
+# Until 2026-08-31 a missing secret made this job print what it would have sent
+# and exit clean. The reasoning was that a workflow which fails red on every
+# push because a secret was never set is a workflow people learn to ignore, and
+# that the hourly cron on the other side is a real backstop.
+#
+# It did not survive contact. The secret stopped being present on 2026-08-28 —
+# the log reads `TOKEN:` with nothing after it — and this workflow then reported
+# **success eighteen times in a row while sending nothing**, including on runs
+# where its own `What moved` step had just counted a changed page. On the far
+# side `caakehorn/home` recorded no `repository_dispatch` at all for three days:
+# every edit merged here waited for the next `:17`. Nobody noticed, because
+# there was nothing to notice — green workflow, green deploy, and a site quietly
+# up to an hour behind the wiki it claims to be.
+#
+# That is the worse failure of the two. A red run on a repository whose owner
+# has not set a secret is a job somebody can decide to ignore; a green run that
+# did nothing is a job that has lied, and it takes a person reading two Actions
+# tabs side by side to catch it. The note further down already says a silent 401
+# "is exactly the failure this file exists to end" — a missing token is that
+# same failure wearing a friendlier message, so it is red now as well.
+#
+# The hourly cron is still there and still catches everything. What it cannot do
+# is tell anybody that it has become the only thing working.
+name: Tell the portal the wiki moved
+
+on:
+  # RE-ENABLED 2026-08-31 — see the top of this file. Needs PORTAL_DISPATCH_TOKEN
+  # in this repository's secrets to actually dispatch; until it's added, a push
+  # touching these paths fails loudly instead of silently doing nothing.
+  push:
+    branches: [main]
+    paths:
+      - 'wiki/**'
+      - 'sage/questions/**'
+      - 'plain/**'
+      - 'lexicon/words/**'
+  workflow_dispatch:
+
+# Read-only here; the write this performs is on the other repository, with the
+# PAT, and is a dispatch rather than a commit.
+permissions:
+  contents: read
+
+# Coalesce a burst. Three merges inside a minute should wake the portal once,
+# and the run that matters is the last one — unlike the sync itself, cancelling
+# an in-flight notification loses nothing, because the next one carries the same
+# instruction.
+concurrency:
+  group: notify-portal
+  cancel-in-progress: true
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      # Only for the payload and the log line — the portal re-derives everything
+      # regardless of what it is told changed. Worth carrying anyway: when the
+      # snapshot and the source disagree later, this is the record of which push
+      # was supposed to have closed the gap.
+      - id: what
+        name: What moved
+        run: |
+          changed="$(git diff --name-only HEAD^ HEAD 2>/dev/null || true)"
+          sage="$(printf '%s\n' "$changed" | grep -c '^sage/questions/' || true)"
+          pages="$(printf '%s\n' "$changed" | grep -c '^wiki/' || true)"
+          plain="$(printf '%s\n' "$changed" | grep -c '^plain/' || true)"
+          words="$(printf '%s\n' "$changed" | grep -c '^lexicon/words/' || true)"
+          echo "sage=$sage"   >> "$GITHUB_OUTPUT"
+          echo "pages=$pages" >> "$GITHUB_OUTPUT"
+          echo "plain=$plain" >> "$GITHUB_OUTPUT"
+          echo "words=$words" >> "$GITHUB_OUTPUT"
+          echo "Answered or asked: $sage · pages: $pages · plain editions: $plain · words: $words"
+
+      - name: Fire wiki-updated at caakehorn/home
+        env:
+          TOKEN: ${{ secrets.PORTAL_DISPATCH_TOKEN }}
+          SAGE: ${{ steps.what.outputs.sage }}
+          PAGES: ${{ steps.what.outputs.pages }}
+          PLAIN: ${{ steps.what.outputs.plain }}
+          WORDS: ${{ steps.what.outputs.words }}
+        run: |
+          set -euo pipefail
+          if [ -z "${TOKEN:-}" ]; then
+            echo '::error::PORTAL_DISPATCH_TOKEN is not set — the portal was told nothing.'
+            echo
+            echo 'This is not a new problem with this push. Every push since 2026-08-28 has'
+            echo 'reported success here and dispatched nothing, and the portal has been'
+            echo 'catching up only on its hourly cron (17 * * * *) the whole time.'
+            echo
+            echo 'To fix it: create a fine-grained PAT with repository access limited to'
+            echo 'caakehorn/home and permission Contents: read and write — that is the'
+            echo 'permission repository_dispatch sits under — then add it to THIS repository'
+            echo 'as the secret PORTAL_DISPATCH_TOKEN.'
+            exit 1
+          fi
+
+          payload=$(printf '{"event_type":"wiki-updated","client_payload":{"slug":"%s","sage":%s,"pages":%s,"plain":%s,"words":%s,"commit":"%s"}}' \
+            "push-${GITHUB_SHA:0:7}" "${SAGE:-0}" "${PAGES:-0}" "${PLAIN:-0}" "${WORDS:-0}" "${GITHUB_SHA}")
+
+          code=$(curl -sS -o /tmp/resp.txt -w '%{http_code}' -X POST \
+            -H 'Accept: application/vnd.github+json' \
+            -H "Authorization: Bearer ${TOKEN}" \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            https://api.github.com/repos/caakehorn/home/dispatches \
+            -d "$payload")
+
+          # 204 is the documented success. Anything else is worth failing on:
+          # a silent 401 here is exactly the failure this file exists to end.
+          if [ "$code" = '204' ]; then
+            echo "Dispatched wiki-updated (sage: ${SAGE:-0}, pages: ${PAGES:-0}, plain: ${PLAIN:-0}, words: ${WORDS:-0})."
+          else
+            echo "::error::dispatch failed with HTTP $code"
+            cat /tmp/resp.txt
+            exit 1
+          fi

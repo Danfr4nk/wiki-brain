@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Places diagram">
+  <rect width="200" height="200" fill="#eaf6f6"/>
+  <g fill="none" stroke="#0f7b83" stroke-width="3">
+    <path d="M100 50 C70 50 55 75 55 100 C55 135 100 160 100 160 C100 160 145 135 145 100 C145 75 130 50 100 50 Z"/>
+    <circle cx="100" cy="98" r="16"/>
+  </g>
+  <text x="100" y="192" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#202122">Places</text>
+</svg>

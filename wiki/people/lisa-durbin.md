@@ -1,0 +1,42 @@
+
+---
+domain: people
+page_type: entity
+status: closed
+date_created: 2026-06-23
+date_modified: 2026-07-14
+date_range_start: 2017-04-14
+date_range_end: 2017-11-01
+sources: ["raw/self/message-csv/MASTER_MESSAGES_DB_DUMP.csv"]
+related: ["wiki/people/vanessa-frank", "wiki/self/message-corpora/master-message-dump"]
+tags: [family]
+knowledge: mixed
+infobox:
+  name: "Lisa Durbin"
+  relationship_to_dan: unknown
+  first_contact: 2017-04-14
+  known_for: "Lisa Durbin (contacts nickname 'lcd') is an extended-family relation who organizes holiday gatherings and checks in on b"
+---
+
+# Lisa Durbin
+
+Lisa Durbin (contacts nickname "lcd") is an extended-family relation who organizes holiday gatherings and checks in on birthdays (`+17242088411`, 36 messages, April–November 2017). She invites the family to Easter dinner in April 2017 and a Father's Day cookout in June celebrating "Syd's 20th birthday" — Syd (matching the email on file, `sydnee97@msn.com`) apparently being Lisa's own daughter — coordinating logistics directly with [[wiki/people/vanessa-frank|Vanessa]] (Dan's sister) in the same thread. The final message is a simple "Happy Birthday, Dan!" on November 1, 2017.
+
+## Corpus Dimensions
+
+| Metric | Value |
+|--------|-------|
+| Messages | 36 |
+| Date range | 2017-04-14 to 2017-11-01 |
+| Direction | Unreliable in this export (marked "Received" throughout) — read as one-way (Lisa to Dan) |
+| Handle | +17242088411 |
+
+## Gaps
+
+Exact family relationship (aunt, cousin, family friend) is not stated in the thread itself.
+
+## Related
+
+[[wiki/people/vanessa-frank]] · [[wiki/self/message-corpora/master-message-dump]]
+
+

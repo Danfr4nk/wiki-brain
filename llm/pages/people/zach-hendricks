@@ -1,0 +1,117 @@
+---
+
+domain: people
+
+page_type: entity
+
+status: closed
+
+date_created: 2026-06-23
+
+date_modified: 2026-09-04
+
+date_range_start: 2018-03-12
+
+date_range_end: 2018-11-26
+
+sources: ["raw/self/message-csv/MASTER_MESSAGES_DB_DUMP.csv"]
+
+tags: [digital-footprint, uniontown-era]
+
+knowledge: derived
+
+infobox:
+
+name: "Zach Hendricks"
+
+aliases: ["Zaco", "Zack Hendricks"]
+
+relationship_to_dan: unknown
+
+handles: []   # both now carried on wiki/people/zaco, the canonical page
+
+location: Fayette County, PA (724 area code)
+
+first_contact: 2018-03-12
+
+known_for: "Fayette County contact known as 'Zaco,' active during the 2018 Fran vigil and Annie relationship period"
+
+connections:
+
+- page: wiki/people/zaco
+
+type: contradicts
+
+claim: "The same man on two pages, unnoticed from 2026-08-20 until 2026-09-04: identical window, identical handle, and this page already listing 'Zaco' as its subject's alias. This page also reported 58 messages where the thread holds 65 — 58 is the Received-only figure, the same one-direction defect that made wiki/people/rod-banks read as 'all received (export artifact)'. wiki/people/zaco is canonical."
+
+- page: wiki/mind/concepts/contact-gini
+
+type: instance-of
+
+claim: "A mid-volume Fayette County contact concentrated in a single 2018 window."
+
+---
+
+# Zach Hendricks
+
+> **SUPERSEDED [2026-09-04] — this is [[wiki/people/zaco]], and the wiki carried
+
+> him twice for six weeks.** Same handle `+17249123381`, same window
+
+> (2018-03-12 → 2018-11-26), and this page already named "Zaco" as its
+
+> subject's own alias — nothing connected the two until
+
+> `bin/wiki-crosslink handles` reported a handle claimed by two pages.
+
+>
+
+> **[[wiki/people/zaco]] is now the canonical entity page.** It holds the
+
+> research this page never had: he is the supply network's only
+
+> push-marketing node, 58 of 65 messages his, almost all unsolicited inventory
+
+> advertisements. This page is retained rather than deleted because three pages
+
+> link to it, on the pattern [[wiki/people/jerel-coles]] and
+
+> [[wiki/people/the-unnamed-man]] already set.
+
+>
+
+> **Two corrections to what is below.** The message count is **65, not 58** —
+
+> 58 is the Received-only figure, the same one-direction defect that had
+
+> [[wiki/people/rod-banks]] reading as "all received (export artifact)" until
+
+> the same day. And of the two Google Contacts numbers, **only
+
+> `+17249123381` appears in the message corpus at all**; `+17247102745` has
+
+> zero rows.
+
+Zach Hendricks (self-styled "Zaco") is a Fayette County contact (724 area code, two phone numbers in Google Contacts — one under "Zach," one under "Zack") who appears in the iMessage corpus with 58 messages across an eight-month window, March–November 2018. The timing places the contact squarely in the Fran caregiving and post-death period, and in the middle of the Annie relationship.
+
+## Corpus Dimensions
+
+| Metric | Value |
+
+|--------|-------|
+
+| Messages | 58 |
+
+| Date range | 2018-03-12 – 2018-11-26 |
+
+| Handle | +17249123381 (primary), +17247102745 (alternate) |
+
+| Direction | All received (export artifact) |
+
+## Gaps
+
+Relationship to Dan unresolved. The casual nickname and Fayette County location suggest a Uniontown social-circle friend. No Facebook or other corpus cross-references found.
+
+---
+
+**Up:** [[wiki/people/index|People]]

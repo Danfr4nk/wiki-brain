@@ -1,0 +1,803 @@
+#!/usr/bin/env python3
+"""wiki-timeline — build the master chronological index from wiki/ pages.
+
+WHY THIS TOOL EXISTS
+--------------------
+The first master-timeline.md (2026-08-14, 1,798 entries) was produced by a
+one-shot sweep that matched any date-shaped string anywhere in a page and kept
+whatever prose surrounded it. Roughly half of what it produced were not events:
+
+  - truncated mid-sentence prose fragments ("with unusual precision, because
+    Dan spent April 11, 2017 telling four")
+  - the wiki's own housekeeping ("> **REVISED [2026-07-20]:** the prior version
+    of this page stated...") — a date, but an edit, not a life event
+  - markdown table *headers* ("| Metric | Value (measured 2026-07-18) |")
+  - HTML comments and corpus-metadata rows (file names, row counts)
+  - bare-year matches lifted out of ordinary prose ("in 2002: From a production
+    standpoint, the Kanye catalog is obligatory")
+  - the same fragment emitted several times under different dates
+
+This tool replaces that sweep with rules. It only reads *structural* positions
+where wiki pages actually record events — table rows, list items, and bold date
+leads — and it reflows hard-wrapped paragraphs before reading them so a
+description can never be cut off mid-sentence.
+
+THE ONE RULE THAT MATTERS
+-------------------------
+A date in a wiki page is not automatically an event. It can be the date the
+page was edited, the date a number was measured, or a year mentioned in
+passing. An event needs a date *and* a thing that happened to someone. Every
+filter below exists to enforce that distinction, and `audit` reports what each
+one rejected so the rejections stay reviewable rather than invisible.
+
+Pure stdlib. No dependencies, no network.
+
+Usage:
+  bin/wiki-timeline generate     rewrite wiki/timeline/master-timeline.md
+  bin/wiki-timeline audit        counts, rejection reasons, tier/decade spread
+  bin/wiki-timeline sample [N]   print N random accepted events
+  bin/wiki-timeline rejects [N]  print N random rejected candidates, with reason
+"""
+
+import argparse
+import json
+import os
+import random
+import re
+import sys
+from collections import Counter, defaultdict
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+WIKI = os.path.join(ROOT, "wiki")
+OUT = os.path.join(WIKI, "timeline", "master-timeline.md")
+
+YEAR_MIN, YEAR_MAX = 1700, 2030
+
+MONTHS = {
+    "january": 1, "february": 2, "march": 3, "april": 4, "may": 5, "june": 6,
+    "july": 7, "august": 8, "september": 9, "october": 10, "november": 11,
+    "december": 12, "jan": 1, "feb": 2, "mar": 3, "apr": 4, "jun": 6,
+    "jul": 7, "aug": 8, "sep": 9, "sept": 9, "oct": 10, "nov": 11, "dec": 12,
+}
+MONTH_NAMES = [
+    "", "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+]
+
+# Qualifiers that may sit in front of a date without changing what it denotes.
+QUAL = r"(?:~|≈|c\.|ca\.|circa|approx\.?|about|around|early|mid-?|late|by|from|before|after|pre-|post-|the\s+)*"
+
+RE_ISO_D = re.compile(r"^" + QUAL + r"(\d{4})-(\d{1,2})-(\d{1,2})\b", re.I)
+RE_ISO_M = re.compile(r"^" + QUAL + r"(\d{4})-(\d{1,2})(?!\d)(?!-)", re.I)
+RE_MDY = re.compile(
+    r"^" + QUAL + r"([A-Za-z]{3,9})\.?\s+(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{4})\b", re.I)
+RE_DMY = re.compile(
+    r"^" + QUAL + r"(\d{1,2})(?:st|nd|rd|th)?\s+([A-Za-z]{3,9})\.?,?\s+(\d{4})\b", re.I)
+RE_MY = re.compile(r"^" + QUAL + r"([A-Za-z]{3,9})\.?\s+(\d{4})\b", re.I)
+RE_Y = re.compile(r"^" + QUAL + r"(\d{4})\s*$", re.I)
+
+# This wiki dates a lot of things by season ("spring 2010 move to Brooklyn",
+# "summer 2013 separation"). Those are real, month-precision-ish events; they
+# sort to the middle of the season and keep their original wording as a label.
+SEASONS = {"winter": 1, "spring": 4, "summer": 7, "fall": 10, "autumn": 10}
+RE_SEASON = re.compile(
+    r"^" + QUAL + r"(winter|spring|summer|fall|autumn)\s+(?:of\s+)?(\d{4})\b", re.I)
+RE_SEASON_IN = re.compile(
+    r"\b(winter|spring|summer|fall|autumn)\s+(?:of\s+)?(\d{4})\b", re.I)
+
+# A date appearing *inside* running text. Day- and month-precision only:
+# a bare year in prose is the single largest source of false events ("in 2002:
+# From a production standpoint, the Kanye catalog is obligatory"), so years
+# are admitted only from structured positions where a date column means a date.
+_MON = (r"(?:January|February|March|April|May|June|July|August|September"
+        r"|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sept?|Oct"
+        r"|Nov|Dec)")
+RE_INLINE = re.compile(
+    r"\b(\d{4}-\d{2}-\d{2}"
+    r"|" + _MON + r"\.?\s+\d{1,2}(?:st|nd|rd|th)?,?\s+\d{4}"
+    r"|\d{1,2}(?:st|nd|rd|th)?\s+" + _MON + r"\.?,?\s+\d{4}"
+    r"|" + _MON + r"\.?\s+\d{4})\b", re.I)
+
+
+def find_inline_date(text):
+    """First day/month-precision date inside running text, or None."""
+    for m in RE_INLINE.finditer(text):
+        d = parse_date(m.group(1))
+        if d and d[3] >= 2:
+            return d
+    m = RE_SEASON_IN.search(text)
+    if m:
+        y = int(m.group(2))
+        if YEAR_MIN <= y <= YEAR_MAX:
+            season = m.group(1).lower()
+            return (y, SEASONS[season], 0, 2, f"{season.capitalize()} {y}")
+    return None
+
+# ---------------------------------------------------------------------------
+# Rejection vocabularies.
+#
+# These are deliberately blunt. A false reject costs one event out of several
+# thousand; a false accept puts a non-event on the page, which is the failure
+# the operator asked to be cleaned up. When in doubt, reject.
+# ---------------------------------------------------------------------------
+
+# The wiki talking about itself: edits, revisions, gates, provenance.
+META_WORDS = [
+    "revised", "corrected", "retracted", "re-check", "recheck", "date_modified",
+    "date_created", "wiki-lint", "wiki-climb", "wiki-connect", "synthesizes",
+    "this page", "this pass", "this session", "this analysis", "the wiki",
+    "this wiki", "read that message", "built a causal chain",
+    "prior version", "previous version", "earlier version", "see above",
+    "see below", "[infer]", "[derived]", "[join]", "budget", "orphan",
+    "wikilink", "frontmatter", "the corpus's", "unverified against",
+    "not yet verified", "flagged on", "queued in", "backlog", "resume point",
+    "handoff", "per this page", "as of this writing", "this entry",
+    "the page previously", "page previously", "falsifier", "gaps section",
+    "measured", "re-derived", "recomputed", "re-verified", "cross-checked",
+    "sourced to", "provenance", "citation", "dossier says", "per the operator",
+    "operator confirmed", "confirmed by the operator", "extraction",
+    "ingest", "climb", "lint",
+]
+
+# Corpus/file metadata rather than lived events.
+FILE_MARKERS = [
+    ".csv", ".md ", ".md|", ".txt", ".docx", ".json", ".html", ".pdf",
+    "raw/self", "raw/people", "wiki/", "http://", "https://", "message_1",
+    "_all_now", "_all_time", "bootloader", "gemini-_", "chat.db",
+]
+
+# Counting/measurement rows: a number about the archive, not a happening.
+METRIC_PAT = re.compile(
+    r"^\s*(?:rows?|messages?|events?|count|total|n)\b"
+    r"|\b\d[\d,]{2,}\s+(?:rows|messages|records|lines|entries)\b",
+    re.I,
+)
+# A cell that is nothing but a number, at any length — always a metric.
+BARE_NUM_PAT = re.compile(r"^\s*[\d,.$%\s—–-]+\s*$")
+
+# Cells that name a file rather than describe an event. A table with a Source
+# column is still a table of real events; drop the column, keep the row.
+FILE_CELL_PAT = re.compile(
+    r"\.(?:csv|md|txt|docx|json|html|pdf)\b|^`|^raw/|^wiki/", re.I)
+
+TIER1 = [
+    "born", "birth", "died", "death", "dies", "funeral", "married", "marriage",
+    "wedding", "divorce", "arrest", "arrested", "convicted", "sentenced",
+    "jail", "prison", "court", "charged", "plea", "dui", "probation",
+    "hospital", "hospitalized", "overdose", "surgery", "diagnosed",
+    "diagnosis", "rehab", "detox", "moved", "move", "eviction", "evicted",
+    "lease", "hired", "fired", "quit", "laid off", "terminated", "graduated",
+    "enrolled", "breakup", "broke up", "engaged", "relationship", "met",
+    "bankruptcy", "foreclosure", "immigrated", "naturalized", "census",
+    "closure", "severance", "suicide", "custody", "settlement",
+]
+TIER2 = [
+    "concert", "show", "gig", "festival", "tour", "played", "released",
+    "release", "album", "single", "ep", "trip", "flight", "vacation",
+    "visited", "visit", "promoted", "promotion", "bought", "purchase",
+    "sold", "birthday", "christmas", "thanksgiving", "party", "anniversary",
+    "opened", "started", "launched", "signed", "loan", "paid", "debt",
+]
+
+
+# Pages that describe the archive rather than the life in it. Their tables are
+# export inventories and row counts — real data, but not events that happened
+# to anyone. Domain-level index pages are rosters for the same reason; nested
+# indexes (wiki/interests/concert-record/index.md) are genuine event lists and
+# stay in.
+EXCLUDE_PREFIXES = ("wiki/self/message-corpora/", "wiki/work/tech/")
+EXCLUDE_EXACT = {"wiki/index.md"}
+
+
+def is_excluded(rel):
+    if rel in EXCLUDE_EXACT or rel == "wiki/timeline/master-timeline.md":
+        return True
+    if any(rel.startswith(p) for p in EXCLUDE_PREFIXES):
+        return True
+    parts = rel.split("/")
+    return len(parts) == 3 and parts[2] == "index.md"   # wiki/<domain>/index.md
+
+
+def split_batch(desc):
+    """Split a batched entry into the separate events it records.
+
+    Several pages compress a run of same-period events onto one line —
+    "2015-12: Breakup with Lex; First Date; Moved; Got Hired; Panic Attack" is
+    five events, not one. Splitting is only applied when every clause stands on
+    its own as an event-sized statement, so ordinary prose semicolons are left
+    alone.
+    """
+    parts = [p.strip(" ;·—–") for p in re.split(r"\s*[;·]\s+", desc)]
+    parts = [p for p in parts if p]
+    if len(parts) < 2:
+        return [desc]
+    for p in parts:
+        if len(p) < 18:
+            return [desc]
+        if len([w for w in re.findall(r"[A-Za-z']+", p) if len(w) > 1]) < 3:
+            return [desc]
+    return parts
+
+
+def tidy(s):
+    """Strip markdown artifacts left at the edges of an extracted description."""
+    t = norm_ws(s)
+    t = re.sub(r"^[\*_`\s:;,—–\-]+", "", t)
+    t = re.sub(r"[\*_`\s]+$", "", t)
+    t = re.sub(r"\s*\[RAW-DUMP\]\s*", " ", t)
+    return norm_ws(t)
+
+
+def norm_ws(s):
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def unlink(s):
+    """Render wikilinks as their plain label.
+
+    Every source page is already linked from the entry's `↳` line, so the
+    inline link adds nothing here — and leaving the raw `[[wiki/...]]` form in
+    place would trip the file/corpus-metadata filter on almost every sentence
+    of ordinary wiki prose, which is exactly what it did on the first run.
+    """
+    def repl(m):
+        target = m.group(1)
+        if "|" in target:
+            return target.split("|", 1)[1].strip()
+        return target.rstrip("/").rsplit("/", 1)[-1].replace("-", " ")
+    return re.sub(r"\[\[([^\]]+)\]\]", repl, s)
+
+
+def parse_date(text):
+    """Return (y, m, d, precision, label) or None. precision 3=day 2=month 1=year."""
+    t = norm_ws(text).strip("*_ ")
+    if not t:
+        return None
+
+    m = RE_ISO_D.match(t)
+    if m:
+        y, mo, d = int(m.group(1)), int(m.group(2)), int(m.group(3))
+        if YEAR_MIN <= y <= YEAR_MAX and 1 <= mo <= 12 and 1 <= d <= 31:
+            return (y, mo, d, 3, f"{y:04d}-{mo:02d}-{d:02d}")
+
+    m = RE_MDY.match(t)
+    if m and m.group(1).lower() in MONTHS:
+        mo, d, y = MONTHS[m.group(1).lower()], int(m.group(2)), int(m.group(3))
+        if YEAR_MIN <= y <= YEAR_MAX and 1 <= d <= 31:
+            return (y, mo, d, 3, f"{y:04d}-{mo:02d}-{d:02d}")
+
+    m = RE_DMY.match(t)
+    if m and m.group(2).lower() in MONTHS:
+        d, mo, y = int(m.group(1)), MONTHS[m.group(2).lower()], int(m.group(3))
+        if YEAR_MIN <= y <= YEAR_MAX and 1 <= d <= 31:
+            return (y, mo, d, 3, f"{y:04d}-{mo:02d}-{d:02d}")
+
+    m = RE_ISO_M.match(t)
+    if m:
+        y, mo = int(m.group(1)), int(m.group(2))
+        if YEAR_MIN <= y <= YEAR_MAX and 1 <= mo <= 12:
+            return (y, mo, 0, 2, f"{MONTH_NAMES[mo]} {y}")
+
+    m = RE_MY.match(t)
+    if m and m.group(1).lower() in MONTHS:
+        mo, y = MONTHS[m.group(1).lower()], int(m.group(2))
+        if YEAR_MIN <= y <= YEAR_MAX:
+            return (y, mo, 0, 2, f"{MONTH_NAMES[mo]} {y}")
+
+    m = RE_SEASON.match(t)
+    if m:
+        y = int(m.group(2))
+        if YEAR_MIN <= y <= YEAR_MAX:
+            season = m.group(1).lower()
+            return (y, SEASONS[season], 0, 2, f"{season.capitalize()} {y}")
+
+    m = RE_Y.match(t)
+    if m:
+        y = int(m.group(1))
+        if YEAR_MIN <= y <= YEAR_MAX:
+            return (y, 0, 0, 1, f"{y}")
+
+    return None
+
+
+def load_retracted_patterns():
+    """Compile every pattern in RETRACTED.md.
+
+    The generated timeline is the one place a retracted claim can come back to
+    life without anyone editing a page: it copies sentences verbatim out of 341
+    source pages, and that copy lands outside the correction blockquote — and
+    outside the `documented_on` exemption — that made the original legal. So the
+    generator refuses to emit any event whose text matches a retracted claim.
+    Both readings of such a sentence justify the same call: it is either the
+    dead claim itself, which must not propagate, or a page narrating its
+    retraction, which is wiki edit history and never a life event.
+    """
+    path = os.path.join(ROOT, "RETRACTED.md")
+    if not os.path.exists(path):
+        return []
+    with open(path, encoding="utf-8", errors="replace") as fh:
+        raw = fh.read()
+    pats = []
+    for block in re.findall(r"^```json\n(.*?)^```", raw, re.S | re.M):
+        try:
+            entry = json.loads(block)
+        except json.JSONDecodeError:
+            continue                      # bin/wiki-lint is the ledger's gate
+        for pat in entry.get("patterns") or []:
+            try:
+                pats.append((entry.get("id", "?"), re.compile(pat, re.I)))
+            except re.error:
+                continue
+    return pats
+
+
+RETRACTED_PATTERNS = load_retracted_patterns()
+
+
+def reject_reason(text, date_prec, kind="prose"):
+    """Return a rejection reason string, or None if the text is a real event.
+
+    Thresholds are kind-aware on purpose. A table row is terse by construction
+    ("| 2009-08-15 | Warped Tour | Pittsburgh |") and reads as a complete event
+    at three words; a prose fragment that short is almost always debris.
+    """
+    t = norm_ws(text)
+    low = t.lower()
+
+    for rid, pat in RETRACTED_PATTERNS:
+        if pat.search(t):
+            return f"retracted claim ({rid})"
+
+    min_chars, min_words = (10, 2) if kind in ("table", "list") else (24, 4)
+    if len(t) < min_chars:
+        return "too short"
+    words = [w for w in re.findall(r"[A-Za-z']+", t) if len(w) > 1]
+    if len(words) < min_words:
+        return "not a sentence"
+    if re.fullmatch(r"[\s\-:|—–]+", t):
+        return "table rule"
+    # A prose description that opens mid-clause is a fragment, not an event.
+    if kind == "prose" and t[:1].islower():
+        return "sentence fragment"
+    # "| 1776 | McCullough, David | 4.10 |" — the year is the book's *title*,
+    # not its date. Reading-list rows have a fixed author/rating shape.
+    if date_prec == 1 and re.fullmatch(
+            r"[A-Z][\w.'-]+(?: [A-Z][\w.'-]+)*,\s+[A-Z][\w.'-]+.{0,40}?—\s*\d\.\d+", t):
+        return "reading-list row"
+    if t.count("|") >= 3 and len(t) < 60:
+        return "table header"
+    # A count is a metric when it *is* the content. Inside a real sentence
+    # ("Two written denials... coexisted with 4,657 messages in December") the
+    # number is detail, not the subject — rejecting those cost real events.
+    if BARE_NUM_PAT.search(t):
+        return "metric row"
+    if len(t) < 90 and METRIC_PAT.search(t):
+        return "metric row"
+    for w in FILE_MARKERS:
+        if w in low:
+            return "file/corpus metadata"
+    for w in META_WORDS:
+        if w in low:
+            return f"wiki housekeeping ({w})"
+    # A description that is mostly a date range and nothing else.
+    if len(re.sub(r"[\d\s\-–—/,.]", "", t)) < 10:
+        return "date only, no event"
+    # Headerish cells: "Date", "Event", "Source", "Category"...
+    if low in {"event", "date", "source", "note", "notes", "category", "value"}:
+        return "table header"
+    # Bare-year prose is the single largest nonsense generator; only structured
+    # positions may carry a year-precision date, and the caller enforces that.
+    if date_prec == 1 and len(t) > 400:
+        return "bare-year prose"
+    return None
+
+
+def tier_of(text):
+    low = text.lower()
+    for w in TIER1:
+        if re.search(r"\b" + re.escape(w), low):
+            return 1
+    for w in TIER2:
+        if re.search(r"\b" + re.escape(w), low):
+            return 2
+    return 3
+
+
+def clip(text, limit=300):
+    t = norm_ws(text)
+    if len(t) <= limit:
+        return t
+    cut = t[:limit].rsplit(" ", 1)[0]
+    return cut.rstrip(" ,;:—–-") + "…"
+
+
+def strip_frontmatter(raw):
+    if raw.startswith("---"):
+        end = raw.find("\n---", 3)
+        if end != -1:
+            nl = raw.find("\n", end + 1)
+            return raw[nl + 1:] if nl != -1 else ""
+    return raw
+
+
+def current_heading(headings):
+    return headings[-1] if headings else "Introduction"
+
+
+def extract_page(path, relpath, rejects):
+    """Yield event dicts from one wiki page."""
+    try:
+        raw = open(path, encoding="utf-8").read()
+    except (OSError, UnicodeDecodeError):
+        return
+
+    body = strip_frontmatter(raw)
+    body = re.sub(r"<!--.*?-->", "", body, flags=re.S)          # HTML comments
+    body = re.sub(r"```.*?```", "", body, flags=re.S)           # fenced code
+
+    lines = body.split("\n")
+    events = []
+    heading = "Introduction"
+    para = []
+
+    def flush_para():
+        """Reflow a wrapped paragraph, then take each dated sentence from it.
+
+        Reflowing first is what makes truncated fragments impossible: the unit
+        of extraction is a whole sentence in a joined paragraph, never a
+        physical line that happened to contain a date. This is the single
+        biggest difference from the sweep that produced the 2026-08-14 page,
+        where "with unusual precision, because Dan spent April 11, 2017 telling
+        four" was a typical entry.
+        """
+        if not para:
+            return
+        text = norm_ws(" ".join(para))
+        para.clear()
+        if not text:
+            return
+        for sent in re.split(r"(?<=[.!?])\s+(?=[A-Z\*\[])", text):
+            sent = norm_ws(sent)
+            if not sent:
+                continue
+            # A bold date lead wins over an inline mention: "**Nov 29, 2015:**
+            # Dan met Annie" is dated by its lead, not by a later aside.
+            d = None
+            lead = re.match(r"^\**\s*([^*]{4,42}?)\s*\**\s*[:—–]\s+", sent)
+            if lead:
+                d = parse_date(lead.group(1))
+                if d and d[3] >= 2:
+                    body_txt = sent[lead.end():]
+                else:
+                    d = None
+            if d is None:
+                d = find_inline_date(sent)
+                body_txt = sent
+            if d is None:
+                continue
+            desc = tidy(unlink(body_txt))
+            why = reject_reason(desc, d[3], "prose")
+            if why:
+                rejects.append((why, relpath, d[4], clip(desc, 90)))
+                continue
+            events.append(dict(date=d, text=clip(desc), page=relpath,
+                               section=heading, kind="prose"))
+
+    for line in lines:
+        stripped = line.strip()
+
+        if stripped.startswith("#"):
+            flush_para()
+            heading = stripped.lstrip("#").strip() or heading
+            continue
+
+        # Blockquotes are correction/revision blocks — the wiki's edit history,
+        # never a life event. Skip wholesale.
+        if stripped.startswith(">"):
+            flush_para()
+            continue
+
+        if not stripped:
+            flush_para()
+            continue
+
+        # --- table rows -----------------------------------------------------
+        if stripped.startswith("|"):
+            flush_para()
+            cells = [c.strip() for c in stripped.strip("|").split("|")]
+            if len(cells) < 2:
+                continue
+            if all(re.fullmatch(r"[\s\-:]+", c) for c in cells):
+                continue                                   # separator row
+            # A date column is a date column wherever the table puts it —
+            # "| Ellen Ulmer condolence | April 2018 | Death |" is as much an
+            # event row as one that leads with the date.
+            hit = None
+            for idx, cell in enumerate(cells):
+                d = parse_date(cell)
+                if d:
+                    hit = (idx, d)
+                    break
+            if hit is None:
+                for idx, cell in enumerate(cells):
+                    d = find_inline_date(cell)
+                    if d:
+                        hit = (idx, d)
+                        break
+            if hit is None:
+                continue
+            idx, d = hit
+            rest = [c for i, c in enumerate(cells)
+                    if i != idx and c.strip() and not FILE_CELL_PAT.search(c.strip())]
+            desc = tidy(unlink(" — ".join(rest)))
+            why = reject_reason(desc, d[3], "table")
+            if why:
+                rejects.append((why, relpath, cells[idx], clip(desc, 90)))
+                continue
+            for part in split_batch(desc):
+                events.append(dict(date=d, text=clip(part), page=relpath,
+                                   section=heading, kind="table"))
+            continue
+
+        # --- list items -----------------------------------------------------
+        lm = re.match(r"^\s*[-*+]\s+(.*)$", line)
+        if lm:
+            flush_para()
+            item = lm.group(1).strip()
+            d, desc = None, item
+            # "**2015-12-01**: text" / "2015-12-01: text" / "2015-12-01 — text"
+            im = re.match(r"^\**\s*(.{4,42}?)\s*\**\s*[:—–]\s+(.*)$", item)
+            if im:
+                d = parse_date(im.group(1))
+                if d:
+                    desc = im.group(2)
+            if d is None:
+                # "- **April 2019** Dan flew to ..." / "- In April 2019 he ..."
+                d = find_inline_date(item)
+                desc = item
+            if d is not None:
+                desc = tidy(unlink(desc))
+                why = reject_reason(desc, d[3], "list")
+                if why:
+                    rejects.append((why, relpath, d[4], clip(desc, 90)))
+                else:
+                    for part in split_batch(desc):
+                        events.append(dict(date=d, text=clip(part), page=relpath,
+                                           section=heading, kind="list"))
+            continue
+
+        para.append(stripped)
+
+    flush_para()
+    return events
+
+
+def collect():
+    events, rejects = [], []
+    for dirpath, dirnames, filenames in os.walk(WIKI):
+        dirnames[:] = [d for d in dirnames if not d.startswith(".")]
+        for fn in sorted(filenames):
+            if not fn.endswith(".md"):
+                continue
+            path = os.path.join(dirpath, fn)
+            rel = os.path.relpath(path, ROOT).replace(os.sep, "/")
+            if is_excluded(rel):
+                continue
+            got = extract_page(path, rel, rejects)
+            if got:
+                events.extend(got)
+
+    # Dedupe: same date + same opening of the description, wherever it appears.
+    seen, unique = set(), []
+    for e in events:
+        key = (e["date"][:3], re.sub(r"[^a-z0-9]", "", e["text"].lower())[:60])
+        if key in seen:
+            continue
+        seen.add(key)
+        e["tier"] = tier_of(e["text"])
+        unique.append(e)
+
+    unique.sort(key=lambda e: (e["date"][0], e["date"][1], e["date"][2],
+                               -e["date"][3], e["tier"], e["page"]))
+    return unique, rejects
+
+
+def cmd_generate(_args):
+    events, rejects = collect()
+    by_year = defaultdict(list)
+    for e in events:
+        by_year[e["date"][0]].append(e)
+
+    tiers = Counter(e["tier"] for e in events)
+    pages = len({e["page"] for e in events})
+    marks = {1: "★", 2: "◆", 3: "·"}
+
+    out = []
+    out.append("---")
+    out.append("domain: timeline")
+    out.append("page_type: summary")
+    out.append("status: active")
+    out.append("knowledge: derived")
+    out.append("date_created: 2026-08-14")
+    out.append("date_modified: 2026-08-15")
+    # Deliberately not a `wiki/...` path: this page is generated *from* the
+    # wiki rather than reasoning *from* named premises, so listing wiki pages
+    # here would make wiki-climb demand a `synthesizes:` block it should not
+    # have. The provenance of every entry is the ↳ link on the entry itself.
+    out.append("sources:")
+    out.append("  - generated from every page under the wiki by bin/wiki-timeline")
+    # no tags: the closed topical set in STYLE_GUIDE.md does not describe a
+    # generated navigation artifact, and tags: is optional (bin/wiki-lint errors
+    # on anything outside the set).
+    out.append("connections:")
+    out.append("  - page: wiki/timeline/index")
+    out.append("    type: component-of")
+    out.append('    claim: "The master timeline is the timeline domain\'s '
+               'chronological index — every dated event the wiki records, '
+               'extracted mechanically from the pages that hold them and '
+               'linked back to the page and section that carries the evidence."')
+    out.append("---")
+    out.append("")
+    out.append("# Master Timeline")
+    out.append("")
+    out.append("Every dated event recorded anywhere in this wiki, in order, each "
+               "linked back to the page and section that documents it.")
+    out.append("")
+    out.append("**This page is generated. Do not hand-edit it** — run "
+               "`bin/wiki-timeline generate`. To correct an entry, fix the "
+               "page it came from; the fix appears here on the next run.")
+    out.append("")
+    out.append(f"**{len(events):,} events** across **{len(by_year)} years** "
+               f"({min(by_year)}–{max(by_year)}), drawn from **{pages} pages**. "
+               f"Tier 1 {tiers[1]:,} · Tier 2 {tiers[2]:,} · Tier 3 {tiers[3]:,}.")
+    out.append("")
+    out.append("## What counts as an event here")
+    out.append("")
+    out.append("An event needs a date **and** something that happened to "
+               "someone. A date on its own is not enough — the wiki is full of "
+               "dates that are edit stamps, measurement timestamps, or years "
+               "mentioned in passing. This index is built only from the "
+               "structural positions where pages actually record events "
+               "(table rows, list items, bold date leads in prose), and it "
+               "rejects, by rule:")
+    out.append("")
+    out.append("- the wiki's own housekeeping — `REVISED`/`CORRECTED` blocks, "
+               "gate output, provenance notes, staleness re-checks")
+    out.append("- corpus metadata — file names, row counts, export statistics")
+    out.append("- table headers, separator rules, and bare-number cells")
+    out.append("- bare years lifted out of running prose")
+    out.append("- duplicate statements of the same event on different pages")
+    out.append("")
+    out.append("Paragraphs are reflowed before extraction, so a description is "
+               "always a whole sentence rather than the fragment of a "
+               "hard-wrapped line. Run `bin/wiki-timeline audit` to see what "
+               "each rule rejected, and `rejects` to read the rejections "
+               "themselves — they are reviewable, not silent.")
+    out.append("")
+    out.append("**Tiers.** ★ Tier 1 — births, deaths, arrests, moves, jobs, "
+               "relationships, hospitalizations, legal and financial events. "
+               "◆ Tier 2 — concerts, trips, releases, purchases, celebrations. "
+               "· Tier 3 — everything else dated.")
+    out.append("")
+
+    decades = defaultdict(list)
+    for y in sorted(by_year):
+        decades[(y // 10) * 10].append(y)
+    out.append("**Jump to:** " + " · ".join(
+        f"[{d}s](#{d}s)" for d in sorted(decades)))
+    out.append("")
+    out.append("---")
+    out.append("")
+
+    for dec in sorted(decades):
+        out.append(f"## {dec}s")
+        out.append("")
+        for y in decades[dec]:
+            rows = by_year[y]
+            out.append(f"### {y}")
+            out.append("")
+            for e in rows:
+                label = e["date"][4]
+                out.append(f"- {marks[e['tier']]} **{label}** — {e['text']}  ")
+                link = e["page"][:-3] if e["page"].endswith(".md") else e["page"]
+                out.append(f"  ↳ [[{link}]] · {e['section']}")
+            out.append("")
+
+    out.append("---")
+    out.append("")
+    out.append(f"*Generated by `bin/wiki-timeline` from {pages} wiki pages. "
+               f"{len(rejects):,} dated candidates were rejected as non-events; "
+               f"`bin/wiki-timeline audit` breaks down why.*")
+    out.append("")
+
+    with open(OUT, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(out))
+
+    print(f"wrote {os.path.relpath(OUT, ROOT)}")
+    print(f"  {len(events):,} events · {len(by_year)} years "
+          f"({min(by_year)}–{max(by_year)}) · {pages} pages")
+    print(f"  tier 1 {tiers[1]:,} · tier 2 {tiers[2]:,} · tier 3 {tiers[3]:,}")
+    print(f"  {len(rejects):,} candidates rejected as non-events")
+    return 0
+
+
+def cmd_audit(_args):
+    events, rejects = collect()
+    print(f"accepted events : {len(events):,}")
+    print(f"rejected        : {len(rejects):,}")
+    print()
+    print("rejections by reason:")
+    for reason, n in Counter(r[0] for r in rejects).most_common():
+        print(f"  {n:6,}  {reason}")
+    print()
+    print("accepted by extraction kind:")
+    for kind, n in Counter(e["kind"] for e in events).most_common():
+        print(f"  {n:6,}  {kind}")
+    print()
+    print("accepted by tier:")
+    for tier, n in sorted(Counter(e["tier"] for e in events).items()):
+        print(f"  {n:6,}  tier {tier}")
+    print()
+    print("accepted by date precision:")
+    names = {3: "day", 2: "month", 1: "year"}
+    for p, n in sorted(Counter(e["date"][3] for e in events).items(),
+                       reverse=True):
+        print(f"  {n:6,}  {names[p]}")
+    print()
+    print("by decade:")
+    dec = Counter((e["date"][0] // 10) * 10 for e in events)
+    for d, n in sorted(dec.items()):
+        print(f"  {n:6,}  {d}s")
+    print()
+    print("top contributing pages:")
+    for page, n in Counter(e["page"] for e in events).most_common(15):
+        print(f"  {n:6,}  {page}")
+    return 0
+
+
+def cmd_sample(args):
+    events, _ = collect()
+    random.seed(args.seed)
+    for e in random.sample(events, min(args.n, len(events))):
+        print(f"[T{e['tier']}] {e['date'][4]:<18} {e['text'][:120]}")
+        print(f"      {e['page']} · {e['section']}")
+    return 0
+
+
+def cmd_rejects(args):
+    _, rejects = collect()
+    random.seed(args.seed)
+    for why, page, datestr, text in random.sample(rejects, min(args.n, len(rejects))):
+        print(f"[{why}] {datestr}")
+        print(f"      {text}")
+        print(f"      {page}")
+    return 0
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    sub = ap.add_subparsers(dest="cmd")
+    sub.add_parser("generate")
+    sub.add_parser("audit")
+    s = sub.add_parser("sample")
+    s.add_argument("n", nargs="?", type=int, default=30)
+    s.add_argument("--seed", type=int, default=0)
+    r = sub.add_parser("rejects")
+    r.add_argument("n", nargs="?", type=int, default=30)
+    r.add_argument("--seed", type=int, default=0)
+    args = ap.parse_args()
+
+    if args.cmd == "generate":
+        return cmd_generate(args)
+    if args.cmd == "audit":
+        return cmd_audit(args)
+    if args.cmd == "sample":
+        return cmd_sample(args)
+    if args.cmd == "rejects":
+        return cmd_rejects(args)
+    ap.print_help()
+    return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

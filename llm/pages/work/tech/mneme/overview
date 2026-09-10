@@ -1,0 +1,155 @@
+---
+
+domain: work
+
+page_type: concept
+
+title: "MNEME — Personal Memory Corpus Platform"
+
+status: stub
+
+date_created: 2026-07-14
+
+date_modified: 2026-07-20
+
+sources:
+
+- raw/self/dox-md/MNEME_BUILDKIT_v02.md
+
+related:
+
+- wiki/work/tech/index
+
+- wiki/work/tech/max-framework/overview
+
+- wiki/mind/synthesis/ai-collaborative-analysis
+
+- wiki/mind/concepts/exocortex
+
+- wiki/work/tech/danmodel
+
+tags: [ai-collaboration]
+
+connections:
+
+- page: wiki/work/tech/danmodel
+
+type: parallels
+
+claim: "Both are independently-built self-modeling infrastructure projects running the same 'extract once, stop re-deriving' thesis this wiki itself is built on — mneme for memory/context, DANMODEL for voice and output."
+
+---
+
+# MNEME — Personal Memory Corpus Platform
+
+A full product spec, dated April 2026, for a tool that solves the exact
+
+problem this wiki itself exists to solve: the "cold-start" problem of
+
+every LLM session beginning with zero context about who its user is. Dan
+
+frames existing approaches (pasting bios into system prompts, RAG) as
+
+solving the wrong layer — retrieval instead of **extraction and
+
+synthesis** — and specs MNEME as a guided self-knowledge-extraction
+
+engine that converts free-form "storytime" narrative into a structured,
+
+versioned "bootloader document" injectable into any LLM's context.
+
+## The five-layer corpus model
+
+The build kit's core intellectual contribution is a layered ontology for
+
+personal context, ordered by "blast radius" — how much of an LLM's
+
+downstream behavior each layer changes — rather than by topic:
+
+| Layer | Content | Example field |
+
+|-------|---------|----------------|
+
+| 1. Life circumstances | Relationship/dependent/employment/geographic status | "married with two kids under 6" changes every recommendation |
+
+| 2. Biographical substrate | Formative history explaining the present | family of origin, career arc, opt-in trauma-adjacent events |
+
+| 3. Ideological/axiological map | Beliefs ranked by **conviction strength**, not flat-listed | "holds X with high conviction, won't update without substantial evidence" |
+
+| 4. Cognitive style | How the person thinks, inferred from behavior rather than self-report | reasoning style, update triggers, bias patterns |
+
+| 5. Stylometric/cultural signature | How they write, what they reject as much as what they like | voice register, anti-tastes, subcultural affiliation |
+
+Layer 3's "conviction strength" requirement and Layer 5's "anti-profile"
+
+(what the user is explicitly *not*, often more useful than positive
+
+assertions) are the spec's sharpest ideas — both map directly onto
+
+choices this wiki has independently made elsewhere (e.g. distinguishing
+
+`knowledge: earned` conclusions from `derived` facts, or documenting
+
+Dan's political trajectory by what he rejects as much as what he holds).
+
+## Extraction method and build plan
+
+Input runs through "storytime mode" (open narrative prompts, funneled
+
+large-to-small, explicitly banning direct "what are your values"
+
+questions as generating performative rather than real answers) plus
+
+adversarial elicitation for the belief/cognitive layers (value-conflict
+
+scenarios, forced ranking of previously stated positions). The technical
+
+plan is deliberately minimal: a single self-contained HTML file built
+
+inside Google AI Studio's canvas environment, no server, no API key
+
+management, local-only storage via localStorage/IndexedDB treated as a
+
+privacy feature given the sensitivity of what it stores (relationships,
+
+ideology, health). A ten-session build sequence is specified end to end,
+
+from JSON-schema locking through a pure-SVG five-layer radar-chart
+
+visualization, with Phase 3 explicitly scoped to import prior Claude/
+
+ChatGPT chat exports.
+
+## Why this page exists
+
+MNEME is Dan externalizing, as a buildable product, the same insight this
+
+wiki already operationalizes: that self-knowledge has to be *extracted and
+
+synthesized once*, not endlessly re-derived from raw source material —
+
+this wiki's own "second brain, not a RAG" framing
+
+([[wiki/self/context-core]], the project's own `CLAUDE.md`) is the same
+
+thesis MNEME's problem statement states almost verbatim. It sits alongside
+
+[[wiki/work/tech/max-framework/overview]] and
+
+[[wiki/mind/concepts/exocortex]] as another instance of Dan building
+
+external cognitive infrastructure for himself, and is the clearest
+
+evidence yet that [[wiki/self/concepts/wiki-brain|the wiki-brain]] project and Dan's own product instincts
+
+are pointed at the same problem independently.
+
+**Gaps:** no evidence in the corpus of MNEME actually being built past
+
+the spec stage; unclear whether this predates or postdates his adoption
+
+of this wiki-brain project as his personal solution to the same problem.
+
+---
+
+**Up:** [[wiki/work/index|Work]] › [[wiki/work/tech/index|Tech]]

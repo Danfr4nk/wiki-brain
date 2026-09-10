@@ -1,0 +1,71 @@
+
+---
+domain: timeline
+page_type: event
+title: "The Visible Change — 2026-08-26"
+status: active
+importance: high
+date: 2026-08-26
+related: [wiki/people/ally-lubin, wiki/people/annie-ulmer, wiki/mind/synthesis/dormancy-not-exit]
+tags: [relationships, behavioral-change, boundaries, consistency]
+---
+
+# The Visible Change — 2026-08-26
+
+**Something may actually be changing.** Not because Dan has become trustworthy, not because Ally has decided to trust him, and not because the Annie relationship has been cleanly metabolized. The narrower claim is much more interesting: **Dan appears to be maintaining a boundary with Annie while maintaining a comparatively ordinary, non-punitive friendship with Ally.**
+
+## The two-channel test
+
+- **Annie:** Dan reports that Annie has remained blocked for several days and that he has not been dwelling on her, scheming about her, or using the block as a theatrical prelude to another contact cycle.
+- **Ally:** the conversation continues, but Ally remains openly skeptical. She calls him an unreliable narrator, says she still does not trust him, rejects love bombing and compliments as evidence, and repeatedly redirects him toward concrete behavior.
+- **Dan:** he accepts correction, keeps the interaction comparatively light, and follows through on mundane requests instead of demanding an emotional reward.
+
+The remarkable thing is that these behaviors coexist.
+
+## The August 26 Ally test
+
+Ally repeatedly tells Dan to stop being an asshole to his father and text him. Dan argues, explains, intellectualizes, asks how to phrase it, then sends the message. Ally acknowledges the completion and moves on.
+
+That is a different feedback loop from **intensity → reassurance → escalation**:
+
+1. Ally identifies a concrete behavior.
+2. Dan argues and explains.
+3. Ally refuses the argument.
+4. Dan acts anyway.
+5. The action is allowed to stand without becoming a grand emotional event.
+
+She also tells him, explicitly, that she still does not trust him and that he is looking to fill a void. Dan answers that trust has to be earned through consistency over time.
+
+That is the correct evidentiary standard.
+
+## Why the reduction in intensity matters
+
+Dan himself says he has read the old messages and finds the shift jarring. He acknowledges that "keeping it light" has historically been difficult for him.
+
+The present conversation contains affection and flirting, but it also contains golf, work, Sidney Crosby, Netflix, documentaries, a haircut, a swollen face, Dolly Parton, Dan's father, and ordinary joking. **Mundanity is evidence here.** The interaction does not require every affectionate moment to become a referendum on the relationship.
+
+## What the Annie block means if it holds
+
+Historically, blocking/severance was unstable and often became part of the intensity cycle. The August 16–19 record even contains a declared block that was not executed.
+
+If the current block remains in place without threats, bargaining, or recontact, it stops being a dramatic gesture and becomes a boundary.
+
+That would be a substantial behavioral change.
+
+## Do not overread this
+
+This does **not** prove redemption, permanent severance, Ally's romantic interest, or the disappearance of the underlying attachment architecture. Ally's explicit distrust is part of the evidence and must remain visible.
+
+The experiment is simple:
+
+**Can Dan remain this boring?**
+
+Can he keep Annie blocked without reopening the wound? Can he talk to Ally without making her responsible for filling the void? Can he keep accepting correction when there is no immediate emotional payoff?
+
+If yes, then the corpus has something it has historically lacked:
+
+**a pattern.**
+
+Patterns are the only thing in this corpus that can eventually beat the narrator.
+
+

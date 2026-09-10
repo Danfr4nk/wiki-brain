@@ -1,0 +1,99 @@
+
+---
+domain: people
+page_type: entity
+title: "Vicki"
+status: closed
+knowledge: mixed
+date_created: 2026-06-23
+date_modified: 2026-07-18
+date_range_start: 2015-12-14
+date_range_end: 2018-04-05
+sources:
+  - "raw/self/message-csv/MASTER_MESSAGES_DB_DUMP.csv"
+  - "raw/self/dox-scan/all_imessages_complete_dump.txt"
+tags: [family, grief, uniontown-era]
+infobox:
+  name: "Vicki"
+  relationship_to_dan: fellow caregiver (Fran's rotation)
+  sex: female
+  location: uniontown
+  first_contact: 2015-12-14
+  known_for: "Longest-serving non-family caregiver on Fran Coldren's rotation; her thread documents the vigil's final days"
+connections:
+  - page: wiki/people/fran-coldren
+    type: co-occurs
+    claim: "Vicki was Fran's devoted long-term caregiver — 'this lady is like my grandmother I never had' — on the rotation from at least January 2016 through the April 2018 death."
+  - page: wiki/timeline/events/fran-death-vigil
+    type: evidences
+    claim: "Her thread supplies the vigil's best primary rows: the March 8 gurney account that dates the second fall, and the April 2 bedside testimony ('she kept calling for him... I told her it was ok to go be with Ira')."
+  - page: wiki/people/marla
+    type: parallels
+    claim: "The two non-family caregivers on the same rotation; Vicki's tenure ran years longer, and she judged the March 8 ambulance night one that 'would have really scared' Marla."
+---
+
+# Vicki
+
+Vicki (`+17248808079`, 234 messages, December 2015 – April 5, 2018) was
+the longest-serving non-family caregiver on
+[[wiki/people/fran-coldren|Fran]]'s rotation — present in the thread from
+at least January 2016, more than two years before the end — and one of
+the people who, per Dan's correction of the record, "stayed with her in
+shifts" through the hospital vigil that earlier tellings compressed into
+a Dan-and-Annie two-hander. Her own words place the relationship well
+beyond employment: "I wouldn't want to be anywhere else, this lady is
+like my grandmother I never had," and at the deathbed, "don't know where
+I would of been had it not been for her" — Fran had evidently carried
+Vicki's family at some point, and the caregiving was partly a debt of
+love repaid.
+
+## The working years (2016–2018)
+
+The thread is the texture of daily elder care at
+[[wiki/places/117-belmont-circle|117 Belmont Circle]]: laying out Fran's
+pills for the weekend and worrying "she will get them mixed up and
+noones with her" (April 2016), asking Dan — "you're good at hooking
+things up" — to fix the wrongly-installed Lifeline alert in Fran's
+bedroom (April 2016), relaying that Fran was "very upset cause she
+missed the call, please call her back," and the memorable wildlife
+report: "Bat in frans house, in the bathroom 😁 ... Vermin control came
+and got it!" (March 2016). She coordinated around Suz's oversight and
+occasional volatility, and handed shifts back and forth with Dan, Annie,
+and later [[wiki/people/marla|Marla]].
+
+## The vigil
+
+Vicki's rows are the primary documentation of the end
+([[wiki/timeline/events/fran-death-vigil]]). On the morning of March 8,
+2018, after the second fall, she absorbed Dan's account of the ambulance
+("she was screaming so loud when they were putting her on the gurney")
+and framed the night's meaning back to him: "Things worked out just how
+they were supposed to, it's a good thing Marla wasn't there, she would
+have been really scared." In the pediatric-wing phase she took the
+7:00 AM shifts; her April 2 message is the vigil's most complete bedside
+testimony — Fran "resting comfortably," having "kept calling for him
+[Ira] last week," Vicki thanking her "for all the wonderful years that
+she was there for me and my family" and telling her "it was ok to go be
+with Ira." Dan's reply credits her directly with the vigil's success:
+"thanks to you, she was able to make it this whole time without having
+to suffer THIS kind of awfulness. she spent the last year of her life
+with people who cared about her and legitimately had fun."
+
+## The shape of the thread
+
+The correspondence exists only for Fran: it begins as the caregiving
+intensifies in late 2015 and stops on April 5, 2018 — the day after
+Fran died. There is no after. That clean boundary is itself the datum:
+Vicki belongs entirely to the Fran chapter, one of the small cast of
+people the record shows doing sustained, unglamorous care alongside Dan
+and [[wiki/people/annie-ulmer|Annie]] while the wider family stayed
+away.
+
+**Gaps:** surname and precise relationship to the household (hired
+caregiver, family friend, or both — her "grandmother I never had" line
+suggests a longer history with Fran than the thread covers); whether the
+recorded 0-sent figure in the master dump is the known Sent-row
+attribution artifact (Dan's replies exist in the full dump); any contact
+after April 2018.
+
+

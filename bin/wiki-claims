@@ -1,0 +1,1001 @@
+#!/usr/bin/env python3
+"""wiki-claims — the claim validity ledger: what was true, when it stopped being true, and what the wiki still asserts anyway.
+
+    bin/wiki-claims                       the standing state
+    bin/wiki-claims scan                  structural candidates, computed from the corpus
+    bin/wiki-claims asof 2019-06-01       what the wiki held true on a given day
+    bin/wiki-claims live wiki/people/x.md which claims on this page are still live
+    bin/wiki-claims record ...            enter a claim and its validity window
+    bin/wiki-claims expire c004 ...       close a window against evidence
+
+WHAT THIS IS
+
+Every date field in this repository is about the *page*, not the *claim*.
+`date_created` and `date_modified` say when the file moved. `date_range_start`
+and `date_range_end` say what span of evidence the page covers. Nothing
+anywhere records **when an assertion stopped being true**, and so nothing can
+ever notice that it did.
+
+That is a hole under the load-bearing beam. `CLAUDE.md` says the point of this
+system is that "today's synthesized conclusion is tomorrow's premise" — the
+whole case for a second brain over a RAG. A premise that quietly expired does
+not announce itself: it keeps reading as a present-tense fact, it keeps getting
+cited, and every conclusion stacked on it inherits the rot. `bin/wiki-climb
+check` fires when a premise *file* is edited. It cannot fire when a premise
+*lapses*, because until this file existed there was nothing to fire on.
+
+THREE WAYS A CLAIM STOPS BEING USABLE, AND COLLAPSING THEM IS A LIE
+
+  RETRACTED   It was never true. `RETRACTED.md` owns this, and `bin/wiki-lint`
+              already fails if a retracted claim reappears as a live assertion.
+
+  CORRECTED   It was wrong when it was written. STYLE_GUIDE rule 9's correction
+              blockquotes own this: the old claim stays visible beside the fix.
+
+  EXPIRED     It was true, and then it stopped. **Nothing owned this.**
+
+The third is not a weaker version of the first two — it is a different fact
+about the world, and filing it as either one slanders the record. "Dan lives in
+Morgantown" was *correct* in 2019. A page that retracts it says the wiki got it
+wrong; a page that keeps asserting it says he lives there now. Both are false,
+and the true statement — it held, then it ended — had nowhere to live.
+
+ENDED IS NOT LAPSED, AND THAT DISTINCTION IS THE WHOLE INSTRUMENT
+
+A window can close two ways and they mean opposite things:
+
+  ENDED    The state stopped, and something dates the stopping. He moved out on
+           a known day; the job has a last day; the release exists.
+
+  LAPSED   The *record* stopped. The last evidence is 2016 and there is nothing
+           after it. The state may have ended that year, or it may be running
+           today with no one writing it down.
+
+`bin/wiki-traits` already refuses to let an instrument's silence be read as
+falsification, and this is the same refusal one layer down: **a corpus going
+quiet is a fact about the corpus.** Nineteen tweets to a friend that stop in
+2016 do not document a friendship ending in 2016. They document a tweet archive
+ending in 2016. So `lapsed` carries `last_seen` and never `valid_to`, it is
+reported in its own band, and `check` refuses a `lapsed` claim that tries to
+present a `valid_to` as though the ending were known.
+
+NEVER EXTEND A WINDOW TO CLEAR A SCAN HIT
+
+`scan` will tell you that a page marked `status: active` rests on evidence that
+stopped a decade ago. The tempting fix — push the window forward, mark it
+current, move on — manufactures evidence, and it is rule 3 of "the four things
+that matter most" wearing a different hat. If the record stopped in 2016 the
+claim lapsed in 2016, whatever the page's status field says. Re-read what the
+evidence actually supports, record `lapsed` with the real `last_seen`, and let
+the page say plainly that the present state is unknown. An honest `unknown` is
+worth more than a confident `active` nothing checked.
+
+WHAT THIS DELIBERATELY IS NOT
+
+Not a claim-level graph over every sentence. This wiki writes prose, and forcing
+each assertion into a record would wreck `STYLE_GUIDE.md` and produce a ledger
+nobody maintains. The unit here is a claim somebody *chose* to put a clock on:
+sparse, opt-in, and load-bearing. `scan` computes candidates from frontmatter
+the corpus already carries, so the ledger is fed by the corpus rather than by
+somebody remembering — the lesson `lexicon/words/` taught by sitting unread with
+one file in it for three days.
+
+WARNING — this writes to a PUBLIC repository, on the same terms as the intake
+and testimony ledgers. `claims/events.jsonl` is tracked and git history cannot
+be un-published. Credential shapes are refused rather than stripped.
+"""
+from __future__ import annotations
+
+import argparse
+import datetime
+import json
+import re
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+LEDGER = ROOT / "claims"
+LOG = LEDGER / "events.jsonl"
+PROJECTION = LEDGER / "claims.json"
+SUMMARY = LEDGER / "SUMMARY.md"
+PAGE = ROOT / "wiki" / "meta" / "claim-validity.md"
+WIKI = ROOT / "wiki"
+
+# ---------------------------------------------------------------- the directive
+# The standing Annie moratorium in CLAUDE.md. A validity record is new writing
+# about a living person, so it is refused outright rather than filtered — the
+# same shape `bin/wiki-testimony` and `bin/wiki-plain` use. Only the operator
+# changes this.
+MORATORIUM = re.compile(r"\b(annie|ulmer|lo_weez)\b", re.I)
+
+# This repository is public and its history cannot be un-published. Refuse the
+# shape, name the field, never silently strip — `bin/wiki-skills`' rule.
+SECRET_PATTERNS = [
+    (re.compile(r"\bAKIA[0-9A-Z]{16}\b"), "an AWS access key id"),
+    (re.compile(r"\bghp_[A-Za-z0-9]{36}\b"), "a GitHub personal access token"),
+    (re.compile(r"\bgithub_pat_[A-Za-z0-9_]{22,}"), "a GitHub fine-grained token"),
+    (re.compile(r"\bxox[bporas]-[A-Za-z0-9-]{10,}"), "a Slack token"),
+    (re.compile(r"\bsk-[A-Za-z0-9_-]{20,}"), "an API secret key"),
+    (re.compile(r"\bAIza[0-9A-Za-z_-]{35}\b"), "a Google API key"),
+    (re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY"), "a private key block"),
+]
+
+# ---------------------------------------------------------------- vocabularies
+# What sort of state the claim asserts. Only states that CAN expire belong here:
+# "born in 1988" has no window and does not want a record.
+CLAIM_KINDS = {
+    "residence":      "where he lives",
+    "employment":     "who he works for, and as what",
+    "relationship":   "an active tie to a person",
+    "affiliation":    "membership of a group, scene, project or platform",
+    "possession":     "what he owns or holds",
+    "health_state":   "a condition, regimen or physical state",
+    "project_status": "whether a project, alias or release line is running",
+    "capability":     "an access, licence, instrument or skill he has",
+    "belief":         "a stated position or identification",
+    "habit":          "a recurring practice at a stated rate",
+    "contact":        "a reachable handle, number or address",
+}
+
+# How the window closed. The first two are the instrument; see the header.
+CLOSURES = {
+    "ongoing":    "still live as far as the record shows — NOT 'true forever'",
+    "ended":      "the state stopped, and something dates the stopping",
+    "lapsed":     "the RECORD stopped; the state's end is undated and unknown",
+    "superseded": "replaced by a later claim, which carries the chain",
+}
+CLOSED = {"ended", "lapsed", "superseded"}
+
+# Reused deliberately from bin/wiki-testimony so one vocabulary describes
+# evidence across both ledgers. A reader who has learned one has learned both.
+EVIDENCE_TIERS = {
+    "first_party_record": "a dated artifact he produced — message, tweet, post",
+    "document":           "a third-party document — court, medical, employment",
+    "third_party":        "somebody else's dated account",
+    "testimony":          "his own later recollection",
+    "inference":          "derived from other claims, not observed",
+    "none":               "nothing — the claim is unverified",
+}
+
+EVENT_TYPES = ("claim_recorded", "claim_expired", "claim_superseded",
+               "claim_revised", "claim_voided")
+
+# How far past a page's own date_range_end `scan` starts asking whether an
+# `active` status is still earned. Two years is not a truth about relationships;
+# it is the point at which "nothing since" stops being a gap in the archive and
+# starts being a question worth a human reading.
+STALE_YEARS = 2
+
+
+# ---------------------------------------------------------------- small helpers
+def today() -> str:
+    return datetime.date.today().isoformat()
+
+
+def die(msg: str, code: int = 2):
+    print(f"wiki-claims: {msg}", file=sys.stderr)
+    sys.exit(code)
+
+
+def as_date(s: str, field: str) -> datetime.date:
+    try:
+        return datetime.date.fromisoformat(str(s))
+    except (TypeError, ValueError):
+        die(f"{field} '{s}' is not a YYYY-MM-DD date")
+
+
+def moratorium_guard(*texts):
+    """Refuse rather than strip. See the header."""
+    for t in texts:
+        if t and MORATORIUM.search(str(t)):
+            hit = MORATORIUM.search(str(t)).group(0)
+            die(f"refused — this names '{hit}', who is under the standing "
+                f"directive in CLAUDE.md. That directive is a stop on new "
+                f"writing about her, and a validity record is new writing. "
+                f"Nothing was appended.")
+
+
+def secret_guard(*texts):
+    """Refuse the shape and name it. This repository is public."""
+    for t in texts:
+        for pat, why in SECRET_PATTERNS:
+            if t and pat.search(str(t)):
+                die(f"refusing to record — that looks like {why}. This "
+                    f"repository is public and its history cannot be "
+                    f"un-published. Nothing was appended.")
+
+
+def read_log() -> list:
+    if not LOG.exists():
+        return []
+    out = []
+    for i, line in enumerate(LOG.read_text(encoding="utf-8").splitlines(), 1):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            out.append(json.loads(line))
+        except json.JSONDecodeError as exc:
+            die(f"claims/events.jsonl:{i} is not valid JSON ({exc}). The log "
+                f"is the record — repair the line, never truncate the file.")
+    return out
+
+
+def append(event: dict):
+    LEDGER.mkdir(parents=True, exist_ok=True)
+    with LOG.open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(event, ensure_ascii=False, sort_keys=True) + "\n")
+
+
+def next_id(events: list) -> str:
+    n = sum(1 for e in events if e.get("type") == "claim_recorded")
+    return f"c{n + 1:03d}"
+
+
+# ---------------------------------------------------------------- the projection
+def project(events: list) -> dict:
+    """Replay the log into current state. Pure; the log is never consulted again."""
+    c: dict = {}
+    for e in events:
+        et, cid = e.get("type"), e.get("id")
+        if et == "claim_recorded":
+            rec = dict(e.get("claim", {}))
+            rec.update({"id": cid, "recorded_at": e.get("at"), "history": []})
+            rec.setdefault("closure", "ongoing")
+            c[cid] = rec
+        elif et in ("claim_expired", "claim_superseded"):
+            if cid in c:
+                c[cid].update(dict(e.get("closure", {})))
+        elif et == "claim_revised":
+            if cid in c:
+                before = {k: v for k, v in c[cid].items() if k != "history"}
+                c[cid]["history"].append({"superseded_at": e.get("at"),
+                                          "reason": e.get("reason", ""),
+                                          "was": before})
+                c[cid].update(dict(e.get("closure", {})))
+        elif et == "claim_voided":
+            if cid in c:
+                c[cid]["voided"] = {"at": e.get("at"),
+                                    "reason": e.get("reason", "")}
+    live = {k: v for k, v in c.items() if not v.get("voided")}
+    bands = {b: sum(1 for v in live.values() if v.get("closure") == b)
+             for b in CLOSURES}
+    return {
+        "generated": "bin/wiki-claims — do not hand-edit; the log is the record",
+        "counts": {"claims": len(live),
+                   "voided": sum(1 for v in c.values() if v.get("voided")),
+                   **bands},
+        "claims": {k: c[k] for k in sorted(c)},
+    }
+
+
+def live_records(state: dict) -> dict:
+    return {k: v for k, v in state["claims"].items() if not v.get("voided")}
+
+
+def live_on(state: dict, when: datetime.date) -> list:
+    """Claims the record holds as true on a given day.
+
+    A `lapsed` claim is live up to its `last_seen` and UNKNOWN after it — never
+    silently false. `asof` reports the two separately for exactly that reason.
+    """
+    held, unknown = [], []
+    for r in live_records(state).values():
+        start = r.get("valid_from")
+        if start and as_date(start, "valid_from") > when:
+            continue
+        closure = r.get("closure", "ongoing")
+        if closure == "ongoing":
+            held.append(r)
+        elif closure in ("ended", "superseded"):
+            end = r.get("valid_to")
+            if not end or as_date(end, "valid_to") >= when:
+                held.append(r)
+        elif closure == "lapsed":
+            seen = r.get("last_seen")
+            if seen and as_date(seen, "last_seen") >= when:
+                held.append(r)
+            else:
+                unknown.append(r)
+    return [held, unknown]
+
+
+# ---------------------------------------------------------------- corpus reading
+def read_frontmatter(path: Path) -> dict:
+    """Flat scalar frontmatter. Enough for the structural signals scan uses."""
+    text = path.read_text(encoding="utf-8", errors="ignore")
+    m = re.match(r"^---\n(.*?)\n---\n", text, re.S)
+    if not m:
+        return {}
+    fm = {}
+    for line in m.group(1).splitlines():
+        kv = re.match(r"^(\w[\w_]*):\s*(.*)$", line)
+        if kv:
+            fm[kv.group(1)] = kv.group(2).strip().strip('"').strip("'")
+    return fm
+
+
+def corpus_pages():
+    for p in sorted(WIKI.rglob("*.md")):
+        if "/archive/" in p.as_posix():
+            continue
+        yield p, read_frontmatter(p)
+
+
+def cmd_scan(args):
+    """Structural candidates for a validity record, computed from frontmatter.
+
+    Deliberately NOT a prose grep. The obvious approach — search for "no longer"
+    and friends — was measured against this corpus and is roughly all false
+    positives: 121 hits, overwhelmingly quoted tweets in which somebody else is
+    no longer something. `bin/wiki-crosslink` learned the same lesson about
+    single-token name matches. What is reliable is the frontmatter the corpus
+    already maintains, and it is reliable because a gate already checks it.
+    """
+    recorded = set()
+    for r in live_records(project(read_log())).values():
+        recorded.update(r.get("pages", []))
+
+    cutoff = datetime.date.today() - datetime.timedelta(days=365 * STALE_YEARS)
+    unearned, unrecorded = [], []
+    for path, fm in corpus_pages():
+        rel = path.relative_to(ROOT).as_posix()
+        if rel in recorded or MORATORIUM.search(rel):
+            continue
+        end = fm.get("date_range_end", "")
+        if not re.match(r"^\d{4}-\d{2}-\d{2}$", end):
+            continue
+        status = fm.get("status", "")
+        if status == "active" and datetime.date.fromisoformat(end) < cutoff:
+            unearned.append((end, rel, fm.get("page_type", "")))
+        elif status == "closed":
+            unrecorded.append((end, rel, fm.get("page_type", "")))
+
+    print("wiki-claims scan — structural candidates for a validity record\n")
+    print(f"UNEARNED `active` — {len(unearned)} page(s)")
+    print(f"  A page asserting a live state on evidence that stopped more than")
+    print(f"  {STALE_YEARS} years ago. This is the class nothing else catches: the status")
+    print(f"  field is a claim, and no gate has ever asked whether it is still earned.")
+    print(f"  Most of these are `lapsed`, not `ended` — read the page before deciding.\n")
+    for end, rel, pt in sorted(unearned):
+        print(f"  last evidence {end}  [{pt or '?'}]  {rel}")
+
+    print(f"\nCLOSED, UNRECORDED — {len(unrecorded)} page(s)")
+    print(f"  The page already knows the state ended. The ledger does not, so no")
+    print(f"  `asof` query and no synthesis can see it. Low urgency, high volume:")
+    print(f"  record these as they are touched rather than in a sweep.\n")
+    for end, rel, pt in sorted(unrecorded)[:args.limit]:
+        print(f"  ends {end}  [{pt or '?'}]  {rel}")
+    if len(unrecorded) > args.limit:
+        print(f"  … and {len(unrecorded) - args.limit} more (--limit to widen)")
+
+    print(f"\nA candidate is a reason to read the page, never a reason to write a")
+    print(f"record. Do not extend a window to clear a line here — see the header.")
+    return 0
+
+
+# ---------------------------------------------------------------- write commands
+def cmd_record(args):
+    """Enter a claim and the window the record actually supports."""
+    moratorium_guard(args.claim, args.note, " ".join(args.pages or []))
+    secret_guard(args.claim, args.note, args.evidence)
+    if args.kind not in CLAIM_KINDS:
+        die(f"unknown kind '{args.kind}' — one of {', '.join(sorted(CLAIM_KINDS))}")
+    if args.tier not in EVIDENCE_TIERS:
+        die(f"unknown evidence tier '{args.tier}' — one of {', '.join(sorted(EVIDENCE_TIERS))}")
+    start = as_date(args.valid_from, "--valid-from")
+    if start > datetime.date.today():
+        die("--valid-from is in the future. A validity record is a record of "
+            "what was so, not a forecast.")
+    for rel in args.pages or []:
+        if not (ROOT / rel).exists():
+            die(f"--pages names '{rel}', which does not exist. A claim with no "
+                f"page cannot be checked against anything.")
+
+    events = read_log()
+    cid = next_id(events)
+    append({"type": "claim_recorded", "id": cid, "at": today(),
+            "claim": {"claim": args.claim, "kind": args.kind,
+                      "subject": args.subject, "valid_from": args.valid_from,
+                      "closure": "ongoing", "valid_to": None, "last_seen": None,
+                      "tier": args.tier, "evidence": args.evidence or "",
+                      "pages": args.pages or [], "source": args.source or "",
+                      "note": args.note or ""}})
+    print(f"{cid} recorded — {args.kind}, from {args.valid_from}, ongoing")
+    print(f"  'ongoing' means still live AS FAR AS THE RECORD SHOWS. If the")
+    print(f"  evidence actually stops, close it with `expire --closure lapsed`.")
+    return 0
+
+
+def _closure_common(args, events, mode: str) -> dict:
+    """Shared validation for the two ways a window closes. See the header."""
+    state = project(events)
+    rec = live_records(state).get(args.id)
+    if not rec:
+        die(f"no live claim {args.id}")
+    if rec.get("closure") in CLOSED and not args.revise:
+        die(f"{args.id} is already {rec['closure']}. A closure is never edited — "
+            f"pass --revise with --reason and the log keeps both.")
+    if args.tier not in EVIDENCE_TIERS:
+        die(f"unknown evidence tier '{args.tier}'")
+    if not args.because:
+        die("--because is required. An expiry that does not say what closed the "
+            "window is a guess wearing a date, and the ledger cannot learn from "
+            "it — the same rule bin/wiki-testimony applies to a miss.")
+    if mode == "ended":
+        if not args.on:
+            die("--on is required for `ended`: the whole difference between "
+                "`ended` and `lapsed` is that `ended` can date the stopping. If "
+                "you cannot date it, it lapsed.")
+        end = as_date(args.on, "--on")
+        if end > datetime.date.today():
+            die("--on is in the future. You cannot record that something will "
+                "stop being true.")
+        if as_date(rec["valid_from"], "valid_from") > end:
+            die(f"--on {args.on} precedes valid_from {rec['valid_from']}")
+        if args.tier == "none":
+            die("`ended` on evidence tier 'none' is not an ending — it is a "
+                "lapse. Record it as one.")
+        return {"closure": "ended", "valid_to": args.on, "last_seen": args.on,
+                "tier": args.tier, "because": args.because, "closed_at": today()}
+    if args.on:
+        die("`lapsed` takes --last-seen, never --on. --on would publish a date "
+            "for an ending nobody observed, which is the one thing this band "
+            "exists to prevent.")
+    if not args.last_seen:
+        die("--last-seen is required for `lapsed`: the date the record goes "
+            "quiet is the only thing actually known.")
+    seen = as_date(args.last_seen, "--last-seen")
+    if as_date(rec["valid_from"], "valid_from") > seen:
+        die(f"--last-seen {args.last_seen} precedes valid_from {rec['valid_from']}")
+    return {"closure": "lapsed", "valid_to": None, "last_seen": args.last_seen,
+            "tier": args.tier, "because": args.because, "closed_at": today()}
+
+
+def cmd_expire(args):
+    """Close a window — as `ended` if it can be dated, as `lapsed` if it cannot."""
+    moratorium_guard(args.because)
+    secret_guard(args.because)
+    if args.closure not in ("ended", "lapsed"):
+        die("--closure is 'ended' or 'lapsed'. Use `supersede` for a replacement.")
+    events = read_log()
+    closure = _closure_common(args, events, args.closure)
+    append({"type": "claim_revised" if args.revise else "claim_expired",
+            "id": args.id, "at": today(),
+            "reason": args.reason or "", "closure": closure})
+    if closure["closure"] == "ended":
+        print(f"{args.id} ended {closure['valid_to']} — {args.because}")
+    else:
+        print(f"{args.id} lapsed, last seen {closure['last_seen']} — {args.because}")
+        print(f"  This does NOT say the state ended then. It says the record did.")
+    return 0
+
+
+def cmd_supersede(args):
+    """Replace a claim with a later one, keeping the chain."""
+    moratorium_guard(args.claim, args.because)
+    secret_guard(args.claim, args.because)
+    events = read_log()
+    state = project(events)
+    old = live_records(state).get(args.id)
+    if not old:
+        die(f"no live claim {args.id}")
+    if args.tier not in EVIDENCE_TIERS:
+        die(f"unknown evidence tier '{args.tier}'")
+    if not args.because:
+        die("--because is required — what established the replacement?")
+    on = as_date(args.on, "--on")
+    if on > datetime.date.today():
+        die("--on is in the future.")
+    if as_date(old["valid_from"], "valid_from") > on:
+        die(f"--on {args.on} precedes the superseded claim's valid_from")
+
+    new_id = next_id(events)
+    append({"type": "claim_recorded", "id": new_id, "at": today(),
+            "claim": {"claim": args.claim, "kind": old["kind"],
+                      "subject": old.get("subject", "self"), "valid_from": args.on,
+                      "closure": "ongoing", "valid_to": None, "last_seen": None,
+                      "tier": args.tier, "evidence": args.because,
+                      "pages": old.get("pages", []), "source": args.source or "",
+                      "note": f"supersedes {args.id}", "supersedes": args.id}})
+    append({"type": "claim_superseded", "id": args.id, "at": today(),
+            "closure": {"closure": "superseded", "valid_to": args.on,
+                        "last_seen": args.on, "tier": args.tier,
+                        "because": args.because, "superseded_by": new_id,
+                        "closed_at": today()}})
+    print(f"{args.id} superseded on {args.on} by {new_id}")
+    return 0
+
+
+def cmd_void(args):
+    """Withdraw a record that should never have been one. The log keeps it."""
+    events = read_log()
+    if args.id not in live_records(project(events)):
+        die(f"no live claim {args.id}")
+    if not args.reason:
+        die("--reason is required")
+    append({"type": "claim_voided", "id": args.id, "at": today(),
+            "reason": args.reason})
+    print(f"{args.id} voided — {args.reason}")
+    return 0
+
+
+# ---------------------------------------------------------------- read commands
+def _line(r: dict) -> str:
+    closure = r.get("closure", "ongoing")
+    if closure == "ongoing":
+        window = f"{r['valid_from']} →  (ongoing)"
+    elif closure == "lapsed":
+        window = f"{r['valid_from']} →  ? (record quiet since {r.get('last_seen')})"
+    else:
+        window = f"{r['valid_from']} → {r.get('valid_to')}"
+    return f"  {r['id']}  [{r['kind']}]  {window}\n        {r['claim']}"
+
+
+def cmd_list(args):
+    state = project(read_log())
+    rows = [r for r in live_records(state).values()
+            if (not args.closure or r.get("closure") == args.closure)
+            and (not args.kind or r.get("kind") == args.kind)]
+    if not rows:
+        print("wiki-claims: nothing recorded matching that filter")
+        return 0
+    for r in sorted(rows, key=lambda x: x["id"]):
+        print(_line(r))
+    print(f"\n{len(rows)} claim(s)")
+    return 0
+
+
+def cmd_show(args):
+    state = project(read_log())
+    r = state["claims"].get(args.id)
+    if not r:
+        die(f"no claim {args.id}")
+    print(f"{r['id']} — {r['claim']}\n")
+    for k in ("kind", "subject", "valid_from", "closure", "valid_to",
+              "last_seen", "tier", "evidence", "because", "source", "note",
+              "supersedes", "superseded_by", "recorded_at", "closed_at"):
+        if r.get(k):
+            print(f"  {k:<14} {r[k]}")
+    for p in r.get("pages", []):
+        print(f"  {'page':<14} {p}")
+    if r.get("voided"):
+        print(f"\n  VOIDED {r['voided']['at']} — {r['voided']['reason']}")
+    for h in r.get("history", []):
+        print(f"\n  revised {h['superseded_at']} — {h['reason']}")
+        print(f"    was: closure={h['was'].get('closure')} "
+              f"valid_to={h['was'].get('valid_to')}")
+    return 0
+
+
+def cmd_asof(args):
+    """What the record held as true on a given day.
+
+    This is the capability the ledger exists for. Reasoning about a past state
+    is otherwise a matter of reading prose and hoping, and every synthesis that
+    reaches backwards does it.
+    """
+    when = as_date(args.date, "date")
+    state = project(read_log())
+    held, unknown = live_on(state, when)
+    print(f"As of {args.date} the record holds {len(held)} claim(s) true:\n")
+    for r in sorted(held, key=lambda x: x["id"]):
+        print(_line(r))
+    if unknown:
+        print(f"\nAnd {len(unknown)} claim(s) it CANNOT SETTLE for that date — "
+              f"the record\nwent quiet before it and nothing says whether the "
+              f"state continued:\n")
+        for r in sorted(unknown, key=lambda x: x["id"]):
+            print(_line(r))
+        print(f"\nUnknown is not false. A lapsed claim reports as unsettled on "
+              f"purpose;\ncollapsing it into either answer would invent a "
+              f"measurement.")
+    return 0
+
+
+def cmd_live(args):
+    state = project(read_log())
+    rows = [r for r in live_records(state).values()
+            if not args.page or args.page in r.get("pages", [])]
+    ongoing = [r for r in rows if r.get("closure") == "ongoing"]
+    closed = [r for r in rows if r.get("closure") in CLOSED]
+    where = f" on {args.page}" if args.page else ""
+    print(f"Live{where}: {len(ongoing)} ongoing, {len(closed)} closed\n")
+    for r in sorted(ongoing, key=lambda x: x["id"]):
+        print(_line(r))
+    if closed:
+        print("\nClosed — do not cite these in the present tense:\n")
+        for r in sorted(closed, key=lambda x: x["id"]):
+            print(_line(r))
+    return 0
+
+
+# ---------------------------------------------------------------- derived files
+def write_projection(state: dict):
+    LEDGER.mkdir(parents=True, exist_ok=True)
+    PROJECTION.write_text(json.dumps(state, ensure_ascii=False, indent=2,
+                                     sort_keys=True) + "\n", encoding="utf-8")
+
+
+def _bands(state: dict) -> dict:
+    rows = live_records(state).values()
+    return {b: sorted([r for r in rows if r.get("closure") == b],
+                      key=lambda x: x["id"]) for b in CLOSURES}
+
+
+def render_summary(state: dict) -> str:
+    b = _bands(state)
+    n = sum(len(v) for v in b.values())
+    L = ["# Claim validity — analysis surface", "",
+         "Generated by `bin/wiki-claims`. Do not hand-edit; `claims/events.jsonl`",
+         "is the record and this is a projection of it.", "",
+         f"**{n} claim(s)** — {len(b['ongoing'])} ongoing, {len(b['ended'])} ended, "
+         f"{len(b['lapsed'])} lapsed, {len(b['superseded'])} superseded.", "",
+         "## Why `lapsed` is counted separately", "",
+         "`ended` means the state stopped and something dates the stopping.",
+         "`lapsed` means the *record* stopped and the state's end is unknown. A",
+         "corpus going quiet is a fact about the corpus, so a lapsed claim is",
+         "reported as unsettled rather than as false — the same refusal",
+         "`bin/wiki-traits` makes when an instrument finds nothing.", ""]
+    for band in ("ongoing", "ended", "lapsed", "superseded"):
+        if not b[band]:
+            continue
+        L += [f"## {band.title()} — {len(b[band])}", "",
+              "| id | kind | window | claim |", "|---|---|---|---|"]
+        for r in b[band]:
+            if band == "ongoing":
+                w = f"{r['valid_from']} → ongoing"
+            elif band == "lapsed":
+                w = f"{r['valid_from']} → ? (quiet since {r.get('last_seen')})"
+            else:
+                w = f"{r['valid_from']} → {r.get('valid_to')}"
+            claim = str(r["claim"]).replace("|", r"\|")
+            L += [f"| `{r['id']}` | {r['kind']} | {w} | {claim} |"]
+        L += [""]
+    return "\n".join(L) + "\n"
+
+
+def render_page(state: dict) -> str:
+    b = _bands(state)
+    n = sum(len(v) for v in b.values())
+    L = ["---", "domain: meta", "page_type: dataset",
+         'title: "Claim Validity"',
+         'aliases: ["claim validity", "validity ledger", "what was true when"]',
+         "status: active", "importance: high", "knowledge: derived",
+         "date_created: 2026-09-06", f"date_modified: {today()}",
+         # The chart is the band distribution, and it is the honest figure to
+         # lead with: it shows how much of the record is UNSETTLED rather than
+         # how much is closed. A ledger that charted only `ended` would flatter
+         # itself by hiding the band it cannot resolve.
+         "chart:", "  kind: bar",
+         '  title: "How each recorded claim\'s window closed"',
+         '  x: { label: "Closure band", type: category }',
+         '  y: { label: "Claims", type: number }',
+         "  series:",
+         '    - name: "Claims"', "      points:",
+         f'        "ongoing": {len(b["ongoing"])}',
+         f'        "ended": {len(b["ended"])}',
+         f'        "lapsed": {len(b["lapsed"])}',
+         f'        "superseded": {len(b["superseded"])}',
+         "tags: [consistency, trust]", "sources:", "  - claims/events.jsonl",
+         "related:", "  - wiki/meta/index",
+         "---", "",
+         "# Claim Validity", "",
+         "*Generated by `bin/wiki-claims`. A hand-edit fails the gate; rerun the",
+         "tool. This page is **evidence, not a claim** — it records what the wiki",
+         "asserted and for how long, and states no finding of its own. A finding",
+         "drawn from it reaches an ordinary page through the normal operations.*", "",
+         "Every other date in this wiki is about a *page*. `date_created` and",
+         "`date_modified` say when a file moved; `date_range_start` and",
+         "`date_range_end` say what span of evidence it covers. None of them says",
+         "**when an assertion stopped being true** — so nothing could notice when",
+         "one did, and a conclusion built on it kept reading as current.", "",
+         "## Three ways a claim stops being usable", "",
+         "| | What it means | Where it lives |",
+         "|---|---|---|",
+         "| **Retracted** | It was never true | `RETRACTED.md`, gated by `bin/wiki-lint` |",
+         "| **Corrected** | It was wrong when written | Correction blockquotes, STYLE_GUIDE rule 9 |",
+         "| **Expired** | It was true, and then it stopped | Here |", "",
+         "The third is not a weaker version of the first two. *Dan lives in",
+         "Morgantown* was **correct** in 2019. Retracting it says the wiki got it",
+         "wrong; leaving it says he lives there now. Both are false.", "",
+         f"## The record — {n} claim(s)", "",
+         f"{len(b['ongoing'])} ongoing · {len(b['ended'])} ended · "
+         f"{len(b['lapsed'])} lapsed · {len(b['superseded'])} superseded", ""]
+
+    for band, blurb in (
+        ("ongoing", "Live as far as the record shows. That is **not** the same as "
+                    "true forever — it means nothing has closed the window yet."),
+        ("ended", "The state stopped and something dates the stopping."),
+        ("lapsed", "The **record** stopped. The state's end is undated and "
+                   "unknown; it may have ended then, or be running now with "
+                   "nobody writing it down."),
+        ("superseded", "Replaced by a later claim, which carries the chain."),
+    ):
+        if not b[band]:
+            continue
+        L += [f"### {band.title()}", "", blurb, "",
+              "| id | kind | window | claim | evidence |",
+              "|---|---|---|---|---|"]
+        for r in b[band]:
+            if band == "ongoing":
+                w = f"{r['valid_from']} → ongoing"
+            elif band == "lapsed":
+                w = f"{r['valid_from']} → ? (quiet since {r.get('last_seen')})"
+            else:
+                w = f"{r['valid_from']} → {r.get('valid_to')}"
+            claim = str(r["claim"]).replace("|", r"\|")
+            L += [f"| `{r['id']}` | {r['kind']} | {w} | {claim} | {r.get('tier','')} |"]
+        L += [""]
+
+    L += ["## What this ledger cannot see", "",
+          "**It is sparse and opt-in by design.** The unit is a claim somebody",
+          "chose to put a clock on, not every sentence in the wiki. A claim absent",
+          "from this page is not thereby timeless — it is unexamined. Reading the",
+          "counts here as coverage of the corpus would be a category error.", "",
+          "**`lapsed` is the honest band and the useless-feeling one.** It is also",
+          "the commonest true answer, because this corpus is built from archives",
+          "that each stop on a date. Wanting a cleaner number is exactly the",
+          "pressure that would produce a false one.", "",
+          "**The standing directive filters the record.** Claims naming the person",
+          "under the moratorium in `CLAUDE.md` are refused outright, so this is a",
+          "record of a filtered corpus and any rate drawn from it inherits that.", "",
+          "**Nothing here is a finding.** The ledger records windows. What a window",
+          "*means* is synthesis, and synthesis happens on an ordinary page.", "",
+          # The breadcrumb bin/wiki-lint asks for, so the meta index is not a
+          # one-way door into a generated page.
+          "---", "",
+          "[[wiki/meta/index|meta]] · "
+          "[[wiki/meta/testimony-veracity|Testimony veracity]] · "
+          "[[wiki/health/intake-ledger|Intake ledger]]", ""]
+    return "\n".join(L) + "\n"
+
+
+def cmd_page(args):
+    state = project(read_log())
+    write_projection(state)
+    SUMMARY.write_text(render_summary(state), encoding="utf-8")
+    PAGE.parent.mkdir(parents=True, exist_ok=True)
+    PAGE.write_text(render_page(state), encoding="utf-8")
+    print(f"wiki-claims: wrote {PROJECTION.relative_to(ROOT)}, "
+          f"{SUMMARY.relative_to(ROOT)}, {PAGE.relative_to(ROOT)}")
+    return 0
+
+
+def cmd_rebuild(args):
+    return cmd_page(args)
+
+
+# ---------------------------------------------------------------- the gate
+def _strip_dates(text: str) -> str:
+    """date_modified moves on every regeneration; drift is about content."""
+    return re.sub(r"^date_modified:.*$", "", text, flags=re.M)
+
+
+def cmd_check(args):
+    """The gate. Silent and clean when nothing has ever been recorded."""
+    errors, warnings = [], []
+    events = read_log()
+    if not events and not PAGE.exists():
+        print("wiki-claims: 0 errors, 0 warnings · ledger empty")
+        return 0
+
+    state = project(events)
+    seen = set()
+    for e in events:
+        if e.get("type") not in EVENT_TYPES:
+            errors.append(f"unknown event type '{e.get('type')}' in the log")
+        if e.get("type") == "claim_recorded":
+            if e.get("id") in seen:
+                errors.append(f"duplicate claim id {e.get('id')} in the log")
+            seen.add(e.get("id"))
+        elif e.get("id") and e.get("id") not in seen:
+            errors.append(f"{e.get('type')} references unknown claim {e.get('id')}")
+
+    today_d = datetime.date.today()
+    for cid, r in live_records(state).items():
+        blob = " ".join(str(r.get(k, "")) for k in
+                        ("claim", "evidence", "because", "note", "source"))
+        if MORATORIUM.search(blob):
+            errors.append(f"{cid}: names a person under the standing directive "
+                          f"in CLAUDE.md — void it")
+        for pat, why in SECRET_PATTERNS:
+            if pat.search(blob):
+                errors.append(f"{cid}: contains what looks like {why}; this "
+                              f"repository is public")
+        if r.get("kind") not in CLAIM_KINDS:
+            errors.append(f"{cid}: unknown kind '{r.get('kind')}'")
+        if r.get("tier") not in EVIDENCE_TIERS:
+            errors.append(f"{cid}: unknown evidence tier '{r.get('tier')}'")
+        closure = r.get("closure", "ongoing")
+        if closure not in CLOSURES:
+            errors.append(f"{cid}: unknown closure '{closure}'")
+            continue
+
+        vf = r.get("valid_from")
+        if not vf or not re.match(r"^\d{4}-\d{2}-\d{2}$", str(vf)):
+            errors.append(f"{cid}: valid_from '{vf}' is not a date")
+            continue
+
+        # The rule the whole instrument rests on. `lapsed` means the ending is
+        # UNKNOWN, so a valid_to on it would publish a date nobody observed —
+        # the corpus's silence rewritten as the world's. Refuse it outright.
+        if closure == "lapsed":
+            if r.get("valid_to"):
+                errors.append(f"{cid}: lapsed with a valid_to of "
+                              f"{r['valid_to']} — a lapse cannot date the "
+                              f"ending, that is what makes it a lapse. Use "
+                              f"last_seen, or record it as `ended`.")
+            if not r.get("last_seen"):
+                errors.append(f"{cid}: lapsed with no last_seen — the date the "
+                              f"record goes quiet is the only thing known")
+        if closure in ("ended", "superseded"):
+            vt = r.get("valid_to")
+            if not vt:
+                errors.append(f"{cid}: {closure} with no valid_to")
+            else:
+                if as_date(vt, "valid_to") > today_d:
+                    errors.append(f"{cid}: valid_to {vt} is in the future — a "
+                                  f"validity record is not a forecast")
+                if as_date(vt, "valid_to") < as_date(vf, "valid_from"):
+                    errors.append(f"{cid}: valid_to {vt} precedes valid_from {vf}")
+            if closure == "ended" and r.get("tier") == "none":
+                errors.append(f"{cid}: `ended` on evidence tier 'none' is a "
+                              f"lapse, not an ending")
+        if closure in CLOSED and not r.get("because"):
+            errors.append(f"{cid}: {closure} with no `because` — an expiry that "
+                          f"does not say what closed the window cannot be audited")
+
+        for rel in r.get("pages", []):
+            if not (ROOT / rel).exists():
+                errors.append(f"{cid}: cites '{rel}', which does not exist")
+                continue
+            # The warning this ledger exists to be able to raise at all: the
+            # claim is closed and the page it lives on still declares itself
+            # active. Advisory, because a page can legitimately stay `active`
+            # on other evidence — but nothing could even ask before now.
+            if closure in CLOSED:
+                fm = read_frontmatter(ROOT / rel)
+                if fm.get("status") == "active":
+                    warnings.append(f"{cid}: closed ({closure}) but {rel} is "
+                                    f"still `status: active` — check the page "
+                                    f"still earns it")
+        if not r.get("source"):
+            warnings.append(f"{cid}: no source recorded")
+
+    # Drift: the projection and the page are derived, so either being behind the
+    # log means somebody hand-edited a generated file or skipped the generator.
+    if PROJECTION.exists():
+        try:
+            if json.loads(PROJECTION.read_text(encoding="utf-8")) != state:
+                errors.append("claims/claims.json has drifted from the log — "
+                              "run `bin/wiki-claims page`")
+        except json.JSONDecodeError:
+            errors.append("claims/claims.json is not valid JSON")
+    elif events:
+        errors.append("claims/claims.json is missing — run `bin/wiki-claims page`")
+    if PAGE.exists():
+        if _strip_dates(PAGE.read_text(encoding="utf-8")) != _strip_dates(render_page(state)):
+            errors.append(f"{PAGE.relative_to(ROOT)} has drifted from the log — "
+                          f"it is generated, so rerun `bin/wiki-claims page` "
+                          f"rather than editing it")
+    elif events:
+        errors.append(f"{PAGE.relative_to(ROOT)} is missing — run "
+                      f"`bin/wiki-claims page`")
+
+    for w in warnings:
+        print(f"WARN  {w}")
+    for e in errors:
+        print(f"ERROR {e}")
+    c = state["counts"]
+    print(f"wiki-claims: {len(errors)} errors, {len(warnings)} warnings · "
+          f"{c['claims']} claims, {c['ongoing']} ongoing, {c['ended']} ended, "
+          f"{c['lapsed']} lapsed")
+    return 1 if errors else 0
+
+
+def cmd_status(args):
+    state = project(read_log())
+    c = state["counts"]
+    print(f"wiki-claims — {c['claims']} claim(s): {c['ongoing']} ongoing, "
+          f"{c['ended']} ended, {c['lapsed']} lapsed, "
+          f"{c['superseded']} superseded, {c['voided']} voided")
+    print(f"  log        claims/events.jsonl")
+    print(f"  analysis   claims/SUMMARY.md")
+    print(f"  public     wiki/meta/claim-validity.md")
+    print(f"\n  bin/wiki-claims scan     what the corpus says is worth recording")
+    print(f"  bin/wiki-claims asof D   what the record held true on a day")
+    return 0
+
+
+def cmd_vocab(args):
+    for title, table in (("CLAIM KINDS", CLAIM_KINDS), ("CLOSURES", CLOSURES),
+                         ("EVIDENCE TIERS", EVIDENCE_TIERS)):
+        print(f"\n{title}")
+        for k, v in table.items():
+            print(f"  {k:<20} {v}")
+    return 0
+
+
+def main():
+    ap = argparse.ArgumentParser(
+        prog="wiki-claims", description=__doc__.split("\n")[0],
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = ap.add_subparsers(dest="cmd")
+
+    p = sub.add_parser("record", help="enter a claim and its validity window")
+    p.add_argument("claim")
+    p.add_argument("--kind", required=True)
+    p.add_argument("--valid-from", required=True)
+    p.add_argument("--tier", default="first_party_record")
+    p.add_argument("--subject", default="self")
+    p.add_argument("--evidence", default="")
+    p.add_argument("--pages", nargs="*", default=[])
+    p.add_argument("--source", default="")
+    p.add_argument("--note", default="")
+    p.set_defaults(fn=cmd_record)
+
+    p = sub.add_parser("expire", help="close a window: --closure ended|lapsed")
+    p.add_argument("id")
+    p.add_argument("--closure", required=True)
+    p.add_argument("--on", help="the dated ending (`ended` only)")
+    p.add_argument("--last-seen", help="date the record goes quiet (`lapsed` only)")
+    p.add_argument("--tier", default="first_party_record")
+    p.add_argument("--because", default="", help="what closed the window")
+    p.add_argument("--revise", action="store_true")
+    p.add_argument("--reason", default="")
+    p.set_defaults(fn=cmd_expire)
+
+    p = sub.add_parser("supersede", help="replace a claim with a later one")
+    p.add_argument("id")
+    p.add_argument("--claim", required=True)
+    p.add_argument("--on", required=True)
+    p.add_argument("--tier", default="first_party_record")
+    p.add_argument("--because", default="")
+    p.add_argument("--source", default="")
+    p.set_defaults(fn=cmd_supersede)
+
+    p = sub.add_parser("void", help="withdraw a record that should not be one")
+    p.add_argument("id")
+    p.add_argument("--reason", default="")
+    p.set_defaults(fn=cmd_void)
+
+    p = sub.add_parser("list", help="the record")
+    p.add_argument("--closure")
+    p.add_argument("--kind")
+    p.set_defaults(fn=cmd_list)
+
+    p = sub.add_parser("show", help="one claim in full")
+    p.add_argument("id")
+    p.set_defaults(fn=cmd_show)
+
+    p = sub.add_parser("asof", help="what the record held true on a given day")
+    p.add_argument("date")
+    p.set_defaults(fn=cmd_asof)
+
+    p = sub.add_parser("live", help="live claims, optionally for one page")
+    p.add_argument("page", nargs="?")
+    p.set_defaults(fn=cmd_live)
+
+    p = sub.add_parser("scan", help="structural candidates from the corpus")
+    p.add_argument("--limit", type=int, default=15)
+    p.set_defaults(fn=cmd_scan)
+
+    for name, fn, helptext in (
+        ("page", cmd_page, "regenerate the projection, summary and wiki page"),
+        ("rebuild", cmd_rebuild, "alias for page"),
+        ("check", cmd_check, "the gate"),
+        ("status", cmd_status, "the standing state"),
+        ("vocab", cmd_vocab, "every kind, closure and evidence tier"),
+    ):
+        q = sub.add_parser(name, help=helptext)
+        q.set_defaults(fn=fn)
+
+    args = ap.parse_args()
+    if not getattr(args, "fn", None):
+        return cmd_status(args)
+    return args.fn(args)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

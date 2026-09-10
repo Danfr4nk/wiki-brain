@@ -1,0 +1,122 @@
+
+---
+domain: people
+page_type: entity
+status: active
+knowledge: mixed
+date_created: 2026-07-19
+date_modified: 2026-07-19
+date_range_start: 2012-02-01
+date_range_end: 2025-10-06
+sources:
+  - "raw/self/message-csv/interspersed_messages.csv"
+  - "raw/self/dox-scan/all_imessages_complete_dump.txt"
+  - "raw/self/facebook/facebook-ihatedanfrank/messages/inbox/mattdunn_abk0dttjqa/message_1.html"
+  - "raw/self/captures/2026-07-19_operator-note-full-sail-mohler.md"
+tags: [career, digital-footprint, relationships]
+infobox:
+  name: "Matt Dunn"
+  sex: male
+  relationship_to_dan: friend
+  location: remote
+  handles: ["Facebook Messenger"]
+  known_for: "Full Sail-era friend, affectionately abused as 'the world's most annoying man woman or child'; the running $5 birthday Venmo-request bit with Eric Jester; witness to the 2022 Oscar Lindquist coincidence"
+connections:
+  - page: wiki/people/jason-bermejo
+    type: co-occurs
+    claim: "Dunn is named alongside Jester and Mohler in Jason's own Sept/Oct 2025 exchanges, confirming the four-person Full Sail cohort from a second independent thread."
+  - page: wiki/people/eric-jester
+    type: co-occurs
+    claim: "The annual $5 birthday Venmo request — 'Of course I pay it' — is the cohort's longest-running documented bit, corroborated identically from both Eric's and Jason's threads a year apart."
+  - page: wiki/timeline/periods/full-sail-2008-2010
+    type: instance-of
+    claim: "Dunn is the fourth named member of the Full Sail friend group that survives, in reduced-contact form, fifteen-plus years after Orlando."
+  - page: wiki/timeline/periods/full-sail-2008-2010
+    type: component-of
+    claim: "Dunn is the cohort's fourth member and its longest-running bit — an annual $5 birthday Venmo request Eric has paid without fail for years."
+  - page: wiki/people/oscar-lindquist
+    type: co-occurs
+    claim: "The 2022 Manhattan-restaurant coincidence Dan told Dunn in real time ('guess who sits down in my section') is the same event this thread's own final message anticipates nothing of — Oscar's side of the reunion is undocumented, only Dan's telling of it survives."
+  - page: wiki/people/jamie-mohler
+    type: co-occurs
+    claim: "Jamie is named alongside Dunn and Jester in the same 2025 exchanges — the fourth member of the same Full Sail cohort."
+---
+
+# Matt Dunn
+
+Matt Dunn is a Full Sail-era friend Dan has never stopped ribbing:
+Jason Bermejo's contemporaneous verdict, preserved on
+[[wiki/people/jason-bermejo|Jason's own page]], is "world's most
+annoying man woman or child," and Dan's own 2025 one-line review —
+delivered to Jason, not to Dunn — is blunter still: "Dunn = gross and
+forgettable." A short, decade-spanning Facebook Messenger thread
+survives directly with Dunn (6 messages, February 2012 – March 2022) —
+sparse, but real, and it happens to carry the corpus's best account of
+one of the wiki's stranger coincidences.
+
+## The Oscar Lindquist coincidence, dated
+
+[[wiki/people/jason-bermejo|Jason's page]] already preserved the bare
+fact — Dan ran into an old Florida friend, Oscar Lindquist, while
+waiting tables in Manhattan, an "impossible coincidence in a 9M-person
+city." The Dunn thread supplies the date and Dan's live reaction: on
+March 5, 2022, at 9:57 PM, Dan tells Dunn "So I'm waiting tables in
+midtown Manhattan and guess who sits down in my section," names him
+the next minute ("Oscar motherfuckin lindquist"), and Dunn's delighted
+reply the following day — "SHUT UP OSCAR" — is the thread's whole
+payoff. [[wiki/people/oscar-lindquist|Oscar's own Facebook thread]]
+independently confirms the two men knew each other from the Full Sail
+years (an August 2011 exchange places them coordinating around
+Hurricane Irene), closing the loop on how Dan and Oscar were connected
+in the first place.
+
+An earlier fragment (February 1, 2012) — "found this on my computer
+rofl," Dunn's reply "Hahaha no doubt tue best thing to ever be written
+on the board" — preserves an in-joke whose referent (a photo, evidently
+attached) is lost to the export; a March 19, 2013 "missed video chat"
+notice is the thread's only other surviving row.
+
+## What the wider record shows
+
+The earliest dated sighting outside this thread is November 16, 2018,
+in Eric's thread:
+"Dunn is down in that neighborhood right now. He was texting me about
+t.… He was snapping me videos of full sail earlier" — Dunn back at the
+Orlando campus itself, seven years after the cohort's own attendance
+window, sending Eric nostalgia footage unprompted. It is the thread's
+only glimpse of Dunn as an active, present person rather than a
+punchline.
+
+The cohort's longest-running bit is the **annual birthday Venmo
+request**: Eric's April 2025 thread confirms it from the receiving end
+— "Lol does Dunn Venmo request you every year on his birthday? …
+Every damn year. And it's always $5. Of course I pay it" — and Dan's
+own October 2025 aside to Jason, delivered as a household-name fact
+requiring no explanation, treats the same bit as common cohort
+knowledge. The joke's durability (running, on Eric's account, for
+years without a single skipped birthday) is the clearest evidence the
+friendship — mocked constantly, abandoned never — has actually held.
+
+Dunn surfaces once more in the October 6, 2025 Jason exchange that also
+corrects the record on Jamie Mohler (see
+[[wiki/people/jamie-mohler]]): asked whether Dan's mother remembers his
+old Florida friends, Dan ranks the cohort — "Jester = forgettable /
+Dunn = gross and forgettable / Mohler = a literal woman" — the running
+insult format the group uses on itself, in which "forgettable" plainly
+does not mean forgotten.
+
+## Corpus record
+
+| Metric | Value |
+|---|---|
+| Direct messages (Facebook Messenger) | 6, Feb 2012 – Mar 2022 |
+| Mentions, third-party threads | 4 (Eric Jester ×2, Jason Bermejo ×2) |
+| Date range, all sources | 2012-02-01 – 2025-10-06 |
+
+**Gaps:** no phone number or iMessage thread for Dunn exists in the
+corpus, only the Facebook thread; his current occupation, location, and
+life circumstances are undocumented. Whether he still uses Venmo to
+extract the annual $5 in years not covered by Eric's snapshot is
+unconfirmed but, given the pattern's described consistency, likely.
+
+

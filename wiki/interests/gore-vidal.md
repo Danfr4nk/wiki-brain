@@ -1,0 +1,76 @@
+
+---
+domain: interests
+page_type: entity
+status: active
+date_created: 2026-07-16
+date_modified: 2026-08-19
+sources:
+  - "raw/self/dox-md/CATO_BOOTLOADER_DANFRANK.md"
+  - "raw/self/dox-scan/all_imessages_complete_dump.txt"
+  - "raw/self/message-csv/imessages_2124702449_last6months.csv"
+  - "raw/self/gemini-activity/Gemini Activity.html"
+related:
+  - wiki/interests/favorites/books
+  - wiki/mind/profile/deviance-mapping
+  - wiki/interests/favorites/music/artists/fall-out-boy
+
+tags: [ideology, politics, personality-profile]
+connections:
+  - page: wiki/mind/synthesis/the-cato-seat
+    type: component-of
+    claim: "Vidal is the type specimen of the corpus's one identification figure: right about the empire for fifty years, changed nothing, and used as a litmus test on strangers — so recognising him is recognising the seat rather than sharing a politics."
+  - page: wiki/interests/roman-republic
+    type: parallels
+    claim: "Vidal is the earlier Rome-and-empire fixation; the 2024 binge re-runs the same imperial-decline preoccupation through history rather than fiction."
+---
+
+# Gore Vidal
+
+American writer, essayist, and public intellectual (1925–2012) — author
+of the *Narratives of Empire* historical-fiction series, a relentless
+critic of American imperialism and the national-security state, and one of
+the sharpest deadpan polemicists of the postwar period. Dan lists Vidal
+among the heroic figures he identifies with, and Vidal recurs in two
+concrete, verifiable ways in the corpus: as a personal litmus test for
+other people, and as a literal object in his living space.
+
+## The litmus test
+
+In the Cato bootloader document — a profile of how Dan sorts people — one
+of the stated filters is: "Have they heard of DJ Shadow or read Gore
+Vidal?" Vidal functions here as a cultural-literacy gate: not a trivia
+question but a quick way to see whether someone shares the
+intellectual-reference frame Dan considers default. That he is named in
+the same breath as a music producer (DJ Shadow) shows the two sit on one
+axis for him — taste as a test of kinship.
+
+## The bookshelf, and the groomsmen bit
+
+Vidal is physically present in Dan's life as books. In a 2025 text about a
+visit he exclaimed "OMG he's got the gore vidal historical fiction series"
+and noted "those gore vidal books are all the way on the left of the book
+shelf" (2025-05-29/30) — i.e., he registers and locates the *Narratives of
+Empire* set by shelf position, the way someone tracks their own library.
+Earlier that month, a hypothetical-groomsmen joke listed "the ghost of
+gore vidal" alongside "a bag of cocaine, the first 3 fall out boy albums"
+(2025-05-05) — Vidal slotted in, deadpan, as a member of the ideal wedding
+party. The humor depends on Vidal being a known constant, not a random
+name.
+
+## Why this belongs
+
+Vidal is another "unutilized for its actual purpose" gap: there is no
+favorites/books entry for him, yet he operates as (a) an identity
+anchor in the heroic-figures list (Bernie Sanders, Hunter S. Thompson,
+Henry Rollins, John Brown, Fred Hampton, Eugene Debs — and Vidal), (b) a
+social sorting key, and (c) a literal shelf object. The meaning — a
+self-identified democratic-socialist who reaches for a patrician gay
+anti-imperialist essayist as a touchstone — is load-bearing for the
+ideology profile and was simply not logged.
+
+## Related
+
+[[wiki/interests/favorites/books]] · [[wiki/mind/profile/deviance-mapping]] · [[wiki/interests/favorites/music/artists/fall-out-boy]]
+
+

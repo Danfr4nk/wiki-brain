@@ -1,0 +1,126 @@
+
+---
+domain: mind
+page_type: concept
+title: "Developmental Origins"
+status: stable
+date_created: 2026-07-14
+date_modified: 2026-07-19
+knowledge: mixed
+sources:
+  - raw/self/dox-scan/Dan Profile.txt
+  - raw/self/context-core/CONTEXT_CORE_EXPANDED.md
+tags: [relationships, attachment, family, trauma-bond, personality-profile]
+connections:
+  - page: wiki/timeline/events/bald-eagle-cummings
+    type: caused-by
+    claim: "The first sexual event in the record is a public failure followed by a year of being renamed for it by older students — exposure and humiliation arriving in the same instant, three to four years before the November 2005 hinge this cluster is built around."
+  - page: wiki/people/rick-frank
+    type: caused-by
+    claim: "The November 2005 rupture on the paternal line is the cluster's named hinge event — the dossier's claim is that it encoded the axiom 'intimacy is a precursor to abandonment' that operates underneath the whole arrangement history."
+  - page: wiki/people/suzanne-frank
+    type: caused-by
+    claim: "Suz's affair with the shared dealer during Rick's treatment is the second half of the 2005 rupture — the maternal side of the event the dossier treats as the psychosexual system's origin point."
+  - page: wiki/mind/profile/enneagram-5w4
+    type: parallels
+    claim: "The sx/sp instinctual-stacking account arrives at the same fusion-or-annihilation prediction from an independent typological framework — three-frame convergence is this cluster's strongest corroboration."
+  - page: wiki/timeline/periods/full-sail-2008-2010
+    type: co-occurs
+    claim: "The 2005–2010 'Neuroemotional Imprinting Era' — the emo/pop-punk template of intense, tragic, doomed devotion — runs through and closes with the Full Sail period."
+  - page: wiki/mind/psychosexual/orchestration-and-voyeurism
+    type: contextualizes
+    claim: "The 2005 axiom offers the cluster's causal reading of the director stance: if closeness reliably precedes loss, authoring the loss in advance is more survivable than being chosen or kept — dossier interpretation, not Dan's own claim."
+  - page: wiki/mind/psychosexual/arrangement-history
+    type: precedes
+    claim: "Both origin accounts predate the earliest documented arrangement instance by roughly a decade — this page is the before, arrangement-history is the after."
+
+---
+
+# Developmental Origins
+
+The dossier material traces the psychosexual system to two separate
+sources: a single hinge event in adolescence that set the emotional
+baseline for intimacy, and a multi-year cultural imprinting period that
+supplied the aesthetic template for what intense romantic/sexual
+connection was supposed to feel like. Both predate the earliest
+documented instance in [[wiki/mind/psychosexual/arrangement-history]] by
+roughly a decade.
+
+## The 2005 axiom
+
+The November 2005 parental rupture — [[wiki/people/rick-frank|Rick]]'s
+cocaine-rehab disclosure followed by [[wiki/people/suzanne-frank|Suz]]'s
+affair with his dealer during his treatment — is already established
+elsewhere in the wiki as the single most load-bearing event in Dan's
+psychological record ([[wiki/mind/concepts/attachment-model]]). The
+dossier's specific claim for this cluster is narrower: that the event
+encoded a foundational axiom — "intimacy is a precursor to abandonment,
+loyalty is conditional, emotional security is an illusion" — that
+functions as the operating assumption underneath the arrangement history
+rather than merely coloring it. Read against
+[[wiki/mind/psychosexual/orchestration-and-voyeurism]], this offers one
+possible account of why control-through-authorship (arranging what
+happens, rather than depending on being chosen or kept) might function as
+a more survivable structure than conventional exclusive intimacy: if
+closeness reliably precedes loss, a structure where the loss is
+pre-authorized and staged by Dan himself removes the unpredictability that
+the 2005 rupture made intolerable. This is the dossier's interpretation,
+not a claim made anywhere by Dan himself in the primary record.
+
+## The 2005–2010 imprinting era
+
+Separately, the dossier names a five-year "Neuroemotional Imprinting Era"
+running from the 2005 rupture through the [[wiki/timeline/periods/full-sail-2008-2010|Full Sail period]]
+in Orlando: "deep, obsessive identification with emo/pop-punk music" —
+the same genre cluster independently documented as a lifelong favorites
+concentration — read here specifically as seeding "core relational
+expectations: intense, tragic, aesthetically rich, ultimately doomed."
+The claim is that the genre's own romantic template (grand, doomed,
+performatively intense devotion) became the aesthetic standard against
+which real relationships were measured, ahead of and independent of any
+actual relationship experience. The dossier also names a secondary
+channel for the same imprinting: intense engagement with the NYC
+stand-up comedy scene starting in 2019 (Aaron Berg, Tim Dillon, Mark
+Normand and similar acts), described as adding "a neural overlay of
+masculine power/comedy/humiliation dynamics" on top of the earlier
+musical template — a later addition to the same underlying pattern rather
+than a separate origin.
+
+## The instinctual-stacking account
+
+A third, more structural account comes from the Enneagram material
+already established on [[wiki/mind/profile/enneagram-5w4]]: the sx/sp
+(sexual-first, social-blind) instinctual stacking, independently derived
+from a different diagnostic framework than the two accounts above,
+describes a "fusion-or-annihilation" relational mode in which "intimacy is
+nuclear" — pursued with total intensity under extreme internal control.
+Unlike the 2005-axiom and imprinting-era accounts, which are historical
+narratives about how the pattern formed, the sx/sp account is a
+structural claim about how the pattern operates regardless of origin. All
+three accounts converge on the same behavioral prediction — total,
+high-control, high-intensity engagement rather than casual or diffuse
+intimacy — from three different theoretical starting points (attachment
+trauma, cultural imprinting, instinctual typology), which is the strongest
+form of corroboration this cluster has to offer, even though none of the
+three is independently verified against a clinical or third-party
+standard.
+
+## Reading these three accounts together
+
+None of the three explanations is exclusive, and the corpus does not rank
+them — they're presented across different source documents as parallel,
+non-competing frames. The practical value of holding all three is that
+they predict the same downstream behavior from different mechanisms,
+which is a stronger form of evidence than any one of them alone, even
+though none is independently verified against a clinical or third-party
+standard: this remains self-reported and AI-co-authored material, subject
+to the same provenance caveats as the rest of [[wiki/mind/psychosexual/index]].
+
+**Gaps:** no primary source documents Dan explicitly connecting the 2005
+rupture, the emo/pop-punk imprinting era, or the sx/sp instinctual
+stacking to the arrangement history himself — all three linkages are
+dossier-authored synthesis. The comedy-scene "masculine power/comedy/
+humiliation" overlay claim in particular has no elaboration beyond the
+one sentence in the source material.
+
+

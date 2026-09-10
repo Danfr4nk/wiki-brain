@@ -1,0 +1,379 @@
+#!/usr/bin/env python3
+"""mine-tweets — corpus mining over the @danfrank twitter/X archive.
+
+Pure stdlib. The instrument behind the mined claims on wiki/self/twitter and
+every page that cites a tweet, kept in the repo so each figure is reproducible
+rather than asserted.
+
+Why this exists rather than grep
+--------------------------------
+`raw/self/twitter/archive.jsonl` is 2,525 originals over seventeen years, and
+five properties of it make a naive grep silently wrong:
+
+1.  **Two sources with different fidelity.** 1,427 rows come from the operator
+    spreadsheet and 1,098 from a live X scrape. Engagement (likes/replies/
+    reposts) is null on 122 rows, and the nulls are not spread evenly — they
+    concentrate in the live scrape. A mean over 2,403 rows must never be able
+    to look like a mean over 2,525, so every engagement figure this tool prints
+    carries the share of rows it was computed from.
+2.  **An @handle is three different acts.** A tweet opening `@alexisarmel` is
+    Dan addressing her; the same handle mid-sentence is him mentioning her to
+    somebody else; `RT @user:` is him quoting them. Counting all three together
+    turns "who does he talk to" into "whose name appears", which are different
+    questions with different answers — @diplo is 10 mentions but only 4
+    addresses, @ericjester is 22 and 20. `handle` separates them.
+3.  **129 rows are truncated** where a t.co link was cut — 114 ending in the
+    ellipsis glyph and 15 in three ASCII periods, which are different
+    characters and were counted as 114 until a backend export caught it. Any
+    word count, last-word or sentence-final analysis is wrong on those rows, so
+    `stats` reports them and excludes them from length figures.
+4.  **A refrain repeats.** "2024 year of the dragon" appears 19 times across
+    eight months of 2024 — 7.4% of that year's originals. It is a real
+    recurring post, not an export artifact, so it is never dropped silently;
+    `stats` names any text posted 3+ times and `--distinct` collapses them when
+    the question is "how many distinct things did he say".
+5.  **Six rows have empty text** where the spreadsheet dropped the content. A
+    2026-09-02 backend fetch showed none of the six is actually empty live:
+    two are emoji-only, three are a bare t.co plus photos, and one is a quote
+    of Dan's own earlier tweet. They count as volume and carry nothing to read
+    *here*, which is a property of this export rather than of the posts.
+
+Two further limits are properties of the archive rather than of this tool, and
+no flag fixes them. Pure reposts carrying no text of Dan's are excluded by the
+archive's own inclusion rule, so *every* volume figure here is originals-only:
+"quiet in 2020" means quiet in things he wrote. And the shortener domains —
+t.co, bit.ly, twitpic, yfrog, 4sq — are dead or opaque, so a link is evidence
+that he shared something, never a retrievable record of what.
+
+Timestamps are UTC in the archive. `hours` converts to Eastern; nothing else does.
+
+Subcommands
+-----------
+  stats                 headline counts, coverage, and the traps above
+  years                 per-year volume with its source split and metric coverage
+  grep <pattern>        dated matching tweets, oldest first (regex, case-insensitive)
+  handle [name]         @mentions split into address / mention / RT-quote
+  entities              handles, hashtags and link domains by frequency
+  timeline <pattern>    per-year histogram of a pattern, against total volume
+  hours                 time-of-day profile (Eastern)
+  top [n]               highest-engagement tweets, live-scraped rows only
+"""
+import argparse, collections, datetime, json, os, re, sys
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SRC = os.path.join(ROOT, "raw", "self", "twitter", "archive.jsonl")
+
+HANDLE = re.compile(r"@(\w+)")
+LEAD_HANDLE = re.compile(r"^\s*@(\w+)")
+RT_QUOTE = re.compile(r"^\s*RT\s+@(\w+)", re.I)
+HASHTAG = re.compile(r"#(\w+)")
+DOMAIN = re.compile(r"https?://([^/\s]+)")
+WORD = re.compile(r"[A-Za-z][A-Za-z'\-]*")
+REFRAIN_MIN = 3          # a text posted this many times is named rather than hidden
+
+
+def load(path=SRC):
+    if not os.path.exists(path):
+        sys.exit(f"mine-tweets: no archive at {path}")
+    rows = []
+    for n, line in enumerate(open(path, encoding="utf-8"), 1):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            rows.append(json.loads(line))
+        except json.JSONDecodeError as e:
+            sys.exit(f"mine-tweets: {path}:{n}: {e}")
+    rows.sort(key=lambda r: r["created_at"])
+    return rows
+
+
+def year(r):
+    return r["created_at"][:4]
+
+
+def truncated(r):
+    """A row whose text was cut where a link used to be.
+
+    Both endings occur and they are different characters: 114 rows end in the
+    ellipsis glyph U+2026 and 15 end in three ASCII periods. Matching only the
+    glyph — as this function did until 2026-09-02 — silently undercounts by 15
+    and lets those rows into the length figures.
+    """
+    t = r["text"].rstrip()
+    return t.endswith("\u2026") or t.endswith("...")
+
+
+def refrains(rows, minimum=REFRAIN_MIN):
+    """Texts posted `minimum` or more times, with their span. Never dropped silently."""
+    seen = collections.defaultdict(list)
+    for r in rows:
+        t = r["text"].strip()
+        if t:
+            seen[t].append(r)
+    out = [(t, rs) for t, rs in seen.items() if len(rs) >= minimum]
+    return sorted(out, key=lambda x: -len(x[1]))
+
+
+def distinct(rows):
+    """One row per distinct text, keeping the earliest. Empties are kept as-is."""
+    first, out = {}, []
+    for r in rows:
+        t = r["text"].strip()
+        if not t:
+            out.append(r)
+            continue
+        if t not in first:
+            first[t] = r
+            out.append(r)
+    return sorted(out, key=lambda r: r["created_at"])
+
+
+def coverage(rows, field):
+    n = sum(1 for r in rows if r.get(field) is not None)
+    return n, len(rows)
+
+
+def cov_note(n, total):
+    if not total:
+        return "no rows"
+    return f"{n}/{total} rows ({100.0 * n / total:.1f}%)"
+
+
+def mean(rows, field):
+    vals = [r[field] for r in rows if r.get(field) is not None]
+    return (sum(vals) / len(vals)) if vals else None
+
+
+# ---------------------------------------------------------------- subcommands
+
+def cmd_stats(rows, args):
+    if args.distinct:
+        rows = distinct(rows)
+        print("(--distinct: repeated texts collapsed to first posting)\n")
+    print(f"originals            {len(rows)}")
+    print(f"span                 {rows[0]['created_at'][:10]} -> {rows[-1]['created_at'][:10]}")
+    src = collections.Counter(r["source"] for r in rows)
+    for k, v in src.most_common():
+        print(f"  {k:22s} {v}")
+    print()
+    empty = [r for r in rows if not r["text"].strip()]
+    trunc = [r for r in rows if truncated(r)]
+    print(f"empty text           {len(empty)}   (image/link-only; count as volume, carry no text)")
+    print(f"truncated (t.co cut) {len(trunc)}   (excluded from the length figures below)")
+    readable = [r for r in rows if r["text"].strip() and not truncated(r)]
+    wl = [len(WORD.findall(r["text"])) for r in readable]
+    if wl:
+        wl_sorted = sorted(wl)
+        print(f"words/tweet          mean {sum(wl)/len(wl):.1f}  median {wl_sorted[len(wl)//2]}  "
+              f"max {max(wl)}   over {cov_note(len(readable), len(rows))}")
+    print()
+    for f in ("likes", "replies", "reposts"):
+        n, t = coverage(rows, f)
+        m = mean(rows, f)
+        ms = f"mean {m:.2f}" if m is not None else "no data"
+        print(f"{f:9s} {ms:14s} over {cov_note(n, t)}")
+    print()
+    reps = refrains(rows)
+    if reps:
+        print(f"refrains (posted {REFRAIN_MIN}+ times) — real recurring posts, not artifacts:")
+        for t, rs in reps[:10]:
+            span = f"{rs[0]['created_at'][:10]}..{rs[-1]['created_at'][:10]}"
+            print(f"  x{len(rs):<3d} {span}  {t[:60]}")
+    else:
+        print("no text posted 3+ times")
+
+
+def cmd_years(rows, args):
+    by = collections.defaultdict(list)
+    for r in rows:
+        by[year(r)].append(r)
+    print(f"{'year':6s} {'orig':>5s} {'distinct':>9s} {'sheet':>6s} {'live':>5s} "
+          f"{'w/likes':>8s} {'mean L':>7s}")
+    for y in sorted(by):
+        rs = by[y]
+        d = len(distinct(rs))
+        sheet = sum(1 for r in rs if r["source"] == "operator-spreadsheet")
+        live = sum(1 for r in rs if r["source"] == "live-x-scrape")
+        n, t = coverage(rs, "likes")
+        m = mean(rs, "likes")
+        ms = f"{m:.2f}" if m is not None else "-"
+        print(f"{y:6s} {len(rs):5d} {d:9d} {sheet:6d} {live:5d} "
+              f"{n:4d}/{t:<3d} {ms:>7s}")
+    print(f"\n{'total':6s} {len(rows):5d} {len(distinct(rows)):9d}")
+    print("\ndistinct < orig means a text was posted more than once that year; "
+          "see `stats` for which.")
+
+
+def cmd_grep(rows, args):
+    try:
+        pat = re.compile(args.pattern, 0 if args.case else re.I)
+    except re.error as e:
+        sys.exit(f"mine-tweets: bad regex: {e}")
+    hits = [r for r in rows if pat.search(r["text"])]
+    if args.year:
+        hits = [r for r in hits if year(r) == args.year]
+    for r in hits:
+        eng = ""
+        if r.get("likes") is not None:
+            eng = f"  [L{r['likes']} RT{r['reposts']}]"
+        print(f"{r['created_at'][:16].replace('T', ' ')}  {r['url']}{eng}")
+        print(f"    {r['text'].strip()}")
+        if r.get("quoted"):
+            print(f"    > quoting: {str(r['quoted'])[:160]}")
+        print()
+    print(f"-- {len(hits)} of {len(rows)} originals")
+
+
+def cmd_handle(rows, args):
+    addr, ment, rtq = collections.Counter(), collections.Counter(), collections.Counter()
+    years = collections.defaultdict(set)
+    for r in rows:
+        t = r["text"]
+        m = RT_QUOTE.match(t)
+        if m:
+            rtq[m.group(1).lower()] += 1
+        lead = LEAD_HANDLE.match(t)
+        if lead and not m:
+            addr[lead.group(1).lower()] += 1
+        for h in HANDLE.findall(t):
+            h = h.lower()
+            years[h].add(year(r))
+            if (lead and h == lead.group(1).lower()) or (m and h == m.group(1).lower()):
+                continue
+            ment[h] += 1
+    if args.name:
+        who = args.name.lstrip("@").lower()
+        pat = re.compile(r"@" + re.escape(who) + r"\b", re.I)
+        hits = [r for r in rows if pat.search(r["text"])]
+        print(f"@{who}: {len(hits)} tweets  |  {addr[who]} addressed  "
+              f"{ment[who]} mentioned  {rtq[who]} RT-quoted")
+        print(f"years: {', '.join(sorted(years[who])) or '-'}\n")
+        for r in hits:
+            kind = "ADDR" if LEAD_HANDLE.match(r["text"]) and \
+                LEAD_HANDLE.match(r["text"]).group(1).lower() == who else "ment"
+            print(f"{r['created_at'][:16].replace('T', ' ')} {kind}  {r['url']}")
+            print(f"    {r['text'].strip()}\n")
+        return
+    total = collections.Counter()
+    for c in (addr, ment, rtq):
+        total.update(c)
+    print(f"{'handle':22s} {'all':>4s} {'addr':>5s} {'ment':>5s} {'RT':>3s}  years")
+    for h, n in total.most_common(args.limit):
+        ys = sorted(years[h])
+        span = ys[0] if len(ys) == 1 else f"{ys[0]}-{ys[-1]}"
+        print(f"@{h:21s} {n:4d} {addr[h]:5d} {ment[h]:5d} {rtq[h]:3d}  {span} ({len(ys)}y)")
+    print("\naddr = tweet opens with the handle (he is talking TO them)")
+    print("ment = handle mid-text (he is talking ABOUT them, or to a thread)")
+
+
+def cmd_entities(rows, args):
+    tags, doms = collections.Counter(), collections.Counter()
+    tag_years, dom_years = collections.defaultdict(set), collections.defaultdict(set)
+    for r in rows:
+        for t in HASHTAG.findall(r["text"]):
+            tags[t.lower()] += 1
+            tag_years[t.lower()].add(year(r))
+        for d in DOMAIN.findall(r["text"]):
+            doms[d.lower()] += 1
+            dom_years[d.lower()].add(year(r))
+    print("hashtags")
+    for t, n in tags.most_common(args.limit):
+        ys = sorted(tag_years[t])
+        print(f"  #{t:24s} {n:4d}  {ys[0]}-{ys[-1]}" if len(ys) > 1
+              else f"  #{t:24s} {n:4d}  {ys[0]}")
+    print("\nlink domains  (shorteners are dead/opaque: evidence of sharing, not of what)")
+    for d, n in doms.most_common(args.limit):
+        ys = sorted(dom_years[d])
+        print(f"  {d:25s} {n:4d}  {ys[0]}-{ys[-1]}" if len(ys) > 1
+              else f"  {d:25s} {n:4d}  {ys[0]}")
+
+
+def cmd_timeline(rows, args):
+    try:
+        pat = re.compile(args.pattern, re.I)
+    except re.error as e:
+        sys.exit(f"mine-tweets: bad regex: {e}")
+    by_all, by_hit = collections.Counter(), collections.Counter()
+    for r in rows:
+        by_all[year(r)] += 1
+        if pat.search(r["text"]):
+            by_hit[year(r)] += 1
+    total = sum(by_hit.values())
+    print(f"/{args.pattern}/ — {total} hits over {len(rows)} originals\n")
+    peak = max(by_hit.values()) if by_hit else 0
+    for y in sorted(by_all):
+        h, a = by_hit[y], by_all[y]
+        bar = "#" * int(round(30 * h / peak)) if peak else ""
+        share = f"{100.0 * h / a:4.1f}%" if a else "   - "
+        print(f"  {y}  {h:4d}/{a:<4d} {share}  {bar}")
+
+
+def cmd_hours(rows, args):
+    by = collections.Counter()
+    for r in rows:
+        dt = datetime.datetime.fromisoformat(r["created_at"])
+        # archive is UTC; Eastern is UTC-5/-4. Use -5 and say so.
+        by[(dt - datetime.timedelta(hours=5)).hour] += 1
+    peak = max(by.values()) if by else 0
+    print("time of day, US Eastern (UTC-5 applied flat; DST not modelled)\n")
+    for h in range(24):
+        n = by[h]
+        bar = "#" * int(round(40 * n / peak)) if peak else ""
+        print(f"  {h:02d}:00  {n:4d}  {bar}")
+
+
+def cmd_top(rows, args):
+    live = [r for r in rows if r.get("likes") is not None]
+    print(f"highest engagement — over {cov_note(len(live), len(rows))} with metrics\n")
+    for r in sorted(live, key=lambda r: (-r["likes"], -(r["reposts"] or 0)))[:args.n]:
+        print(f"{r['created_at'][:10]}  L{r['likes']:<4d} RT{r['reposts']:<3d}  {r['url']}")
+        print(f"    {r['text'].strip()[:200]}\n")
+
+
+def main():
+    p = argparse.ArgumentParser(
+        prog="mine-tweets", description=__doc__.split("\n")[0],
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    p.add_argument("--src", default=SRC, help="archive jsonl (default: the twitter archive)")
+    sub = p.add_subparsers(dest="cmd", required=True)
+
+    s = sub.add_parser("stats", help="headline counts, coverage and traps")
+    s.add_argument("--distinct", action="store_true", help="collapse repeated texts")
+    s.set_defaults(fn=cmd_stats)
+
+    s = sub.add_parser("years", help="per-year volume, sources, metric coverage")
+    s.set_defaults(fn=cmd_years)
+
+    s = sub.add_parser("grep", help="dated matching tweets")
+    s.add_argument("pattern")
+    s.add_argument("--year")
+    s.add_argument("--case", action="store_true", help="case-sensitive")
+    s.set_defaults(fn=cmd_grep)
+
+    s = sub.add_parser("handle", help="@mentions split by act")
+    s.add_argument("name", nargs="?")
+    s.add_argument("--limit", type=int, default=40)
+    s.set_defaults(fn=cmd_handle)
+
+    s = sub.add_parser("entities", help="hashtags and link domains")
+    s.add_argument("--limit", type=int, default=30)
+    s.set_defaults(fn=cmd_entities)
+
+    s = sub.add_parser("timeline", help="per-year histogram of a pattern")
+    s.add_argument("pattern")
+    s.set_defaults(fn=cmd_timeline)
+
+    s = sub.add_parser("hours", help="time-of-day profile (Eastern)")
+    s.set_defaults(fn=cmd_hours)
+
+    s = sub.add_parser("top", help="highest-engagement tweets")
+    s.add_argument("n", nargs="?", type=int, default=15)
+    s.set_defaults(fn=cmd_top)
+
+    args = p.parse_args()
+    args.fn(load(args.src), args)
+
+
+if __name__ == "__main__":
+    main()

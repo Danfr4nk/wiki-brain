@@ -1,0 +1,89 @@
+
+---
+domain: timeline
+page_type: period
+status: archived
+date_created: 2026-06-22
+date_modified: 2026-07-18
+infobox:
+  name: 2025 Collapse
+  type: Period
+  period: 2024–2026
+  outcome: Relationship termination; housing transition
+  notes: Culmination documented in [[wiki/timeline/events/eli-incident|the Eli incident]]
+# Synthesis concepts injector pass 2026-06-23: expanded _18 section + added dedicated Bifurcated Daily OS + Decoupling/Grounding Paradox verbatim (cold data ledger/chat.db epistemic cross); migration/OS/work entropy ties. Cross all Gemini sources. See /tmp/gemini-concepts-injection.md.
+# 2026-06-23 _13 cross: 2012-2015 tenancy at 155 Virginia (w/Annie, pre-NYC) as precursor period; Suz ownership, neighborhood Bacharach link (Saratoga/VA), "texture file" exposure in 2025 read. Cross gemini-activity, people/jacob-bacharach, context-core.
+sources: [
+  "raw/self/dox-md/LIFE_EVENTS_CALENDAR.md",
+  "raw/self/context-core/CONTEXT_CORE_EXPANDED.md",
+  "raw/self/dox-md/LIFE REPORT.md",
+  "raw/self/dox-md/operating_manual.md",
+  "raw/self/message-csv/annie_all_time_logs.csv",
+  "raw/self/dox-md/BFS_BOOTLOADER_v2.md",
+  "raw/self/facebook/facebook-ihatedanfrank/",
+  "raw/self/gemini-activity/Gemini Activity.html",
+  "raw/self/dox-md/Gemini-_07.md",
+  "raw/self/dox-md/Gemini-_00.md",
+  "raw/self/dox-md/Gemini-_02.md"
+]
+related: [
+  "wiki/timeline/events/timeline",
+  "wiki/mind/synthesis/attachment-trauma-bond",
+  "wiki/people/annie-ulmer",
+  "wiki/people/eli",
+  "wiki/self/facebook",
+  "wiki/self/context-core",
+  "wiki/self/message-corpora/master-message-dump",
+  "wiki/mind/synthesis/vertical-authority-skepticism",
+  "wiki/mind/concepts/forensic-method",
+  "wiki/self/gemini-activity/gemini-activity"
+]
+tags: [ai-collaboration, nyc-era, trauma-bond, uniontown-era]
+connections:
+  - page: wiki/mind/synthesis/estate-money-spine
+    type: component-of
+    claim: "This period carries the spine's terminal accounting: the three-rotation earner see-saw, the 2026 broke status, and the PA return framed as escaping metropolitan financial drains."
+  - page: wiki/people/tom
+    type: supplied-by
+    claim: "Tom is the period's simultaneous crisis anchor and supply line; the dual role sets up the spring 2026 rupture."
+  - page: wiki/mind/concepts/bunker-core
+    type: contains
+    claim: "Bunker Core is named in Dan's own 2026 'Bifurcated Daily OS' self-description as one half of a two-track life this period documents in full — survival work alongside a self-built technical sovereignty stack."
+  - page: wiki/timeline/periods/feb-apr-2025-return-and-rupture
+    type: contains
+    claim: "The Feb-April 2025 window is this period's opening chapter at week-level granularity: the NYC apartment exit, Annie's unilateral move to her parents, and Suz's 2024 bankruptcy destabilizing the landing."
+  - page: wiki/mind/synthesis/message-circadian-latency
+    type: evidenced-by
+    claim: "The 41,278-message 2025 whole-corpus total — within 2% of the 2018 peak — gives this period its first precise volume figure, confirming the collapse year matched the deep-cycle year for raw output even as the content shifted from relationship crisis to relationship termination."
+---
+
+
+# 2025 Collapse
+
+**Date range:** 2025
+
+**Defining characteristics:** Terminal collapse, cheating accusations, burning rituals, Wall of Despair, drug procurement as bond, AI as salvation, high event volume leading to June 2026 closure.
+
+**Data profile:** 259 events (high). Relationship high, mental health, crisis. From annie_all_time_logs.csv (23k rows terminal extract): 12,255 msgs in 2025 alone (Dec peak 4,657); "eli" 388 mentions, "love you" 541, "goodbye"/"lying" 110/150. Massive Dec 2025 spike confirms reinvestment.
+
+**Key events:** Separation/tenderness Feb (Gemini profile locks: Separation Logistics, The Loop, The Betty Event, Signals + [[wiki/people/eli|Eli]] as Patient Zero), terminal Aug 2025, group chat closure 2026. Suzy call + blackout cascade (Jan 2026, _07): detailed 374-line forensic. Jan 4 ~19:00 speaker "Suzy" acoustic leak (NACK hangup <2s); Jan 8-9 Whisk wife-warning psyop stimulus; Jan 9-20 10-day total blackout of q48h Target G visitor (Grim Trigger per game theory Utility = P(s)·R_e - P(d)·C_d ; >95% prob matrix); vector separation from Eli/WhatsApp per user correction. Feb 1 "breach containment" trigger. 2025 msg volume: 12,255 in annie_all_time_logs (Dec spike 4,657); "eli" 388. Cross raw LIFE/operating for attachment/psych spine. Ties Au Za'atar contrast (_00/_02: Annie avatar reliability vs Dan alibi tenure). 2026 closure June per annie.md.
+
+**_18 Migration + 2026 OS Additions (tables first; sourced raw/self/dox-md/Gemini-_18.md):** "The Great Migration Loop: Terminated the New York residency paradigm in early 2025, executing a deliberate strategic re-entry into his native operating hub of Uniontown, Pennsylvania." "Driven by structural shifts in personal priorities, economic optimization strategies, and a focused return to native territory to manage regional assets." "Current 2026 Concurrent Daily OS": "Institutional/Corporate Interface: Managing high-volume counter operations, customer service logistics, and lottery infrastructure at [[wiki/work/bfs-foods|BFS Foods]] (initiated April 2026). * Physical Asset Management: Direct manual and logistical property preservation workflows. * Independent Digital Production: Ongoing deployment of localized agentic frameworks (`Bunker Core`), automation scripts, and the commercial execution of data assets via platforms like Gumroad (iMessage Analysis Toolkit, launched February 2026)." "Strategic Objective: The return to the native operating base is framed as a conscious tactical pivot: escaping systemic metropolitan financial drains to construct a high-autonomy, localized technical stack capable of generating data tools and maintaining operational insulation from mainstream institutional constraints."
+
+**Dedicated Gemini Concepts: Bifurcated Daily OS:** "The Bifurcated Daily OS" — Survival (BFS + Suzanne property) vs "High-Autonomy Technical Stack" (Bunker Core, Gumroad, zsh/sqlite3 chat.db forensics on ~/Library/Messages/chat.db for "Epistemic Verification" "cold-data ledger" + cognitive offload). Ties to prosthetic extension.
+
+**Dedicated: Decoupling/Grounding Paradox (verbatim):** "structural friction point ... zero-reliance philosophy and ... material dependence on ... Annie’s stable domestic framework and Suzanne’s real estate operations." Framed as "launchpad" providing "baseline security and financial runway" for digital fortress.
+
+Freqs cross: annie:22, suzanne:16, bunker:20, work:22, timeline:16. Cross _07 Grim Trigger Suzy blackout (Jan 2026 post-sep), work entropy _00/_02 (Annie avatar vs Dan tenure), node locks/_18 profile.
+
+**Financial substrate (final dossiers, added 2026-07-13):** the terminal-phase dependency structure — Dan controlling the drug supply while Annie was unemployed and dependent — was the latest of three rotations, per the accepted amendments: Dan funded the early NYC years; Dan worked through the 2023 landlord-debt accumulation while Annie was between jobs; Annie was sole earner through 2024 after Dan's involuntary Au Za'atar job loss (hours cut Jun–Aug 2024 to dodge unemployment obligations). See [[wiki/people/annie-ulmer]] "The money — quantified" for the hard number: across Cash App and Venmo Dan sent Annie on the order of **~$139K** and received back only **~$16–20K** — a net outflow to her of roughly **$119K–$123K** over the relationship (per operator-provided payment-app screenshots, 2026-07-15; two separate app ledgers, not a single summed total). The "funded" read is a six-to-one financial asymmetry in her favor. [[wiki/people/annie-ulmer]] and [[wiki/work/au-zaatar]]. Terminal-phase mechanism catalog (love-to-request ratio 187:4 — REVISED 2026-07-18, deflated by base-rate control, see the Annie page — 44 moral-debt pivots, 13 weaponized apologies, 12 uncared-for crisis statements) is detailed on the Annie page and [[wiki/mind/concepts/attachment-model]] / [[wiki/mind/concepts/conflict-architecture]].
+
+**Transition:** Into 2026 closure.
+
+**Cross-check:** Matches core Feb 2025 back to Uniontown, Aug 2025 terminal, June 1 2026 closure. LIFE REPORT details aura illness, tether. No contradiction. Re-mined: 259 2025 events (Aug30/Sep97/Oct58 peak), operating full collapse timeline, annie logs end, BFS post work power. FB groups/events cross. 
+
+**Related:** [[wiki/timeline/events/timeline]], [[wiki/mind/synthesis/attachment-trauma-bond]], [[wiki/timeline/periods/dec-2025-spike]]
+
+The cross-corpus structural read of this period — the housing clock, the precarity ledger, and the output-port recursion — is [[wiki/mind/synthesis/totality-themes]]; the period page holds the events, the synthesis holds the shape.
+
+

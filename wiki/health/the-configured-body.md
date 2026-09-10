@@ -1,0 +1,433 @@
+
+---
+domain: health
+page_type: synthesis
+title: "The Configured Body"
+aliases: ["specification not care", "the input clamp", "the deferred body", "body as instrument"]
+status: active
+knowledge: earned
+importance: high
+date_created: 2026-08-19
+date_modified: 2026-08-31
+sources:
+  - raw/self/dox-scan/all_imessages_complete_dump.txt
+  - raw/self/context-core/CONTEXT_CORE_EXPANDED.md
+  - raw/self/captures/2026-08-01_154556_picky-eater.md
+  - raw/self/dox-md/ADDICTION_PROFILE.md
+  - raw/self/dox-md/Breaking the anxiety avoidance cycle.md
+synthesizes:
+  - wiki/health/chemical-architecture
+  - wiki/health/cocaine
+  - wiki/health/hyperreflexivity
+  - wiki/interests/food-and-diet
+  - wiki/interests/extreme-sports
+  - wiki/mind/profile/big-five-psychometrics
+  - wiki/mind/synthesis/the-deferred-audit
+  - wiki/mind/synthesis/supply-network
+tags: [physical-health, addiction-recovery, mental-health, personality-profile]
+connections:
+  - page: wiki/health/chemical-architecture
+    type: contains
+    claim: "The stack is the input half of a two-sided rule: every substance in it is specified to the component and defended absolutely, which is the same faculty that refuses a sandwich with onion on it — and the page's own gap about prescriber information is closed here, because the 2025 messages show the Suboxone script has a prescribing doctor and the whole recorded relationship with him is routing."
+  - page: wiki/interests/food-and-diet
+    type: parallels
+    claim: "Food and the chemical stack are one behaviour measured in two domains: an absolute composition rule refusing any component he did not specify, enforced without negotiation, on a plate and in a bloodstream alike — which is why the food regime looks like pickiness and is actually the same clamp the substance architecture runs."
+  - page: wiki/health/hyperreflexivity
+    type: contains
+    claim: "Hyperreflexivity is the output half of this rule and its most expensive instance: a monitoring apparatus pointed at the body's legibility from outside, running continuously, generating the problems it watches for — surveillance without a maintenance arm attached to it."
+  - page: wiki/mind/synthesis/the-deferred-audit
+    type: instantiates
+    claim: "The body splits the provenance sort in half rather than sitting on one side of it: the configuration is chosen and gets the imposed-object treatment (preemptive, absolute, on contact), while the substrate underneath it is deferred exactly as a chosen object is — which is the first case in the corpus of one object running both clocks at once."
+  - page: wiki/health/cocaine
+    type: evidenced-by
+    claim: "The dosage arc is the rule's hardest number: 1g/day to 3.5-7g/day to 0.5-1g/day, tracking the inheritance's arrival and exhaustion with no health variable anywhere in the curve, which is what specification without maintenance looks like when the constraint is removed."
+  - page: wiki/interests/extreme-sports
+    type: evidenced-by
+    claim: "Six years of aggressive inline and terrain-park skiing establish that the relationship to the body was never absent, only differently aimed — a body trained toward a performance ceiling is still a body configured for output rather than kept in repair."
+  - page: wiki/mind/profile/big-five-psychometrics
+    type: evidenced-by
+    claim: "Self-Consciousness at 91 and Impulsiveness at 96 are the trait-level shape of this rule: continuous monitoring of how the body reads from outside, bolted to no braking mechanism on what goes into it."
+  - page: wiki/mind/synthesis/supply-network
+    type: contradicts
+    claim: "That page treats Tom as the standing supply line for Suboxone; the June 2025 messages show a prescribing doctor as the primary route and Tom as the failover invoked when an out-of-state script could not be filled, which reverses the architecture's default path and makes the May 2026 withdrawal a second-line failure rather than a first-line one."
+  - page: wiki/mind/synthesis/2020-left-turn
+    type: causes
+    claim: "The page dates the radicalization to a media-and-reading pipeline and never quotes the material stake Dan names himself six months earlier: 'the doctor thing is a really big thing for me' and 'imagine being able to just go to the doctor or dentist when you need,' which is the body record supplying the personal grievance under the ideology."
+---
+
+# The Configured Body
+
+> **RE-CHECKED [2026-08-28]:** flagged stale against
+> [[wiki/mind/synthesis/the-deferred-audit]] (2026-08-28), which gained a
+> RE-CHECKED note tracing back to a `dormancy-not-exit` correction (a
+> five-day tenure figure reattributed from Franki Faris to Alexis Armel, a
+> 2013 Uniontown-era detail unrelated to chemical history). **No claim on
+> this page is affected.**
+
+> **RE-CHECKED [2026-08-31] — both chemical premises moved, and the movement
+> is on this page's side.** [[wiki/health/cocaine]] and
+> [[wiki/health/chemical-architecture]] both gained the intake ledger's first
+> measured night (2026-08-30/31: one 0.75 g cocaine unit over 9h 31m in six
+> doses, three 0.05 g cannabis units; the unit reconciled with nothing
+> unaccounted for, and four of the six cocaine doses were entered through a
+> one-tap preset that fills in 0.1 g, so the record is less exactly weighed than
+> its coverage figure suggests). Nothing in it touches the dosage arc this page cites,
+> and no claim here is withdrawn — but the *instrument* is worth naming, because
+> it is a new instance of the structure this page argues for rather than a
+> complication of it. Dan built a ledger that records the inputs to a tenth of a
+> gram, with a reconciliation step that refuses to close a unit while quantity
+> is unaccounted for. That is the specification mode and the monitoring mode
+> both, running at a new level of rigour. It produces no repair. A record this
+> precise about what goes in, kept by somebody with no primary care, no labs and
+> no dental in seventeen years, is the **missing middle mode stated in a new
+> register** — the body measured at the input and read at the output, and still
+> never serviced. Falsifier 2 is untouched: the ledger shows no dose changed for
+> a health reason, because it shows no dose changed for any stated reason at all.
+>
+> **Prediction 4 is not settled, but it is leaning.** It says any future "health
+> kick" in the record will be an input regime — a diet, a stack change, a
+> substance protocol — and never a course of treatment or a follow-up schedule.
+> The ledger is the first new self-directed bodily regime to enter the corpus
+> since that prediction was written, and it is an input-measurement regime with
+> no treatment arm anywhere in it. It is *not* squarely a health kick, which is
+> why this is a lean and not a resolution: it was built to hold the record
+> honest, not to improve anything. Recorded here so the next reader can settle
+> it rather than re-derive it.
+
+> **RE-CHECKED [2026-08-26]:** flagged stale against [[wiki/health/cocaine]]
+> (2026-08-26), which added a happiness-rate counter-measure to the same
+> dosage arc this page already cites (1g/day → 3.5–7g/day → 0.5–1g/day
+> tracking the inheritance). **The addition strengthens this page's claim
+> rather than complicating it** — the new finding shows the arc's peak
+> coincides with the corpus's lowest first-person happiness-claim rate, which
+> is a second variable absent from the curve alongside the health variable
+> this page already names. No claim withdrawn.
+
+> **RE-CHECKED [2026-08-23]:** flagged stale against
+> [[wiki/interests/food-and-diet]] and [[wiki/mind/synthesis/the-deferred-audit]]
+> (both 2026-08-23). **Both moved only by acquiring re-check notes** in a
+> cascade that began with a music-domain corpus search and an exit-declaration
+> re-derivation; no dietary, chemical, somatic or deferral claim on either page
+> changed. Nothing here is affected and no claim is withdrawn.
+
+> **RE-CHECKED [2026-08-22] — premise moved by a re-check block only.**
+> [[wiki/health/cocaine]] moved on 2026-08-22 solely by gaining a `RE-CHECKED`
+> blockquote confirming that a correction on
+> [[wiki/legal/2015-possession-arrest]] (about which magistrate heard the case)
+> left it undisturbed. No cocaine claim changed — not the residue quantity, not
+> the supply record, not the legal consequence — and this page reasons from those
+> claims rather than from the block. Nothing withdrawn.
+
+
+Dan's relationship to his own body has exactly two modes, and no third.
+He **specifies the inputs** — with a rigour that is close to absolute, down to
+which vegetables may touch a sandwich and which milligram of which molecule
+holds the floor — and he **monitors the outputs**, continuously and painfully,
+for how the result reads to other people. What is missing from a
+seventeen-year, 217,573-message record is the mode in between: **maintenance.**
+Nothing in this corpus is kept in repair. The body is not neglected in the
+ordinary sense of a person who does not think about it — it is one of the most
+intensively managed objects in the whole archive. It is managed the way an
+instrument is managed: configured at the input, read at the output, and never
+serviced.
+
+> **RE-CHECKED [2026-08-21] — three premises moved, none of them where this
+> page leans.** [[wiki/health/cocaine]] and [[wiki/mind/synthesis/supply-network]]
+> moved on 2026-08-21, [[wiki/mind/synthesis/the-deferred-audit]] on 2026-08-20.
+> All three movements are about the **Menore node** — that his service ran
+> continuously rather than in two eras, that his product is bagged and not
+> cannabis, that he is still operating — plus `RE-CHECKED` blocks. This page's
+> argument is maintenance versus surveillance, and the one place it touches
+> supply topology is the Tom/Suboxone reversal at *"It reverses the supply
+> architecture,"* which concerns the prescription-versus-dealer ordering and
+> not the NYC delivery node at all. Nothing withdrawn, nothing narrowed.
+
+The two teeth are what that costs. By 2025 a visible canine is gone, and Dan
+supplies his own causal chain for it — *"bulimic as a high schooler candy as a
+staple of my diet terrified of dentist (aka haven't gone) suboxone
+cigarettes"* ([[wiki/health/hyperreflexivity]]). Every item on that list is an
+input he specified or an output he watched. None of them is a thing he stopped
+doing to himself; the loss is what accumulates in the gap between the two modes
+that are running.
+
+## The rule, stated so it can be broken
+
+> Dan operates his body through two faculties and only two. **Specification**
+> governs what enters it and is enforced preemptively, absolutely, and without
+> negotiation. **Surveillance** governs how it presents and runs continuously
+> at high cost. There is no maintenance faculty: no preventive care, no repair
+> regime, no recovery protocol, no baseline measurement anywhere in the record.
+> Damage is therefore not prevented and not repaired — it is absorbed, and then
+> re-enters the system as a new surveillance object.
+
+> **Provenance disclosure**, per [[wiki/mind/synthesis/instrument-is-subject]].
+> Two members are `knowledge: mixed` — [[wiki/health/hyperreflexivity]] rests
+> on AI-chat exports and [[wiki/mind/profile/big-five-psychometrics]] on
+> self-administered instruments. **The primary evidence this page adds that its
+> premises lacked is a first-pass census of medical vocabulary across the full
+> message dump**, run 2026-08-19, which closes one declared gap, corrects one
+> claim on a member page, and contradicts one piece of Dan's own retrospective
+> testimony. The counts and the quoted lines are residue; the two-mode rule
+> built on them is a reading.
+
+## Mode one: specification
+
+The specification faculty is the best-documented thing in the health domain and
+it is uniform across substances and food, which is the finding — the corpus has
+been treating them as two subjects.
+
+| Domain | The specification | Enforcement |
+| :--- | :--- | :--- |
+| Opioid floor | Suboxone daily since 2010-02-17, 1–2 mg, sixteen years, zero relapses | Absolute; the one regime never interrupted |
+| Stimulant layer | Cocaine, framed as "CPU & RAM," dosed to the ceiling money allows | Continuous |
+| Alcohol | **Zero**, thirteen to fifteen years, active aversion | Categorical exclusion, no exceptions in the record |
+| Heroin | Tried once, winter 2008, refused — *"felt dirty"* | Refused on **aesthetic** grounds, not medical ones |
+| Composition of a meal | Cheeseburger = meat, cheese, bread. Corn and lettuce permitted; no other vegetable | *"An absolute, dealbreaking, no-questions-asked policy"* |
+| Onion, tomato, pickle | Refused outright — the three that permeate and cannot be removed after the fact | Refused before the plate arrives |
+
+Read the alcohol row against the heroin row and the faculty shows its hand.
+Neither exclusion is a health judgement. Alcohol is excluded because it is the
+substance coded to the family's mechanism of betrayal —
+[[wiki/health/chemical-architecture]] reads it as anti-identification, and four
+functional alcoholics across three generations support that. Heroin was refused
+because of how it *felt to take*. A body being kept healthy would not produce
+that pair; a body being **composed** would produce exactly it.
+
+[[wiki/interests/food-and-diet]] reached the same structure independently and
+in a different vocabulary, and the two have never been read against each other.
+Its correction of 2026-08-02 is the hinge: the earlier reading held that food
+was simply never evaluated, and what replaced it was that food is not *ranked*
+but is *specified*, totally, with the refusal list consisting precisely of the
+three items that cannot be picked off afterwards. That is the same operation as
+a fifteen-year single-molecule floor with an absolute exclusion bolted to it.
+**Evaluation and specification are different faculties, and this body only has
+the second one.**
+
+## Mode two: surveillance
+
+The monitoring faculty is equally well documented and is aimed at a different
+target: not what the body contains but **how it reads from outside**.
+
+[[wiki/health/hyperreflexivity]] carries Dan's own statement of it — *"the
+anxious, internally probing awareness of my appearance in all senses"* — and
+the mechanism named in that session is a loop where the monitoring apparatus
+generates the problem it watches for. Self-Consciousness sits at the **91st
+percentile** on [[wiki/mind/profile/big-five-psychometrics]]. The 2025 tooth
+disclosure is scored by Dan not as a health event but as an image event: *"the
+additional self-consious, humiliating image issue."* The one food image on his
+body is a Misfits skull, and [[wiki/self/tattoos]] records that the design
+reasoning is entirely about which version of the band's logo it is.
+
+Surveillance produces information and no action. That is not a criticism; it is
+the structural point. A monitoring system with no maintenance arm attached to
+it can only escalate, because every reading it takes adds to the queue and
+nothing drains it.
+
+## The missing mode, measured
+
+The claim that maintenance is absent has been asserted on
+[[wiki/health/chemical-architecture]] — *"no labs, no dental, no primary care
+appears anywhere in 17 years of messages"* — without a count behind it. Counted,
+the assertion is **too strong, and the corrected version is more interesting
+than the original.**
+
+| Term | Dan's outbound | Inbound (503 handles) |
+| :--- | ---: | ---: |
+| `dentist` | 13 | 38 |
+| `doctor` | 36 | 23 |
+| `checkup` / `check-up` | 3 | 4 |
+| `prescription` | 36 | 26 |
+| `insurance` | 21 | 95 |
+| `bloodwork` | **0** | 5 |
+| `physician` | **0** | 2 |
+| `primary care` | **0** | 1 |
+| `prescribed` | **0** | 4 |
+
+> **CORRECTED [2026-08-19] — dental care exists in the record, and Dan's own
+> account of it is wrong.** [[wiki/health/hyperreflexivity]] quotes his 2025
+> causal chain for the lost teeth as *"terrified of dentist (aka haven't
+> gone)."* The message dump contradicts the parenthesis directly. **2017-10-09:**
+> *"went back to the dentist today and i've got a lot of work to get done. all
+> those years of being a delinquent junkie catching up to me."* **2017-10-26:**
+> *"I've got a dentist appt at 830."* **2017-11-09:** asking Suz for a ride to
+> the dentist at 3:30. **2017-11-30:** *"When I went back for a 1wk checkup on
+> the second, they noticed a hole that hadn't yet begun to develop tissue so
+> they put in a membrane and restitched it"* — a post-surgical follow-up, which
+> means a graft. **2020-09-05:** *"setting up a dentist appointment asap."*
+> **2024-07-13:** *"I have a dentist appointment and work on the same day."*
+>
+> There was a full dental episode in autumn 2017 including surgery and a kept
+> one-week follow-up. Per [[wiki/mind/synthesis/instrument-is-subject]], residue
+> beats testimony and the disagreement is recorded rather than resolved
+> silently. **What survives, and is the better claim: the maintenance is
+> episodic and reactive, not absent.** He goes when something has already
+> broken, which is the same clock [[wiki/mind/synthesis/the-deferred-audit]]
+> documents everywhere else, and it is the reason the 2017 visit opens with
+> *"a lot of work to get done"* rather than with a cleaning.
+
+Three further things the census settles:
+
+**The prescriber exists, and the whole relationship with him is routing.**
+[[wiki/health/chemical-architecture]] lists "prescriber information" as a gap
+and [[wiki/health/hyperreflexivity]] records Dan declining to say whether the
+Suboxone is prescribed or self-managed — *"no comment"*, the one hard line in
+that session. The 2025 messages answer it. **2025-03-06:** *"I had my doctor
+move my prescription here."* **2025-06-08:** *"my doctor said the pharmacy won't
+fill an out of state prescription."* **2025-06-12:** *"my doctor tried to send a
+prescription to walmart and they won't fill it either so i'm completely out of
+options now."* **2019-05-31**, six years earlier: *"try to go get subs from my
+old doctor."* The regimen is prescribed. Every recorded exchange about that
+doctor is about moving a script between pharmacies, and none is about a dose, a
+taper, a review, or a body. **The one standing medical relationship in this life
+is a logistics relationship**, which is exactly what the two-mode rule predicts:
+a prescriber is an input supplier, and input supply is a faculty this system
+has.
+
+**It reverses the supply architecture.** [[wiki/mind/synthesis/supply-network]]
+frames [[wiki/people/tom]] as the standing supply line for Suboxone. The June
+2025 sequence runs the other way: the script fails at Walmart on the 12th, and
+on the 13th — *"I am so fucked. I'm gonna have to drive down to see Tom today"* —
+Tom is the fallback. On this evidence the default path is the prescription and
+the dealer network is the failover, which makes the May 2026 collapse a
+**second-line** failure with the first line already down, not a single point of
+failure giving way. That is a materially different architecture and it is
+flagged here as a contradiction rather than absorbed.
+
+**The barrier he names is money, not fear.** Every self-directed medical
+sentence in the corpus is modal — *"I know you rly don't want me to go to a
+doctor but I'm telling you I should go"* (2017-09-28), *"i should get into a
+doctor for that before caddie season ends"* (2017-10-08), *"I might need to go
+see a doctor if my voice doesn't start coming back"* (2018-07-13), *"I'm
+probably going to need to go to the doctor"* (2018-07-15) — and none of them is
+followed by a visit anywhere in the record. Alongside them: *"The copay for the
+doctor would be about that much"* (2017-06-24), and, in February 2020,
+*"imagine being able to just go to the doctor or dentist when you need"* and
+*"the doctor thing is a really big thing for me...like, there's no reason that
+50,000 people die a year because they don't have insurance."*
+
+## The asymmetry that names the mechanism
+
+Set those modal self-sentences against how he talks about other people's
+bodies, in the same corpus, often in the same years.
+
+| About himself | About someone else |
+| :--- | :--- |
+| *"I'm telling you I should go"* (2017-09-28) | *"I kept telling her to make an appointment with a doctor"* (2017-06-24, about [[wiki/people/fran-coldren|Fran]]) |
+| *"i should get into a doctor for that before caddie season ends"* (2017-10-08) | *"I wish she would have just gone to see her doctor months ago when I told her to"* (2017-06-25) |
+| *"I might need to go see a doctor"* (2018-07-13) | *"if you are legitimately unable to not SHIT YOUR PANTS then go to a fucking doctor"* (2018-10-11) |
+| *"I'm probably going to need to go to the doctor"* (2018-07-15) | *"I just ran out of the apartment to get him to a doctor asap"* (2023-10-29, the cat) |
+
+**Every self-directed instance is conditional. Every other-directed instance is
+imperative, and several are urgent enough to be rude.** Same speaker, same
+years, same subject matter. Four months separate *"I wish she would have just
+gone to see her doctor months ago"* from *"i should get into a doctor for that
+before caddie season ends."*
+
+That is [[wiki/mind/synthesis/the-deferred-audit]]'s two clocks running inside
+one person's health, and it forces a genuine extension of that page. The audit
+rule sorts *objects* by provenance — imposed objects audited on contact, chosen
+objects deferred until they fail. A body is not obviously either. What the
+evidence shows is that **the body is split down the middle by the sort rather
+than filed on one side of it.** The *configuration* — the stack, the exclusion
+list, the composition rule — is chosen, is his, and gets the treatment reserved
+for the imposed: preemptive, absolute, enforced in under a second without
+argument. The *substrate* — teeth, lungs, the thing the configuration runs on —
+gets the chosen-object clock, deferred until it fails and only then
+reconstructed. This is the first case in the corpus of a single object running
+both clocks at once, and the seam between them is exactly where the damage
+lands.
+
+## The controls
+
+**Extreme sports is the control that rules out indifference.**
+[[wiki/interests/extreme-sports]] documents roughly 2000–2006 as a
+total-obsession adolescence in aggressive inline skating and terrain-park
+skiing — four summers at Camp Woodward, trampoline training as off-season ski
+conditioning, an identity built on what the body could be made to do. A person
+who does not think about his body does not spend six years training one. The
+faculty that is missing is not attention and not investment; it is
+*maintenance*. Training is configuration aimed at a performance ceiling, and it
+belongs on the input side of this page with everything else.
+
+**The pets are the control that rules out a general fatalism about bodies.**
+[[wiki/mind/synthesis/the-deferred-audit]] identifies the pets as the corpus's
+one protected class, exempt from the forensic treatment everything else
+receives, and the 2023 message above is the proof it extends to their physical
+care: *"I just ran out of the apartment to get him to a doctor asap."* Immediate,
+unhesitating, no modal verb. The capacity for urgent care about a body exists
+intact. It is simply never pointed inward.
+
+**The 2017 dental episode is the control on the rule's own strength.** It is
+the reason this page claims *deferred and reactive* rather than *absent*, and
+it is what a falsifier looks like when it lands partially: the rule survives
+narrowed, and the narrowing is stated above rather than argued away.
+
+## Falsifiers
+
+1. **A preventive act.** Any documented instance of Dan initiating care before
+   symptoms — a screening, a physical, a cleaning, a baseline lab — with no
+   damage already in evidence. One clean case falsifies the missing-mode claim
+   outright.
+2. **A dose changed for a health reason.** [[wiki/health/cocaine]]'s arc moves
+   with the inheritance and with nothing else. A documented reduction, taper or
+   substitution made because of a physical effect rather than a budget would
+   show a maintenance faculty operating inside the specification one.
+3. **A recorded medical relationship that is not routing.** A conversation with
+   the prescriber about a dose, a taper, or a body — rather than about which
+   pharmacy will fill the script — breaks the "input supplier" reading of that
+   relationship.
+4. **Surveillance producing action.** [[wiki/health/hyperreflexivity]] records
+   the loop generating distress; if a source shows a monitoring output leading
+   to a repair rather than to more monitoring, the two-mode structure is wrong
+   and there is a third mode that is simply under-recorded.
+
+## Predictions
+
+1. **The next physical failure will be absorbed, not treated, and will convert
+   into a surveillance object within weeks.** The teeth are the template:
+   damage accumulates silently, becomes visible, and is then narrated as an
+   image problem rather than a medical one. This is scoreable against any
+   post-2026 export.
+2. **The Suboxone supply will fail again through geography, not through Tom.**
+   The June 2025 sequence shows the actual fragility is an out-of-state
+   prescription meeting a pharmacy that will not fill it. If the corpus records
+   another withdrawal episode, this rule predicts a pharmacy or jurisdiction at
+   the root of it and the dealer network as the recovery path.
+3. **No health-motivated change will follow the housing resolution.**
+   [[wiki/legal/463-morgantown]] and [[wiki/people/suzanne-frank]] have the
+   living situation unresolved as of August 2026. Under this rule, stabilising
+   housing frees resources for configuration (better supply, more controlled
+   inputs) and not for maintenance, because there is no faculty for the latter
+   to route to.
+4. **Any future "health kick" in the record will be an input regime.** A diet,
+   a stack change, a substance protocol — never a course of treatment, a
+   physiotherapy, or a follow-up schedule. The form of the intervention is more
+   predictable than its content.
+
+## Gaps
+
+- **The census is one pass over one dump and used a fixed term list.** Adjacent
+  vocabulary — *urgent care, clinic, X-ray, scan, specialist, therapist,
+  meds* — was not counted, and the dump covers 2015–2025 with **2022 and 2026
+  missing entirely**, so nothing here speaks to the terminal phase or to the
+  present. A second pass with a wider list would put the missing-mode claim on
+  a much larger base or break it.
+- **No medical record of any kind exists in `raw/`.** Everything above is
+  inferred from what Dan said about care in text messages, which is a proxy for
+  care and not a record of it. A single insurance statement or pharmacy history
+  would outrank the entire census.
+- **Nothing here dates the bulimia.** [[wiki/interests/food-and-diet]] already
+  flags the open question — whether the adult composition regime grew out of the
+  adolescent eating disorder or ran alongside it — and it is the single most
+  load-bearing unknown for this page, because it decides whether specification
+  is the primary faculty or a survival of something else.
+- **The extreme-sports material rests on one retrospective capture.** The
+  training years are the page's control against an indifference reading and
+  they are attested by a single 2026 recollection, with no contemporaneous
+  record. If that capture is wrong about the intensity, the control weakens.
+- **The prescriber is unnamed and undated before 2019.** Whether the Suboxone
+  regimen has been continuously prescribed since 2010 or has moved between
+  prescribed and unprescribed stretches is unresolved, and it changes what the
+  sixteen-year "zero relapses" figure is a measurement of.
+
+

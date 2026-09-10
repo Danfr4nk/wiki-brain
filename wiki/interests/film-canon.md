@@ -1,0 +1,125 @@
+
+---
+domain: interests
+page_type: entity
+status: stable
+date_created: 2026-07-16
+date_modified: 2026-08-19
+sources:
+  - "raw/self/favorites/FAVS MASTERLIST.csv"
+  - "raw/self/dox-scan/Dan Profile.txt"
+  - "raw/self/dox-scan/all_imessages_complete_dump.txt"
+tags: [personality-profile, digital-footprint]
+connections:
+  - page: wiki/mind/synthesis/interests-as-era-markers
+    type: mirrors
+    claim: "The control case for the era-marker thesis: the canon's contents are stable, but Eyes Wide Shut's meaning is era-indexed — completion target 2017, arrangement self-lens 2019, household ritual 2023 — so even the fixed list dates its own readings."
+  - page: wiki/mind/psychosexual/orchestration-and-voyeurism
+    type: evidences
+    claim: "The 2019-07-18 'living some eyes wide shut shit vicariously through her' message is primary evidence for the spectator/orchestrator frame — Dan reaching for the canon's masked-voyeur film as the lens on his own arrangement."
+  - page: wiki/interests/stand-up-comedy
+    type: parallels
+    claim: "Keeping The King of Comedy — a portrait of a delusional aspiring stand-up — in the top eleven while writing his own five-minute open-mic set is the canon and the pursuit running the same self-portrait."
+  - page: wiki/mind/profile/intp
+    type: evidences
+    claim: "Taxi Driver and The King of Comedy as chosen self-mirrors are primary evidence for the hyperaware-observer self-myth the profile documents — isolated men building private missions the world hasn't asked for."
+  - page: wiki/interests/favorites/art-and-movies
+    type: contextualizes
+    claim: "Supplies the lived meaning behind the eleven-title list that the favorites page correctly filed as thin: it is a curated, assigned, evangelized canon, not a watch-log."
+  - page: wiki/mind/synthesis/closing-the-set
+    type: evidences
+    claim: "The Kubrick line — 'theres only one kubrick movie i haven't seen' — is the case that proves the unit is a closed set and not a subject: where the boundary is a dead director's filmography rather than an event, the completism attaches to the director, and the appetite is otherwise identical."
+  - page: wiki/mind/synthesis/the-cato-seat
+    type: component-of
+    claim: "Taxi Driver and The King of Comedy are not two dark films among eleven; they are two portraits of the same seat — a man who sees clearly and can act only catastrophically — and the surrounding titles are unmasking pictures where the seeing arrives too late to help."
+---
+
+# Film Canon
+
+The movies favorites list is tiny — 11 titles, unrated, no metadata — so
+[[wiki/interests/favorites/art-and-movies]] correctly filed it as a thin
+category. But the message dump shows film is not a thin interest at all:
+it is something Dan *evangelizes*, uses as a compatibility test on
+partners, and returns to as a self-mythologizing mirror. The eleven
+titles are a canon, not a watch-log.
+
+## The list
+
+Parasite; The Prestige; Pulp Fiction; The Witch; The Shining; The King of
+Comedy; Taxi Driver; There Will Be Blood; The Graduate; Eyes Wide Shut;
+Kill Bill.
+
+Three authorial gravity wells account for most of it: **Kubrick** (The
+Shining, Eyes Wide Shut, plus 2001 named in messages), **Scorsese/De
+Niro** (Taxi Driver, The King of Comedy), and **Tarantino** (Pulp
+Fiction, Kill Bill). The remainder — Parasite, The Prestige, The Witch,
+There Will Be Blood, The Graduate — are precision, dread, and unmasking
+pictures. The tag cluster on his art favorites (mask, wound, dread,
+observer, recursive) is the same grammar as this film list.
+
+## Film as proselytizing and compatibility test
+
+Dan does not just watch these; he assigns them. The corpus shows him
+pushing the canon onto partners, treating an unseen classic as a gap that
+has to be closed:
+
+- **2015-12-16:** "But you HAVE to see pulp fiction. I can't believe
+  you've made it this far without catching it," in a thread where he's
+  reciting Tarantino's filmography ("Directed Pulp Fiction, Kill Bill,
+  inglorious basterds, django unchained").
+- **2016-04-10:** "Which means you should have seen citizen Kane, 2001 a
+  space odyssey, and the prestige" — a canonical homework list handed to
+  a partner.
+- **2016-03-23:** identifying a film as "Same director as the shining" —
+  Kubrick as a reference axis.
+- **2017-03-30:** "Did u see the witch" — checking whether someone caught
+  the A24 folk-horror pick.
+- **2017-03-29:** naming his Kubrick completism directly — "theres only
+  one kubrick movie i haven't seen ... and eyes wide shut."
+
+## Eyes Wide Shut — the load-bearing one
+
+Of the eleven, Eyes Wide Shut is the film that recurs with the most
+personal weight, and its meaning shifts over time:
+
+- **2017-03-29:** it is the *last* Kubrick he hasn't seen — a completion
+  target.
+- **2019-07-18:** he reaches for it as a lens on his own life during the
+  Annie non-monogamy period — "i feel like i'm living some eyes wide shut
+  shit vicariously through her." The film about a husband spectating
+  transgression maps directly onto the orchestration/voyeurism material
+  in [[wiki/mind/psychosexual/index]].
+- **2023-12-24:** it has become a household in-joke and ritual — "In a
+  little bit we're going to watch my favorite Christmas movie…eyes wide
+  shut lol." (The film is set at Christmas; naming Kubrick's masked-orgy
+  picture as the "favorite Christmas movie" is exactly his deadpan
+  register.)
+
+## The King of Comedy / Taxi Driver — the self-portrait pair
+
+Two De Niro/Scorsese pictures sit in the canon and rhyme with the
+[[wiki/interests/stand-up-comedy]] thread: **The King of Comedy** (Rupert
+Pupkin, the delusional aspiring stand-up who wants the stage at any cost)
+and **Taxi Driver** (Travis Bickle, the isolated hyper-observer narrating
+a rotten city). Both are portraits of a socially-isolated man building a
+private mission the world hasn't asked for — the same "hyperaware hero of
+a world too stupid to see the trap" self-myth named in his profile. That
+he keeps a movie about a wannabe comedian in his top eleven *while*
+writing his own five-minute open-mic set is not a coincidence worth
+flattening.
+
+## Why it matters
+
+The film list looked like the wiki's most disposable favorites category.
+Read against the messages it is the opposite: a curated canon he uses to
+test intimacy, a Kubrick completion project, and — in Eyes Wide Shut and
+The King of Comedy — two films he explicitly reads himself *through*.
+
+**Gaps:** Watch dates for most titles are not in the corpus (the movies
+CSV carries no dates). Parasite, The Graduate, and There Will Be Blood
+appear on the list but were not found discussed in the sampled message
+dump — their inclusion is asserted by the favorites list only. No
+letterboxd/rating export was located to rank the eleven against each
+other.
+
+

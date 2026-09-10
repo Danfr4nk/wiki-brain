@@ -1,0 +1,37 @@
+---
+
+domain: interests
+
+page_type: synthesis
+
+status: archived
+
+date_created: 2026-06-22
+
+date_modified: 2026-06-22
+
+sources: ["raw/self/favorites/FAVS MASTERLIST.csv"]
+
+synthesizes:
+
+- wiki/interests/favorites/books
+
+- wiki/self/context-core
+
+related: ["wiki/interests/favorites/books", "wiki/self/context-core"]
+
+---
+
+# Journalism (Book Favorites)
+
+## Count
+
+31 tagged.
+
+## Reflection
+
+Focus on reporting, media, and insider accounts. Supports forensic approach to narratives.
+
+---
+
+**Up:** [[wiki/interests/index|Interests]] › [[wiki/interests/favorites/index|Favorites]] › [[wiki/interests/favorites/books|Books]]

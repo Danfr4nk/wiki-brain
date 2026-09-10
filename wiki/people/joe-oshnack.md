@@ -1,0 +1,121 @@
+
+---
+domain: people
+page_type: entity
+status: active
+knowledge: mixed
+date_created: 2026-07-19
+date_modified: 2026-07-20
+date_range_start: 2011-01-20
+date_range_end: 2022-01-02
+sources:
+  - "raw/self/facebook/facebook-ihatedanfrank/messages/inbox/joeoshnack_7killpebkw/message_1.html"
+tags: [uniontown-era, nyc-era, music-production, ideology, personality-profile]
+infobox:
+  name: "Joe Oshnack"
+  sex: male
+  location: "Park City, UT"
+  relationship_to_dan: friend
+  known_for: "High school bandmate in Batteries Not Included (BNI); recipient of Dan's fullest self-narrated account of his own pre-2020 conservative political identity and its reversal"
+connections:
+  - page: wiki/interests/music/bands/batteries-not-included
+    type: evidenced-by
+    claim: "Joe is one of two named bandmates (with Matt Turko), and his thread is the primary source for the band's setlist and the 2021 political retrospective on covering Dead Kennedys' 'California Uber Alles.'"
+  - page: wiki/mind/synthesis/2020-left-turn
+    type: evidences
+    claim: "A Sept 23, 2021 message gives the fullest documented account of the *pre*-turn identity the other page dates the conversion away from: Dan describes his teenage self as 'an annoying little conservative fuckcunt' who was 'less than thrilled about playing songs with an anti-Iraq war theme' — concrete texture for what he was converting from, not just what he converted to."
+  - page: wiki/people/jacob-bacharach
+    type: co-occurs
+    claim: "Jan 2, 2022: Dan recommends Bacharach's Uniontown-set novel to Joe unprompted, framing him as proof 'not everyone from our hometown turned into a reactionary fascist-adjacent class traitor' — the same hometown-vs-politics lens applied to a third person."
+  - page: wiki/people/jamie-mohler
+    type: evidenced-by
+    claim: "A Dec 13, 2017 message on Jamie's rediscovered thread independently confirms the Alexis/Annie cam encounter this page first surfaced, narrowing it to Alexis's Feb-Oct 2017 bail window."
+  - page: wiki/people/matthew-palermo
+    type: parallels
+    claim: "Both threads carry the same generational framing of the Uniontown opiate epidemic — 'the class of 06 was a real low point for humanity' to Joe (Aug 2018) and 'a quarter of my graduating class isn't around anymore' to Matthew (Feb 2020) — independent statements of the same scale claim eighteen months apart."
+  - page: wiki/interests/music/bands/batteries-not-included
+    type: evidences
+    claim: "Joe's Aug 2018 setlist-reconstruction thread and Sept 2021 retrospective are the corpus's primary sources on the band — Dan names himself lead songwriter for the originals."
+---
+
+# Joe Oshnack
+
+Joe Oshnack is a high-school-era Uniontown bandmate — the two played
+together in [[wiki/interests/music/bands/batteries-not-included|Batteries
+Not Included]] ("BNI") — whose eleven-year
+Facebook thread (2011–2022) runs from failed long-distance recording
+collaborations through a rich 2021 political retrospective that is the
+corpus's fullest first-person account of what Dan's political identity
+looked like *before* it changed.
+
+## The band and the collaborations that didn't happen
+
+Dan and Joe try repeatedly, over a decade, to record together and never
+quite manage it: a January 2011 injury (Joe's blown ACL) cancels a
+planned NYC studio session; an April 2011 offer to trade guitar/vocal
+stems over the internet gets as far as identifying DAWs and file formats
+before going quiet; an August 2012 in-person plan (Dan offering his home
+8x8 interface setup "so we don't have to book studio time") also
+doesn't close. A August 2018 exchange reconstructs
+[[wiki/interests/music/bands/batteries-not-included|the band]]'s
+setlist from memory — Misfits, Dead Kennedys, Ramones, NOFX covers
+alongside originals Dan wrote as "lead songwriter" — good corroborating
+detail for the corpus's picture of Dan's teenage hardcore/punk
+immersion (see also [[wiki/people/seth-ledonne]]).
+
+## "An annoying little conservative fuckcunt"
+
+The thread's most valuable exchange is September 23, 2021, when Dan asks
+Joe how much either of them understood of the politics behind covering
+Dead Kennedys' "California Uber Alles" in the band. His own answer is
+unsparing and detailed — the fullest first-person account in the corpus
+of his *pre*-conversion political identity, not just the post-2020
+result already documented at
+[[wiki/mind/synthesis/2020-left-turn|the 2020 left turn]]: "I find it so
+fucking hilarious as someone who embraced far left political ideology
+later in life, that I was exposed to this music before I understood or
+agreed with it... It's also pretty cringey what an annoying little
+conservative fuckcunt I thought I was. Literally it's MORTIFYING to
+remember being less than thrilled about playing songs with an
+anti-Iraq-war theme." He contrasts this with his 2021 self — "a 32 year
+old who has an 'antifascistche action' flag in his apartment and who
+went out of state to door knock for Bernie last year" — and closes the
+exchange grieving how many of the old scene are dead, an echo of the
+opiate-epidemic framing he'd used to Joe three years earlier ("the
+class of 06 was a real low point for humanity... the opiates epidemic is
+vishnu cleansing our misguided sheep classmates," Aug 2018).
+
+## A cam threesome reference, since narrowed
+
+In the same August 12, 2018 conversation where Dan explains the
+camming operation's blackmail-resistance logic to Joe, he adds, in
+passing and as already completed: "We even had a threesome with my ex
+(the girl I left for Annie) on cam haha" — meaning
+[[wiki/people/alexis-armel|Alexis]]. Taken alone this was hard to
+reconcile with the well-documented **November 2018** Alexis/Annie
+reunion on
+[[wiki/timeline/events/annie-alexis-reunion-november-2018|arrangement-history.md]],
+which opens "days after Alexis's release from prison." A second,
+independent source resolves it: a December 13, 2017 message on
+[[wiki/people/jamie-mohler|Jamie Mohler]]'s rediscovered thread
+describes the same encounter in the same already-past-tense register
+("I did and I have it forever as an HD recording"), which places it
+inside Alexis's **Feb–Oct 2017 bail window** (between her Valentine's
+Day 2017 arrest and her end-of-October jailing) — a distinct, earlier
+encounter, not a contradiction of the November 2018 reunion's own
+dating. The precise date within that eight-month window remains
+unfixed.
+
+## Corpus record
+
+| Metric | Value |
+|---|---|
+| Messages | ~195 (Facebook Messenger, both directions) |
+| Date range | 2011-01-20 – 2022-01-02 |
+| Defining content | The Sept 23, 2021 political retrospective |
+
+**Gaps:** whether any of the proposed recording collaborations (2011,
+2012) ever actually happened; further detail on the band beyond the
+setlist (see [[wiki/interests/music/bands/batteries-not-included]]).
+
+

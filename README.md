@@ -1,144 +1,112 @@
-# wiki-brain
+# Personal Wiki (v2) — second brain
 
-A source-grounded, longitudinal knowledge graph and cognitive modeling system.
-It archives raw evidence about a person and the world that produced them, turns
-that evidence into atomic facts, events, entities, relationships, patterns and
-higher-order syntheses, and gives an LLM persistent context for reasoning over
-it — **without collapsing evidence, interpretation and inference into the same
-layer.**
+A lifelong personal wiki: complete biographical history, psychological and ideological profile, and everything else about your personhood, stored as plain Markdown files. No apps, no databases, no APIs — just text files, two small scripts, and git for history. Claude (or any LLM agent) does the compilation; you just feed it material.
 
-Published to GitHub Pages: **<https://danfr4nk.github.io/wiki-brain>**
+## The app
 
-> **One-time setup:** Pages must be enabled by hand — *Settings → Pages →
-> Source: **GitHub Actions***. The workflow cannot do this for you:
-> `configure-pages` has an `enablement` input, but it requires a Personal
-> Access Token rather than the default `GITHUB_TOKEN`, and wiring up a secret
-> is more work than clicking the setting once. Until it is set, `validate`
-> passes and `deploy` fails.
+**To pin it in your Dock:** drag **Personal Wiki.app** onto the Dock. Click it any time to launch (or refocus) the wiki in your browser — clicking it again while it's already running just opens/reuses the tab, it never starts a second server.
 
----
+Alternatively, double-click **Wiki.command** (or run `python3 app.py`). Either way, your browser opens at `http://127.0.0.1:8477` with everything in one place:
 
-## The constitutional law
+- **Wiki** — browse with collapsible domain groups and full-text search; every page has **✎ Edit** (in-place editor) and **Rename** in the toolbar. Rename updates every link and `related:` reference across the wiki automatically, and logs the operation.
 
-```
-RAW DATA → STRUCTURED FACT → INTERPRETATION → SYNTHESIS.  NEVER THE REVERSE.
-```
+- **Capture** — type facts or full stories; drag-and-drop any file to upload. Type **@** to autocomplete a wiki page reference — the note is then saved as a *correction/expansion targeting that page*, and ingestion applies it there first
 
-Its mechanical form, checked on every build:
+- **Ingest** — the full any-LLM loop in the GUI: select an inbox item, generate the prompt pack, copy it into any chat model, paste the reply back, and apply (validated + linted, optional auto-commit)
 
-> **A node may cite only nodes at a strictly lower layer.**
+- **Sync** — header shows branch / uncommitted / ahead-behind state; the Sync button commits, pulls --rebase, and pushes to GitHub. A red banner warns if the GitHub repo is publicly visible.
 
-That single rule is what stops a conclusion from becoming a premise. Without it
-someone writes "the relationship was abusive" on a synthesis page, and months
-later an event page quotes it as though it were observed at the time — the
-interpretation has silently become a fact and the evidence that would let anyone
-check it is gone. The failure always runs downward, so the rule is directional,
-and `bin/wb-validate` fails the build rather than trusting anyone to be careful.
+- **Intake ledger** — catalogue a finite quantity when it arrives (substance from a select box, amount, unit, when), then log each intake against it in one line. Events can be measured, estimated, or *unquantified* — "one line" is still an event and still counts toward the timing, it just never enters a gram figure. Closing a unit asks how it ended and refuses to guess at anything unaccounted for. `bin/intake` does the same from the terminal
 
-It also makes the citation graph a DAG with layers as topological levels, so
-tracing any conclusion to its evidence terminates, and a citation cycle cannot
-be written at all.
+- **Inbox** — see and manage what's waiting for ingestion
 
-## The six layers
+- **Export** — one click bundles the corpus for LLMs, with a download link
 
-| L | Layer | What it is | Mutable? |
-| :-- | :---- | :---- | :---- |
-| **0** | `source` | Raw material as acquired | **Never.** Append-only |
-| **1** | `datum` | One claim, one thing, one time, known provenance | Corrigible |
-| **2** | `entity` `event` `relationship` | Structured objects assembled from data | Corrigible |
-| **3** | `interpretation` `contradiction` | What it might mean. Someone's reading | Freely revised |
-| **4** | `pattern` | Recurrence across layer ≤3 | Freely revised |
-| **5** | `synthesis` | Cross-domain model | Freely revised |
+It's a single Python file using only the standard library — nothing to install, runs entirely on your machine, touches only this folder.
 
-Mutability runs opposite to altitude, deliberately. The higher a node sits, the
-more disposable it is: an LLM's synthesis is the most disposable thing in the
-system, and the source it rests on is the least.
+## Adding material from the terminal (optional)
 
-Full design: **[`ARCHITECTURE.md`](ARCHITECTURE.md)**.
+The same three ways also work as CLI commands, all landing in `inbox/`:
 
-## Tools
+bin/capture                     # type or paste a story; end with a "." line
 
-```sh
-bin/wb-validate                    # schema + the layer invariant
-bin/wb-build                       # compile to site/ + graph.json + llms.txt
-bin/wb-check-publish               # refuse to publish sensitive material
-bin/wb-query "why did X happen"    # layered retrieval, not a dump
-tests/test-invariant               # 15 regression tests on the invariant
-```
+bin/capture "quick fact here"   # one-liner, no prompts
 
-Standard library only — no dependencies, no build step, no database. Nodes are
-Markdown with TOML frontmatter: machine-readable head, human-readable body,
-neither destroying the other.
+bin/capture -f ~/some-file.pdf  # upload any file (or a whole folder)
 
-```markdown
-+++
-id         = "evt:2026-09-08-rebuild-begins"
-layer      = 2
-type       = "event"
-title      = "Rebuild on the six-layer architecture begins"
-cites      = ["dat:0006-drive-copy-lossy"]
-confidence = "high"
+bin/capture status              # see what's waiting
 
-[when]
-date = "2026-09-08"
-+++
+Or double-click `Capture.command` in Finder to open a capture window. You can also just drag files into `inbox/` yourself — same thing.
 
-Prose for humans. The frontmatter is for machines.
-```
+## Getting it into the wiki
 
-## What the system refuses to do
+Two ways — either works, both follow the same rules (`STRATEGY.md` for intent, `CLAUDE.md` for process, `STYLE_GUIDE.md` for format):
 
-- **Resolve contradictions automatically.** Both claims are preserved, dated and
-  attributed. "The historical record is ambiguous" beats invented certainty.
-- **Let synthesis mutate sources.** Concluding something adds an L3 node; it does
-  not rewrite the events underneath.
-- **Flatten hindsight onto the past.** If the subject believed "everything is
-  fine" during a period later remembered as disastrous, both are kept.
-- **Treat absence as evidence of absence.** Negative data is typed:
-  `never_observed`, `explicitly_rejected` and `known_not_to_occur` are three
-  different claims.
-- **Confuse whose reading a claim is.** Every interpretation declares a
-  `perspective` — `self`, `external`, `llm` or `other` — so "Dan believes X about
-  himself, but the longitudinal record suggests Y" is expressible rather than a
-  distinction that quietly disappears.
+1. **Claude Code:** open it in this folder and say "ingest the inbox."
 
-## Privacy
+1. **Any LLM (no subscription needed):** `bin/ingest-pack` bundles an inbox item into a single prompt; paste it into any chat model (ChatGPT, Gemini, a local model), save the reply, and `bin/ingest-apply <reply>` validates and applies it. Full details in `INGEST_PROTOCOL.md`.
 
-**This repository is public**, and the message corpus is not the subject's data
-alone — it holds the phone numbers, addresses and private words of 498 other
-people who did not choose to be published.
+Either way, one item at a time: the original is filed into `raw/` (kept forever, never edited), then the relevant wiki pages are written or updated.
 
-So the split is deliberate and enforced in three places:
+## Reading it
 
-- `.gitignore` keeps `corpus/messages.csv`, `corpus/private/` and the shelf
-  contents out of git, whose history is permanent and searchable.
-- `bin/wb-build` excludes any node marked `sensitive = true`, and the citations
-  pointing at it — but *declares* the exclusion rather than hiding it, so a
-  partial evidence trail never looks complete.
-- `bin/wb-check-publish` runs before deploy and asserts the exclusion actually
-  happened, against the built output rather than the source.
+Start at `index.md` — it links to the eight domain indexes (self, timeline, people, mind, work, interests, health, places). Everything is plain Markdown; it also opens cleanly in Obsidian if you ever want a nicer reader.
 
-One thing worth stating plainly, because it is easy to conflate: **the gitignore
-is not what protects this data.** The Google Sheet backing the corpus is
-deliberately shared "anyone with the link" — a decision on the record, not an
-oversight, documented in [`corpus/README.md`](corpus/README.md). Keeping the
-corpus out of git history matters on its own terms. It does not narrow who can
-reach the sheet. Two separate exposures; one of them is closed.
+## Exporting for LLMs (local)
 
-## Message evidence
+bin/export-corpus                 # the whole compiled wiki -> exports/
 
-[`CORPUS_POLICY.md`](CORPUS_POLICY.md) governs what counts as message evidence.
-The complete export — 192,140 messages, 2011-03-19 → 2026-09-07, 577 threads,
-498 counterparties — is authoritative. Every earlier per-counterparty extract is
-shelved: retained as evidence of what was believed and why it was wrong, never
-as evidence of what happened.
+bin/export-corpus --domain mind   # one domain only
 
-```sh
-bin/corpus-verify                            # integrity against the manifest
-bin/corpus-query --who "Name" --context 3    # read it in situ
-```
+bin/export-corpus --raw           # include the raw source archive (big)
 
-## Migration
+Produces a single Markdown file with a table of contents and a token count, ready to paste or upload into any LLM.
 
-[`MIGRATION.md`](MIGRATION.md) tracks what is still to come across, and why the
-Google Drive staging copy is not the source it is coming from.
+## Online access for LLMs & agents
+
+The compiled wiki is published for agents on every push to `main`:
+
+- **Discovery:** [https://caakehorn.github.io/wiki-brain/llms.txt](https://caakehorn.github.io/wiki-brain/llms.txt)
+
+- **Manifest:** [https://caakehorn.github.io/wiki-brain/agent/manifest.json](https://caakehorn.github.io/wiki-brain/agent/manifest.json)
+
+- **Public mirror** (resynced hourly, useful when Pages is mid-deploy): [https://caakehorn.github.io/leviathan/data/wiki-data.json](https://caakehorn.github.io/leviathan/data/wiki-data.json) — full page text under `wikiText`, metadata and typed edges under `wikiPages.pages`.
+
+- **Critical spine / full corpus / per-domain bundles / individual pages**
+
+See [AGENT_ACCESS.md](http://AGENT_ACCESS.md) for the full URL table, a pasteable agent prompt, freshness rules, and privacy notes. Local preview:
+
+bin/build-site                   # builds the static site/ (HTML wiki + agent feed), no deps
+
+python3 -m http.server -d site 8787
+
+## Layout
+
+app.py     the app: capture + browse + search + export in one window
+
+inbox/     what you've added but hasn't been processed yet
+
+raw/       original sources, immutable archive
+
+wiki/      the compiled knowledge (the actual second brain)
+
+exports/   generated LLM bundles (disposable, not in git)
+
+bin/       the tools: capture, mining, linting, export, publish
+
+## The governing documents
+
+Six files govern the work, in the order a new reader should meet them. Each says what it wins on when two disagree.
+
+| **File** | **Governs** |
+| --- | --- |
+| `STRATEGY.md` | what this repo is for and the core loop — **read first** |
+| `CLAUDE.md` | the operations: ingest, query, climb, rewrite, lint |
+| `EXTRACTION_SPEC.md` | how deep to mine a source before writing — the binding constraint |
+| `STYLE_GUIDE.md` | page format and the substance standard |
+| `CONNECTIONS_SPEC.md` | typed edges and the claims they carry |
+| `SYNTHESIS_SPEC.md` | altitude — how conclusions stack on conclusions |
+
+Plus the working files: `BACKLOG.md` (standing work), `LLM_HANDOFF.md` (the exact resume point), `index.md` (master navigation), `log.md` (history of every operation), `queue.md` (pending ingestion), and the two machine-maintained queues `connection-queue.md` and `synthesis-queue.md`. `INGEST_RUNBOOK.md` and `INGEST_PROTOCOL.md` cover the two ingest routes; `FACTSTORY_BRIEF_TEMPLATE.md` is the source of truth for the brief shipped with hand-typed captures; `AGENT_ACCESS.md` covers online access for agents.
+
+`DIGEST.md`, `RECENT.md` and `OPEN.md` are generated by `bin/wiki-digest` — committed, but never hand-edited.

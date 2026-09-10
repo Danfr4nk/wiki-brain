@@ -1,0 +1,455 @@
+---
+
+domain: self
+
+page_type: period
+
+status: stable
+
+date_created: 2026-09-02
+
+date_modified: 2026-09-03
+
+knowledge: mixed
+
+date_range_start: 2021-01-05
+
+date_range_end: 2021-12-04
+
+title: "Twitter / X — 2021"
+
+sources:
+
+- "raw/self/twitter/archive.jsonl"
+
+- "raw/self/twitter/tweet-archive.xlsx"
+
+tags: [politics, ideology, digital-footprint]
+
+connections:
+
+- page: wiki/self/twitter
+
+type: component-of
+
+claim: 'The 2021 originals are one year of the @danfrank public record filed under the twitter hub.'
+
+- page: wiki/self/twitter/2020
+
+type: follows
+
+claim: '2021 continues the @danfrank original-tweet record from 2020 without a break in the account.'
+
+- page: wiki/self/twitter/2022
+
+type: precedes
+
+claim: '2021 is the immediately previous year of originals before 2022 on the same account.'
+
+- page: wiki/interests/opie-and-anthony
+
+type: contradicts
+
+claim: 'The move away from comedy free-speech absolutism is dated five months earlier than that page states: "Lenny Bruce was arrested...not by \'the public\', but by the state. Dave Chappelle is facing criticism which is, I\'m told, different." (2021-10-26), against the Louis CK defence of 2019-01-16.'
+
+- page: wiki/mind/synthesis/vertical-authority-skepticism
+
+type: evidences
+
+claim: 'January 6th is the cleanest demonstration of the distinction: he forms a police-collusion hypothesis at high confidence, prices it in the same tweet ("but what was the endgame? is that being too generous"), and rejects the antifa-infiltration mirror on the ground that it requires its actors to work against their own interests.'
+
+- page: wiki/interests/concert-record/performers/dave-chappelle
+
+type: evidences
+
+claim: "The 26 October 2021 Lenny Bruce distinction is aimed at Chappelle specifically, eight years after Dan watched him deliver the Oddball redemption set — the same performer bracketing both ends of the free-speech position."
+
+---
+
+# Twitter / X — 2021
+
+**The first full year of the converted position, and it is fluent.** 2021 has
+
+only 34 posts, but the vocabulary, the targets and the internal disagreements
+
+are all a settled leftist's rather than a recent convert's — and one of them
+
+corrects a date this corpus currently carries.
+
+## The position, a year on
+
+The 2020 declaration was an ultimatum. 2021 is the working version:
+
+- **5 January**, on GOP rhetoric: *"just wait until they are running against a principled and unapologetic dem soc... they will probz regret using up all their effective 'socialism bad because venezuala' talking points"*
+
+- **6 January**, refusing an anti-Comey op-ed's framing: *"Comey is not 'what got us into this mess'. The Democratic party and their corporate ring-kissing deserve blame; also - racism."*
+
+- **6 November**, on the infrastructure bill: *"None of the remaining entitlements will substantially improve material conditions and nothing will be implemented before the midterm election anyway"*
+
+- **3–4 December**, on the Fetterman/Lamb primary: *"the neoliberal forces who run the party and their corpo donors see it as a worthy investment to block fetterman"*, and *"I hope that his potential for the left isn't the catalyst for the same playbook that worked to outperform both Sanders campaigns"*
+
+- **15 November**: *"Honestly I would sooner forgive someone for viciously insulting my mom than I would for taking a swipe at Bernie Sanders."*
+
+*Material conditions*, *neoliberal*, *corpo donors*, *dem soc* — the terms are
+
+used correctly and the primary opponent is the Democratic Party rather than the
+
+Republicans, which is the tell that distinguishes a leftist from a liberal.
+
+`@hasanthehun` — Hasan Piker, one of the four channels
+
+[[wiki/mind/synthesis/2020-left-turn]] names as the pipeline — is addressed
+
+directly on 9 January.
+
+And on **15 November**, a disappointment stated as one: *"Had been (foolishly)
+
+holding out hope that @elonmusk would eventually turn face and experience some
+
+kind of leftist epiphany. Officially filing that fantasy as a 'no shot' and
+
+also get fucked, Elon."* The admission that he had been hoping is the
+
+interesting half.
+
+## 26 October 2021 corrects a date
+
+[[wiki/interests/opie-and-anthony]] dates Dan's move away from comedy free-speech
+
+absolutism to **28 March 2022**, during the Chris Rock slap. This page has it
+
+five months earlier, during the Chappelle row:
+
+> *"Lenny Bruce was arrested...not by 'the public', but by the state. Dave
+
+> Chappelle is facing criticism which is, I'm told, different."*
+
+That is the whole argument in two sentences, and it is aimed precisely at the
+
+martyrdom analogy the position depends on. Set against **16 January 2019** —
+
+*"The recent joke shaming of Louis CK is so fucking disturbing"* — the move
+
+happens somewhere in the thirty-three months between, and the earliest dated
+
+instance of the new position is **2021-10-26**, not March 2022.
+
+The O&A page's 2022 example is not wrong; it is just not first. Corrected
+
+there rather than left for the next reader to trip over.
+
+## January 6th: a conspiracy entertained, priced, and one rejected
+
+The Capitol riot produces the year's densest cluster, and it is the best
+
+available demonstration of what
+
+[[wiki/mind/synthesis/vertical-authority-skepticism]] means when it says the
+
+"conspiracy crank" label is contradicted by his behaviour.
+
+**He forms one.** On 7 January: *"i'm as sure as i could possibly be that the
+
+capitol police had arranged to allow the chuds into the building while they
+
+LARPed the violence they would usually be committing"* — a serious accusation
+
+of collusion by a police force, stated at high confidence.
+
+**Then he immediately prices it, in the same tweet:** *"but what was the
+
+endgame? is that being too generous"*. The hypothesis is published with its own
+
+weakest point attached, and the weakest point is that it credits the actors
+
+with more coherence than the evidence supports.
+
+**And he rejects the mirror-image conspiracy on structural grounds.** On
+
+17 January, to somebody arguing antifa infiltration: *"Sooooooo...are you saying
+
+that the radical leftists were agitating to keep the far-right president in
+
+power rather than the democratic candidate? Do you seriously think that antifa
+
+is working against their own ideological values to sling mud on Trump
+
+supporters?"* The refutation is not "that's a conspiracy theory" — it is that
+
+the theory requires its actors to work against their own interests.
+
+That is the distinction the whole vertical-authority page rests on: he is not
+
+credulous about institutions and he is not credulous about the stories told
+
+against them either. The test he applies is whether the actors' behaviour makes
+
+sense from inside their own position, and he applies it to his own hypothesis
+
+first.
+
+## Texture
+
+*"gonna exec produce a new primetime series that is just conservatives in a
+
+restraining chair (like the theater scene from a clockwork orange) and make
+
+them define terms they constantly use incorrectly such as: socialism,
+
+globalism, obamagate, liberty/freedom"* (5 January) — the definitional-precision
+
+instinct as a revenge fantasy. Matt Gaetz *"is a lot more tolerable if you just
+
+pretend he is actually a 4th grader who switched bodies with an Arizona State
+
+undergrad"* (15 January). And on 12 November, a small perfect one: he
+
+misreads a tweet in somebody's likes, believes for twelve hours that his old
+
+coach is coaching in the NFL, **telephones his mother about it**, and then
+
+posts the correction himself.
+
+## What would change this reading
+
+The Chappelle correction is solid — it is a dated post making the argument, and
+
+the O&A page's own example is later. The Jan 6 reading interprets a
+
+self-qualification as method rather than as hedging, which is a real
+
+alternative; the reason to prefer method is the 17 January rejection, which
+
+applies the same test to the opposite conspiracy at cost to his own side's
+
+narrative. And 34 posts is a small year to characterise a position from — the
+
+vocabulary is unambiguous, but the absence of any internal *doubt* about the
+
+position may be an artefact of how little he posted.
+
+## Coverage
+
+| | |
+
+|---|---|
+
+| Originals on this page | 34 |
+
+| From operator spreadsheet | 34 |
+
+| From live X scrape | 0 |
+
+| Pure reposts | omitted by rule (no @danfrank quote text) |
+
+This page is the text archive. Every original and every quote-tweet with Dan's own text that has been retrieved for the year is below, oldest first. Pure reposts with no @danfrank quote content are omitted.
+
+## The record
+
+**2021-01-05 06:28:43 UTC** · [1346342849357508609](https://x.com/danfrank/status/1346342849357508609)
+
+*likes 0 · replies 0 · reposts 0*
+
+> all the bombastic GOP claims that the most moderate, establishment-approved democrats having a "radical/extreme liberal" agenda (including wanting to do a little socialism, communism, and possibly even a marxism) is like the funniest shit ever to me.
+
+**2021-01-05 06:31:46 UTC** · [1346343614796996608](https://x.com/danfrank/status/1346343614796996608)
+
+*likes 0 · replies 0 · reposts 0*
+
+> like - just wait until they are running against a principled and unapologetic dem soc... they will probz regret using up all their effective "socialism bad because venezuala" talking points
+
+**2021-01-05 06:45:31 UTC** · [1346347076368662529](https://x.com/danfrank/status/1346347076368662529)
+
+*likes 0 · replies 0 · reposts 0*
+
+> gonna exec produce a new primetime series that is just conservatives in a restraining chair (like the theater scene from a clockwork orange) and make them define terms they constantly use incorrectly such as: socialism, globalism, obamagate, liberty/freedom, etc.
+
+**2021-01-06 11:57:47 UTC** · [1346788048542031873](https://x.com/danfrank/status/1346788048542031873)
+
+*likes 0 · replies 0 · reposts 0*
+
+> totally disagree with the central message of his op-ed. there are a lot of good reasons to investigate and charge as they would w/ any other citizen. Comey is not "what got us into this mess".  The Democratic party and their corporate ring-kissing deserve blame; also - racism.
+
+**2021-01-07 16:51:29 UTC** · [1347224346994073608](https://x.com/danfrank/status/1347224346994073608)
+
+*likes 0 · replies 0 · reposts 0*
+
+> not only that but the footage showing how they got through each layer of security is just inexplicable. even the most generous interpretation - that the entire force tasked with preventing a breach are wholly inept semi-narcoleptic  pacifists
+
+**2021-01-07 16:59:59 UTC** · [1347226488811225090](https://x.com/danfrank/status/1347226488811225090)
+
+*likes 0 · replies 0 · reposts 0*
+
+> i have no background in security or law enforcement, to be sure. but it doesn't take a criminal justice degree or any training whatsoever to know that the "mosh pit" is not a reccomended move
+
+**2021-01-07 20:11:38 UTC** · [1347274719645609990](https://x.com/danfrank/status/1347274719645609990)
+
+*likes 0 · replies 0 · reposts 0*
+
+> yep, although it's hard to imagine any series finale could ever have such a shakespearean and unexpectedly satisfying ending.
+
+**2021-01-07 20:19:41 UTC** · [1347276744991117314](https://x.com/danfrank/status/1347276744991117314)
+
+*likes 0 · replies 0 · reposts 0*
+
+> it's so curious, though. i'm as sure as i could possibly be that the capitol police had arranged to allow the chuds into the building while they LARPed the violence they would usually be committing -and then blame it on ANTIFER but what was the endgame? is that being too generous
+
+**2021-01-07 20:25:48 UTC** · [1347278283898036225](https://x.com/danfrank/status/1347278283898036225)
+
+*likes 0 · replies 0 · reposts 0*
+
+> this is what happens when the best option you have for your coup de tat crew are the hogs that organized the charlottesville "unite the right" disaster.
+
+**2021-01-07 21:22:31 UTC** · [1347292554526674944](https://x.com/danfrank/status/1347292554526674944)
+
+*likes 0 · replies 0 · reposts 0*
+
+> I don’t disagree with the spirit of this take but, after seeing some of the livestream footage that was broadcast as they breached the security checkpoints and (more obviously) once they had gained entrance, the Capitol police seemingly collaborated to let them inside
+
+**2021-01-09 20:48:26 UTC** · [1348008756056096777](https://x.com/danfrank/status/1348008756056096777)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @hasanthehun  Derrick Evans is in the Capitol Building!!!
+
+**2021-01-10 15:20:14 UTC** · [1348288547980255234](https://x.com/danfrank/status/1348288547980255234)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Yikes  https:// vm.tiktok.com/ZMJvRLq4a/
+
+**2021-01-14 02:35:58 UTC** · [1349545766071787528](https://x.com/danfrank/status/1349545766071787528)
+
+*likes 0 · replies 0 · reposts 0*
+
+> A dedication to the years we let the mentally-ill billionaire student of Roy Cohn run the most militarized and wealthy nation on earth
+
+**2021-01-15 01:11:39 UTC** · [1349886934777278467](https://x.com/danfrank/status/1349886934777278467)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Matt Gaetz is a lot more tolerable if you just pretend he is actually a 4th grader who switched bodies with an Arizona State undergrad
+
+**2021-01-15 10:02:39 UTC** · [1350020566326145032](https://x.com/danfrank/status/1350020566326145032)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @Phloxenheim
+
+**2021-01-16 16:30:26 UTC** · [1350480540353392647](https://x.com/danfrank/status/1350480540353392647)
+
+*likes 0 · replies 0 · reposts 0*
+
+> And it just might
+
+**2021-01-16 16:38:44 UTC** · [1350482628969902080](https://x.com/danfrank/status/1350482628969902080)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Fucking YIKES dude
+
+**2021-01-17 09:20:06 UTC** · [1350734632422154240](https://x.com/danfrank/status/1350734632422154240)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Sooooooo...are you saying that the radical leftists were agitating to keep the far-right president in power rather than the democratic candidate? Do you seriously think that antifa is working against their own ideological values to sling mud on Trump supporters? Come on, dude.
+
+**2021-01-18 03:19:24 UTC** · [1351006247873556483](https://x.com/danfrank/status/1351006247873556483)
+
+*likes 0 · replies 0 · reposts 0*
+
+> lol that's not bernie sanders at all. while bernie sanders has more spine than anyone in congress...his posture is abominable. also the senate is not in session. also a million other things
+
+**2021-01-21 12:41:35 UTC** · [1352234889899356161](https://x.com/danfrank/status/1352234889899356161)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Legit can’t tell if this is sarcastic or not lol Oh 2021
+
+**2021-01-25 03:31:57 UTC** · [1353546118655832065](https://x.com/danfrank/status/1353546118655832065)
+
+*likes 0 · replies 0 · reposts 0*
+
+> No........ No,he’s not lol
+
+**2021-10-26 01:44:22 UTC** · [1452813322320064512](https://x.com/danfrank/status/1452813322320064512)
+
+*likes 0 · replies 0 · reposts 0*
+
+> The math might be correct if they’re serving glass bottles of Mexican soda. This still should not inspire any sympathy for the owner and is probably not what is happening here anyway.
+
+**2021-10-26 02:33:20 UTC** · [1452825644245688322](https://x.com/danfrank/status/1452825644245688322)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Lenny Bruce was arrested...not by “the public”, but by the state. Dave Chappelle is facing criticism which is, I’m told, different.
+
+**2021-10-30 01:56:41 UTC** · [1454265974522318859](https://x.com/danfrank/status/1454265974522318859)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @bludnymph  I was looking for tattoo design ideas and came across this
+
+**2021-11-04 03:57:12 UTC** · [1456108240165609472](https://x.com/danfrank/status/1456108240165609472)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Of all the stupidity being pushed today by every cable news pundit searching for a narrative to blame progressives as the cause of yesterday’s election losses, this one is impressively bad.
+
+**2021-11-06 05:07:37 UTC** · [1456850736344702978](https://x.com/danfrank/status/1456850736344702978)
+
+*likes 0 · replies 0 · reposts 0*
+
+> What mechanism of the current BIF bill is going to excite voters enough to impact voter turnout next year? None of the remaining entitlements will substantially improve material conditions  and nothing will be implemented before the midterm election anyway
+
+**2021-11-12 04:48:30 UTC** · [1459020254395482112](https://x.com/danfrank/status/1459020254395482112)
+
+*likes 0 · replies 0 · reposts 0*
+
+> @turkoforpitt  I saw this in your likes and misunderstood it for 12 hours. I literally called my mom to tell her  @CoachKolesar  was coaching in the NFL
+
+**2021-11-15 12:20:52 UTC** · [1460221259921469440](https://x.com/danfrank/status/1460221259921469440)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Had been (foolishly) holding out hope that  @elonmusk  would eventually turn face and experience some kind of leftist epiphany. Officially filing that fantasy as a ‘no shot’ and also get fucked, Elon.
+
+**2021-11-15 12:28:10 UTC** · [1460223095676055555](https://x.com/danfrank/status/1460223095676055555)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Honestly I would sooner forgive someone for viciously insulting my mom than I would for taking a swipe at Bernie Sanders.
+
+**2021-11-16 01:41:34 UTC** · [1460422763169079307](https://x.com/danfrank/status/1460422763169079307)
+
+*likes 0 · replies 0 · reposts 0*
+
+> “Bowing down” sounds like the exact opposite of the epiphany I was describing. Also not sure what reality you’re living in where the leftist economic ideological message is even given basic legitimacy in the US, much less demanding compliance from a billionaire lol
+
+**2021-11-23 10:14:40 UTC** · [1463088602238308358](https://x.com/danfrank/status/1463088602238308358)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Ah, conservative comedy.
+
+**2021-12-03 06:29:02 UTC** · [1466655698666672128](https://x.com/danfrank/status/1466655698666672128)
+
+*likes 0 · replies 0 · reposts 0*
+
+> I’m really not excited for the dnc messaging initiative forthcoming for the fetterman/lamb primary. There’s nothing more threatening to libs than a hugely important race being won by an effective progressive so they’ll throw a lot of money and time to spoil
+
+**2021-12-04 02:21:10 UTC** · [1466955709401157638](https://x.com/danfrank/status/1466955709401157638)
+
+*likes 0 · replies 0 · reposts 0*
+
+> Agreed on the premise, but doesn’t this just create the conditions to put more DNC effort into anti-fetterman oppo messaging? I would imagine the neoliberal forces who run the party and their corpo donors see it as a worthy investment to block fetterman from spreading influence
+
+**2021-12-04 05:43:21 UTC** · [1467006590976933892](https://x.com/danfrank/status/1467006590976933892)
+
+*likes 0 · replies 0 · reposts 0*
+
+> To your point, fetterman is uniquely positioned to do well and the fundraising numbers are super promising. I hope that his potential for the left isn’t the catalyst for the same playbook that worked to outperform both Sanders campaigns to be run.
+
+---
+
+**Up:** [[wiki/self/index|Self]] › [[wiki/self/twitter|Twitter]] · **Previous:** [[wiki/self/twitter/2020|2020]] · **Next:** [[wiki/self/twitter/2022|2022]]

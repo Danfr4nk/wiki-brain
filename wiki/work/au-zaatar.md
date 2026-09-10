@@ -1,0 +1,294 @@
+
+---
+domain: work
+page_type: event
+title: "Au Za'atar (NYC, ~2021–2024)"
+status: closed
+date_created: 2026-07-13
+date_modified: 2026-08-21
+sources:
+  - raw/self/message-csv/imessage_19178259183_both_all_now.csv
+  - raw/self/dansynth/StorytimeAuZaatarAnalysis.md
+  - raw/self/dansynth/TheWaitersVisibleHigh.md
+  - raw/self/dansynth/AuZaatarsFinalShift.md
+  - raw/self/dansynth/FromSidewalkShedtoAnalyticalProwess.md
+  - raw/self/dox-md/Gemini-_00.md
+  - raw/self/dox-md/Gemini-_02.md
+  - raw/self/context-core/CONTEXT_CORE_EXPANDED.md
+  - raw/self/dansynth/DANSYNTH.txt
+  - raw/self/dansynth/dansynth-scrape-phases-2-7.md
+  - raw/self/dox-scan/DanAnnie_TenYears_WithAmendments.docx
+  - "raw/self/dox-md/Breaking the anxiety avoidance cycle.md"
+related:
+  - wiki/people/tarik-fallous
+  - wiki/people/valeria-iglesias-cid
+  - wiki/people/annie-ulmer
+  - wiki/self/location-history
+  - wiki/timeline/periods/2021-2023-employment-block
+  - wiki/mind/synthesis/vertical-authority-skepticism
+  - wiki/mind/concepts/institutional-out
+tags: [nyc-era, career, ai-collaboration, housing, forensic-analysis]
+connections:
+  - page: wiki/mind/synthesis/failure-to-launch
+    type: evidences
+    claim: "Forty-one months sustained by a private objective inside a low-oversight sovereign territory, ending when the shed came down rather than when the work got hard, is the clearest instance of tenure that was real without ever being transferable."
+  - page: wiki/mind/synthesis/the-embedded-objective
+    type: instantiates
+    claim: "The 41 months were not held by the job — the work itself took 'literally EVERYTHING i had in me' — but by three self-set objectives installed inside it: the day-one tip split, the eighteen-month night-class alibi, and sole custody of the shed's cash tips. The job ended when a city work order bulldozed the third, not when the employer spent three months cutting his hours."
+  - page: wiki/interests/food-and-diet
+    type: evidences
+    claim: "Forty-one months inside one cuisine is the strongest control the corpus offers for a rule about what Dan does not evaluate: the Lebanese culture and humour registered and are recorded, and no judgement of the food survives anywhere."
+  - page: wiki/mind/concepts/institutional-out
+    type: evidences
+    claim: "The night-class alibi — a fictitious 9pm schedule held for over a year, securing peak shifts while exempting closing duty — is the out-protocol's documented masterpiece."
+  - page: wiki/mind/synthesis/attachment-trauma-bond
+    type: co-occurs
+    claim: "Dan's involuntary exit here set up the 2024 sole-earner rotation of the bond's leverage see-saw."
+  - page: wiki/mind/synthesis/vertical-authority-skepticism
+    type: evidences
+    claim: "The 41-month audit posture — and Dan's own documented sabotage — are this page's contribution to the skepticism model."
+  - page: wiki/mind/synthesis/supply-network
+    type: co-occurs
+    claim: "The supply network wrapped around this workday: Menore delivered mid-shift to the Shed block through taxi windows — primary-confirmed for May–Aug 2024, and the storytime's longer window is now corroborated, the Menore thread's 2020–24 gap having proved to be a handle change rather than a break in service."
+  - page: wiki/people/menore
+    type: supplied-by
+    claim: "Menore was the mid-shift supply line to the Shed block, his legit-taxi cover making the sidewalk handoffs trivial — primary-confirmed for May–Aug 2024 (deliveries to 1st Ave bet 57–58), and the earlier years no longer rest on the storytime alone: third-party threads show him running deliveries throughout 2023 and Jan–May 2024. This page's independent description of him as Dan's 'Dominican contact' is now confirmed from the message record."
+  - page: wiki/health/hyperreflexivity
+    type: co-occurs
+    claim: "An AI session dated by internal reference to roughly mid-2025 records Dan returning to full-time work after nearly eleven months unemployed following this job's involuntary end — the corpus's only documented marker of what came after the Aug 2024 loss."
+  - page: wiki/people/tarik-fallous
+    type: contains
+    claim: "Tarik's own 80-message direct thread (filed 2026-07-20) is the primary source for the wine-inventory and hiring-coordination texture behind the 'de facto manager' framing below, and documents the relationship continuing, warmly, nearly two years past this job's end."
+  - page: wiki/timeline/periods/2021-2023-employment-block
+    type: component-of
+    claim: "The Au Za'atar tenure (March 2021–August 2024) is the period's central institution — the 690-shift block that gives these three years their name and nearly all their documented events."
+---
+
+
+# Au Za'atar (NYC, ~2021–2024)
+
+Au Za'atar Midtown — the Lebanese restaurant at 58th & 1st owned by
+[[wiki/people/tarik-fallous|Tarik Fallous]] and his brother Ghassan — was
+Dan's main employment through the second NYC period: **41 months, March
+2021 to August 2024**, hired as a busser with zero food-service experience
+and a bank account at zero, talking his way into the veterans' equal tip
+split from day one. It is the most-visited location in his entire GPS
+record (445 visits) and the longest job of his adult life. For most of his
+tenure the restaurant operated out of a plywood COVID-era **"Shed"** on the
+58th Street sidewalk while the interior stood as a construction shell — a
+low-oversight sovereign territory where Dan ran his "9pm night class"
+alibi — the fullest documented instance of
+[[wiki/mind/concepts/institutional-out|the institutional-out protocol]] —
+for over a year to secure peak hours and tip splits, took sidewalk
+deliveries from his Dominican contact Menore through taxi windows, and
+eventually made himself the "Outside Guy": sole custodian of the dying
+shed section and its cash tips. The job ended in August 2024 when the
+city-mandated shed tear-down erased the territory. The DanAnnie dossier
+amendments add the mechanics and the verdict: the employer cut his hours
+through June–August 2024 in a pattern Dan read in real time as maneuvering
+to force a quit and dodge unemployment obligations ("lowering my hours so
+much that it's not even worth staying," Aug 6 2024); he dropped resumes
+from July 9 onward, filed for unemployment on August 8, and the loss is
+ruled **involuntary** (Amendment 2, ACCEPTED) — the fact that reframes
+Annie's late-2024 "you never work" grievances as locally valid but
+historically partial. What followed is only lightly documented: a
+separate AI-collaborative session (see
+[[wiki/health/hyperreflexivity]]), dated by internal reference to
+roughly mid-2025, has Dan noting he'd been "working for the first time
+since june 2024 for the last 2 weeks" and about to hit a full 40-hour
+week — nearly eleven months unemployed before returning to paid work,
+at an employer the corpus doesn't name.
+
+## The founding (Part 1 of the STORYTIME)
+
+Early 2021: two years into NYC round two, "the money just ran out," and Dan
+— wanting to keep funding the daily Dominican supply line — charmed owner
+Tarik at the interview for the brand-new Midtown location (twenty blocks
+south of the 307 E 76th apartment) and started the next day, no
+food-service history, straight into the equal FOH tip split. The owners'
+style set the whole culture: Tarik and Ghassan rented an apartment above
+the restaurant for no purpose but constant surveillance, micromanaged
+trivia while never working, and churned through staff so fast that Dan —
+"REAL good at the beginning of a job I like" — became the protocol-keeper
+by default (he was also, he notes, the only white FOH employee, which with
+the owners' prejudices cut in his favor). The opening formula — outdoor-only, BYOB, food "to die for" — made the
+sheds a genuine draw ("a sweet and sustainable gig") before the winters
+turned them into an endurance test. The shed had to be torn down and
+rebuilt nightly (2–3 hours of build), which gave Dan his permanent slot:
+sleep to 1pm, build 2–5, serve the early hours, first cut at 9–10pm —
+**he never closed once in 41 months**. A month in, he got
+[[wiki/people/annie-ulmer|Annie]] hired as hostess at the *original East
+Village location*. Winter service meant an apron over a ski jacket,
+carrying the tableside shawarma rotisserie across an icy sidewalk to
+"OUTDOOR-OUTDOOR" tables while reservation-holders queued freezing. The
+promotion to server came when [[wiki/people/dimitri|Dimitri]] insisted:
+during one of the mass-quit exoduses Dan rode his Boosted Board to the 5th
+Ave Uniqlo, bought a white Oxford, and started waiting tables in
+golf-caddie mode — the customer's advocate against the house ("hey, drop
+your beer bottle after you pour it and I'll say I did it and get you a
+free one") — which is "frowned upon in food service in a way that it is
+not as a golf caddie," and which made him the regulars' favorite.
+
+## The ecosystem
+
+The staff-side economy ran on mutual suspicion. Employees held a settled
+"radical skepticism" that the owners were siphoning the digital tip pool,
+and Dan ran what he called a "decentralized audit" — pocketing cash tips —
+as self-help against it. The core alliance was the **Triad**: Dimitri, the
+Greek manager-"oracle" who navigated the owners' moods (and "chose the
+flooded basement over a quiet life") — "the only boss or manager or
+supervisor who i have ever actually really loved"; **DJ — [[wiki/people/ismaila-barry|Ismaila Barry]]**,
+the Senegalese busser-turned-server Dan calls one of his best friends
+("smart and curious and funny"); and Dan supplying the analysis. The BOH
+bond had a specific genesis: Dan describes shedding an admitted prejudice
+about Mexicans by offering bumps to the cooks and bringing in (stolen)
+Takis — "turns out i fucking LOVE mexicans" — friendships he reports
+keeping to this day. Felipe, his "unbelievably gay Colombian bff," joined
+as a server (shattering the old glass door with a table leg on day one) —
+though per Dan directly (2026-07-14), contact with Felipe specifically
+did not survive past the job; see [[wiki/people/felipe]] for the
+correction. [[wiki/people/suzanne-frank|Suz]] visited for Dan's birthday
+(November 2021) and the owners comped the whole menu — "typical lebanese
+hospitality." Around them, the documented
+cast: [[wiki/people/manuel|Manuel]], a coworker whose thread opens with an October shift-swap; **Sergio**, a 53-year-old Miami service veteran whose war with Dan
+over the word "dude" escalated into a "nonsense meeting" with Tarik and
+Ghassan conducted in tooth-loss analogies; a **Tunisian zoomer manager**
+who tried to fire Dan for tip-siphoning on Thanksgiving 2023 — and failed,
+because the 58th Street regulars and neighbors demanded he stay; and
+**Menore**, the delivery node keeping the chemistry running mid-shift. The
+physical setting matched the social one: service continued through active
+interior construction (exposed studs, concrete dust, open floor trenches —
+"serving food in an active construction zone," a phase Dan marks as
+distinctly harder than the shed-only stasis before it), a basement Dan
+filmed ankle-deep in floodwater with potato boxes afloat, and a $50k-class
+DEENBOR delivery robot that — per Dan's flat confirmation, "the robot was
+never once used lol" — sat by the plate stacks as a monument to the fact
+that the "Outside Guy" was the only functioning infrastructure the place
+had. When the interior finally opened in 2024 it emerged fully dressed:
+glowing dome ovens with fresh dough staged for the fire, green velvet
+booths, geometric floor tiles, chain curtains and mood lighting — with
+blue painter's tape still covering the counters while service ran, the
+building's transition never quite complete even at its completion. The
+video record from this era also preserves Dan's twenty-plate balancing
+carry, the physical skill the busser years trained into him.
+
+## The middle years: de facto manager, Thanksgiving 2023, the factions
+
+Dan's own STORYTIME telling fills in the arc between the Shed's golden age
+and the end. He was repeatedly yelled at for vaping in front of customers
+("hey, the customers are all outside!") and finally drew a one-star review
+for leaving mid-meal that asked, verbatim, **"WAS HE HIGH?"** ("uh,
+clearly") — and survived it because Tarik and Ghassan liked him and "ALL of
+the neighbors and regulars" insisted he wait their tables. After Dimitri
+first quit there was simply no manager, and Dan became the de facto one —
+"except i don't do anything the manager should other than advocate for the
+customers and neighbors." The tip pool had zero transparency and paychecks
+were suspiciously identical every week, so for over a year Dan told staff
+and customers alike that the owners were siphoning tips ("because they 100%
+were"). Tarik's own direct texts corroborate the scope of the "de facto
+manager" role concretely: Dan ran grocery errands on Tarik's Barclays
+card, tracked liquor and wine stock by hand (two full inventory counts
+survive verbatim), and coordinated job-candidate interviews directly —
+see [[wiki/people/tarik-fallous]] for the primary texts. The 22-year-old Tunisian — hired as manager "because he speaks
+arabic" — took that to Tarik, and on **Thanksgiving 2023** Dan was sat down
+and "brought right up to the line of being let go." He held on. Then
+Dimitri returned ("WITH A STEEL CHAIR") as co-manager alongside the
+Tunisian, factions formed, and the owners consistently favored "the more
+seemingly muslim option" — even Dimitri taking short shrift. The Sergio
+war has a primary record: a mediated basement sit-down was recorded and
+auto-transcribed, with Sergio (serving since 2000, Miami, "I've served
+celebrities") accusing Dan of acting "like he owns the place" and refusing
+to be called "dude," and Dan countering that Sergio shoved him twice and
+that "dude" was "a term of endearment" while "kid" was "a term of
+criticism."
+
+## Annie, Valeria, and the contrast
+
+In a turn Dan flags as "truly weird," [[wiki/people/annie-ulmer|Annie]] —
+"prim and proper... reliability IS her strong suit and is my antithesis" —
+was fired with no notice and no reason from her hostess job at Au Za'atar's
+**original East Village location** (a job Dan had gotten her a month after
+his own start), while Dan held onto the Midtown job even longer. The "Night
+Class" alibi doubled as a shield during the
+[[wiki/people/valeria-iglesias-cid|Valeria]] breach — she was the Au
+Za'atar host-stand hostess — which the post-mortem
+tags as the period's "CORE ANOMALY."
+
+## Why the page matters
+
+**It is also the corpus's proof that a job never held Dan — a payload inside
+one did.** Forty-one months is the longest assigned commitment in the record
+and it dwarfs the six-month Fran vigil, which is why it falsifies
+[[wiki/mind/concepts/acquisition-drive]]'s prediction that no assigned goal
+ever received sustained costly effort. But the assignment itself was
+punishing by his own account, and what he actually sustained for those
+41 months was three objectives of his own installed inside the role: the
+veterans' tip split talked into existence on day one, the eighteen-month
+fabricated night class, and sole custody of the shed's cash tips. Each is
+separable from the job and each runs against the employer's interest. The
+tenure then tracks the payload rather than the employment — three months of
+deliberate hour-cutting in mid-2024 did not end it, and the destruction of
+the shed territory did. Argued in full at
+[[wiki/mind/synthesis/the-embedded-objective]].
+
+Au Za'atar fills what the timeline otherwise records as the 2021–2023
+employment block: he was employed, at volume, the whole time — the block was
+about trajectory, not idleness. And unlike the BFS dispute
+([[wiki/work/bfs-foods]]), where Dan documents himself as the wronged party,
+here the same forensic method is turned on his own conduct: unreliable
+narrator, saboteur, and beneficiary of the exact off-books logic he condemns
+elsewhere. The two pages together are the strongest evidence that the
+methodology is genuinely domain-invariant rather than self-serving.
+
+The ending, in his own words: by the final stretch he served "like 3
+tables per week total and would just hang," pocketing all cash tips, until
+the outdoor dining shutdown closed the Shed for good — "it was a long run
+and it was fun and good food and cool mexicans and... valeria." He came in
+"a novice in a red apron" and left "a legend in a white Uniqlo shirt," with
+the respect of the BOH Mexican squad intact. (The famous "outside bread,"
+he confirms, "obviousLY WAS NOT from outside.") The shutdown itself had
+two causes, and Dan is precise about the order: "once the inside opened,
+they just didn't have enough interest in outdoor dining" — demand for the
+sidewalk tables died first — "also the city made places tear down sheds
+for winter, so that was that." The city mandate finished off a territory
+the finished interior had already made obsolete.
+
+**On pay:** confirmed by Dan directly (2026-07-14) — base wage was
+$15/hour plus tip pool, with checks (paid weekly, Sundays) typically
+$800–1,000 for a six-day week. Unusually for the industry, the tip pool
+was split equally between servers and bussers rather than weighted toward
+servers — consistent with the "equal FOH tip split" already documented as
+the structural hook that made the job worth staying in.
+
+**Gaps:** his final role title (busser → server, informally); the
+Tunisian manager's name. The STORYTIME/DANSYNTH record is stylized
+self-narration through Gemini and should be read as memoir, not
+deposition. **Media collection gap:** the era's video/photo artifacts
+cited in the storytime sessions — the hidden-camera basement hug
+(`65A14E3A….mov`), the Central Park kiss (`69597826….mov`), the finished
+interior with the DEENBOR robot (`IMG_0978.mp4`), the flooded basement
+(`IMG_8225.MOV`), the "outside bread" interrogation (`BDBAEDEC….mp4`),
+the shed exterior (`IMG_7152.MOV`), the twenty-plate carry
+(`IMG_8393.mov`), and the Dimitri+DJ portrait (`IMG_5318.HEIC`) — exist
+only as uploads inside the Gemini sessions; none are on disk in `raw/`.
+Locating the originals is an open collection task.
+
+> **REVISED [2026-07-14]:** the Sergio-mediation mediator is confirmed —
+> Dan's own follow-up in the same session names Ghassan as running most of
+> the sit-down, with Tarik joining toward the end. It was not Dimitri. The
+> same follow-up clarifies the Tunisian manager was uninvolved in the
+> Sergio incident specifically ("he and i were kinda chill by then") and
+> that Sergio himself was a short-tenured hire who "came through and left
+> quickly" rather than a lasting cast member.
+
+> **REVISED [2026-07-13]:** DANSYNTH ingest corrected the location (Au
+> Za'atar **Midtown, 58th & 1st** — not the East Village flagship), fixed
+> the start month (March 2021), and supplied the ending (August 2024 shed
+> shutdown). Second correction, refined same day by the Part 1 STORYTIME:
+> Annie worked as hostess at Au Za'atar's **original East Village
+> location** — Dan got her the job a month after he started (~April 2021).
+> Her later zero-notice firing was from that separate location ("the
+> restaurants ran totally differently and with different people"), not
+> from the Midtown shed.
+
+

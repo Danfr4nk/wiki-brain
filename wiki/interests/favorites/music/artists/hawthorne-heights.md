@@ -1,0 +1,34 @@
+
+---
+domain: interests
+page_type: entity
+status: stable
+date_created: 2026-08-01
+date_modified: 2026-08-01
+sources:
+  - "raw/self/concerts/table.csv"
+related: []
+tags: [music-production, digital-footprint]
+connections:
+  - page: wiki/interests/concert-record/festivals/vans-warped-tour
+    type: component-of
+    claim: "Hawthorne Heights performed at Vans Warped Tour on Aug 1, 2005 (Post-Gazette Pavilion, Burgettstown, PA)."
+---
+
+# Hawthorne Heights
+
+Hawthorne Heights is an act Dan Frank saw live 1 time between 2005, per the concert log he kept (preserved in the corpus). This page records those appearances and the details attached to each in the source.
+
+## Live appearances
+
+All dates, venues, cities, and notes below are taken from the source table and preserved in full, including tentative or unconfirmed items.
+
+| Date | Show / Context | Venue | City | Note |
+|------|---------------|-------|------|------|
+| Aug 1, 2005 | Vans Warped Tour | Post-Gazette Pavilion | Burgettstown, PA | Warped Tour date. Lineup included Fall Out Boy, Alexisonfire, Gogol Bordello, Hawthorne Heights. |
+
+## Notes per appearance
+
+- **Aug 1, 2005** — Vans Warped Tour, Post-Gazette Pavilion, Burgettstown, PA. Warped Tour date. Lineup included Fall Out Boy, Alexisonfire, Gogol Bordello, Hawthorne Heights.
+
+

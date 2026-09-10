@@ -1,0 +1,85 @@
+
+---
+domain: people
+page_type: entity
+title: "Kya Hansen (\"bbblud\")"
+aliases: ["bbblud", "blud"]
+status: closed
+date_created: 2026-07-14
+date_modified: 2026-07-14
+date_range_start: 2019-06-01
+date_range_end: 2020-03-23
+sources:
+  - raw/self/captures/2026-07-14-kya-hansen.md
+  - raw/self/dox-scan/all_imessages_complete_dump.txt
+related:
+  - wiki/people/shelbie-breakiron
+  - wiki/people/jerad-friedline
+  - wiki/mind/psychosexual/arrangement-history
+knowledge: mixed
+tags: [relationships, digital-footprint]
+infobox:
+  name: "Kya Hansen (\"bbblud\")"
+  relationship_to_dan: unknown
+  first_contact: 2019-06-01
+  known_for: "Kya Hansen — online handle bbblud ('blud') — is a Canadian model and"
+---
+
+# Kya Hansen ("bbblud")
+
+Kya Hansen — online handle **bbblud** ("blud") — is a Canadian model and
+OnlyFans creator Dan was, by his own account (2026-07-14), the Reddit
+subreddit admin for during a stretch of 2019. He lost interest in the
+role over a specific, concrete frustration: she was an OnlyFans creator
+who "absolutely refused to appear topless, much less naked" — a
+mismatch between the platform's expected content economy and what she
+was actually willing to post that he found untenable as an unpaid
+moderator. He describes staying in communication with her for a while
+after, mostly through OnlyFans messaging.
+
+## What the corpus independently shows
+
+Two dated, low-context data points confirm Dan was actively promoting her
+content to people in his own circle across at least a nine-month span,
+consistent with more than a passing interest. On **June 7, 2019**, he
+sent [[wiki/people/shelbie-breakiron|Shelbie Breakiron]] her Instagram
+link (`instagram.com/bbblud`) along with two images — mid-way through the
+Shelbie relationship, in the same period Shelbie was herself building out
+a webcam career (see [[wiki/people/shelbie-breakiron]]). On **March 23,
+2020**, in a long, freewheeling conversation with childhood friend
+[[wiki/people/jerad-friedline|Jerad]] about the OnlyFans/camming economy
+generally — equipment, pricing psychology ("panties and socks are a
+racket"), the platform's business logic ("Onlyfans is such a brilliant
+idea") — Dan recommends her again: "until then...you should check this
+girl out instagram.com/bbblud." Jerad's ambiguous reply in the same
+window, "I don't think that's her," suggests some unresolved identity
+question came up in that conversation, though the context doesn't survive
+in what's captured.
+
+## Reading it
+
+The subreddit-admin role and the OnlyFans-messaging relationship sit
+naturally alongside the broader pattern already documented at
+[[wiki/mind/psychosexual/arrangement-history]] — an ongoing, active
+interest in the commercial-sexual creator economy that runs in parallel
+to, not just downstream of, Dan's own relationship arrangement history.
+The specific complaint (an OF creator unwilling to post nude content)
+reads as a fairly ordinary creator-economy frustration rather than
+anything more loaded — but it's notable that it was significant enough to
+end his moderation involvement while apparently not ending the personal
+contact.
+
+## Gaps
+
+The actual OnlyFans message history with Kya Hansen — which Dan believes
+may be extractable from a source not yet in the raw corpus — has not been
+recovered. Exact dates for the Reddit admin period, how the role began,
+and what (if anything) happened to the contact after March 2020 are all
+undocumented. Whether "Kya Hansen" is her real name or a stage name is
+not established from the current sources.
+
+## Related
+
+[[wiki/people/shelbie-breakiron]] · [[wiki/people/jerad-friedline]] · [[wiki/mind/psychosexual/arrangement-history]]
+
+

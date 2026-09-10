@@ -1,0 +1,86 @@
+
+---
+domain: mind
+page_type: index
+title: "Politics & Axiomatic Ideologies — Hub"
+status: active
+date_created: 2026-08-10
+date_modified: 2026-08-10
+sources: []
+tags: [politics, ideology]
+connections:
+  - page: wiki/mind/index
+    type: component-of
+    claim: "This is the fifth organizing cluster in the mind domain, alongside profile/, concepts/, synthesis/ and psychosexual/ — a topic-based grouping for material that had been scattered across synthesis/, interests/ and self/ with no single point of entry."
+---
+
+# Politics & Axiomatic Ideologies
+
+Dan's political material has existed in the wiki for weeks — a dated
+conversion event, a state-scale forensic method, a workplace-and-family
+distrust architecture, two archived reading-list stubs — but it has
+never had one door in. This page is that door. It opened 2026-08-10
+with one new page, [[wiki/mind/politics/axioms]], written to answer a
+question none of the existing pages asked: is the corpus's own flagged
+"paradox" — leftist politics alongside a documented fascination with
+Caesar and Trump — actually a contradiction, or two expressions of one
+axiom? (Short answer, argued in full on that page: one axiom. He tracks
+the legitimacy of concentrated power, not the tribe of whoever holds it.)
+
+## The axiom layer (this cluster)
+
+- [[wiki/mind/politics/axioms]] — the power axiom: what Dan's Caesar
+  reading and his own Cato-the-Younger AI persona actually resolve to,
+  against the dossier's "paradox" framing. New, 2026-08-10.
+
+## The existing material this cluster indexes
+
+These pages are not moved — moving them would break every inbound link
+across the wiki for no navigational gain — but they are the substance of
+Dan's politics, and belong in this map:
+
+- [[wiki/mind/synthesis/2020-left-turn]] — the dated origin event: a
+  self-narrated COVID-lockdown radicalization on 2020-08-22, Bernie 2020
+  as the electoral on-ramp, Chapo/Hasan/ContraPoints as the media
+  pipeline, Marx/Kropotkin as the reading, the family's union-busting
+  money as the emotional clinch.
+- [[wiki/mind/synthesis/political-psyops]] — the settled adult ideology
+  run at state scale: the January 6th "hybrid organic event + inserted
+  lethal core" reading, the both-parties-captured structural-decay
+  narrative, politics held simultaneously as forensic object and
+  aesthetic spectacle.
+- [[wiki/mind/synthesis/vertical-authority-skepticism]] — the
+  underlying architecture the politics runs on: vertical authority
+  (fathers, managers, owners, the state) is structurally suspect;
+  lateral peers are where trust lives. Traced to the 2005 family
+  rupture, evidenced at every scale from a $50 drawer dispute to J6.
+- [[wiki/interests/roman-republic]] — the 2024 full-immersion binge on
+  the fall of the Roman Republic and "great man" biography; the primary
+  evidence base [[wiki/mind/politics/axioms]] reasons from.
+- [[wiki/interests/gore-vidal]] — the earlier, fiction-mediated version
+  of the same Rome-and-empire fixation.
+- [[wiki/interests/favorites/books/topics/politics]] and
+  [[wiki/interests/favorites/books/topics/trump]] — archived reading-list
+  stubs (79 and 40+ titles respectively); thin but the raw count behind
+  the qualitative claims above.
+- [[wiki/mind/concepts/exocortex]] — where the CATO AI-persona bootloader
+  is fully documented as an artifact; [[wiki/mind/politics/axioms]] adds
+  the specific political reading of the name that page's own description
+  ("refused to compromise under pressure") elides.
+
+## What's still missing
+
+This is a beginning, not a complete section. Untouched by this pass:
+Dan's specific policy positions beyond the "democratic socialist /
+anti-capitalist" label (healthcare, labor, foreign policy — none are
+inventoried anywhere in the wiki); a dedicated page on the pre-2016
+political identity (`2020-left-turn.md`'s own Gaps section notes this is
+thin — "an annoying little conservative fuckcunt" per one 2021
+retrospective, per [[wiki/people/joe-oshnack]], but the corpus itself
+is sparse before the Bernie era); the "Chinese ascendancy against
+American self-sabotage" line in `political-psyops.md`, mentioned once
+and never developed; and whether the power axiom this cluster now names
+extends to non-Western/non-Roman concentrations of power, which
+[[wiki/mind/politics/axioms]]'s own Gaps flags as untested.
+
+

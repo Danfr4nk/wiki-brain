@@ -1,0 +1,332 @@
+#!/usr/bin/env python3
+"""wiki-history — every version of every page, and whether the dates agree.
+
+Git is the history mechanism in this repository (`CLAUDE.md`, Architecture), and
+because every operation commits `<op>: <short description>`, the log is not a
+list of saves — it is a labelled record of every ingest, climb, close, answer,
+translate and portal edit that has ever touched a page. This reads it.
+
+The portal derives the same log into a reader-facing panel
+(`scripts/build-wiki-history.mjs` in `caakehorn/home`, `docs/CORPUS.md` §1.5a).
+This is the half that belongs here: the questions a session working in this
+repository asks, and one check the portal cannot make.
+
+---- THE CHECK, AND WHY IT IS THIS ONE -----------------------------------------
+
+`date_modified` in frontmatter is load-bearing. `bin/wiki-climb check` decides
+whether a synthesis has gone stale by comparing its `date_modified` against its
+premises'; `bin/wiki-plain check` decides whether a plain twin has, the same way.
+Both reason from a date a session typed by hand.
+
+The obvious check — "does `date_modified` match the last commit" — is the wrong
+one, and measuring it is how you find that out. 214 of 472 pages are behind their
+last commit, and the commits doing it are `delete: knock2 — the entry held back
+from the 47` and its kind: a link cleanup that touched forty pages and changed
+what none of them SAY. Those pages are correct not to have bumped. A gate on that
+number would fail on every honest run, and a gate that fails on every honest run
+gets ignored, then removed.
+
+So `check` gates on the one direction that cannot be innocent: **a page whose
+`date_modified` is LATER than its most recent commit.** Nothing in the working
+tree can make that true honestly — the file has not changed since the commit, so
+a date after it is a claim git does not support. It is what "clearing a stale
+warning by bumping a date" looks like from the outside, and that is the move
+`CLAUDE.md` calls the one that corrupts the system quietly. It is at 0 today.
+
+`drift` reports the other direction, and reports it as a reading job rather than
+a defect: it names the commit, so a session can see in one line whether the page
+moved or only its neighbours did.
+
+    bin/wiki-history status              # pages, revisions, span, the busiest
+    bin/wiki-history page <slug>         # one page's revisions, newest first
+    bin/wiki-history drift [-n N]        # date_modified behind the log
+    bin/wiki-history check                # the gate: 0 = clean, 1 = forward-dated
+
+A shallow clone cannot answer any of this — its log does not reach the first
+version of any page — so every command says so and `check` passes rather than
+failing on a truth it cannot see.
+"""
+import argparse
+import os
+import re
+import subprocess
+import sys
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+WIKI = os.path.join(ROOT, "wiki")
+
+DATE_MODIFIED = re.compile(r"^date_modified:\s*[\"']?(\d{4}-\d{2}-\d{2})", re.M)
+# `<op>: <short description>`, the convention CLAUDE.md sets for every commit.
+OP = re.compile(r"^([a-z][a-z-]*)(\([^)]*\))?:")
+
+SHALLOW = (
+    "wiki-history: this is a shallow clone, so the log does not reach the first\n"
+    "  version of any page. Run `git fetch --unshallow` for a real answer."
+)
+
+
+def git(*args):
+    return subprocess.run(
+        ["git", "-C", ROOT, *args],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout
+
+
+def shallow():
+    try:
+        return git("rev-parse", "--is-shallow-repository").strip() == "true"
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return False
+
+
+def history():
+    """path -> [(sha, iso date, author, subject)], newest first, renames followed.
+
+    One pass with `-M` rather than `--follow` per file: `--follow` is 472
+    invocations and still cannot see two pages that swapped names. Walking
+    newest-first, a rename seen at commit C means every OLDER commit used the old
+    name, so the alias is installed as the rename is passed.
+    """
+    sep = "\x1f"
+    out = git(
+        "log",
+        "--no-merges",
+        "--name-status",
+        "-M",
+        f"--format=@@%H{sep}%aI{sep}%an{sep}%s",
+        "--",
+        "wiki/",
+    )
+    revs = {}
+    alias = {}
+    sha = date = author = subject = None
+    for line in out.split("\n"):
+        if line.startswith("@@"):
+            sha, date, author, subject = line[2:].split(sep)
+            continue
+        if not line.strip() or sha is None:
+            continue
+        fields = line.split("\t")
+        status = fields[0][0]
+        path = fields[2] if status == "R" and len(fields) > 2 else fields[1]
+        if not path.startswith("wiki/") or not path.endswith(".md"):
+            continue
+        current = alias.get(path, path)
+        # A delete is a commit that touched the page and is not a version OF it:
+        # there is no file at that commit to show. Counting it would also put
+        # this tool's revision count one or two above the portal's, and two
+        # derivations of one log that disagree on a count are worse than either.
+        if status == "D":
+            continue
+        revs.setdefault(current, []).append((sha, date, author, subject, status, path))
+        if status == "R" and fields[1].endswith(".md"):
+            alias[fields[1]] = current
+    return revs
+
+
+def live_pages():
+    out = set()
+    for dirpath, _dirs, files in os.walk(WIKI):
+        if os.sep + "assets" in dirpath + os.sep:
+            continue
+        for f in files:
+            if f.endswith(".md"):
+                out.add(os.path.relpath(os.path.join(dirpath, f), ROOT))
+    return out
+
+
+def slug_of(path):
+    return path[len("wiki/") : -len(".md")]
+
+
+def declared_date(path):
+    """`date_modified` as the page states it, or None."""
+    try:
+        with open(os.path.join(ROOT, path), encoding="utf-8", errors="replace") as fh:
+            head = fh.read(4000)
+    except OSError:
+        return None
+    match = DATE_MODIFIED.search(head)
+    return match.group(1) if match else None
+
+
+def op_of(subject):
+    match = OP.match(subject)
+    return match.group(1) if match else None
+
+
+# ---------------------------------------------------------------------------
+
+
+def cmd_status(args):
+    revs = history()
+    live = live_pages()
+    tracked = {p: r for p, r in revs.items() if p in live}
+    total = sum(len(r) for r in tracked.values())
+    dates = sorted(d for r in tracked.values() for (_s, d, *_rest) in r)
+
+    print(f"wiki-history: {len(tracked)} pages · {total} revisions")
+    if dates:
+        print(f"  span    {dates[0][:10]} → {dates[-1][:10]}")
+    untracked = len(live - set(tracked))
+    if untracked:
+        print(f"  {untracked} page(s) in wiki/ with no commit yet")
+
+    ops = {}
+    for r in tracked.values():
+        for _sha, _date, _author, subject, *_rest in r:
+            ops[op_of(subject) or "(none)"] = ops.get(op_of(subject) or "(none)", 0) + 1
+    print("\n  by operation")
+    for name, n in sorted(ops.items(), key=lambda kv: -kv[1])[: args.top]:
+        print(f"    {n:5}  {name}")
+
+    print(f"\n  most revised")
+    for path, r in sorted(tracked.items(), key=lambda kv: -len(kv[1]))[: args.top]:
+        print(f"    {len(r):5}  {slug_of(path)}")
+
+    never = [p for p, r in tracked.items() if len(r) == 1]
+    print(f"\n  {len(never)} page(s) never revised since the commit that created them")
+
+
+def cmd_page(args):
+    slug = args.slug.removeprefix("wiki/").removesuffix(".md")
+    path = f"wiki/{slug}.md"
+    revs = history().get(path)
+    if not revs:
+        print(f"wiki-history: no commits touch {path}", file=sys.stderr)
+        return 1
+
+    declared = declared_date(path)
+    print(f"{slug} — {len(revs)} revision(s)")
+    if declared:
+        print(f"  frontmatter says date_modified: {declared}")
+    print()
+    for sha, date, author, subject, status, at in revs:
+        moved = "" if at == path else f"  (as {slug_of(at)})"
+        print(f"  {date[:10]}  {sha[:10]}  {author[:18]:18}  {subject[:64]}{moved}")
+    return 0
+
+
+def cmd_drift(args):
+    revs = history()
+    live = live_pages()
+    rows = []
+    for path in sorted(live):
+        r = revs.get(path)
+        if not r:
+            continue
+        declared = declared_date(path)
+        if declared is None:
+            rows.append((path, None, r[0][1][:10], r[0][3]))
+            continue
+        if declared < r[0][1][:10]:
+            rows.append((path, declared, r[0][1][:10], r[0][3]))
+
+    print(f"wiki-history: {len(rows)} page(s) whose date_modified is behind the log\n")
+    print("  This is a reading job, not a defect list. A link cleanup that touched")
+    print("  forty pages moved none of them, and those pages are right not to have")
+    print("  bumped. The commit is printed so you can tell which is which.\n")
+    for path, declared, committed, subject in sorted(rows, key=lambda r: r[2], reverse=True)[
+        : args.limit
+    ]:
+        says = declared or "(none)"
+        print(f"  {says:10}  →  {committed}   {slug_of(path)}")
+        print(f"  {'':26}   {subject[:70]}")
+    if len(rows) > args.limit:
+        print(f"\n  … and {len(rows) - args.limit} more (-n to raise the limit)")
+    return 0
+
+
+def uncommitted():
+    """Pages with changes not yet in the log — staged, unstaged or untracked.
+
+    These are EXEMPT, and the gate is worthless without the exemption. A session
+    mid-pass has edited a page and set `date_modified` to today, and the last
+    commit is necessarily older than that — which is the exact shape the check
+    looks for. Without this, the gate fires on every honest working tree, and a
+    gate that fires on every honest run is one somebody removes.
+
+    The date on an uncommitted edit is a claim about a change that is about to
+    be committed. It becomes checkable the moment it is.
+    """
+    out = git("status", "--porcelain", "--", "wiki/")
+    paths = set()
+    for line in out.split("\n"):
+        if not line.strip():
+            continue
+        entry = line[3:]
+        # A rename is `R  old -> new`; the new name is the one on disk.
+        if " -> " in entry:
+            entry = entry.split(" -> ", 1)[1]
+        paths.add(entry.strip().strip('"'))
+    return paths
+
+
+def cmd_check(_args):
+    """The gate. A page dated later than its last commit, and nothing else."""
+    if shallow():
+        print(SHALLOW)
+        print("wiki-history: check skipped — 0 errors.")
+        return 0
+
+    revs = history()
+    pending = uncommitted()
+    bad = []
+    for path in sorted(live_pages()):
+        r = revs.get(path)
+        if not r or path in pending:
+            continue
+        declared = declared_date(path)
+        if declared and declared > r[0][1][:10]:
+            bad.append((path, declared, r[0][1][:10], r[0][0][:10]))
+
+    for path, declared, committed, sha in bad:
+        print(
+            f"  ERROR  {slug_of(path)}: date_modified {declared} is later than the last\n"
+            f"         commit that touched the file ({committed}, {sha}). The file has\n"
+            f"         not changed since, so the date is a claim git does not support.\n"
+            f"         If a premise moved under this page, re-read it — never clear a\n"
+            f"         staleness warning by bumping a date."
+        )
+    print(f"wiki-history: {len(bad)} error(s).")
+    return 1 if bad else 0
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(prog="wiki-history", description=__doc__)
+    sub = parser.add_subparsers(dest="cmd")
+
+    p = sub.add_parser("status", help="pages, revisions, span, the busiest")
+    p.add_argument("--top", type=int, default=10)
+    p.set_defaults(func=cmd_status)
+
+    p = sub.add_parser("page", help="one page's revisions, newest first")
+    p.add_argument("slug")
+    p.set_defaults(func=cmd_page)
+
+    p = sub.add_parser("drift", help="date_modified behind the log")
+    p.add_argument("-n", "--limit", type=int, default=25)
+    p.set_defaults(func=cmd_drift)
+
+    p = sub.add_parser("check", help="the gate: a page dated later than its last commit")
+    p.set_defaults(func=cmd_check)
+
+    args = parser.parse_args(argv)
+    if not getattr(args, "func", None):
+        parser.print_help()
+        return 0
+
+    if args.cmd != "check" and shallow():
+        print(SHALLOW, file=sys.stderr)
+        return 2
+    try:
+        return args.func(args) or 0
+    except subprocess.CalledProcessError as err:
+        print(f"wiki-history: git failed — {err.stderr.strip()}", file=sys.stderr)
+        return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main())

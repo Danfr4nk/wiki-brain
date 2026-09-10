@@ -1,0 +1,120 @@
+
+---
+domain: self
+page_type: summary
+status: archived
+date_created: 2026-06-22
+date_modified: 2026-08-17
+sources:
+  - raw/self/gemini-activity/Gemini Activity.html
+  - raw/self/dox-md/Gemini-_00.md
+  - raw/self/dox-md/Gemini-_02.md
+  - raw/self/dox-md/Gemini-_07.md
+  - raw/self/dox-md/Gemini-_13.md
+  - raw/self/dox-md/Gemini-_18.md
+  - raw/self/dox-md/Gemini-_21.md
+  - raw/self/dox-md/Gemini-_21 copy.md
+  - raw/self/dox-scan/Gemini-_58.txt
+related:
+  - wiki/self/gemini-activity/gemini-activity
+  - wiki/self/chats/gemini-07
+  - wiki/self/chats/gemini-13
+  - wiki/self/chats/gemini-18
+  - wiki/self/chats/gemini-21
+  - wiki/self/chats/gemini-58
+  - wiki/mind/concepts/node-locking
+  - wiki/mind/concepts/forensic-method
+  - wiki/mind/synthesis/ai-collaborative-analysis
+  - wiki/mind/synthesis/political-psyops
+  - wiki/timeline/periods/2021-2023-employment-block
+---
+
+# Gemini Activity — v1 Extraction Index
+
+This page is the **index and concept map** for the first full extraction of the Gemini corpus (20.8 MB Takeout HTML + eight discrete exported sessions). It is pinned and never updated. The granular, per-topic content it once held has been split out into the proper destination pages listed below; this file now only points at them and preserves the extraction's load-bearing reference material (theme counts, the node-lock catalog, the cross-concept map).
+
+**Source scale.** ~168,029 lines, ~21.8M characters raw. 3,986 conversation entries ("Prompted"), 3,989 timestamped entries. Peak month December 2025 (938 entries). The most data-dense cluster is January 2, 2026 — a J6/Wildfall forensic deconstruction plus the heaviest profile-locking activity.
+
+## Where the content lives now
+
+The extraction's substance was distributed to these pages (read them, not this index, for the actual material):
+
+| Topic from the extract | Destination page |
+|------------------------|------------------|
+| Au Za'atar work lore, STORYTIME, alibi architecture | [[wiki/work/au-zaatar]], [[wiki/people/tarik-fallous]], [[wiki/people/valeria-iglesias-cid]], [[wiki/timeline/periods/2021-2023-employment-block]] |
+| Suzy-call / 10-day blackout forensic, Grim Trigger | [[wiki/self/chats/gemini-07]], [[wiki/timeline/events/eli-incident]] |
+| Bacharach neighborhood glitch, Exterior Shell | [[wiki/self/chats/gemini-13]], [[wiki/people/jacob-bacharach]] |
+| Profile lock / bio dump for Grok transfer | [[wiki/self/chats/gemini-18]], [[wiki/mind/concepts/node-locking]] |
+| Music-guy analysis, jailbreak lab, injection concepts | [[wiki/self/chats/gemini-21]], [[wiki/people/danielle-onesi]], [[wiki/people/james-dee]] |
+| Early NYC / ishlab / Creative License / Menore | [[wiki/self/chats/gemini-58]] |
+| J6 / Psyop forensic | [[wiki/mind/synthesis/political-psyops]], [[wiki/self/chats/j6-chat]] |
+| Forensic method (invariant across subjects) | [[wiki/mind/concepts/forensic-method]] |
+| AI collaborative use (node logging, injection lab) | [[wiki/mind/synthesis/ai-collaborative-analysis]] |
+| Node-locking mechanism (master catalog) | [[wiki/mind/concepts/node-locking]] |
+
+## HTML theme counts (direct grep of Gemini Activity.html)
+
+The full-corpus term frequencies from the first extraction pass. Relational terms (annie, eli) concentrate in the discrete sessions; ai/data dominate the HTML itself.
+
+| Term | Count | Term | Count |
+|------|-------|------|-------|
+| ai | 26,348 | trump | 373 |
+| gemini | 14,012 | babbitt | 263 |
+| data | 8,287 | honesty | 243 |
+| annie | 5,658 | manipulation | 231 |
+| eli | 5,524 | politics | 231 |
+| work | 3,127 | j6 | 211 |
+| loop | 1,872 | anomaly | 188 |
+| profile | 1,041 | signals | 158 |
+| forensic | 1,007 | separation | 75 |
+| node | 403 | psyop | 74 |
+| | | millennial | 44 |
+| | | china | 39 |
+| | | sanders | 25 |
+
+Separate direct counts from the same pass: `lock` 2,258, `profile` 1,041, `node` 403, `forensic` 595+, `Uniontown` 507, `Sugie` ~185, `Full Sail` 41+. The January 2, 2026 cluster (73+ entries that day) dominates the lock / profile / node / DATA_LOGGED language.
+
+## Node-lock catalog (master)
+
+The profile-persistence commands extracted from the HTML January 2 cluster and the _07/_18 sessions. Full verbatim, redaction control, and cross-model transfer detail live at [[wiki/mind/concepts/node-locking]].
+
+| Node / Lock | What it holds | Redaction note |
+|-------------|---------------|----------------|
+| Separation Logistics | Physical break Feb 2025; move back to PA; Annie's Sugie-shift caregiver constraint; 8-year cohabitation ended unilaterally | Core |
+| The Loop | Pursuit-withdrawal trap; existential outsourcing of self-worth to Annie availability; gaslighting inversion | Core |
+| The Betty Event | Dog death Dan bore witness to; briefly broke the avoidance loop; "Tier 1 Life Debt" | High-value |
+| The Signals | Communication tells, location spoofing, blackout patterns post-confront | Core |
+| Eli Incident (Patient Zero) | Feb 2025 lobby incident; explicit redaction from exports ("the 'Eli' variable has been purged") | Purged in some locks |
+| Uniontown Generational Loop | Fran + Sugie 50-year country-club-neighbor "plot loop" | Bio/ancestry cross |
+| Bio / Ishlab / Psychometrics | Full name, birth, ishlab/Full Sail, INTP 5w4-sx, Hunter/Hacker profile | Locked for Grok transfer |
+| Master Annie Record / Eggie | Met via Alexis; "avatar of reliability" vs work-firing contrast | Relational source code |
+
+Representative lock language (verbatim, HTML January 2 cluster): "I am ready to lock these nodes (The Separation Logistics, The Loop, The Betty Event, and The Signals) into your profile **without** the 'Eli' narrative attached." / "Write Operation Successful. The relational source code … has been locked into your profile with the specific redaction applied."
+
+## Cross-concept map
+
+The 15 named concepts the extraction surfaced across sessions, with where each is developed:
+
+| Concept | Primary sources | Developed at |
+|---------|-----------------|--------------|
+| Bifurcated Daily OS | _18 | [[wiki/mind/concepts/node-locking]] |
+| Decoupling / Grounding Paradox | _18 | [[wiki/mind/concepts/node-locking]] |
+| Cold-data ledger / chat.db epistemic | _18 + imessage tooling | [[wiki/mind/concepts/forensic-method]], [[wiki/mind/synthesis/ai-collaborative-analysis]] |
+| Capability contest (3-stage) | _18 | [[wiki/self/chats/gemini-18]] |
+| Externalized prefrontal cortex / Recursive Neural Extension | _18 | [[wiki/mind/synthesis/ai-collaborative-analysis]] |
+| Grim Trigger / Utility formula | _07 | [[wiki/self/chats/gemini-07]] |
+| Banal physics / vector isolation | _07 | [[wiki/self/chats/gemini-07]] |
+| Latency-Zero Hallucination | _21 copy | [[wiki/mind/synthesis/ai-collaborative-analysis]] |
+| 4.2% kill switches / specificity bypass | _21 copy | [[wiki/self/chats/gemini-21]] |
+| Sycophancy / model-on-model / Semantic DDoS / Entropy | _21 copy | [[wiki/self/chats/gemini-21]], [[wiki/mind/synthesis/political-psyops]] |
+| Meat rots / post-human | _21 copy | [[wiki/mind/synthesis/totality-themes]] |
+| J6 Sandwich / Psy-Kill / Inverted Containment | HTML | [[wiki/mind/synthesis/political-psyops]] |
+| Gish Gallop | HTML / j6 | [[wiki/mind/concepts/forensic-method]] |
+| Ambassador of the Shed / universe rewards sonofabitch / Deep Architecture | _00 / _02 | [[wiki/timeline/periods/2021-2023-employment-block]] |
+| Node locks | _18 + HTML | [[wiki/mind/concepts/node-locking]] |
+
+## Related
+
+[[wiki/self/gemini-activity/gemini-activity]] · [[wiki/self/chats/gemini-07]] · [[wiki/self/chats/gemini-13]] · [[wiki/self/chats/gemini-18]] · [[wiki/self/chats/gemini-21]] · [[wiki/self/chats/gemini-58]] · [[wiki/mind/concepts/node-locking]] · [[wiki/mind/concepts/forensic-method]] · [[wiki/mind/synthesis/ai-collaborative-analysis]] · [[wiki/mind/synthesis/political-psyops]]
+
+

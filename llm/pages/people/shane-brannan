@@ -1,0 +1,169 @@
+---
+
+domain: people
+
+page_type: entity
+
+status: active
+
+date_created: 2026-09-02
+
+date_modified: 2026-09-02
+
+date_range_start: 2011-06-27
+
+date_range_end: 2016-03-17
+
+knowledge: earned
+
+sources:
+
+- raw/self/twitter/archive.jsonl
+
+- contacts.csv
+
+tags: [uniontown-era, nyc-era]
+
+infobox:
+
+name: "Shane Brannan"
+
+relationship_to_dan: friend
+
+known_for: "The gaming channel — nineteen tweets across 2011–2016 that are almost entirely about games, and the only documented relationship in the corpus organised around playing them"
+
+connections:
+
+- page: wiki/people/josh-brannan
+
+type: co-occurs
+
+claim: "Shane and Josh share a surname and are addressed together in the same tweet on 6 November 2012, placing them in one household or family; the exact relation is undocumented."
+
+- page: wiki/interests/video-games
+
+type: evidences
+
+claim: "The nineteen tweets to Shane are the densest gaming evidence in the corpus and fall inside the 2008–2015 hole in that page's timeline, showing an intensity the page's 'low-grade presence' reading was drawn without."
+
+- page: wiki/self/twitter
+
+type: evidenced-by
+
+claim: "This relationship exists in the tweet archive and nowhere else — no message thread, no Facebook exchange, no mention on any other page before 2026-09-02."
+
+---
+
+# Shane Brannan
+
+Shane Brannan is the person Dan talked to about **video games**, and
+
+almost only about video games. Nineteen tweets between June 2011 and March
+
+2016 — eighteen of them opening with his handle, which makes this a
+
+direct-address relationship rather than a name Dan drops in passing — and
+
+the subject matter barely varies.
+
+He had no page here until 2026-09-02, and he is not named anywhere else in
+
+the corpus: no message thread, no Facebook exchange, no appearance on
+
+another person's page. He exists in the tweet archive and in one row of
+
+`contacts.csv` (`Shane, Brannan`, `7248586899`, `twitter.com/shane_brannan`,
+
+`jayysus@live.com`) — a 724 number, which is Fayette/Westmoreland County,
+
+placing him in the Uniontown orbit rather than the Orlando one.
+
+## What they talked about
+
+| Date | The tweet |
+
+|---|---|
+
+| 2011-06-27 | *"star2 is mad gosu. Let me know when you get sick of farming leather to for auction house copper and I'll give u trial code"* |
+
+| 2011-06-27 | *"no tbh I dedicate the little bit of gaming time I do have strictly to star2. You play?"* |
+
+| 2012-07-19 | *"DUDE have you played Slender yet? I'm scared to fucking death of this game"* |
+
+| 2012-07-20 | *"imo 100x scarier than Amnesia. For reals. Also, this weeks workaholics 👍"* |
+
+| 2012-07-20 | *"fuck EVERYTHING about/in that game. I'm going back to playing dayZ"* |
+
+| 2012-07-20 | *"the worst part is that the character model is so bad…but it's still scary as fuck when you turn and it's there"* |
+
+| 2012-11-06 | *"I just saw the IGN review. Had NO idea that it would be anything more than mediocre."* |
+
+| 2012-11-08 | *"just bough halo4 and ofc brought it home to 'open tray' error"* |
+
+| 2012-11-08 | *"it runs a LOT. But it's also 6 years old."* |
+
+| 2012-11-10 | *"alright homeslice. i bought a new xbox for halo. what's your gamertag?"* |
+
+| 2012-11-13 | *"Y0 U wonNA plAy DyZ CODBO2?!!!"* |
+
+StarCraft II, World of Warcraft's auction-house economy, Slender, Amnesia,
+
+DayZ, Halo 4, Call of Duty: Black Ops II — and a console that was "6 years
+
+old" in November 2012, dating an Xbox 360 purchase to roughly 2006, which
+
+is the same teenage window [[wiki/interests/video-games]] documents from
+
+Facebook ("slaying on halo").
+
+## The friendship is legible entirely through one subject
+
+Two things are worth noticing about a relationship this narrow.
+
+**It is a real channel, not small talk.** The Halo 4 sequence runs across
+
+four days and five tweets — the purchase, the hardware failure, the
+
+diagnosis, the replacement console, the request for a gamertag. Dan bought
+
+a new Xbox rather than wait, and narrated it in real time to one person.
+
+The Slender exchange is craft criticism: *"the character model is so bad…
+
+but it's still scary as fuck when you turn and it's there"* is an
+
+observation about how horror design survives bad assets, not a reaction.
+
+**It is also the only such channel.** Nothing here is about Uniontown,
+
+family, work, music, or politics — the subjects that organise every other
+
+relationship on this wiki. Whatever else Shane was to Dan, the public
+
+record of it is a co-op partner. The two tweets outside the pattern are the
+
+6 November 2012 group address (*"@JoshBrannan @Shane_Brannan @jebskis I'm
+
+in haytrobe miss you fux"* — written from New York, missing home) and the
+
+last one, 17 March 2016, which is a joke video about walking.
+
+## Gaps
+
+Who he is to [[wiki/people/josh-brannan|Josh]] is undocumented — the shared
+
+surname and the joint address of 6 November 2012 establish that they are
+
+connected, and nothing establishes how. Whether the friendship continued
+
+past March 2016 is unknown: he does not appear in any message export the
+
+corpus holds, which may mean the friendship ended, moved to a platform
+
+nothing here archives, or simply never used SMS. The 724 number in
+
+`contacts.csv` is undated, so it cannot settle it.
+
+---
+
+**Up:** [[wiki/people/index|People]]

@@ -1,0 +1,325 @@
+---
+
+domain: mind
+
+page_type: dataset
+
+title: "Trait–corpus map"
+
+aliases: ["trait map", "personality filter", "trait-corpus map"]
+
+status: active
+
+importance: high
+
+knowledge: derived
+
+date_created: 2026-09-06
+
+date_modified: 2026-09-06
+
+chart:
+
+kind: grouped-bar
+
+title: "Traits by behavioural support and by how much the wiki leans on them"
+
+x: { label: "How much the wiki already leans on the trait", type: category }
+
+y: { label: "Number of traits", type: number }
+
+series:
+
+- name: "unreviewed"
+
+points:
+
+"load-bearing": 4
+
+"present": 5
+
+"dormant": 1
+
+- name: "no instrument"
+
+points:
+
+"load-bearing": 3
+
+"present": 0
+
+"dormant": 0
+
+- name: "silent"
+
+points:
+
+"load-bearing": 0
+
+"present": 3
+
+"dormant": 0
+
+- name: "too few"
+
+points:
+
+"load-bearing": 0
+
+"present": 1
+
+"dormant": 0
+
+tags: [personality-profile, forensic-analysis, ai-collaboration]
+
+sources:
+
+- raw/self/message-csv/
+
+- raw/self/twitter/archive.jsonl
+
+- raw/self/chatgpt-export/
+
+- raw/self/gemini-activity/
+
+---
+
+# Trait–corpus map
+
+Part of [[wiki/mind/profile/index]] — the measured counterpart to the
+
+self-report scores it collects.
+
+> **GENERATED — do not hand-edit.** `bin/wiki-traits page` writes this file;
+
+> an edit here fails `bin/wiki-traits check`. It is **evidence, not a claim**:
+
+> it states no finding about Dan. A finding drawn from it reaches an ordinary
+
+> page through the normal operations.
+
+Every trait in `wiki/mind/profile/` tested against 138,249 sent messages
+
+(controlled against 135,443 received from other handles), 2,741 tweets,
+
+1,456 ChatGPT prompts and 3,986 Gemini prompts —
+
+then against the wiki's own reasoning, separately and never pooled.
+
+## The two axes, and why they are never added
+
+**Support** is Tier A: Dan's own behavioural output, produced without knowing
+
+what this wiki would say. It is the only tier that can corroborate anything.
+
+**Reach** is Tier C: how much of the wiki already leans on the trait. It is
+
+**not evidence and never becomes evidence.** These pages were written by agents
+
+that had read `wiki/mind/profile/`, so reach measures how often the writing
+
+process reached for a vocabulary — not how present the trait is in the life.
+
+Of 483 entries, 122 carry personality vocabulary and 38 of 61 synthesis pages do.
+
+**Silence is not falsification.** A trait can be real and leave no lexical
+
+trace; people do not narrate their own architecture in text messages. `silent`
+
+means the corpus does not carry it, and constrains how much weight a synthesis
+
+may place on it — nothing more. Only `INVERTED` is evidence against a score.
+
+There is no confidence percentage on this page and one must never be added.
+
+## The state of the instrument
+
+Of 23 lexical proxies, **1 has been reviewed and found sound**, 6 were
+
+reviewed and found broken, and 16 have never had their matches read.
+
+A proxy earns its verdict by having had its matches actually read. **An unreviewed
+
+proxy may not confirm a score and may not contradict one** — a result that would
+
+have been either is reported as `unreviewed` instead. That is a different band from
+
+`silent`, and the difference matters: *silent* means an instrument ran and found
+
+nothing, *unreviewed* means no trustworthy instrument ran, and *no instrument* means
+
+every proxy built for the trait was read and found to measure something else. Three
+
+positions, three names, never collapsed. The cap exists because the heaviest verdict
+
+in this system is also the cheapest to manufacture: a regex that catches the wrong
+
+side of a conversation inverts trivially. The first run of this tool reported
+
+`CONTRADICTED LOAD` on the Fe deficit — an instruction to re-read 37 pages, 17 of
+
+them synthesis — on a proxy for *other-directed concern* whose every match was Dan
+
+being comforted: *"Thank you for making me feel better sweetie."* The pattern caught
+
+`feel better` and could not tell who was doing the feeling.
+
+`bin/wiki-traits review` is the queue. Each broken proxy names the string that
+
+breaks it.
+
+## The map
+
+| Trait | Reg. | Support | Replicates | Reach | Cell |
+
+|---|---|---|---|---|---|
+
+| Ti dominance (introverted thinking lead) | 1 | unreviewed | — | load-bearing (48p / 25s) | **UNREVIEWED LOAD** |
+
+| Vulnerability at the 78th percentile | 2 | no instrument | — | load-bearing (48p / 12s) | **NO INSTRUMENT / LOAD** |
+
+| Liberalism at the 91st percentile | 11 | unreviewed | chatgpt, twitter | load-bearing (46p / 28s) | **UNREVIEWED LOAD** |
+
+| Fe deficit (absent relational grading) | 1 | no instrument | — | load-bearing (35p / 17s) | **NO INSTRUMENT / LOAD** |
+
+| Impulsiveness at the 96th percentile | 2 | no instrument | chatgpt, gemini, twitter | load-bearing (33p / 12s) | **NO INSTRUMENT / LOAD** |
+
+| Anxiety at the 67th percentile | 2 | unreviewed | chatgpt | load-bearing (29p / 7s) | **UNREVIEWED LOAD** |
+
+| Schizotypal at 79 (pattern cognition) | 2 | unreviewed | — | load-bearing (26p / 6s) | **UNREVIEWED LOAD** |
+
+| Self-consciousness at the 91st percentile | 2 | unreviewed | — | present (18p / 7s) | **unreviewed** |
+
+| Intellect / abstraction at the 95th percentile | 2 | unreviewed | — | present (16p / 5s) | **unreviewed** |
+
+| Sociability at the 3rd percentile | 2 | unreviewed | chatgpt, gemini, twitter | present (16p / 5s) | **unreviewed** |
+
+| Assertiveness at the 5th percentile | 2 | silent | chatgpt, gemini, twitter | present (15p / 7s) | **unsupported** |
+
+| Introspection at the 87th percentile | 2 | silent | — | present (14p / 6s) | **unsupported** |
+
+| Narcissistic at 67 (grandiosity) | 2 | too few | — | present (14p / 4s) | **unmeasured** |
+
+| Modesty at the 5th percentile | 2 | silent | — | present (13p / 2s) | **unsupported** |
+
+| Artistic interests at the 81st percentile | 2 | unreviewed | gemini | present (11p / 5s) | **unreviewed** |
+
+| Trust at the 9th percentile | 2 | unreviewed | chatgpt, gemini | present (10p / 5s) | **unreviewed** |
+
+| Antisocial at 58 (rule indifference) | 2 | unreviewed | — | dormant (3p / 2s) | **unreviewed** |
+
+## What the map obliges
+
+7 trait(s) sit in a cell that constrains what a synthesis may do.
+
+### UNREVIEWED LOAD — Ti dominance (introverted thinking lead)
+
+Cite as testimony, never as measurement. The wiki leans on this and no proxy for it has had its matches read, so the instrument cannot yet confirm or contradict it. Reviewing them is owed work: `bin/wiki-traits review`.
+
+- **Support:** unreviewed
+
+- **Reach:** 48 pages, 25 of them synthesis, 43 citing `wiki/mind/profile/intp.md`
+
+- **Constitution register 1**
+
+- `conditional reasoning` — 1.56x vs control, n=43, unreviewed
+
+- `explicit confidence %` — 17.64x vs control, n=18, too few
+
+- `probability quantification` — 2.05x vs control, n=23, unreviewed
+
+### NO INSTRUMENT / LOAD — Vulnerability at the 78th percentile
+
+Cite as testimony, never as measurement, and say so on the page. Every proxy built for this trait was read and found to catch something else. The wiki leans on it anyway.
+
+- **Support:** no instrument
+
+- **Reach:** 48 pages, 12 of them synthesis, 25 citing `wiki/mind/profile/big-five-psychometrics.md`
+
+- **Constitution register 2**
+
+- `overwhelm` — 0.96x vs control, n=318, excluded
+
+### UNREVIEWED LOAD — Liberalism at the 91st percentile
+
+Cite as testimony, never as measurement. The wiki leans on this and no proxy for it has had its matches read, so the instrument cannot yet confirm or contradict it. Reviewing them is owed work: `bin/wiki-traits review`.
+
+- **Support:** unreviewed — replicates in chatgpt, twitter
+
+- **Reach:** 46 pages, 28 of them synthesis, 13 citing `wiki/mind/politics/axioms.md`
+
+- **Constitution register 11**
+
+- `political register` — 1.42x vs control, n=55, unreviewed
+
+### NO INSTRUMENT / LOAD — Fe deficit (absent relational grading)
+
+Cite as testimony, never as measurement, and say so on the page. Every proxy built for this trait was read and found to catch something else. The wiki leans on it anyway.
+
+- **Support:** no instrument
+
+- **Reach:** 35 pages, 17 of them synthesis, 43 citing `wiki/mind/profile/intp.md`
+
+- **Constitution register 1**
+
+- `offering help unprompted` — 1.81x vs control, n=372, excluded
+
+- `other-directed concern` — 2.72x vs control, n=311, excluded
+
+- `sympathy tokens` — 0.49x vs control, n=57, excluded
+
+### NO INSTRUMENT / LOAD — Impulsiveness at the 96th percentile
+
+Cite as testimony, never as measurement, and say so on the page. Every proxy built for this trait was read and found to catch something else. The wiki leans on it anyway.
+
+- **Support:** no instrument — replicates in chatgpt, gemini, twitter
+
+- **Reach:** 33 pages, 12 of them synthesis, 25 citing `wiki/mind/profile/big-five-psychometrics.md`
+
+- **Constitution register 2**
+
+- `immediacy / right-now` — 1.05x vs control, n=1140, excluded
+
+### UNREVIEWED LOAD — Anxiety at the 67th percentile
+
+Cite as testimony, never as measurement. The wiki leans on this and no proxy for it has had its matches read, so the instrument cannot yet confirm or contradict it. Reviewing them is owed work: `bin/wiki-traits review`.
+
+- **Support:** unreviewed — replicates in chatgpt
+
+- **Reach:** 29 pages, 7 of them synthesis, 25 citing `wiki/mind/profile/big-five-psychometrics.md`
+
+- **Constitution register 2**
+
+- `worry` — 1.32x vs control, n=465, unreviewed
+
+### UNREVIEWED LOAD — Schizotypal at 79 (pattern cognition)
+
+Cite as testimony, never as measurement. The wiki leans on this and no proxy for it has had its matches read, so the instrument cannot yet confirm or contradict it. Reviewing them is owed work: `bin/wiki-traits review`.
+
+- **Support:** unreviewed
+
+- **Reach:** 26 pages, 6 of them synthesis, 19 citing `wiki/mind/profile/deviance-mapping.md`
+
+- **Constitution register 2**
+
+- `pattern / conspiracy cognition` — 2.04x vs control, n=27, unreviewed
+
+## What is not measured
+
+- **Facebook.** 286 MB and 1,686 HTML files, and the export is nested inside
+
+itself — a second copy of `posts/your_posts_1.html` sits one directory down,
+
+so counting the tree as it stands double-counts every post. A real fifth
+
+register, absent for a stated reason rather than by oversight.
+
+- **Non-lexical expression.** Every proxy here is a regex over text. A trait
+
+expressed in what Dan *did* rather than what he wrote is invisible to this
+
+instrument, and that invisibility is what `silent` records.
+
+- **The instrument scores themselves are Tier B testimony** — self-report, the
+
+claim rather than support for it. Their standing is the testimony ledger's.

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="People diagram">
+  <rect width="200" height="200" fill="#f3f0fa"/>
+  <g fill="none" stroke="#795cb2" stroke-width="3">
+    <circle cx="70" cy="76" r="20"/><path d="M40 140 C40 104 100 104 100 140"/>
+    <circle cx="132" cy="84" r="16"/><path d="M108 138 C108 112 156 112 156 138"/>
+  </g>
+  <text x="100" y="192" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#202122">People</text>
+</svg>

@@ -1,0 +1,976 @@
+#!/usr/bin/env python3
+"""wiki-traits — cross-test the personality profile against the whole corpus.
+
+Pure stdlib. Reuses `psychometrics`' PREDICTIONS table, `wiki-lexicon`'s four
+corpus readers and `mine-tweets`' archive loader, so every trap those files
+document is handled once and not re-solved here.
+
+WHY THIS EXISTS
+---------------
+`SYNTHESIS_SPEC.md`'s constitution pass makes the cognitive stack register 1
+and the measured personality profile register 2 — the first two things every
+synthesis must be checked against. Both registers currently point at *pages*.
+A page states a score; it does not say how much weight a conclusion may put on
+it. So the pass can be run honestly and still lean the whole argument on a
+trait the corpus has never corroborated, which is what a register that names a
+file rather than a measurement permits.
+
+This computes the missing number, on two axes that must never be added
+together.
+
+  SUPPORT  (Tier A)  how much of Dan's own behavioural output carries the trait
+  REACH    (Tier C)  how much of the wiki's own reasoning already leans on it
+
+THE CIRCULARITY, WHICH IS THE WHOLE REASON FOR THE TIERS
+--------------------------------------------------------
+The obvious build — "test each trait against everything, raw and wiki alike,
+and score it" — produces a confidently circular number, and it would look like
+the strongest evidence in the repository.
+
+Measured on 2026-09-06: **122 of 483 pages carry personality vocabulary, and 38
+of 61 synthesis pages do.** Those pages were written by agents that had read
+`wiki/mind/profile/`. A trait scored across them is not being tested against
+the corpus; it is being tested against how often the writing process reached
+for its vocabulary. `intp` is cited by 46 pages. Every one of those citations
+is downstream of the claim, not evidence for it.
+
+So the corpus is stratified by whether a source could have been contaminated by
+the profile pages, and only one tier may confirm anything:
+
+  Tier A — behavioural, uncontaminated. First-party text Dan produced without
+           knowing what the wiki would say: sent messages, tweets, his own
+           turns in AI transcripts. **The only tier that is evidence.**
+  Tier B — first-person testimony. The instrument scores themselves, and
+           `context-core`. This is the CLAIM, not support for it. Its standing
+           is the testimony ledger's, currently 57/100 over n=14.
+  Tier C — wiki-derived. Measures REACH: how load-bearing the trait already is
+           in the corpus's own reasoning. Reach is never support. A trait can
+           have enormous reach and no evidence, and that combination is the
+           single most dangerous object this system can hold.
+
+WHAT THE TWO AXES PRODUCE
+-------------------------
+The output is a quadrant, not a ranking, and the useful cells are the off-
+diagonal ones:
+
+  supported + load-bearing  → earned. The wiki reasons from a measured thing.
+  supported + dormant       → UNDERUSED. A measured mechanism the wiki is not
+                              reasoning from. This is exactly the failure
+                              SYNTHESIS_SPEC's worked example documents: three
+                              synthesis pages on cognition cited one of the
+                              eleven profile pages between them.
+  silent    + load-bearing  → UNSUPPORTED LOAD. Every page in the reach set is
+                              reasoning from a premise nothing measured. This
+                              is the quadrant the tool exists to surface.
+  silent    + dormant       → fine. Noted, not chased.
+
+THE ASYMMETRY, INHERITED AND NON-NEGOTIABLE
+-------------------------------------------
+From `psychometrics`, and it governs every number below:
+
+    failure to corroborate is not falsification.
+
+Three of four core axioms tested lexically were invisible, *time = countdown*
+the clearest negative. A trait can be real and leave no lexical trace, because
+people do not narrate their own architecture in text messages. So `silent`
+means THE CORPUS DOES NOT CARRY THIS — never "the trait is absent" — and its
+consequence is about how much weight a synthesis may place on it, never about
+whether it is true. Only an INVERTED result is evidence against a score.
+
+There is therefore no confidence percentage anywhere in this tool, and one must
+never be added. A percentage needs a denominator of things that could have
+disconfirmed, and silence is not one of them. Bands, and their counts.
+
+THE CONTROL PROBLEM ACROSS REGISTERS
+------------------------------------
+Only the message corpus has a within-medium control — 110,944 messages received
+from 503 handles. There is no such thing as a received tweet or a received
+prompt, so a raw rate in the other three registers is uninterpretable on its
+own, which is the trap `psychometrics` documents in its first paragraph.
+
+So the registers are not scored the same way and their numbers are never
+pooled:
+
+  messages         → ratio against the control → a verdict
+  twitter/ai       → rank of the proxy WITHIN that register against all other
+                     proxies → replication, not verdict
+
+A trait replicates when it lands in the upper half of its register's own proxy
+ranking. Replication across registers is the control-free evidence that a trait
+is dispositional rather than an artefact of one medium.
+
+WHAT IS NOT READ, AND WHY
+-------------------------
+**Facebook.** 286 MB and 1,686 HTML files, and the export is nested inside
+itself — `facebook-ihatedanfrank/facebook-ihatedanfrank/` holds a second copy
+of `posts/your_posts_1.html`. Counting the tree as it stands double-counts
+every post. No reader in `bin/` handles it and writing one is its own job with
+its own trap. It is a real fifth register and its absence is a stated gap, not
+an oversight.
+
+USAGE
+  bin/wiki-traits support            Tier A: every trait across four registers
+  bin/wiki-traits reach              Tier C: the wiki's own footprint per trait
+  bin/wiki-traits map                the quadrant — the filter output
+  bin/wiki-traits assess ti_dominance   what weight a synthesis may put on it
+  bin/wiki-traits review             the proxy review queue
+  bin/wiki-traits mine               recompute traits/measured.json (~90s)
+  bin/wiki-traits page               regenerate the wiki entry
+  bin/wiki-traits check              the gate
+"""
+import argparse
+import json
+import os
+import re
+import sys
+from collections import Counter
+from importlib.machinery import SourceFileLoader
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MEASURED = os.path.join(ROOT, "traits", "measured.json")
+PAGE = os.path.join(ROOT, "wiki", "mind", "profile", "trait-corpus-map.md")
+
+# A trait must land in the top quarter of a register's own proxy ranking, on a
+# non-trivial number of hits, to count as replicated there. The first build used
+# the median and it was meaningless by construction: half of all proxies clear a
+# median, so every trait "replicated in all three registers" and the column
+# carried no information at all.
+REPLICATION_QUANTILE = 0.75
+REPLICATION_MIN_HITS = 10
+
+# Reach bands, in pages out of the 483 non-index entries. A trait cited by
+# thirty-odd pages is structural in this corpus; one cited by under five is
+# not being reasoned from.
+REACH_LOAD_BEARING = 20
+REACH_PRESENT = 5
+
+
+def _mod(name, fname):
+    return SourceFileLoader(name, os.path.join(ROOT, "bin", fname)).load_module()
+
+
+# ---------------------------------------------------------------------------
+# The trait registry.
+#
+# `facets` are the keys in psychometrics.PREDICTIONS this trait owns.
+# `wiki` is how the trait shows up in wiki PROSE, which is a different string
+# problem from how it shows up in a text message — `Ti` is a cognitive
+# function in one and a typo in the other, so the wiki pattern is anchored on
+# vocabulary the profile pages actually established.
+# `register` is the constitution-pass register this trait feeds.
+#
+# A `wiki` pattern is held to the same standard as a Tier A proxy and was
+# checked the same way. Three were broken on the first run and each inflated a
+# reach count enough to change a cell:
+#   liberalism   `left` matched "**Checked, left standing**" — constitution-pass
+#                boilerplate present on every synthesis page — plus "left the
+#                company" and "2020 left turn". 202 pages, almost all spurious.
+#   sociability  `withdraw` matched "troop withdrawal" and "was withdrawn".
+#   anxiety      bare `worry` more than doubled the count over `anxiet|anxious`.
+# Reach is not evidence, but an inflated reach count moves a trait into a
+# louder cell and manufactures an obligation, so it is checked like one.
+# ---------------------------------------------------------------------------
+TRAITS = {
+    "ti_dominance": {
+        "label": "Ti dominance (introverted thinking lead)",
+        "register": 1, "home": "wiki/mind/profile/intp.md",
+        "facets": ["ti_dominance"],
+        "wiki": r"Ti[- ]dominan|\bTi\b|introverted thinking|Ti at 9",
+    },
+    "fe_deficit": {
+        "label": "Fe deficit (absent relational grading)",
+        "register": 1, "home": "wiki/mind/profile/intp.md",
+        "facets": ["sympathy", "altruism"],
+        "wiki": r"\bFe\b|extraverted feeling|Fe[- ]mediated|Fe at 1",
+    },
+    "trust_floor": {
+        "label": "Trust at the 9th percentile",
+        "register": 2, "home": "wiki/mind/profile/big-five-psychometrics.md",
+        "facets": ["trust"],
+        "wiki": r"trust at the 9th|9th percentile|trust floor|no stable middle",
+    },
+    "intellect": {
+        "label": "Intellect / abstraction at the 95th percentile",
+        "register": 2, "home": "wiki/mind/profile/big-five-psychometrics.md",
+        "facets": ["intellect"],
+        "wiki": r"intellect at the 9|abstraction|95th percentile",
+    },
+    "introspection": {
+        "label": "Introspection at the 87th percentile",
+        "register": 2, "home": "wiki/mind/profile/big-five-psychometrics.md",
+        "facets": ["introspection"],
+        "wiki": r"introspect|self[- ]explanat|87th percentile",
+    },
+    "impulsiveness": {
+        "label": "Impulsiveness at the 96th percentile",
+        "register": 2, "home": "wiki/mind/profile/big-five-psychometrics.md",
+        "facets": ["impulsiveness"],
+        "wiki": r"impulsiv|96th percentile|immediacy",
+    },
+    "self_consciousness": {
+        "label": "Self-consciousness at the 91st percentile",
+        "register": 2, "home": "wiki/mind/profile/big-five-psychometrics.md",
+        "facets": ["self_consciousness"],
+        "wiki": r"self[- ]conscious|self[- ]monitor|91st percentile",
+    },
+    "anxiety": {
+        "label": "Anxiety at the 67th percentile",
+        "register": 2, "home": "wiki/mind/profile/big-five-psychometrics.md",
+        "facets": ["anxiety"],
+        "wiki": r"anxiet|anxious|67th percentile",
+    },
+    "vulnerability": {
+        "label": "Vulnerability at the 78th percentile",
+        "register": 2, "home": "wiki/mind/profile/big-five-psychometrics.md",
+        "facets": ["vulnerability"],
+        "wiki": r"vulnerab|overwhelm|78th percentile",
+    },
+    "low_sociability": {
+        "label": "Sociability at the 3rd percentile",
+        "register": 2, "home": "wiki/mind/profile/big-five-psychometrics.md",
+        "facets": ["sociability"],
+        "wiki": r"sociabil|3rd percentile|solitar|social withdrawal",
+    },
+    "assertiveness_floor": {
+        "label": "Assertiveness at the 5th percentile",
+        "register": 2, "home": "wiki/mind/profile/big-five-psychometrics.md",
+        "facets": ["assertiveness", "submissiveness"],
+        "wiki": r"assertiv|5th percentile|non[- ]directive",
+    },
+    "modesty_floor": {
+        "label": "Modesty at the 5th percentile",
+        "register": 2, "home": "wiki/mind/profile/big-five-psychometrics.md",
+        "facets": ["modesty"],
+        "wiki": r"modest|self[- ]elevat|grandios",
+    },
+    "liberalism": {
+        "label": "Liberalism at the 91st percentile",
+        "register": 11, "home": "wiki/mind/politics/axioms.md",
+        "facets": ["liberalism"],
+        "wiki": r"liberalism at the|far[- ]?left|leftist|axiomatic polit|political register",
+    },
+    "artistic_interests": {
+        "label": "Artistic interests at the 81st percentile",
+        "register": 2, "home": "wiki/mind/profile/big-five-psychometrics.md",
+        "facets": ["artistic_interests"],
+        "wiki": r"artistic interest|aesthetic register|81st percentile",
+    },
+    "schizotypal": {
+        "label": "Schizotypal at 79 (pattern cognition)",
+        "register": 2, "home": "wiki/mind/profile/deviance-mapping.md",
+        "facets": ["schizotypal"],
+        "wiki": r"schizotyp|pattern cognit|conspirac",
+    },
+    "narcissistic": {
+        "label": "Narcissistic at 67 (grandiosity)",
+        "register": 2, "home": "wiki/mind/profile/deviance-mapping.md",
+        "facets": ["narcissistic"],
+        "wiki": r"narcissis|grandios|uniqueness",
+    },
+    "antisocial": {
+        "label": "Antisocial at 58 (rule indifference)",
+        "register": 2, "home": "wiki/mind/profile/deviance-mapping.md",
+        "facets": ["antisocial"],
+        "wiki": r"antisocial|rule indifferen|rule[- ]break",
+    },
+}
+
+
+# ---------------------------------------------------------------------------
+# THE PROXY REVIEW REGISTER — the gate that stops this tool publishing garbage.
+#
+# `psychometrics` built its proxy table for an exploratory sheet a human reads
+# top to bottom, and its docstring is explicit that the matches must be read
+# before the counts are believed. This tool puts that same table under a much
+# heavier load: a filter that constrains what every future synthesis may claim.
+# A regex good enough to start a conversation is not good enough to gate one.
+#
+# So a proxy earns its verdict by having had its matches actually read:
+#
+#   sound       reviewed, the matches are the construct. Full verdicts.
+#   broken      reviewed, the matches are NOT the construct. Excluded entirely.
+#   unreviewed  nobody has read the matches. It may not produce SUPPORTED and it
+#               may not produce INVERTED; a verdict that would have been either
+#               is reported as `unreviewed`, which is a distinct band from
+#               `silent` and must never be folded into it. See verdict().
+#
+# The cap on INVERTED is the load-bearing rule, and it is counter-intuitive.
+# The inherited asymmetry says only INVERTED is evidence *against* a score, so
+# INVERTED is the heaviest verdict in the system — and it is also the cheapest
+# to manufacture, because a regex that catches the wrong side of a conversation
+# inverts trivially. On 2026-09-06 the first run of this tool reported
+# CONTRADICTED LOAD on the Fe deficit — an instruction to re-read 37 pages,
+# 17 of them synthesis — on the strength of a proxy for "other-directed
+# concern" whose matches were, every one, Dan being comforted: "Thank you for
+# making me feel better sweetie". The pattern caught `feel better` and could
+# not tell who was doing the feeling.
+#
+# Reviews below were done by reading `bin/psychometrics run --facet X
+# --examples N`. Each broken entry names the string that breaks it.
+# ---------------------------------------------------------------------------
+PROXY_REVIEW = {
+    "altruism::offering help unprompted": (
+        "broken", "Catches transactional and romantic offers indiscriminately — "
+        "'let me know if you can do that or not', 'I'll have suz car if you need a "
+        "clean getaway'. Offering a lift is not the altruism facet."),
+    "altruism::other-directed concern": (
+        "broken", "Catches Dan RECEIVING comfort, which is the opposite of the "
+        "construct: 'Thank you for making me feel better sweetie', 'those are the "
+        "things you always make ME feel better about'. `feel better` cannot tell "
+        "who is doing the feeling. This proxy alone produced the first run's "
+        "CONTRADICTED LOAD on Fe deficit."),
+    "sympathy::sympathy tokens": (
+        "broken", "Construct mismatch: matches are dominated by first-person "
+        "apology — 'I'm so sorry I was in the shower' — not sympathy extended to "
+        "another. It measures the submissiveness construct and agrees with the "
+        "sympathy score by accident. A proxy that is right for the wrong reason "
+        "cannot be trusted the next time it moves."),
+    "assertiveness::directives / commands": (
+        "broken", "Catches the anti-directive: 'I want you to do things however "
+        "you feel most comfortable and happy'. `i want you to` is a frame for "
+        "deference at least as often as for command."),
+    "vulnerability::overwhelm": (
+        "broken", "`too much` and `i'm done` are idiom, not state — 'too much of "
+        "a babe', 'he's too much to be hanging around here', 'I'm done with "
+        "everything in the world that isn't Annie Ulmer' (devotion), 'I'm done "
+        "smoking cigs' (an achievement)."),
+    "impulsiveness::immediacy / right-now": (
+        "broken", "`can't wait` is anticipation and affection — 'can't wait to see "
+        "you' — not impulsivity; `right now` is a temporal adverb every register "
+        "uses at the same rate."),
+    "submissiveness::deference / apology": (
+        "sound", "Matches are genuine first-person apology and deference: 'Sorry I "
+        "wasn't answering', 'I'm so sorry for being anxious and weird tonight'. "
+        "The construct is what the pattern catches."),
+}
+
+
+def proxy_status(facet, label):
+    return PROXY_REVIEW.get(f"{facet}::{label}", ("unreviewed", ""))
+
+
+def load_predictions():
+    """psychometrics' table, which is the asset — 24 proxies with a documented
+    false-positive history. Duplicating it would fork that history."""
+    return _mod("psychometrics", "psychometrics").PREDICTIONS
+
+
+# ---------------------------------------------------------------------------
+# Tier A — the four behavioural registers.
+# ---------------------------------------------------------------------------
+def count_messages(compiled, minlen=12):
+    """Sent vs received, from the deduplicated union of both exports.
+
+    Uses wiki-lexicon's load_texting rather than mine-messages' single-dump
+    reader: the union is larger and the UTC/Eastern conversion that makes it
+    correct lives in exactly one place.
+    """
+    lex = _mod("wiki_lexicon", "wiki-lexicon")
+    sent, recv = Counter(), Counter()
+    ns = nr = 0
+    for r in lex.load_texting():
+        t = r["text"] or ""
+        outbound = r["dir"].lower() == "sent"
+        if outbound:
+            ns += 1
+        else:
+            nr += 1
+        if len(t) < minlen:
+            continue
+        for key, rx in compiled:
+            if rx.search(t):
+                (sent if outbound else recv)[key] += 1
+    return sent, ns, recv, nr
+
+
+def count_flat(compiled, texts, minlen=12):
+    hits = Counter()
+    n = 0
+    for t in texts:
+        if not t:
+            continue
+        n += 1
+        if len(t) < minlen:
+            continue
+        for key, rx in compiled:
+            if rx.search(t):
+                hits[key] += 1
+    return hits, n
+
+
+def rate(hits, total):
+    return (hits / total * 1000) if total else 0.0
+
+
+def mine(verbose=True):
+    """Recompute every Tier A measurement. ~90s over four corpora."""
+    preds = load_predictions()
+    compiled = [((f, l), re.compile(p, re.I)) for f, s, d, l, p in preds]
+    meta = {(f, l): {"facet": f, "score": s, "dir": d, "label": l}
+            for f, s, d, l, p in preds}
+
+    if verbose:
+        print("wiki-traits: messages (both exports, deduplicated) ...", file=sys.stderr)
+    sent, ns, recv, nr = count_messages(compiled)
+
+    if verbose:
+        print("wiki-traits: twitter archive ...", file=sys.stderr)
+    tw = _mod("mine_tweets", "mine-tweets")
+    tweets = [r.get("text") or "" for r in tw.load()]
+    tw_hits, tw_n = count_flat(compiled, tweets)
+
+    lex = _mod("wiki_lexicon", "wiki-lexicon")
+    if verbose:
+        print("wiki-traits: chatgpt prompts ...", file=sys.stderr)
+    cg_hits, cg_n = count_flat(compiled, lex.load_ai_prompts("chatgpt"))
+    if verbose:
+        print("wiki-traits: gemini prompts ...", file=sys.stderr)
+    gm_hits, gm_n = count_flat(compiled, lex.load_ai_prompts("gemini"))
+
+    proxies = {}
+    for key, m in meta.items():
+        f, l = key
+        sr, cr = rate(sent[key], ns), rate(recv[key], nr)
+        proxies[f"{f}::{l}"] = {
+            **m,
+            "messages": {"dan": round(sr, 3), "control": round(cr, 3),
+                         "hits": sent[key], "ratio": (round(sr / cr, 3) if cr else None)},
+            "twitter": {"rate": round(rate(tw_hits[key], tw_n), 3), "hits": tw_hits[key]},
+            "chatgpt": {"rate": round(rate(cg_hits[key], cg_n), 3), "hits": cg_hits[key]},
+            "gemini": {"rate": round(rate(gm_hits[key], gm_n), 3), "hits": gm_hits[key]},
+        }
+
+    return {
+        "generated": None,
+        "totals": {"sent": ns, "received": nr, "tweets": tw_n,
+                   "chatgpt_prompts": cg_n, "gemini_prompts": gm_n},
+        "proxies": proxies,
+    }
+
+
+def register_ranks(measured, reg):
+    """Rank every proxy within one register. Returns key -> percentile rank."""
+    rows = [(k, v[reg]["rate"]) for k, v in measured["proxies"].items()]
+    rows.sort(key=lambda r: r[1])
+    n = len(rows)
+    return {k: (i / (n - 1) if n > 1 else 0.0) for i, (k, _) in enumerate(rows)}
+
+
+def verdict(direction, ratio, hits, status="unreviewed"):
+    """psychometrics' thresholds, then capped by the proxy's review status.
+
+    THE INVARIANT: an unreviewed proxy cannot confirm a score and cannot
+    contradict one, because nobody has checked that its matches are the thing it
+    claims to measure.
+
+    It is capped, not silenced, and the difference is load-bearing. Returns for
+    `unreviewed` are exactly:
+
+        `unreviewed`  the underlying verdict was SUPPORTED, INVERTED or
+                      "leans yes" — a claim this proxy has not earned
+        `silent`      the corpus genuinely carried nothing either way
+        `too few`     not enough matches to say anything at all
+
+    **Never collapse the first into the second.** `silent` is a finding — an
+    instrument ran and came back empty. `unreviewed` is the absence of one, and
+    it is what makes the cell `UNREVIEWED LOAD` rather than `UNSUPPORTED LOAD`.
+    Returning `silent` here would report a measurement that never happened, and
+    `no instrument` — every proxy read and found broken — is a third state
+    again. Three epistemic positions, three names.
+    `tests/test_wiki_traits.py::VerdictCap` pins all of it.
+    """
+    ps = _mod("psychometrics", "psychometrics")
+    v = ps.verdict(direction, ratio if ratio is not None else float("inf"), hits)
+    if status == "broken":
+        return "excluded"
+    if status == "unreviewed" and v in ("SUPPORTED", "INVERTED", "leans yes"):
+        return "unreviewed"
+    return v
+
+
+def support(measured):
+    """Per trait: the controlled message verdict plus cross-register replication."""
+    ranks = {r: register_ranks(measured, r) for r in ("twitter", "chatgpt", "gemini")}
+    out = {}
+    for tid, t in TRAITS.items():
+        keys = [k for k, v in measured["proxies"].items() if v["facet"] in t["facets"]]
+        if not keys:
+            continue
+        verdicts, reps, detail = [], [], []
+        for k in keys:
+            v = measured["proxies"][k]
+            status, note = proxy_status(v["facet"], v["label"])
+            vd = verdict(v["dir"], v["messages"]["ratio"], v["messages"]["hits"], status)
+            if status != "broken":
+                verdicts.append(vd)
+            rep = [r for r in ("twitter", "chatgpt", "gemini")
+                   if ranks[r][k] >= REPLICATION_QUANTILE
+                   and measured["proxies"][k][r]["hits"] >= REPLICATION_MIN_HITS]
+            reps.append(rep)
+            detail.append({"proxy": v["label"], "facet": v["facet"], "score": v["score"],
+                           "dir": v["dir"], "ratio": v["messages"]["ratio"],
+                           "hits": v["messages"]["hits"], "verdict": vd,
+                           "status": status, "note": note,
+                           "replicates": rep if status != "broken" else []})
+        replicated = sorted({r for rr in reps for r in rr})
+        statuses = [d["status"] for d in detail]
+        if not verdicts:
+            # Every proxy this trait owns was reviewed and found broken. The
+            # trait is not silent — it is UNMEASURABLE with the instrument as
+            # it stands, and those are different claims.
+            band = "no instrument"
+        elif "INVERTED" in verdicts:
+            band = "inverted"
+        elif "SUPPORTED" in verdicts and replicated:
+            band = "supported"
+        elif "SUPPORTED" in verdicts or "leans yes" in verdicts:
+            band = "supported" if replicated else "message-only"
+        elif "unreviewed" in verdicts:
+            band = "unreviewed"
+        elif set(verdicts) <= {"too few"}:
+            band = "too few"
+        else:
+            band = "silent"
+        out[tid] = {"band": band, "replicates": replicated, "proxies": detail,
+                    "reviewed": sum(1 for x in statuses if x != "unreviewed"),
+                    "n_proxies": len(statuses)}
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Tier C — reach. Never evidence; the contamination is the point of measuring.
+# ---------------------------------------------------------------------------
+# Generated evidence pages are excluded from reach. This one names every trait
+# by construction, so counting it would make the map an input to itself and the
+# reach figures would climb on every regeneration — which is exactly what
+# happened on the first run, and `check` caught it immediately.
+GENERATED = {
+    "wiki/mind/profile/trait-corpus-map.md",
+    "wiki/meta/testimony-veracity.md",
+    "wiki/meta/skills.md",
+    "wiki/health/intake-ledger.md",
+    "wiki/interests/language/measured-vocabulary.md",
+    "wiki/meta/readers-digest.md",
+    "wiki/meta/digest.md",
+    "wiki/meta/recent-activity.md",
+    "wiki/meta/open-questions.md",
+}
+
+
+def wiki_pages():
+    for dirpath, _, files in os.walk(os.path.join(ROOT, "wiki")):
+        for f in files:
+            if not f.endswith(".md") or f == "index.md":
+                continue
+            p = os.path.join(dirpath, f)
+            rel = os.path.relpath(p, ROOT)
+            if rel in GENERATED:
+                continue
+            with open(p, encoding="utf-8", errors="replace") as fh:
+                yield rel, fh.read()
+
+
+def reach():
+    pages = list(wiki_pages())
+    out = {}
+    for tid, t in TRAITS.items():
+        rx = re.compile(t["wiki"], re.I)
+        hit = [(p, txt) for p, txt in pages if rx.search(txt)]
+        syn = [p for p, txt in hit if "page_type: synthesis" in txt]
+        cite = [p for p, txt in pages if t["home"].replace(".md", "") in txt]
+        n = len(hit)
+        band = ("load-bearing" if n >= REACH_LOAD_BEARING
+                else "present" if n >= REACH_PRESENT else "dormant")
+        out[tid] = {"pages": n, "synthesis": len(syn), "citations": len(cite),
+                    "band": band, "total_pages": len(pages),
+                    "examples": sorted(p for p, _ in hit)[:5]}
+    return out
+
+
+QUADRANT = {}
+for _r in ("load-bearing", "present", "dormant"):
+    QUADRANT[("supported", _r)] = "UNDERUSED" if _r == "dormant" else "earned"
+    QUADRANT[("message-only", _r)] = "THIN LOAD" if _r == "load-bearing" else "thin"
+    QUADRANT[("silent", _r)] = {"load-bearing": "UNSUPPORTED LOAD",
+                                "present": "unsupported", "dormant": "dormant"}[_r]
+    QUADRANT[("inverted", _r)] = {"load-bearing": "CONTRADICTED LOAD",
+                                  "present": "CONTRADICTED", "dormant": "contradicted"}[_r]
+    QUADRANT[("too few", _r)] = "unmeasured"
+    # A trait whose proxies nobody has read cannot be scored. Where the wiki
+    # already leans on it, that is a live obligation, not a shrug.
+    QUADRANT[("unreviewed", _r)] = "UNREVIEWED LOAD" if _r == "load-bearing" else "unreviewed"
+    # And a trait whose every proxy was read and found broken is worse: the
+    # instrument for it does not exist, and saying "silent" would imply one ran.
+    QUADRANT[("no instrument", _r)] = ("NO INSTRUMENT / LOAD" if _r == "load-bearing"
+                                       else "no instrument")
+
+# What a synthesis may do with each cell. This is the filter, stated as policy
+# rather than left to the reader — the point of computing it at all.
+WEIGHT = {
+    "earned": "Cite as mechanism. The trait is measured, replicated across registers, "
+              "and the corpus reasons from it.",
+    "UNDERUSED": "Cite as mechanism, and ask why this page is not already using it. "
+                 "Measured, replicated, and the wiki is not reasoning from it.",
+    "THIN LOAD": "Cite with the register named. Supported in messages only — say so, "
+                 "because a single-medium result may be an artefact of the medium.",
+    "thin": "Usable, single-register. Name the register.",
+    "UNSUPPORTED LOAD": "DO NOT use as a load-bearing mechanism. The wiki already leans "
+                        "on this and the behavioural corpus does not carry it. State the "
+                        "silence on any page that invokes it.",
+    "unsupported": "Do not make it the mechanism. The corpus is silent — which is not "
+                   "falsification, and not permission either.",
+    "dormant": "Nothing owed. Silent and unused.",
+    "CONTRADICTED LOAD": "STOP. The corpus runs against this score and the wiki leans on "
+                         "it. Every page in the reach set needs re-reading.",
+    "CONTRADICTED": "Evidence against the score. Write it up before citing the trait again.",
+    "contradicted": "Evidence against the score. Not currently load-bearing.",
+    "unmeasured": "Too few matches to say anything. Treat as untested.",
+    "UNREVIEWED LOAD": "Cite as testimony, never as measurement. The wiki leans on this "
+                       "and no proxy for it has had its matches read, so the instrument "
+                       "cannot yet confirm or contradict it. Reviewing them is owed work: "
+                       "`bin/wiki-traits review`.",
+    "unreviewed": "Untested. No proxy for it has been reviewed; treat the score as the "
+                  "self-report it is.",
+    "NO INSTRUMENT / LOAD": "Cite as testimony, never as measurement, and say so on the "
+                            "page. Every proxy built for this trait was read and found to "
+                            "catch something else. The wiki leans on it anyway.",
+    "no instrument": "No working proxy exists. The score stands as testimony and this "
+                     "tool has nothing to say about it — which is not agreement.",
+}
+
+
+def build():
+    if not os.path.exists(MEASURED):
+        sys.exit("wiki-traits: no traits/measured.json — run `bin/wiki-traits mine` first")
+    measured = json.load(open(MEASURED, encoding="utf-8"))
+    sup, rch = support(measured), reach()
+    rows = []
+    for tid, t in TRAITS.items():
+        if tid not in sup:
+            continue
+        s, r = sup[tid], rch[tid]
+        cell = QUADRANT[(s["band"], r["band"])]
+        rows.append({"id": tid, **t, "support": s, "reach": r, "cell": cell,
+                     "weight": WEIGHT[cell]})
+    rows.sort(key=lambda x: (x["cell"] not in ("UNSUPPORTED LOAD", "CONTRADICTED LOAD",
+                                               "THIN LOAD", "UNDERUSED"),
+                             -x["reach"]["pages"]))
+    return measured, rows
+
+
+# ---------------------------------------------------------------------------
+# commands
+# ---------------------------------------------------------------------------
+def cmd_mine(a):
+    import datetime
+    m = mine()
+    m["generated"] = datetime.date.today().isoformat()
+    os.makedirs(os.path.dirname(MEASURED), exist_ok=True)
+    json.dump(m, open(MEASURED, "w", encoding="utf-8"), indent=1, sort_keys=True)
+    t = m["totals"]
+    print(f"wiki-traits: wrote {os.path.relpath(MEASURED, ROOT)} — "
+          f"{t['sent']:,} sent / {t['received']:,} control, {t['tweets']:,} tweets, "
+          f"{t['chatgpt_prompts']:,} chatgpt, {t['gemini_prompts']:,} gemini prompts")
+
+
+def cmd_support(a):
+    measured, rows = build()
+    t = measured["totals"]
+    print(f"# TIER A — behavioural support. {t['sent']:,} sent messages against "
+          f"{t['received']:,} received (within-medium control);")
+    print(f"# {t['tweets']:,} tweets, {t['chatgpt_prompts']:,} chatgpt and "
+          f"{t['gemini_prompts']:,} gemini prompts, ranked within register (no control exists).")
+    print("# silence is not falsification. Only INVERTED is evidence against a score.\n")
+    print(f"{'trait':38} {'band':13} replicates")
+    print("-" * 78)
+    for r in rows:
+        rep = ", ".join(r["support"]["replicates"]) or "—"
+        print(f"{r['label'][:37]:38} {r['support']['band']:13} {rep}")
+        if a.verbose:
+            for p in r["support"]["proxies"]:
+                ratio = f"{p['ratio']:.2f}x" if p["ratio"] is not None else "inf"
+                print(f"    {p['proxy'][:40]:42} {ratio:>7} n={p['hits']:<6} {p['verdict']}")
+
+
+def cmd_reach(a):
+    _, rows = build()
+    print(f"# TIER C — reach. How much of the wiki already leans on each trait.")
+    print("# REACH IS NOT EVIDENCE. These pages were written by agents that had read")
+    print("# wiki/mind/profile/, so this measures vocabulary adoption, not the trait.\n")
+    print(f"{'trait':38} {'pages':>6} {'synth':>6} {'cites':>6}  band")
+    print("-" * 78)
+    for r in rows:
+        c = r["reach"]
+        print(f"{r['label'][:37]:38} {c['pages']:6} {c['synthesis']:6} "
+              f"{c['citations']:6}  {c['band']}")
+
+
+def cmd_map(a):
+    measured, rows = build()
+    print("# THE FILTER — support (Tier A) against reach (Tier C).")
+    print("# The off-diagonal cells are the findings. Loud cells first.\n")
+    print(f"{'trait':38} {'support':13} {'reach':13} cell")
+    print("-" * 88)
+    for r in rows:
+        print(f"{r['label'][:37]:38} {r['support']['band']:13} "
+              f"{r['reach']['band']:13} {r['cell']}")
+    loud = [r for r in rows if r["cell"].isupper() or r["cell"] == "UNDERUSED"]
+    if loud:
+        print(f"\n{len(loud)} trait(s) need a decision:\n")
+        for r in loud:
+            print(f"  {r['cell']}  {r['label']}")
+            print(f"    {r['weight']}")
+            print(f"    reach: {r['reach']['pages']} pages, "
+                  f"{r['reach']['synthesis']} synthesis · support: "
+                  f"{r['support']['band']}"
+                  f"{' (replicates: ' + ', '.join(r['support']['replicates']) + ')' if r['support']['replicates'] else ''}")
+
+
+def cmd_assess(a):
+    _, rows = build()
+    hits = [r for r in rows if a.trait.lower() in r["id"] or a.trait.lower() in r["label"].lower()]
+    if not hits:
+        sys.exit(f"wiki-traits: no trait matching {a.trait!r}; try `map`")
+    for r in hits:
+        print(f"\n{r['label']}")
+        print(f"  constitution register {r['register']} · {r['home']}")
+        print(f"  support   {r['support']['band']}"
+              f"{'  replicates in ' + ', '.join(r['support']['replicates']) if r['support']['replicates'] else ''}")
+        print(f"  reach     {r['reach']['band']} — {r['reach']['pages']} pages, "
+              f"{r['reach']['synthesis']} synthesis, {r['reach']['citations']} cite the home page")
+        print(f"  cell      {r['cell']}")
+        print(f"\n  WEIGHT: {r['weight']}\n")
+        for p in r["support"]["proxies"]:
+            ratio = f"{p['ratio']:.2f}x" if p["ratio"] is not None else "inf"
+            rep = ", ".join(p["replicates"]) or "—"
+            print(f"    {p['proxy'][:40]:42} {ratio:>7} n={p['hits']:<6} "
+                  f"{p['verdict']:10} [{rep}]")
+
+
+def render():
+    import datetime
+    measured, rows = build()
+    t = measured["totals"]
+    L = []
+    A = L.append
+    reach_bands = ["load-bearing", "present", "dormant"]
+    sup_bands, counts = [], {}
+    for r in rows:
+        b = r["support"]["band"]
+        if b not in sup_bands:
+            sup_bands.append(b)
+        counts[(b, r["reach"]["band"])] = counts.get((b, r["reach"]["band"]), 0) + 1
+    A("---")
+    A("domain: mind")
+    A("page_type: dataset")
+    A('title: "Trait–corpus map"')
+    A('aliases: ["trait map", "personality filter", "trait-corpus map"]')
+    A("status: active")
+    A("importance: high")
+    A("knowledge: derived")
+    A(f"date_created: 2026-09-06")
+    A(f"date_modified: {datetime.date.today().isoformat()}")
+    A("chart:")
+    A("  kind: grouped-bar")
+    A('  title: "Traits by behavioural support and by how much the wiki leans on them"')
+    A('  x: { label: "How much the wiki already leans on the trait", type: category }')
+    A('  y: { label: "Number of traits", type: number }')
+    A("  series:")
+    for b in sup_bands:
+        A(f'    - name: "{b}"')
+        A("      points:")
+        for rb in reach_bands:
+            A(f'        "{rb}": {counts.get((b, rb), 0)}')
+    A("tags: [personality-profile, forensic-analysis, ai-collaboration]")
+    A("sources:")
+    A("  - raw/self/message-csv/")
+    A("  - raw/self/twitter/archive.jsonl")
+    A("  - raw/self/chatgpt-export/")
+    A("  - raw/self/gemini-activity/")
+    A("---")
+    A("")
+    A("# Trait–corpus map")
+    A("")
+    A("Part of [[wiki/mind/profile/index]] — the measured counterpart to the")
+    A("self-report scores it collects.")
+    A("")
+    A("> **GENERATED — do not hand-edit.** `bin/wiki-traits page` writes this file;")
+    A("> an edit here fails `bin/wiki-traits check`. It is **evidence, not a claim**:")
+    A("> it states no finding about Dan. A finding drawn from it reaches an ordinary")
+    A("> page through the normal operations.")
+    A("")
+    A(f"Every trait in `wiki/mind/profile/` tested against {t['sent']:,} sent messages")
+    A(f"(controlled against {t['received']:,} received from other handles), "
+      f"{t['tweets']:,} tweets,")
+    A(f"{t['chatgpt_prompts']:,} ChatGPT prompts and {t['gemini_prompts']:,} Gemini prompts —")
+    A("then against the wiki's own reasoning, separately and never pooled.")
+    A("")
+    A("## The two axes, and why they are never added")
+    A("")
+    A("**Support** is Tier A: Dan's own behavioural output, produced without knowing")
+    A("what this wiki would say. It is the only tier that can corroborate anything.")
+    A("")
+    A("**Reach** is Tier C: how much of the wiki already leans on the trait. It is")
+    A("**not evidence and never becomes evidence.** These pages were written by agents")
+    A("that had read `wiki/mind/profile/`, so reach measures how often the writing")
+    A("process reached for a vocabulary — not how present the trait is in the life.")
+    A("Of 483 entries, 122 carry personality vocabulary and 38 of 61 synthesis pages do.")
+    A("")
+    A("**Silence is not falsification.** A trait can be real and leave no lexical")
+    A("trace; people do not narrate their own architecture in text messages. `silent`")
+    A("means the corpus does not carry it, and constrains how much weight a synthesis")
+    A("may place on it — nothing more. Only `INVERTED` is evidence against a score.")
+    A("There is no confidence percentage on this page and one must never be added.")
+    A("")
+    A("## The state of the instrument")
+    A("")
+    n_broken = sum(1 for v in PROXY_REVIEW.values() if v[0] == "broken")
+    n_sound = sum(1 for v in PROXY_REVIEW.values() if v[0] == "sound")
+    n_total = len(load_predictions())
+    n_un = n_total - n_sound - n_broken
+    A(f"Of {n_total} lexical proxies, **{n_sound} {'has' if n_sound == 1 else 'have'} been "
+      f"reviewed and found sound**, {n_broken} {'was' if n_broken == 1 else 'were'}")
+    A(f"reviewed and found broken, and {n_un} {'has' if n_un == 1 else 'have'} never had "
+      "their matches read.")
+    A("")
+    A("A proxy earns its verdict by having had its matches actually read. **An unreviewed")
+    A("proxy may not confirm a score and may not contradict one** — a result that would")
+    A("have been either is reported as `unreviewed` instead. That is a different band from")
+    A("`silent`, and the difference matters: *silent* means an instrument ran and found")
+    A("nothing, *unreviewed* means no trustworthy instrument ran, and *no instrument* means")
+    A("every proxy built for the trait was read and found to measure something else. Three")
+    A("positions, three names, never collapsed. The cap exists because the heaviest verdict")
+    A("in this system is also the cheapest to manufacture: a regex that catches the wrong")
+    A("side of a conversation inverts trivially. The first run of this tool reported")
+    A("`CONTRADICTED LOAD` on the Fe deficit — an instruction to re-read 37 pages, 17 of")
+    A("them synthesis — on a proxy for *other-directed concern* whose every match was Dan")
+    A('being comforted: *"Thank you for making me feel better sweetie."* The pattern caught')
+    A("`feel better` and could not tell who was doing the feeling.")
+    A("")
+    A("`bin/wiki-traits review` is the queue. Each broken proxy names the string that")
+    A("breaks it.")
+    A("")
+    A("## The map")
+    A("")
+    A("| Trait | Reg. | Support | Replicates | Reach | Cell |")
+    A("|---|---|---|---|---|---|")
+    for r in rows:
+        rep = ", ".join(r["support"]["replicates"]) or "—"
+        A(f"| {r['label']} | {r['register']} | {r['support']['band']} | {rep} "
+          f"| {r['reach']['band']} ({r['reach']['pages']}p / {r['reach']['synthesis']}s) "
+          f"| **{r['cell']}** |")
+    A("")
+    loud = [r for r in rows if r["cell"].isupper() or r["cell"] == "UNDERUSED"]
+    A("## What the map obliges")
+    A("")
+    if not loud:
+        A("No trait is currently in a cell that requires a decision.")
+    else:
+        A(f"{len(loud)} trait(s) sit in a cell that constrains what a synthesis may do.")
+        A("")
+        for r in loud:
+            A(f"### {r['cell']} — {r['label']}")
+            A("")
+            A(f"{r['weight']}")
+            A("")
+            A(f"- **Support:** {r['support']['band']}"
+              f"{' — replicates in ' + ', '.join(r['support']['replicates']) if r['support']['replicates'] else ''}")
+            A(f"- **Reach:** {r['reach']['pages']} pages, {r['reach']['synthesis']} of them synthesis, "
+              f"{r['reach']['citations']} citing `{r['home']}`")
+            A(f"- **Constitution register {r['register']}**")
+            A("")
+            for p in r["support"]["proxies"]:
+                ratio = f"{p['ratio']:.2f}x" if p["ratio"] is not None else "inf"
+                A(f"  - `{p['proxy']}` — {ratio} vs control, n={p['hits']}, {p['verdict']}")
+            A("")
+    A("## What is not measured")
+    A("")
+    A("- **Facebook.** 286 MB and 1,686 HTML files, and the export is nested inside")
+    A("  itself — a second copy of `posts/your_posts_1.html` sits one directory down,")
+    A("  so counting the tree as it stands double-counts every post. A real fifth")
+    A("  register, absent for a stated reason rather than by oversight.")
+    A("- **Non-lexical expression.** Every proxy here is a regex over text. A trait")
+    A("  expressed in what Dan *did* rather than what he wrote is invisible to this")
+    A("  instrument, and that invisibility is what `silent` records.")
+    A("- **The instrument scores themselves are Tier B testimony** — self-report, the")
+    A("  claim rather than support for it. Their standing is the testimony ledger's.")
+    A("")
+    return "\n".join(L) + "\n"
+
+
+def cmd_review(a):
+    """The proxy review queue — the work that turns testimony into measurement."""
+    preds = load_predictions()
+    rows = []
+    for f, sc, d, l, _ in preds:
+        st, note = proxy_status(f, l)
+        owner = next((t["label"] for t in TRAITS.values() if f in t["facets"]), "—")
+        rows.append((st, f, l, owner, note))
+    order = {"broken": 0, "unreviewed": 1, "sound": 2}
+    rows.sort(key=lambda r: (order[r[0]], r[1]))
+    n_un = sum(1 for r in rows if r[0] == "unreviewed")
+    print("# PROXY REVIEW QUEUE")
+    print("# An unreviewed proxy cannot confirm a score and cannot contradict one;")
+    print("# such a result is reported as `unreviewed`, never as `silent`.")
+    print("# Review by reading the matches:")
+    print("#   bin/psychometrics run --facet <facet> --examples 8")
+    print("# then record the verdict in PROXY_REVIEW at the top of this file.\n")
+    for st, f, l, owner, note in rows:
+        print(f"  [{st:10}] {f:20} {l}")
+        if note:
+            print(f"               {note}")
+    print(f"\n{len(rows)} proxies · {n_un} unreviewed · "
+          f"{sum(1 for r in rows if r[0]=='broken')} broken · "
+          f"{sum(1 for r in rows if r[0]=='sound')} sound")
+    return 0
+
+
+def cmd_page(a):
+    os.makedirs(os.path.dirname(PAGE), exist_ok=True)
+    open(PAGE, "w", encoding="utf-8").write(render())
+    print(f"wrote {os.path.relpath(PAGE, ROOT)}")
+
+
+def cmd_check(a):
+    errors = []
+    if not os.path.exists(MEASURED):
+        print("wiki-traits: no traits/measured.json — `bin/wiki-traits mine` (not a gate failure)")
+        return 0
+    if not os.path.exists(PAGE):
+        errors.append(f"{os.path.relpath(PAGE, ROOT)} missing — run `bin/wiki-traits page`")
+    else:
+        cur = open(PAGE, encoding="utf-8").read()
+        want = render()
+        # date_modified is stamped on every render; compare everything else.
+        strip = lambda s: re.sub(r"^date_modified:.*$", "", s, flags=re.M)
+        if strip(cur) != strip(want):
+            errors.append(f"{os.path.relpath(PAGE, ROOT)} is behind the measurement — "
+                          "run `bin/wiki-traits page` and do not hand-edit it")
+    for e in errors:
+        print(f"ERROR {e}")
+    n = len(json.load(open(MEASURED, encoding="utf-8"))["proxies"])
+    print(f"wiki-traits: {len(errors)} error(s) · {len(TRAITS)} traits over {n} proxies")
+    return 1 if errors else 0
+
+
+def main():
+    ap = argparse.ArgumentParser(prog="wiki-traits", description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = ap.add_subparsers(dest="cmd", required=True)
+    for name, fn in (("mine", cmd_mine), ("reach", cmd_reach), ("map", cmd_map),
+                     ("review", cmd_review), ("page", cmd_page), ("check", cmd_check)):
+        p = sub.add_parser(name)
+        p.set_defaults(fn=fn)
+    s = sub.add_parser("support")
+    s.add_argument("-v", "--verbose", action="store_true")
+    s.set_defaults(fn=cmd_support)
+    x = sub.add_parser("assess")
+    x.add_argument("trait")
+    x.set_defaults(fn=cmd_assess)
+    a = ap.parse_args()
+    rc = a.fn(a)
+    sys.exit(rc or 0)
+
+
+if __name__ == "__main__":
+    main()

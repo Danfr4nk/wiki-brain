@@ -1,0 +1,50 @@
+
+---
+domain: people
+page_type: entity
+status: closed
+date_created: 2026-06-23
+date_modified: 2026-07-14
+date_range_start: 2019-06-02
+date_range_end: 2019-07-17
+sources: ["raw/self/message-csv/MASTER_MESSAGES_DB_DUMP.csv"]
+related: ["wiki/self/message-corpora/master-message-dump", "wiki/mind/concepts/contact-gini"]
+tags: [addiction-recovery, digital-footprint, nyc-era]
+knowledge: mixed
+infobox:
+  name: "Annoying"
+  relationship_to_dan: unknown
+  first_contact: 2019-06-02
+  known_for: "Saved in Google Contacts under the first name 'annoying' — Dan's own label, not a self-identification — this is a cocain"
+connections:
+  - page: wiki/health/cocaine
+    type: evidences
+    claim: "An unidentified 2019 cocaine dealer saved under Dan's own 'annoying' label — the thread documents price negotiation ($300 for a ball, $8ball/280) and the purely transactional register of the short-term supply bond."
+---
+
+# "Annoying" (unidentified dealer, 2019)
+
+Saved in Google Contacts under the first name "annoying" — Dan's own label, not a self-identification — this is a cocaine dealer contacted through the summer of 2019 (`+13057095740`, 87 messages, June 2–July 17). The relationship is purely transactional and short-lived: daily-to-weekly "Hey bro" check-ins, quantity and price negotiation ("I have special today $300 for a ball," "8 ball $280"), and one mention of "kpin" (klonopin) alongside the cocaine offerings.
+
+## Texture
+
+The thread has none of the personal texture of Dan's other 2018–19 supply contacts — no names, no shared history, just recurring availability pings and price quotes, with the contact frequently opening with "Hey" / "Bro" and no reply logged before following up again hours or days later. The final week (July 16–17) shows the most active back-and-forth: repeated attempts to schedule a meet, delays blamed on traffic and GPS, and a final "Almost there" that closes out the corpus.
+
+## Corpus Dimensions
+
+| Metric | Value |
+|--------|-------|
+| Messages | 87 |
+| Date range | 2019-06-02 to 2019-07-17 |
+| Direction | Unreliable in this export (marked "Received" throughout) — read as mostly one-way (dealer to Dan) |
+| Handle | +13057095740 |
+
+## Gaps
+
+Real identity is unknown — "annoying" is Dan's own contact-card label, giving no clue to a real name. No activity is recorded before or after the six-week window.
+
+## Related
+
+[[wiki/self/message-corpora/master-message-dump]] · [[wiki/mind/concepts/contact-gini]]
+
+

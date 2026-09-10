@@ -1,0 +1,223 @@
+---
+
+domain: people
+
+page_type: entity
+
+title: "Dave Moore"
+
+aliases: ["Dave", "Dave Moore"]
+
+status: stable
+
+knowledge: mixed
+
+date_created: 2026-08-18
+
+date_modified: 2026-08-18
+
+sources:
+
+- raw/self/dox-scan/all_imessages_complete_dump.txt
+
+- raw/people/captures/2026-08-17_230820_gap-diane-shrum.md
+
+tags: [family, grief, uniontown-era, financial-stress]
+
+infobox:
+
+name: "Dave Moore"
+
+sex: male
+
+location: unknown
+
+relationship_to_dan: family
+
+role: "second husband of Dan's maternal grandmother"
+
+known_for: "Spoke to Fran's hospital social workers on Diane's behalf during the final week, and is the man Dan believed drafted the letter that threatened him with trespassing"
+
+connections:
+
+- page: wiki/people/diane-moore
+
+type: co-occurs
+
+claim: "Dave is Diane's second husband and her proxy: in the vigil's final week she could not be reached by anyone and he was the one talking to the hospital's social workers about day-to-day decisions."
+
+- page: wiki/timeline/events/fran-death-vigil
+
+type: causes
+
+claim: "On Dan's reading of the document, Dave wrote the letter whose closing paragraph made a violation of its rules trespassing — the instrument that kept the two caregivers off the mandated rotation."
+
+- page: wiki/mind/synthesis/vertical-authority-skepticism
+
+type: evidences
+
+claim: "A man with no blood tie and no caregiving role speaking for the estate's heir to hospital social workers, and drafting its correspondence, is authority-by-proxy in its purest family-scale form."
+
+- page: wiki/people/suzanne-frank
+
+type: co-occurs
+
+claim: "Suz's August 2018 encounter with Dian and Dave together, four months after the funeral, is the only documented post-death contact between the two halves of the family."
+
+---
+
+# Dave Moore
+
+Dave is the second husband of [[wiki/people/diane-moore|Diane]], Dan's
+
+maternal grandmother, and therefore Dan's step-grandfather by marriage. He is
+
+never quoted, never messages anyone in the corpus, and appears in exactly nine
+
+records across five years — but he is on the wrong side of every one of them,
+
+and the operator's 2026 identification of the "grandparents who already hated
+
+you" as **"Dian and Dave"** makes him half of the pair whose hostility shaped
+
+the most consequential eight hours of the Fran sequence.
+
+He matters for one specific reason: he is the only person in the family
+
+architecture who exercised authority over Fran's death without holding any
+
+relationship to her. Diane was her daughter. Dave was her daughter's husband,
+
+and in the final week he was the one the hospital was talking to.
+
+## What the record has him doing
+
+**Speaking for her when she could not be reached.** On 2018-04-01, three days
+
+before Fran died, Dan reported the arrangement twice within eighteen minutes,
+
+and the second time with the detail that makes it strange:
+
+> "meanwhile diane moore hasn't been able to be reached by anyone. dave is
+
+> 'speaking on her behalf' and it's very unusual stuff"
+
+>
+
+> "no comment required. it's just wild, the social workers are talking to dave
+
+> moore about the day-to-day stuff lol"
+
+The quotation marks around *speaking on her behalf* are Dan's. The situation
+
+he is describing is a hospital discussing a dying woman's daily care with a
+
+man who is not her relative, because her only child was unreachable — while
+
+the two people who had kept her out of a nursing home for three years had been
+
+formally excluded from the rotation.
+
+**Writing the letter, on Dan's reading.** Two days later, holding the document
+
+that demanded the keys to 155 Virginia and closed with a trespassing clause,
+
+Dan's first conclusion was about authorship:
+
+> "i think dave wrote it — read the last paragraph. 'any violation of the
+
+> rules will be considered trespassing' ....so if i violated the rules by not
+
+> leaving the key i would be trespassing?"
+
+This is a read of prose style by its recipient, not evidence of authorship,
+
+and the page holds it as such. But it is consistent with the social-worker
+
+arrangement two days earlier — the same substitution, the instrument issued in
+
+Diane's name and produced in Dave's voice.
+
+**Everything else is a pair.** He appears in the corpus almost exclusively as
+
+the second half of "Diane and Dave," and the pairing itself is the finding —
+
+Dan does not treat them as a person and her husband but as a single actor:
+
+| Date | Record |
+
+|---|---|
+
+| 2016-08-13 | *"Diane and Dave went ALL out this year on a very creative and not the same thing they got last year birthday gift for gram"* — sarcasm, and the only record of either of them marking Fran's birthday |
+
+| 2018-04-01 | *"i don't know if anyone wants a 45 minute roasting of diane and dave"* — Dan on whether to speak at the service |
+
+| 2018-04-03 | *"just glad that diane and dave aren't super upset, they're probably busy working through the tragedy of her death and that's why they haven't checked in on her"* — written the day before Fran died |
+
+| 2018-08-01 | Annie, four months after the funeral: *"Wait wtf. Your mom ran into Dian and Dave today?!"* |
+
+| 2020-03-28 | *"i hope diane and dave both drown in their own vomit after simultaneously contracting coronavirus"* |
+
+The 2018-08-01 line is the only documented post-funeral contact between the
+
+two halves of the family, and Annie's reaction to it — *wait wtf* — is the
+
+measure of how unexpected it was.
+
+## Why he gets a page
+
+The wiki's rule is one page per entity and no entity too small to have one,
+
+and Dave clears the bar on evidence alone. But he earns it on a second ground:
+
+he is the cleanest instance in the family material of
+
+[[wiki/mind/synthesis/vertical-authority-skepticism]]. The template that page
+
+describes is authority exercised at a distance, through paperwork and proxies,
+
+by people who are not present and do not do the work. Diane at least had
+
+standing — she was the heir and the daughter. Dave had none, and he is the one
+
+who talked to the social workers and, probably, wrote the letter.
+
+He is also the reason the operator's two-word answer changed the shape of the
+
+Fran material rather than just correcting a name. The earlier reading had Dan
+
+fearing a generic pair of grandparents — Diane and George — during the
+
+keno-morning fall, an eight-hour delay in treating a fallen 97-year-old
+
+explained by inheritance anxiety. The couple he actually feared is the couple
+
+that then served the notice, wrote the letter, took the hospital's calls and
+
+sold the Florida condo. The fear was not a mood. It was a forecast, and it was
+
+right.
+
+## Gaps
+
+- **Everything biographical.** No age, no occupation, no location, no surname
+
+confirmation beyond the two 2018 messages that give it. Whether he and Diane
+
+are still married, or still living, is unknown.
+
+- **Whether he actually wrote the letter.** Dan's read is the only evidence.
+
+The document itself is not in `raw/`.
+
+- **Whether he had any relationship with Fran at all** before the final weeks.
+
+The one record of him marking her birthday is a joke at his expense.
+
+- **What he is to Suz.** He is her stepfather by her mother's second marriage,
+
+and the corpus never records a single word between them.
+
+---
+
+**Up:** [[wiki/people/index|People]]

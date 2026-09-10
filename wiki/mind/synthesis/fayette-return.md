@@ -1,0 +1,396 @@
+
+---
+domain: mind
+page_type: synthesis
+title: "The Fayette Return"
+aliases: ["the elastic tether", "regional gravity", "leave-and-come-back"]
+status: active
+knowledge: earned
+date_created: 2026-08-01
+date_modified: 2026-08-28
+date_range_start: 1892-01-01
+date_range_end:
+sources:
+  - raw/self/ancestry/23andme-ancestry-family-tree-20260623.zip
+  - raw/self/context-core/CONTEXT_CORE_EXPANDED.md
+  - raw/self/dox-md/FULL PROFILE 2026.md
+synthesizes:
+  - wiki/people/david-j-frank
+  - wiki/people/sadie-harris
+  - wiki/people/morley-frank
+  - wiki/people/rick-frank
+  - wiki/self/ancestry
+  - wiki/mind/synthesis/ancestral-dialectic
+  - wiki/mind/profile/intp
+  - wiki/mind/synthesis/the-binary-verdict
+tags: [family, uniontown-era, personality-profile, forensic-analysis]
+connections:
+  - page: wiki/people/morley-frank
+    type: instance-of
+    claim: "The generation that proves the rule is not Dan's: Morley leaves for Seattle in 1957 and is back in Uniontown by 1959, a two-year turnaround and the only documented leave-and-return in the line before Dan's own."
+  - page: wiki/people/rick-frank
+    type: instance-of
+    claim: "The generation that never left: born Uniontown 1959, builds an auto-parts chain in the same county, and is the only line member for whom departure is not attested — which the rule must account for rather than ignore."
+  - page: wiki/people/david-j-frank
+    type: contains
+    claim: "The founder, and not merely an anchor: Manhattan 1900-1910 and the Bronx in 1915 before Brownsville in 1920 means the line's first move was New York City to Fayette County — the same vector Dan runs twice."
+  - page: wiki/timeline/events/bald-eagle-cummings
+    type: evidenced-by
+    claim: "Sharpens the Champion question rather than settling it: the family rented at Seven Springs for years before buying unit K2, and Champion is the resort's town — so Morley's 1996-99 listings are now a specific checkable question (that rental, a separate property, or the unit later purchased) instead of a vague adjacency."
+  - page: wiki/people/sadie-harris
+    type: contains
+    claim: "The longest tenure in the record — seventy-seven Fayette years with no attested departure — and the burial that, with David's and Morley's, resolves the terminus from a county to one Hopwood cemetery."
+  - page: wiki/self/ancestry
+    type: evidenced-by
+    claim: "The 515-individual GEDCOM is the residue this rule is built from; every date, residence and terminus in the table below is a census, directory or burial record inside that export."
+  - page: wiki/places/337-saratoga-drive
+    type: instance-of
+    claim: "The tether at maximum tension: the current return has landed Dan in the childhood home itself, the tightest possible value of the pattern, while that house is being sold out from under him."
+  - page: wiki/mind/synthesis/ancestral-dialectic
+    type: contradicts
+    claim: "The dialectic explains the return as inherited psychology from two incompatible parental lines; this page shows the return is documented in the paternal line alone across four generations, so a single-line geographic account is sufficient and the two-line psychological one may be over-specified."
+  - page: wiki/mind/concepts/chaos-preference
+    type: mirrors
+    claim: "The same asymmetry as the entropy appetite: disorder is welcome everywhere except in the structures he did not choose, and geography is the one structure nobody in this line has successfully chosen against."
+  - page: wiki/mind/synthesis/totality-themes
+    type: component-of
+    claim: "Four generations, each leaving and returning to Fayette County, is 'The Irreversibility Firewall' run at the scale of geography: departure is never converted into the irreversible, examined fact of having left for good."
+  - page: wiki/mind/synthesis/the-binary-verdict
+    type: instance-of
+    claim: "The 'personal failure' reading this page's own Consequences section rejects is Core Axiom 1's worth-binary applied to a return — exceptional-departure or worthless-retreat, no middle state. This page's genealogical reframing is the one documented case in the corpus that offers a way out of that binary without invoking a middle value: not a graded self-assessment, but a different category entirely (inherited pattern, not personal verdict)."
+  - page: wiki/mind/profile/intp
+    type: caused-by
+    claim: "Core Axiom 1's binary self-worth verdict, per the-binary-verdict's account of Ti-dominance with no Fe-mediated grading function, is why a return misfiled as 'personal failure' would otherwise resolve to worthless rather than to a graded 'a setback, not a verdict' — which is what makes this page's reframing substantive rather than merely comforting: it changes the category the event is judged in, not its position on a scale that was never available."
+---
+
+# The Fayette Return
+
+> **RE-CHECKED [2026-08-23]:** flagged stale against [[wiki/people/rick-frank]]
+> (2026-08-23), which gained an alias finding — *Ricky*, 66 further mentions
+> across 2015–2020 — corroborating the 2026-08-11 retraction of that page's
+> held-block reading by showing ordinary domestic contact (dinners, plumbing,
+> money both ways) through the Uniontown years. **This page's argument is
+> unaffected and mildly supported**: a return to Fayette County into a family
+> network that was actually functioning is more consistent with the pull this page
+> describes than a return into estrangement would be. No date, move or claim here
+> changes, and nothing is withdrawn.
+
+Every generation of Dan's paternal line that has left Fayette County,
+Pennsylvania has come back to it. Four generations and roughly 130 years —
+Brownsville, Hopwood, Uniontown, three towns inside twenty miles — with an
+ocean crossing at the start and at least four separate departures since, and
+the line has never once ended somewhere else. Dan's own returns, which are
+recorded across the timeline as individual failures and retreats, are the
+**fourth iteration of a documented family pattern**. That reframing is the
+point of this page: the returns are the rule, not the exception, and they were
+happening before he was born.
+
+The corpus already contains this observation in pieces. The ancestry material
+calls Fayette County a *"psychic sinkhole"* and describes a system that
+*"keeps snapping back to the same Appalachian locus like an elastic tether."*
+Morley's page carries an edge claiming the Seattle-and-back arc is *"the
+geographic template Dan's own returns repeat."* But it existed only as scattered
+edge claims and one interpretive flourish. **Nobody had stated it as a rule
+across the whole line, and a rule is a different object from an observation:
+it can be broken.**
+
+## The line
+
+| Generation | Person | Born | Departure | Terminus | Burial |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| G1 | [[wiki/people/david-j-frank]] | 1892, **Russia** | **NYC 1900–1915**, then Fayette | d. 1960 **Brownsville, Fayette Co.** | **Hopwood** |
+| G1 | [[wiki/people/sadie-harris]] | 1900, **Austria** | emigration (arrival, not return) | d. 1997, place unrecorded | **Hopwood** |
+| G2 | [[wiki/people/morley-frank]] | 1927, Brownsville | **Seattle, 1957** → Uniontown by **1959** | d. 1998 **Hopwood, PA** | **Hopwood** |
+| G3 | [[wiki/people/rick-frank]] | 1959, Uniontown | *none attested* | Fayette Co. (auto-parts chain) | — |
+| G4 | Dan | 1988, Uniontown | Florida, New York (twice) | **337 Saratoga Drive, Uniontown** | — |
+
+> **REVISED [2026-08-02] — the rule survives and gets two corrections and one
+> sharpening, all from a direct read of the GEDCOM that this page was written
+> above rather than from.**
+>
+> 1. **Sadie did not die in Hopwood.** The export records only a death *date*
+>    (27 Nov 1997) and gives Hopwood as her **burial** place; her last attested
+>    residence is Brownsville in 1993. The original table asserted a death place
+>    the record does not contain.
+> 2. **G1 is not a bare arrival.** David J. Frank is documented in Manhattan in
+>    1900, 1905 and 1910 and in the Bronx on 1 June 1915, reaching Brownsville
+>    only by the 1920 census. The line's founding move was **New York City to
+>    Fayette County** — which is the identical vector Dan runs in
+>    [[wiki/timeline/periods/feb-apr-2025-return-and-rupture]]. It remains true
+>    that David had no Fayette County to return *to*, so he is not an instance of
+>    the rule; but "arrival, not return" understated him. He chose the county
+>    over New York at the first opportunity anyone in this family had to choose.
+> 3. **The terminus is a town, not a county.** All three of David, Sadie and
+>    Morley are buried in **Hopwood** — across thirty-eight years, and only one
+>    of the three died there. The rule's geography is tighter than it was stated.
+> 4. **Morley's return is now dated** (Seattle 1957 → Uniontown by 1959), which
+>    hardens the pre-Dan instance even though the *duration* of the Seattle stay
+>    stays open. See the gap list below, revised accordingly.
+
+G1 is the anchor rather than an instance: neither immigrant had a Fayette County
+to come back to. The pattern of *returning* properly begins with G2, the first
+generation with somewhere to come back *to* — but the pattern of *ending up
+there* begins with G1, and the burial record shows it beginning more sharply
+than the residence record does.
+
+Dan's iterations are the densest and the best documented:
+[[wiki/timeline/periods/full-sail-2008-2010]] takes him to Florida and ends;
+[[wiki/timeline/periods/uniontown-return-2013-2015]] names a return in its own
+title; the New York era across
+[[wiki/places/307-e-76th-st]], [[wiki/places/90th-st-manhattan]] and
+[[wiki/places/424-bedford-ave]] ends in
+[[wiki/timeline/periods/feb-apr-2025-return-and-rupture]] — another return in
+its own title. **Two of his life periods are literally named for coming back.**
+
+## The rule, stated so it can be broken
+
+> No member of the paternal Frank line, from G2 onward, has both left Fayette
+> County and ended elsewhere. Every documented departure is followed by a
+> documented return, and every terminus in the record is inside the same
+> twenty-mile radius.
+
+Three falsifiers, each checkable against the GEDCOM and the census record:
+
+1. **A line member who left and died elsewhere.** Any sibling, cousin or
+   collateral relative in the 515-individual family tree whose terminus is
+   outside Fayette County breaks the claim as stated — and the collaterals have
+   not been checked, which is the most likely place for this to fail.
+2. **Morley's Seattle move turning out to be administrative** — a brief
+   posting or a work assignment rather than a relocation — which would remove
+   the only pre-Dan instance and reduce the pattern to one generation. His 1945
+   Selective Service record makes a service posting an ordinary possibility, and
+   the blank decade 1946–1956 is where the answer would be.
+3. **A departure by Dan that terminates outside the county.** This one is
+   still live and cannot currently be settled, which is the correct status for
+   a rule about a person who is not finished.
+
+## The generation that never left
+
+G3 is the case a lazy version of this page would drop. Rick has no attested
+departure at all: born Uniontown 1959, builds an auto-parts chain in the same
+county, stays. He is not an instance of leaving-and-returning.
+
+He is, however, the **strongest possible form of the anchor** — and he matters
+because he demonstrates the tether does not require a journey to act. The
+pattern is not "Franks are drawn home"; it is "**Fayette County is where a
+Frank ends up**," and never leaving satisfies that description more completely
+than leaving and returning does. A rule stated as *departure implies return*
+survives him vacuously. A rule stated as *the terminus is always Fayette*
+includes him directly, and that is the better-supported form.
+
+## What this does to the psychological reading
+
+[[wiki/mind/synthesis/ancestral-dialectic]] attributes the return dynamic to
+two incompatible inherited operating systems — Ashkenazi hypervigilance against
+Appalachian numbness — pulled from a Gemini deep-research report and correctly
+marked `knowledge: mixed`.
+
+This page is a problem for that account, and the problem is parsimony. **The
+return is fully documented within the paternal line alone**, whose two
+immigrant ancestors are *both* the Ashkenazi side. If one line reproduces the
+pattern by itself across four generations, a two-line dialectic is not required
+to explain it, and the maternal contribution is at best unproven. Per
+[[wiki/mind/synthesis/instrument-is-subject]] the distinction is exactly the
+one that matters: the **dates, places and termini here are residue** — census
+records, death records, a GEDCOM — while the psychogenealogical mechanism is
+**testimony**. Where they disagree, residue wins.
+
+That does not falsify the dialectic. It does mean the geography is established
+and the psychology is not, and the wiki has been treating them as equally
+solid.
+
+> **CONTRADICTION:** this page and [[wiki/mind/synthesis/ancestral-dialectic]]
+> give incompatible accounts of the same phenomenon. The dialectic requires two
+> inherited operating systems from two parental lines; this page shows the return
+> is reproduced by the paternal line alone, whose two immigrant anchors are both
+> Ashkenazi. Both pages now carry the disagreement, and the direct GEDCOM read of
+> 2026-08-02 moved a second point in this page's favour: the paternal
+> immigration terminated in New York City and only reached Fayette County fifteen
+> years later, so the dialectic's image of pogrom-flight landing directly in the
+> coal patch — the moment at which its two codes are supposed to collide — is not
+> what the record shows.
+
+## Consequences
+
+- **Dan's returns are misfiled as personal outcomes.** They are recorded across
+  the timeline as collapses, retreats and failures. They are also the fourth
+  generation of a pattern with a 100% completion rate, and any account of his
+  life that reads them purely as individual failure is missing the base rate.
+  That misfiling is not a neutral error. [[wiki/mind/synthesis/the-binary-verdict]]
+  documents a self-worth axiom with exactly two states and no graded middle —
+  "not exceptional = worthless" — so a return read as personal failure does not
+  resolve to a discounted, tolerable setback; per [[wiki/mind/profile/intp]]'s
+  account of the mechanism (Ti-dominance with no Fe-mediated grading function
+  to soften the verdict), it resolves to the worthless pole outright. This
+  page's reframing works because it changes the *category* a return is judged
+  in — inherited pattern, not personal verdict — rather than trying to argue
+  for a middle value the architecture does not have available.
+- **It predicts.** If the rule holds, the current tenancy at
+  [[wiki/places/337-saratoga-drive]] is not the end state — a departure is
+  expected, and so is a return. The rule makes a claim about the future and can
+  be scored later, which is more than most of this repository can say.
+- **The tether is at maximum tension right now.** The current return did not
+  land him merely in the county but in **the childhood home itself**, which is
+  simultaneously being sold out from under him. The tightest possible value of
+  the pattern is being removed while he stands in it.
+
+## Gaps
+
+- **The maternal line is assessed as of 2026-08-18, and the answer is mixed**
+  (see the re-check below). The Van Voorhis / Whyel / Coldren lines *are* also
+  Fayette-anchored — the majority of all 90 direct ancestors die within twenty
+  miles of Uniontown — and [[wiki/people/fran-coldren|Fran Coldren]] supplies a
+  maternal leave-and-return with a Fayette terminus. So the pull is at least
+  partly regional, and this page's parsimony argument against
+  [[wiki/mind/synthesis/ancestral-dialectic]] does not survive that. **What is
+  now open is narrower and sharper:** whether the rule describes a lineage or a
+  county. [[wiki/people/diane-moore|Diane Van Voorhis]] — thirty-five years in
+  Michigan, no attested return, no terminus yet — is the case that will
+  separate them, and nothing else in the tree does.
+- **Collaterals unchecked.** The rule is asserted over the direct line of
+  descent only. The 515-individual GEDCOM contains siblings and cousins who
+  have not been enumerated, and falsifier 1 most likely lives there.
+- **Morley's Seattle duration is unknown — but the return is now dated.** The
+  residence table brackets him at Brownsville 1945, Seattle 1957, Uniontown 1959:
+  the turnaround is at most two years, and the open question has moved to the
+  front end, the blank decade 1946–1956.
+- **Champion, Pennsylvania is the nearest thing to a falsifier on the board.**
+  Morley holds a Champion address in the 1996–99 directories, concurrently with
+  Hopwood rather than instead of it. If Champion lies outside Fayette County — it
+  is the Seven Springs resort town, and the check has not been run — it is the
+  line's only attested out-of-county residence in four generations, though he
+  dies and is buried in Hopwood regardless, so the rule survives it either way.
+- **No control group.** Fayette County out-migration in this period was
+  heavy — the coal economy collapsed — so a family that stays may be typical of
+  the county rather than distinctive. Nothing here compares the line against a
+  regional base rate, and until it does, "elastic tether" is a description and
+  not yet an explanation.
+
+> **RE-CHECKED [2026-08-18] — the page's most important gap is now half-closed,
+> the geographic rule survives and widens, and the parsimony argument it uses
+> against the dialectic does not survive intact.**
+>
+> **The premise that moved.** [[wiki/self/ancestry]] was rewritten on 2026-08-14
+> from a direct GEDCOM extraction — 515 individuals, **90 direct ancestors**,
+> four grandparental lines, geographic concentration tables and six migration
+> corridors. This page's top gap read: *"The maternal line is not assessed… If
+> they are [Fayette-anchored], the pull may be regional rather than lineal and
+> the 'paternal line' framing is too narrow."* The rewrite assesses it. The
+> answer is **yes, partly** — and it cuts both ways.
+>
+> **The rule widens and holds.** Of the 90 direct ancestors traced, *"the
+> majority were born, lived, and died within a twenty-mile radius of
+> Uniontown"* — across **both** sides of the tree, not the Frank line only. The
+> rule stated on this page as *the terminus is always Fayette* is not merely
+> unbroken; it is now the family-wide default rather than a paternal
+> peculiarity. The maternal line also supplies a clean confirming instance this
+> page never had: **[[wiki/people/fran-coldren|Fran Coldren]]** runs McDowell
+> Co. WV → Monongalia Co. WV → Smithfield, Fayette Co. → **Miami Beach, FL** →
+> **Uniontown**, dying there in 2018. That is a leave-and-return with a Fayette
+> terminus, executed on the maternal side, by the most geographically mobile
+> ancestor in the entire tree.
+>
+> **What it costs — and this is the real result of the re-check.** The section
+> "What this does to the psychological reading" argues against
+> [[wiki/mind/synthesis/ancestral-dialectic]] on **parsimony**: the return is
+> *"fully documented within the paternal line alone,"* so a two-line dialectic
+> is *"not required to explain it."* That inference no longer follows. It was
+> valid only while the maternal line was unassessed — the argument's force came
+> from *absence of evidence about the other side*, not from evidence of its
+> absence. Now that the maternal line is assessed and turns out to be
+> Fayette-anchored too, "the paternal line reproduces the pattern by itself"
+> remains **true** and stops being **distinctive**, which is the property the
+> parsimony argument needed. The dialectic is still unproven and still
+> testimony against residue; it is no longer *outcompeted on parsimony* by this
+> page. The CONTRADICTION block above should be read with that correction
+> attached: its second point (the fifteen-year New York layover) is untouched
+> and still stands.
+>
+> **And the rule gets its first real counterexample candidate — from the side
+> this page does not cover.** [[wiki/people/diane-moore|Rebecca Diane Van
+> Voorhis]], Dan's maternal grandmother, is described in the rewrite as *"the
+> line's one documented departure from the Pennsylvania/West Virginia
+> region"*: Farmington Hills, Michigan **1985–2010**, then Stanwood, Michigan
+> **2013–2020**. Thirty-five years out of region, no attested return, and she is
+> still living, so no terminus is on the record at all.
+>
+> She does **not** falsify the rule as written — it is stated over the paternal
+> Frank line from G2, and she is maternal and not a Frank. That is exactly why
+> she matters. She is the sharpest available test of whether this page has been
+> describing *a lineage* or *a county*, and the two readings have until now made
+> identical predictions. If the pull is regional, she is an anomaly the account
+> owes an explanation for; if it is lineal, she is simply outside the claim and
+> the concentration statistic above is doing less work than it appears to.
+> **The page cannot currently tell these apart, and should stop implying it
+> can.** Falsifier 1 is hereby widened: it asks for a line member who left and
+> died elsewhere, and the cheapest place to run it is no longer the unchecked
+> collaterals but Diane's own terminus, when there is one.
+>
+> **A cascade, found and run.** [[wiki/people/diane-moore]] still recorded
+> Farmington Hills 1985–2010 as *"the only geographic fact the corpus supplies
+> about her adult life."* The 2026-08-14 ancestry rewrite added the Stanwood
+> 2013–2020 residence four days before that page was last touched, and it never
+> reached it — so the page was declaring a scarcity the corpus had already
+> relieved. Corrected there on 2026-08-18.
+
+> **RE-CHECKED [2026-08-11] — premise moved, conclusion unaffected.**
+> [[wiki/people/rick-frank]] gained a corrected, two-sided reading of the
+> December 2015 rupture (Dan's decade-long silence toward Rick, verified
+> against the per-number export) and a 2010 NYC-funding narrative from an
+> earlier pass. Neither touches Rick's residence record — no departure from
+> Fayette County is attested by either finding, so his G3 row ("*none
+> attested*") is unchanged. Nothing here needed revising.
+
+> **RE-CHECKED [2026-08-26] — the collaterals-unchecked gap gains its first
+> data point, and it is not the falsifier.** [[wiki/self/ancestry]] added one
+> verified collateral from the maternal Shrum line: **Daniel Shrum** (b. 11
+> Apr 1884, Pennsylvania; d. 11 Dec 1918, Greensburg, Westmoreland County) —
+> an older brother of the direct-line G. Dixon Shrum, single and living at
+> home per the 1900 census, dead at 34. He never left Westmoreland County at
+> all: born and died in the same county the rest of the line is anchored to.
+> That makes him a **non-event for falsifier 1**, which asks specifically for
+> a collateral who *departed and did not return* — Daniel Shrum never
+> departed, so the search that gap names is still open. What it does confirm,
+> weakly, is the regional-gravity reading against the lineal one: a
+> collateral on a different branch, checked for the first time, holds the
+> same territory the direct line does. One data point against 515
+> unenumerated people is not the audit this gap asks for; it is the first
+> stone in it.
+
+## The constitution pass
+
+Run 2026-08-28, against the eleven registers in `SYNTHESIS_SPEC.md`. This
+page had never cited `wiki/mind/profile/`, and its own methodological
+identity (residue over testimony, per [[wiki/mind/synthesis/instrument-is-subject]],
+already cited in prose) made a decorative citation an easy trap to avoid
+falling into and an easy one to fall into anyway — most of what this page
+argues is genealogical residue and does not need a cognitive-stack
+mechanism to stand. One place genuinely does.
+
+| # | Register | Disposition |
+|---|---|---|
+| 1. Cognitive stack | **Moved the conclusion, narrowly.** [[wiki/mind/profile/intp]]'s Ti-dominance/Fe-inferior account (via [[wiki/mind/synthesis/the-binary-verdict]]) explains why "personal failure" is a consequential misfiling rather than a loose one — see the addition to "Consequences" above. This is the only register this pass found a genuine, non-decorative fit for. |
+| 2. Personality profile | **Checked, does not add a distinct mechanism** beyond register 1. |
+| 3. Historical precedent | **This page IS the register.** The four-generation table is its own historical base; no further citation needed. |
+| 4. Attitudes and forces | **Checked, does not bear.** |
+| 5. Security and prosperity | **Checked, does not bear** beyond the already-documented 337 Saratoga Drive tenure. |
+| 6. Health | **Checked, does not bear.** |
+| 7. Romantic and relational state | **Checked, does not bear.** |
+| 8. Age and upbringing | **Already load-bearing, and IS the register** together with #9 — the whole page is a claim about family and origin. |
+| 9. Geographic and ethnic culture | **This page IS the register**, more than any other page in this backlog. No further citation needed or added. |
+| 10. Religious and ideological programming | **Checked, does not bear.** |
+| 11. Axiomatic politics | **Checked, does not bear.** |
+| 12. Other — provenance | **Already load-bearing.** The residue-over-testimony discipline against [[wiki/mind/synthesis/ancestral-dialectic]] is this page's own central methodological argument, already correctly attributed to [[wiki/mind/synthesis/instrument-is-subject]] in prose. |
+
+**What survived:** the four-generation table, all three falsifiers, and
+the parsimony argument against the dialectic (as already qualified by the
+2026-08-18 re-check) — none required a profile-layer citation, since this
+is fundamentally a genealogical-residue page. **What the pass added:** a
+cognitive-stack account of *why* misfiling a return as personal failure is
+consequential rather than merely inaccurate — the corpus's own binary
+worth-verdict, not a graded self-assessment, is what such a misfiling
+actually invokes. **What it did not do:** manufacture a mechanism for
+registers 3-11, which are either already this page's own base or
+genuinely do not bear on a claim about ancestral geography.
+
+

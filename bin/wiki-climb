@@ -1,0 +1,387 @@
+#!/usr/bin/env python3
+"""wiki-climb — altitude engine for the wiki.
+
+Pure stdlib, no dependencies, per repo convention.
+
+Subcommands:
+  check               Validate `synthesizes:` blocks and report stale pages —
+                      pages whose premises have been modified more recently
+                      than the page reasoning from them. Exit 1 on errors.
+  audit               Altitude report: tier distribution, domains with no
+                      junction above them, deepest synthesis chains, and the
+                      load-bearing pages (most dependents).
+  candidates [N]      Mine unclimbed clusters — groups of 3+ densely
+                      connected pages spanning 2+ domains with no page above
+                      them — and write synthesis-queue.md (default N=25).
+
+Where wiki-connect governs how two pages relate, this governs how a page
+stands on top of others. See SYNTHESIS_SPEC.md. The rule it exists to
+enforce: a conclusion whose premise has moved is a debt, not a fact.
+"""
+import os, re, sys, collections, itertools, datetime
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+WIKI = os.path.join(ROOT, "wiki")
+QUEUE = os.path.join(ROOT, "synthesis-queue.md")
+
+LINK_RE = re.compile(r"\[\[([^\]|#]+)(?:#[^\]|]*)?(?:\|[^\]]+)?\]\]")
+
+
+def load_pages():
+    pages = {}
+    for root, _dirs, files in os.walk(WIKI):
+        for f in files:
+            if f.endswith(".md"):
+                p = os.path.relpath(os.path.join(root, f), ROOT)
+                with open(os.path.join(root, f), encoding="utf-8", errors="replace") as fh:
+                    pages[p] = fh.read()
+    return pages
+
+
+def split_fm(txt):
+    if txt.startswith("---"):
+        e = txt.find("\n---", 3)
+        if e > 0:
+            return txt[: e + 4], txt[e + 4 :]
+    return "", txt
+
+
+def fm_scalar(fm, key):
+    m = re.search(r"^%s:\s*(.+)$" % key, fm, re.M)
+    return m.group(1).strip().strip("\"'") if m else ""
+
+
+def fm_list(fm, key):
+    """Read a frontmatter list in either inline or block form."""
+    m = re.search(r"^%s:\s*\[([^\]]*)\]" % key, fm, re.M)
+    if m:
+        return [x.strip().strip("\"'") for x in m.group(1).split(",") if x.strip()]
+    m2 = re.search(r"^%s:\s*\n((?:[ \t]+-\s*.+\n)+)" % key, fm, re.M)
+    if m2:
+        return [x.strip().strip("\"'") for x in re.findall(r"-\s*(.+)", m2.group(1))]
+    return []
+
+
+def resolver(pages):
+    by_base = {}
+    for p in pages:
+        by_base.setdefault(os.path.splitext(os.path.basename(p))[0], p)
+
+    def resolve(t):
+        t = (t or "").strip().rstrip("/")
+        if t.endswith(".md"):
+            t = t[:-3]
+        if (t + ".md") in pages:
+            return t + ".md"
+        if ("wiki/" + t + ".md") in pages:
+            return "wiki/" + t + ".md"
+        return by_base.get(os.path.basename(t))
+
+    return resolve
+
+
+def parse_date(s):
+    try:
+        return datetime.date.fromisoformat(s.strip()[:10])
+    except Exception:
+        return None
+
+
+def is_index(p):
+    return os.path.basename(p) == "index.md"
+
+
+def is_quarantine(p):
+    return "/contacts/" in p or "/archive/" in p
+
+
+def dom(p):
+    parts = p.split("/")
+    return parts[1] if len(parts) > 2 else "root"
+
+
+def build(pages):
+    """Return per-page metadata: domain, modified date, synthesizes targets."""
+    resolve = resolver(pages)
+    meta = {}
+    for p, txt in pages.items():
+        fm, body = split_fm(txt)
+        raw_syn = fm_list(fm, "synthesizes")
+        meta[p] = {
+            "fm": fm,
+            "body": body,
+            "domain": dom(p),
+            "page_type": fm_scalar(fm, "page_type"),
+            "knowledge": fm_scalar(fm, "knowledge"),
+            "modified": parse_date(fm_scalar(fm, "date_modified")),
+            "sources": fm_list(fm, "sources"),
+            "syn_raw": raw_syn,
+            "syn": [resolve(s) for s in raw_syn],
+        }
+    return meta, resolve
+
+
+def tiers(meta):
+    """Compute altitude per SYNTHESIS_SPEC: T1 ground, T2 junction, T3 doctrine.
+
+    A page's tier is 1 + the max tier of what it synthesizes, capped at 3.
+    Cycles are broken by capping recursion depth; a page in a cycle lands at
+    the cap, which is the right answer for a self-referential stack anyway.
+    """
+    tier = {}
+
+    def walk(p, seen):
+        if p in tier:
+            return tier[p]
+        if p in seen or len(seen) > 12:
+            return 3
+        deps = [d for d in meta[p]["syn"] if d in meta]
+        if not deps:
+            t = 1
+        else:
+            t = min(3, 1 + max(walk(d, seen | {p}) for d in deps))
+        tier[p] = t
+        return t
+
+    for p in meta:
+        walk(p, frozenset())
+    return tier
+
+
+# ---------------------------------------------------------------- check
+
+def cmd_check(pages):
+    meta, _resolve = build(pages)
+    errors, warnings = [], []
+
+    for p, m in sorted(meta.items()):
+        for raw, resolved in zip(m["syn_raw"], m["syn"]):
+            if raw.startswith("raw/"):
+                errors.append("%s: synthesizes a raw path (%s) — raw belongs in sources:" % (p, raw))
+                continue
+            if resolved is None:
+                errors.append("%s: synthesizes unresolved page '%s'" % (p, raw))
+                continue
+            if resolved == p:
+                errors.append("%s: synthesizes itself" % p)
+        for src in m["sources"]:
+            if src.startswith("wiki/"):
+                errors.append("%s: sources a wiki page (%s) — wiki belongs in synthesizes:" % (p, src))
+
+        if m["syn"] and m["knowledge"] == "derived":
+            warnings.append("%s: synthesizes %d pages but is marked knowledge: derived — "
+                            "confirm it adds no argument" % (p, len(m["syn"])))
+
+        # staleness: a premise modified after the page that reasons from it
+        #
+        # The `STALE ` prefix and the `<page> (<date>) reasons from <page> (<date>)`
+        # shape are load-bearing beyond this file: `bin/wiki-work` parses these
+        # lines to list stale premises as obligations, rather than carrying a
+        # second implementation of staleness that could disagree with this one
+        # about which pages are stale. Change the wording here and fix the regex
+        # in `find_stale()` there in the same commit.
+        if m["modified"]:
+            for d in m["syn"]:
+                if d in meta and meta[d]["modified"] and meta[d]["modified"] > m["modified"]:
+                    warnings.append(
+                        "STALE %s (%s) reasons from %s (%s) — premise moved %d days after; "
+                        "re-check, don't just bump the date"
+                        % (p, m["modified"], d, meta[d]["modified"],
+                           (meta[d]["modified"] - m["modified"]).days))
+
+    n_syn = sum(1 for m in meta.values() if m["syn"])
+    print("wiki-climb check: %d pages, %d with synthesizes:, %d errors, %d warnings\n"
+          % (len(meta), n_syn, len(errors), len(warnings)))
+    for e in errors:
+        print("ERROR   %s" % e)
+    for w in warnings:
+        print("warning %s" % w)
+    return 1 if errors else 0
+
+
+# ---------------------------------------------------------------- audit
+
+def cmd_audit(pages):
+    meta, _r = build(pages)
+    tier = tiers(meta)
+    real = {p: m for p, m in meta.items() if not is_index(p) and not is_quarantine(p)}
+
+    print("=== ALTITUDE ===")
+    dist = collections.Counter(tier[p] for p in real)
+    names = {1: "T1 ground", 2: "T2 junction", 3: "T3 doctrine"}
+    for t in (1, 2, 3):
+        print("  %-14s %4d" % (names[t], dist.get(t, 0)))
+    climbed = sum(dist.get(t, 0) for t in (2, 3))
+    print("  climbed        %4d of %d pages (%.1f%%)"
+          % (climbed, len(real), 100.0 * climbed / max(1, len(real))))
+
+    print("\n=== DOMAINS WITH NO JUNCTION ABOVE THEM ===")
+    by_dom = collections.defaultdict(list)
+    for p in real:
+        by_dom[meta[p]["domain"]].append(p)
+    flat = []
+    for d, ps in sorted(by_dom.items()):
+        top = max(tier[p] for p in ps)
+        if top < 2 and len(ps) >= 3:
+            flat.append((d, len(ps)))
+    if flat:
+        for d, n in sorted(flat, key=lambda x: -x[1]):
+            print("  %-12s %3d ground pages, nothing above them" % (d, n))
+    else:
+        print("  (none — every domain with 3+ pages has a junction)")
+
+    print("\n=== LOAD-BEARING PAGES (most dependents) ===")
+    dependents = collections.Counter()
+    for p, m in meta.items():
+        for d in m["syn"]:
+            if d:
+                dependents[d] += 1
+    if dependents:
+        for p, n in dependents.most_common(12):
+            print("  %-56s %2d dependents" % (p, n))
+    else:
+        print("  (no synthesizes: edges declared yet)")
+
+    print("\n=== DEEPEST CHAINS ===")
+    shown = 0
+    for p in sorted(real, key=lambda x: (-tier[x], x)):
+        if tier[p] < 2:
+            break
+        deps = [d for d in meta[p]["syn"] if d in meta]
+        print("  [T%d] %s" % (tier[p], p))
+        for d in deps[:5]:
+            print("        <- [T%d] %s" % (tier[d], d))
+        shown += 1
+        if shown >= 8:
+            break
+    if not shown:
+        print("  (nothing above ground level yet)")
+    return 0
+
+
+# ---------------------------------------------------------------- candidates
+
+def cmd_candidates(pages, n=25):
+    meta, resolve = build(pages)
+    tier = tiers(meta)
+    real = [p for p in pages if not is_index(p) and not is_quarantine(p)]
+
+    # undirected prose+frontmatter adjacency
+    adj = collections.defaultdict(set)
+    for p in real:
+        fm, body = split_fm(pages[p])
+        for m in LINK_RE.finditer(body + fm):
+            r = resolve(m.group(1))
+            if r and r != p and r in meta and not is_index(r):
+                adj[p].add(r)
+                adj[r].add(p)
+
+    # a page is "covered" if something already synthesizes it
+    covered = set()
+    for p, m in meta.items():
+        for d in m["syn"]:
+            if d:
+                covered.add(d)
+
+    tag_of = {p: set(fm_list(meta[p]["fm"], "tags")) for p in real}
+    src_of = {p: set(meta[p]["sources"]) for p in real}
+
+    # seed clusters on triangles: three pages mutually linked
+    seen, clusters = set(), []
+    for p in real:
+        nbrs = sorted(x for x in adj[p] if x in meta)
+        for a, b in itertools.combinations(nbrs, 2):
+            if b not in adj[a]:
+                continue
+            key = tuple(sorted((p, a, b)))
+            if key in seen:
+                continue
+            seen.add(key)
+            members = set(key)
+            # grow: pull in anything linked to all three
+            for c in real:
+                if c not in members and members <= adj[c]:
+                    members.add(c)
+            members = frozenset(members)
+            if len(members) < 3:
+                continue
+            clusters.append(members)
+
+    scored = []
+    for members in set(clusters):
+        doms = {meta[p]["domain"] for p in members}
+        if len(doms) < 2:
+            continue
+        uncovered = [p for p in members if p not in covered]
+        if len(uncovered) < 3:
+            continue
+        density = sum(1 for a, b in itertools.combinations(members, 2) if b in adj[a])
+        maxe = len(members) * (len(members) - 1) / 2.0
+        tagsets = [tag_of[p] for p in members if p in tag_of]
+        shared_tags = set.intersection(*tagsets) if tagsets and all(tagsets) else set()
+        srcsets = [src_of[p] for p in members if p in src_of]
+        shared_src = set.intersection(*srcsets) if srcsets else set()
+        already = max((tier.get(p, 1) for p in members), default=1)
+        score = (density / max(1.0, maxe)) * 4.0
+        score += len(doms) * 1.4
+        score += len(shared_tags) * 0.75
+        score += len(shared_src) * 2.0
+        score += len(uncovered) * 0.4
+        if already >= 2:
+            score *= 0.6   # something here is already climbed
+        scored.append((score, members, doms, shared_tags, shared_src))
+
+    scored.sort(key=lambda x: -x[0])
+    top = scored[:n]
+
+    out = ["# Synthesis Queue — unclimbed clusters",
+           "",
+           "Generated by `bin/wiki-climb candidates`. Each entry is a group of",
+           "pages that are densely interlinked, span two or more domains, and",
+           "have no page above them. **A cluster is a question, not an",
+           "instruction:** per SYNTHESIS_SPEC.md step 3, if you cannot write one",
+           "sentence that is true of every member, not true of the corpus",
+           "generally, and falsifiable — reject it here with a line of reasoning",
+           "and move on. A considered non-synthesis is also knowledge.",
+           "",
+           "Mark entries `CLIMBED -> <page>` or `REJECTED — <reason>` as you work.",
+           "",
+           "| # | score | domains | members |",
+           "|---|---|---|---|"]
+    for i, (score, members, doms, tags, srcs) in enumerate(top, 1):
+        ms = " · ".join("[[%s]]" % p[:-3] for p in sorted(members))
+        out.append("| %d | %.2f | %s | %s |" % (i, score, ", ".join(sorted(doms)), ms))
+    out.append("")
+    out.append("Shared signals per cluster:")
+    out.append("")
+    for i, (score, members, doms, tags, srcs) in enumerate(top, 1):
+        bits = []
+        if tags:
+            bits.append("tags: " + ", ".join(sorted(tags)))
+        if srcs:
+            bits.append("%d shared raw source(s)" % len(srcs))
+        out.append("%d. %s" % (i, "; ".join(bits) if bits else "link density only"))
+    out.append("")
+    with open(QUEUE, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(out) + "\n")
+    print("wrote %s: %d clusters (of %d scored)" % (os.path.relpath(QUEUE, ROOT), len(top), len(scored)))
+    return 0
+
+
+def main():
+    args = sys.argv[1:]
+    cmd = args[0] if args else "check"
+    pages = load_pages()
+    if cmd == "check":
+        sys.exit(cmd_check(pages))
+    if cmd == "audit":
+        sys.exit(cmd_audit(pages))
+    if cmd == "candidates":
+        n = int(args[1]) if len(args) > 1 else 25
+        sys.exit(cmd_candidates(pages, n))
+    print(__doc__)
+    sys.exit(2)
+
+
+if __name__ == "__main__":
+    main()

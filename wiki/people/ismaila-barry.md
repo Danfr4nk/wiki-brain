@@ -1,0 +1,68 @@
+
+---
+domain: people
+page_type: entity
+title: "Ismaila Barry (\"DJ\")"
+aliases: ["DJ", "Ismaila"]
+status: stable
+date_created: 2026-07-13
+date_modified: 2026-07-20
+sources:
+  - raw/self/dansynth/StorytimeAuZaatarAnalysis.md
+  - raw/self/dansynth/AuZaatarsFinalShift.md
+  - raw/self/context-core/CONTEXT_CORE_EXPANDED.md
+related:
+  - wiki/work/au-zaatar
+  - wiki/people/dimitri
+  - wiki/people/tom
+  - wiki/people/tarik-fallous
+tags: [nyc-era]
+infobox:
+  name: "Ismaila Barry (\"DJ\")"
+  relationship_to_dan: unknown
+  known_for: "Ismaila Barry — universally 'DJ' — is the Senegalese busser-turned-server"
+connections:
+  - page: wiki/people/tarik-fallous
+    type: co-occurs
+    claim: "Dan's Aug 21 2024 'CIA agent' tip to Tarik was specifically about DJ (Ismaila Barry) possibly not returning from vacation — informal post-employment intel-sharing about a close friend's own uncertain exit, source of the unconfirmed 'DJ did what MD did' lead."
+---
+
+# Ismaila Barry ("DJ")
+
+Ismaila Barry — universally "DJ" — is the Senegalese busser-turned-server
+of [[wiki/work/au-zaatar|Au Za'atar]] Midtown whom Dan counts among his best friends: "smart and
+curious and funny," his "first impression of the very unusual group of
+people from the country known as Senegal." Brought in by
+[[wiki/people/dimitri|Dimitri]], DJ made the same busser-to-server climb
+as Dan (his first white-shirt day is preserved in the photo record) — but
+where Dan ran the 9pm "night class" escape, DJ did the setup *and* stayed
+to close, absorbing the wreckage the alibi left behind. He is the other
+constant of the Triad, Dan's co-conspirator in the basement culture (the
+"outside bread" interrogation video is the two of them), and his backer
+through the Sergio war. This page resolves a long-standing context-core
+collection gap: the "Ismaila — named anchor, no detail" entry in the
+social graph is DJ.
+
+The friendship had one documented fault line: religion. DJ is a serious
+Muslim, and Dan — by his own storytime account — deliberately antagonized
+him over Islam, up to and including taunts about Aisha's age, framing
+himself as "doing my part to represent the western world of free speech."
+His own summary: "We always got past it though." The friction never broke
+the bond, and it is the corpus's clearest record of Dan running his
+anti-deference register against a friend's sincere faith rather than an
+institution. The photo record preserves DJ's first day serving in the
+white shirt and a three-shot of Dan, DJ, and Dimitri together.
+
+**Gaps:** no direct message thread has been confirmed in the corpus under
+either name — but a candidate exists: handle `+19293235324` received
+r/Senegal Reddit links from Dan in May 2024 (iMessage dump), the only
+Senegal-flagged thread in the record; worth confirming as DJ. A second,
+unconfirmed lead: in [[wiki/people/tarik-fallous|Tarik Fallous]]'s direct
+thread, Dan tells Tarik on Aug 21 2024 (13 days after his own termination)
+that he wouldn't be surprised if "DJ does what MD did and doesn't 'return'
+when he gets back from his vacation" — informal chatter suggesting DJ's
+own tenure may have ended around the same window, not corroborated
+anywhere else.
+Current contact status post-2024; his own exit from Au Za'atar.
+
+

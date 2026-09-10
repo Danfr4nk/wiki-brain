@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Usage: wiki-search <term> — case-insensitive search across wiki pages.
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+TERM="${1:?Usage: wiki-search <term>}"
+grep -ri "$TERM" "$ROOT/wiki" --include="*.md" -l

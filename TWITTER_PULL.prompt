@@ -1,0 +1,295 @@
+You have authenticated X/Twitter API access. I have one night of it. Pull as
+much of my account's record as the API will give you, write it to files as you
+go, and tell me exactly what you could not get.
+
+ACCOUNT
+  handle    @danfrank
+  user id   16430736
+  public    yes (not protected)
+  bio       "insufferable politics sicko"
+
+WHAT ALREADY EXISTS, SO YOU KNOW WHAT IS NEW
+  A local archive holds 2,741 of my posts, 2008-09-24 through 2026-09-01, from
+  three sources of unequal fidelity: 1,412 rows from a spreadsheet export,
+  1,098 from a browser scrape, 231 from a 10-results-per-query search backend.
+  It is originals-only by its own inclusion rule. It has almost no replies,
+  five retweets, five media rows, no expanded links, no client/source field, no
+  geo, no likes-given, and no social graph. Every one of those is a hole this
+  session can fill.
+
+===============================================================================
+THE FOUR RULES
+===============================================================================
+
+1. NEVER INVENT A ROW. A file that is empty or explicitly a lower bound is a
+   correct result. A file that looks complete and is not is the only outcome
+   here worse than doing nothing. If a query caps at N results and returns N,
+   say so per window — that window is truncated, not exhausted.
+
+2. EXCLUSION DIRECTIVE, non-negotiable. Drop, do not file, any post that
+   mentions @Lo_weez, "Annie", or "Ulmer" in any form — the post text, a reply
+   parent, a quoted tweet, a like target, a follow row, anything. Do not
+   summarise them, do not count them into a per-month total, do not describe
+   what they were about. Report only one number: excluded_under_directive: <n>.
+   There are ~17 known such posts spanning 2015-2020. This is a safety
+   directive about a living person, not an editorial preference.
+
+3. NOTHING PRIVATE GOES IN A FILE. These files land in a public repository whose
+   history cannot be un-published. So: no DM content or DM metadata, no email
+   addresses, no phone numbers, no login/IP/device history, no ad-targeting or
+   audience data, no API keys or bearer tokens, no other person's private data.
+   If a payload contains any of it, strip the field and name the field you
+   stripped rather than filing it and telling me after.
+
+4. WRITE AS YOU GO, ONE FILE PER DELIVERABLE. Do not hold results in context and
+   write at the end — if the session dies, everything unwritten is gone. Finish
+   a deliverable, write its file, note it in the manifest, start the next.
+
+===============================================================================
+OUTPUT FORMAT
+===============================================================================
+
+JSONL, one object per line, UTF-8. Timestamps as UTC "YYYY-MM-DDTHH:MM:SS" with
+no suffix. Every id as a STRING, never a number — they exceed 2^53 and JSON
+parsers silently corrupt them.
+
+Post rows use this schema. It is a superset of what I already hold, so a merge
+is a dedup by `id` and nothing else:
+
+  {
+    "id": "932618140",
+    "created_at": "2008-09-24T04:52:36",
+    "type": "original" | "reply" | "quote" | "repost",
+    "text": "<full untruncated text, note_tweet expanded if over 280>",
+    "lang": "en",
+    "likes": 0, "replies": 0, "reposts": 0,
+    "quotes": 0, "bookmarks": null, "impressions": null,
+    "url": "https://x.com/danfrank/status/932618140",
+    "source": "api-2026-09-03",
+    "client": "Twitter for iPhone",
+    "conversation_id": "932618140",
+    "in_reply_to_status_id": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_screen_name": null,
+    "quoted": {"id": "...", "handle": "...", "text": "..."} | null,
+    "retweeted": {"id": "...", "handle": "...", "text": "..."} | null,
+    "media": [{"type":"photo|video|gif","url":"...","alt_text":"...",
+               "duration_ms":null,"width":0,"height":0}],
+    "urls": [{"short":"https://t.co/xyz","expanded":"https://...",
+              "title":"...","description":"..."}],
+    "hashtags": [], "mentions": [{"id":"...","handle":"..."}],
+    "geo": {"place_id":"...","name":"...","full_name":"...",
+            "country":"...","coordinates":[lon,lat]} | null,
+    "context_annotations": [{"domain":"...","entity":"..."}],
+    "possibly_sensitive": false,
+    "edit_history_tweet_ids": ["..."],
+    "is_self_thread": false
+  }
+
+Fields the API does not return are `null`. Never a guessed 0 — a real zero and
+an unknown are different facts and I need to be able to tell them apart. Extra
+keys are welcome; drop nothing because I did not list it.
+
+===============================================================================
+DELIVERABLES, IN PRIORITY ORDER
+===============================================================================
+
+Work top-down. If the night ends at item 6, that is a good night.
+
+--- TIER 0 — three numbers that settle live claims (do these first, minutes) ---
+
+  01-account.json
+  The user object, every field the API exposes.
+  THE ONE FIELD THAT MATTERS MOST: `created_at`. My wiki currently dates the
+  account to September 2008 by inference from a #MyTwitterAnniversary post
+  reading "14 years", posted 2022-09-24. That is an inference, not a
+  timestamp, and it is cited on a page. Your `created_at` either confirms it
+  or corrects it.
+  Also: public_metrics.tweet_count — this bounds how far my 2,741 rows are
+  from the truth, which nothing currently does; followers_count (256 as of
+  June 2026), following_count, listed_count; verified_type; profile_image_url;
+  pinned_tweet_id; the `location` and `url` profile fields; `protected`;
+  `withheld` if present.
+  If screen-name history, display-name history, or bio history is reachable at
+  all, take it — I have exactly one bio string on record and no history.
+
+--- TIER 1 — completeness (the point of the night) -----------------------------
+
+  02-timeline-full.jsonl
+  EVERY post on the account, all types, oldest to newest, no window skipped:
+  originals, replies, quote tweets, and pure retweets. Page to exhaustion.
+  Report the per-page cap you hit and the total pages walked.
+
+  These windows are known-thin or known-empty locally. If your pull covers
+  them, say so explicitly per window, because "the API returned nothing here"
+  and "I never asked" have to be distinguishable in the manifest:
+
+    2008-10 .. 2009-10-19   every month is a truncated 10-result window; the
+                            true counts are unknown and higher than mine
+    2009-01-01 .. 2013-08-16  no spreadsheet coverage; scrape only
+    2015-04, 2015-08..11    zero rows locally (141-day hole Jul->Dec 2015)
+    2018-07, 2018-08, 2018-11
+    2019-02, 2019-06, 2019-07
+    2020-06, 2020-08, 2020-09, 2020-11, 2020-12
+    2021-02 .. 2021-09      a 273-day hole, 2021-01-25 -> 2021-10-26
+    2025-03 .. 2026-02      eleven of twelve months empty; ONE row in 2025-10
+    2026-04-07 .. 2026-05-30   52-day hole between export sources
+    2026-06-14 .. 2026-08-07   54-day hole; 2026-07 entirely empty
+
+  2025 MATTERS MORE THAN THE REST. My wiki calls 2025 "the collapse-year
+  silence: 13 originals, the lowest count in the archive" and reasons from it
+  on other pages. If those months are actually populated and my export simply
+  missed them, a published finding is wrong and I need to know tonight. Give
+  me the true 2025 count as its own line in the manifest whatever it is.
+
+  03-counts-by-month.csv
+  month,posts,originals,replies,quotes,retweets — every month from account
+  creation to today, zeros included. This is the completeness check: it lets me
+  diff your census against mine month by month instead of trusting either.
+
+--- TIER 2 — fields my archive does not have at all ----------------------------
+
+  Fold these into 02 if your endpoint returns them inline. Only make separate
+  files for what needs a second pass.
+
+  04-urls-expanded.jsonl
+  The expanded target of every shortened link I ever posted: 151 t.co, 25
+  twitpic, 24 bit.ly, 15 4sq.com (Foursquare check-ins), 10 yfrog, 3 tinyurl.
+  Right now a link in my archive is evidence that I shared something and no
+  record of what. Expand every one the API resolves. Dead targets: record the
+  expanded URL anyway and mark `resolved: false` — a dead nytimes.com/2010/...
+  URL still tells me what I read.
+
+  05-clients.jsonl
+  The `source` / client-app string per post, if the API still exposes it. Over
+  seventeen years this is a device timeline — Twitter for iPhone vs web vs
+  Tweetdeck vs Instagram vs Foursquare — and it cross-checks a separate
+  analysis I have of how my writing changes by mode. Nothing in my corpus
+  currently records what I posted *from*.
+
+  06-geo.jsonl
+  Every post with place or coordinate data. My only street-level location
+  evidence before 2014 is fifteen Foursquare check-ins in 2010-2011 recovered
+  from link text. Real geo payloads on those, and on anything else geotagged,
+  would put dates on two apartment moves that are currently inferred.
+
+  07-media.jsonl
+  Every media attachment ever posted: type, direct URL, alt text, dimensions,
+  duration, view count where available. I have five media rows total. Include
+  media on deleted-parent replies if reachable. Do NOT download the files —
+  URLs only.
+
+  08-repairs.jsonl
+  125 rows in my archive have text truncated where a link was cut (114 end in
+  the "…" glyph, 15 in three ASCII periods — different characters, and the
+  distinction cost me a miscount once). If you have full-fidelity text for
+  every post from item 02, this file is redundant; say so and skip it. If not,
+  re-fetch the truncated ones and give me full text.
+
+--- TIER 3 — the other side of the conversation --------------------------------
+
+  My archive is 2,718 originals against 22 replies. That ratio is an artifact
+  of how it was built, not of how I use the site, and it means the corpus has
+  my monologue and none of my dialogue.
+
+  09-replies-with-parents.jsonl
+  Every reply I ever posted, each row carrying the PARENT tweet hydrated:
+  parent id, author handle and id, parent text, parent created_at. A reply
+  without what it replied to is unreadable. Where the parent is deleted or
+  protected, keep my reply and mark `parent_available: false`.
+
+  10-threads.jsonl
+  Every conversation_id where I posted two or more times, reassembled in order
+  — my own threads, and threads I participated in. One named target: the
+  thread rooted at 1548831640528510976. My archive has part 1 of three and I
+  have been looking for parts 2 and 3 for months.
+
+  11-quotes.jsonl
+  Every quote tweet I posted with the quoted tweet's full text, author and
+  date. I have 12 rows with a `quoted` field and most carry a summary rather
+  than the actual text.
+
+--- TIER 4 — amplification and attention (entirely absent locally) --------------
+
+  12-retweets.jsonl
+  Every pure retweet, all seventeen years. My archive has five, and excludes
+  the rest by construction — which means every "quiet year" I have written down
+  means quiet in things I wrote, not quiet on the site. This one probably
+  changes a published conclusion.
+
+  13-likes.jsonl
+  Every post I have ever liked, with liked-at timestamp if the API gives one,
+  and the target post's id, author, date and text. This is the single richest
+  thing available tonight and I have none of it: a seventeen-year record of
+  what held my attention, including everything I read and never responded to.
+  If the endpoint caps or only returns recent likes, take what it gives and
+  report the cap and the earliest liked-at you reached.
+
+  14-bookmarks.jsonl
+  Same shape. Deliberate saves rather than reflexive likes — a smaller and
+  probably sharper signal.
+
+--- TIER 5 — the social graph --------------------------------------------------
+
+  15-following.jsonl
+  Everyone I follow: id, handle, name, bio, location, follower count,
+  account created_at, verified status. In API list order, which approximates
+  recency of follow — note that ordering assumption in the file header rather
+  than presenting it as a date.
+
+  16-followers.jsonl
+  All 256, same fields. Small enough to enumerate completely.
+
+  17-muted-blocked.jsonl
+  Muted and blocked accounts, flagged which is which. Owner-only data, gone
+  the moment this access window closes, and behaviourally louder than the
+  follow list.
+
+  18-lists.jsonl
+  Lists I own, subscribe to, or am a member of, with membership.
+
+  19-handle-identities.jsonl
+  User objects for these handles — they appear repeatedly in my posts and I
+  cannot identify several of them from the text alone. Give id, name, bio,
+  location, created_at, and whether the account still exists:
+    @woodguts (17 posts, 2009-2013, unidentified — highest value here)
+    @yamez1 (13, a DJ), @iamcoreybrown (10), @jfriedline (7)
+    @ericjester (22), @danpolyak (21), @shane_brannan (19), @ulmdub (6)
+    @alexisarmel (84), @alexarandolph, @tbichris, @katie_efff
+    @filthysilver, @phloxenheim, @lapiana, @sunofrich, @kristarenae25
+  DO NOT include @Lo_weez. See rule 2.
+
+--- TIER 6 — try, but do not burn the night on it ------------------------------
+
+  20-deleted-audit.md
+  Any way to enumerate ids that 404 — posts I deleted or X removed. If there
+  is no such endpoint, one line saying so is the complete deliverable.
+
+  21-nonpublic-metrics.jsonl
+  Owner-only impression counts, link clicks and profile clicks. These are
+  usually retained for a short recent window only. Take whatever window exists
+  and name it — it will not cover the archive and I am not expecting it to.
+
+===============================================================================
+THE MANIFEST — write this even if you finish nothing else
+===============================================================================
+
+MANIFEST.md, and it is the most important file you produce. A dataset I cannot
+trust the boundaries of is worse than no dataset.
+
+  1. Every file written, with its row count, and complete / lower-bound /
+     partial / empty-on-purpose for each.
+  2. excluded_under_directive: <n>. Nothing else about those rows.
+  3. Every field you stripped for rule 3, named.
+  4. Every endpoint that failed, capped, or returned nothing — with the query,
+     the cap, and whether "nothing" means empty or means blocked. Truncated
+     windows listed individually.
+  5. The three Tier 0 numbers on their own lines: account created_at,
+     tweet_count, followers_count.
+  6. The true 2025 post count, on its own line.
+  7. Anything you found that I did not ask for and that looks like it matters.
+  8. What a full Settings-export zip would still add that the API cannot give,
+     so I know what remains worth requesting later.
+
+If you have to choose: completeness of item 02 beats everything below it, and
+an honest boundary beats a full-looking file every single time.

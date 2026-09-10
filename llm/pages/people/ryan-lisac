@@ -1,0 +1,85 @@
+---
+
+domain: people
+
+page_type: entity
+
+status: closed
+
+date_created: 2026-06-23
+
+date_modified: 2026-07-20
+
+sources: []
+
+tags: [digital-footprint]
+
+infobox:
+
+name: "Ryan Lisac"
+
+relationship_to_dan: unknown
+
+known_for: "Childhood peer and core figure in the 'Snob Squad' developmental era, whose vocabulary Dan later revived as a 2026 DJ-identity project"
+
+connections:
+
+- page: wiki/mind/synthesis/totality-themes
+
+type: parallels
+
+claim: "The 'Snob Squad' name Dan road-tests for his 2026 DJ-identity relaunch is drawn directly from the childhood vocabulary originated in this era — a deliberate callback, not a coincidence of naming."
+
+---
+
+# Ryan Lisac
+
+Ryan Lisac is a childhood or early-peer friend and the core figure in
+
+what Dan's own notes call the "Snob Squad" — a developmental era with
+
+its own vocabulary (including the shorthand `#sn0b`) that predates the
+
+bulk of the ingested corpus. A tribute letter from this era is
+
+confirmed to have been delivered and received warmly, though the letter
+
+itself isn't preserved. The relationship reads as historically closed
+
+rather than ongoing: occasional, positive mentions surface in later
+
+message logs (a 2018 reference to "Ryan Lisac closet" and a 2025 mention
+
+tied to Taking Back Sunday songs) without indicating renewed regular
+
+contact.
+
+The name resurfaces much later and in an unrelated context: Dan's own
+
+identity-forensic notes (see
+
+[[wiki/mind/synthesis/totality-themes|totality-themes]]) document that
+
+his 2026 DJ-alias relaunch is deliberately named "Snob Squad" too — the
+
+name explicitly "road-tested against native vocabulary" from this
+
+childhood era rather than newly invented. The DJ project has no
+
+documented connection to Ryan Lisac himself; it borrows the name as a
+
+personal callback, not as a revival of the friendship or the group.
+
+**Gaps:** the full "Snob Squad" narrative and the `#sn0b` origin
+
+vocabulary are not present anywhere in the ingested raw corpus — this
+
+page records what's recalled but not independently source-verified;
+
+the content of the tribute letter; how or when contact with Ryan
+
+specifically ended.
+
+---
+
+**Up:** [[wiki/people/index|People]]

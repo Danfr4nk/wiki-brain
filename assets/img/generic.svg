@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Article diagram">
+  <rect width="200" height="200" fill="#f6f6f6"/>
+  <g stroke="#54595d" stroke-width="3" fill="none">
+    <rect x="55" y="55" width="90" height="90" rx="6"/>
+    <line x1="68" y1="80" x2="132" y2="80"/><line x1="68" y1="98" x2="132" y2="98"/>
+    <line x1="68" y1="116" x2="112" y2="116"/>
+  </g>
+  <text x="100" y="192" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#202122">Article</text>
+</svg>

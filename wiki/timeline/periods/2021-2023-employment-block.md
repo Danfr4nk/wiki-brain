@@ -1,0 +1,175 @@
+
+---
+domain: timeline
+page_type: period
+status: stable
+knowledge: mixed
+date_created: 2026-06-22
+date_modified: 2026-07-18
+date_range_start: 2021-01-01
+date_range_end: 2023-12-31
+sources:
+  - "raw/self/dox-md/Gemini-_02.md"
+  - "raw/self/dox-md/Gemini-_00.md"
+  - "raw/self/dox-md/LIFE_EVENTS_CALENDAR.md"
+  - "raw/self/context-core/CONTEXT_CORE_EXPANDED.md"
+  - "raw/self/dox-scan/all_imessages_complete_dump.txt"
+  - "raw/self/location/2026-06-22-ingest/"
+  - "raw/self/gemini-activity/Gemini Activity.html"
+tags: [nyc-era, career, ai-collaboration]
+connections:
+  - page: wiki/mind/synthesis/the-embedded-objective
+    type: evidences
+    claim: "Supplies the two figures the payload rule turns on: an eighteen-month alibi duration, and Dan's own account that the assigned work took 'literally EVERYTHING i had in me' — which is what separates the cost of the assignment from the private objective that was actually carrying him through it."
+  - page: wiki/work/au-zaatar
+    type: contains
+    claim: "The Au Za'atar tenure (March 2021–August 2024) is the period's central institution — the 690-shift block that gives these three years their name and nearly all their documented events."
+  - page: wiki/mind/synthesis/vertical-authority-skepticism
+    type: evidences
+    claim: "The period supplies the model's richest workplace data: the one loved manager (Dimitri, lateral 'a real person'), the surveilled-owner vertical axis, and Dan's own documented sabotage of the institution he audited."
+  - page: wiki/people/valeria-iglesias-cid
+    type: contains
+    claim: "The Valeria affair — the decade's one unauthorized infidelity — runs inside this period, covered by the same night-class alibi infrastructure the job produced."
+  - page: wiki/mind/synthesis/interests-as-era-markers
+    type: contextualizes
+    claim: "This period is the era-marker series' named gap: no intake obsession has been identified for 2021–23, and the leading candidate is that the Shed itself absorbed the obsession slot."
+  - page: wiki/mind/profile/intp
+    type: evidences
+    claim: "The introversion cost is stated in primary voice — fifteen-table freezing Saturday nights took 'literally EVERYTHING i had in me' — hospitality as a direct stressor of the documented type."
+  - page: wiki/people/tarik-fallous
+    type: contains
+    claim: "The grocery-run, inventory, and hiring texts are ground-truth day-to-day texture for the period this page otherwise records only as 'employed at volume.'"
+---
+
+# 2021–2023 Employment Block
+
+For three years — invisible in Dan's self-narrative until the location
+history exposed it — Dan held one sustained job: busser, then server, at
+[[wiki/work/au-zaatar|Au Za'atar Midtown]], the Lebanese restaurant at
+58th & 1st. The Google location record logs ~690 shifts and 445 visits,
+making it the longest continuous employment of his adult life (the full
+tenure runs to August 2024). The period's texture is preserved in his own
+words in the two "STORYTIME: AU ZA'ATAR" Gemini sessions, which this page
+and its linked pages have absorbed; the LIFE calendar's near-silence for
+these years (5 events in 2021, against 254 in 2018) is not a gap in the
+record but the shape of the era itself — low mobility, one anchor
+institution, life organized around a plywood shed.
+
+## How it started
+
+By early 2021, two years into the second NYC period, "the money just ran
+out." Dan's own narration names the motive for seeking work with
+characteristic candor: not rent but continuity of supply — he wanted to
+keep being able to call his Dominican dealers daily (the
+[[wiki/people/menore|Menore]] service line, running since 2018). With no
+food-service experience he charmed owner
+[[wiki/people/tarik-fallous|Tarik Fallous]] at the interview, was hired
+on the spot, and started the next day as a busser — into the structural
+quirk that made everything after possible: an equal front-of-house tip
+split, bussers paid the same as waiters. A month in, he got
+[[wiki/people/annie-ulmer|Annie]] hired as hostess at the original East
+Village location — he was the employment vector, and they worked
+different locations. His general claim about job beginnings ("I've turned
+every internship i've ever had into a paid gig — I'm REAL good at the
+beginning of a job I like") is borne out here: within months the
+turnover-churned restaurant's opening protocol was simply *his*.
+
+## The Shed economy
+
+The owners opened outdoor-only in spring 2021 — nice sheds, BYOB, food
+"to die for" — planning to build the interior later with nine months of
+runway. They never did: November 2021 arrived with construction "not
+even technically started," all four seasons of 2022 passed with none,
+and the restaurant served its third consecutive outdoor winter in
+2023–24, after COVID ended, as the only outdoor-dining holdout on the
+block — neighbors hostile, customers furious, Tarik unbothered. Winter
+service meant an apron over a ski jacket, space heaters mounted over
+each table, and a two-tier seating taxonomy of Dan's coinage: "INDOOR
+OUTDOOR" (inside the shed) versus "OUTDOOR OUTDOOR" (on the sidewalk,
+minimal heat), the latter offered to freezing customers who had reserved
+actual tables. Tableside shawarma — the signature vertical rotisserie
+carved at the table — meant hand-carrying what was effectively an oven
+across an icy February sidewalk. Because everything moved inside
+nightly, rebuilding the restaurant was 2–3 hours of work every day, and
+Dan owned it as the opener: sleep to 1pm, arrive at 2, build until 5,
+work the first service hours, first cut at 9–10pm — a slot he held the
+entire tenure, never once closing. Dan's own verdict on the dysfunction
+is the period's key self-insight: he was "kinda happy about it," because
+the brokenness preserved the "weird" conditions he thrives in.
+
+## The promotion and the caddie method
+
+Manager [[wiki/people/dimitri|Dimitri]] — "the only boss or manager or
+supervisor who i have ever actually really loved" — insisted Dan become
+a server. Under the equal split the promotion carried zero economic
+gain; its perks were purely positional (iPads, authority over the
+Honduran and Guatemalan bussers), and Dan took it anyway. Promotion day:
+a mass staff exodus, a Boosted-board ride to the 5th Avenue Uniqlo for a
+white oxford shirt, and a same-day start with no training. What he
+brought instead of training was the caddying philosophy: a caddie is
+"an ADVOCATE OF THE CUSTOMER," paid to bend the club's rules for his
+group — so he ran tables the same way, steering customers off dishes
+("it's come out like half cooked a bunch of times"), staging dropped
+beer bottles to comp replacements, and openly badmouthing the
+construction delay to seated guests, noting himself that this is
+"frowned upon in food service in a way that it is not as a golf caddie."
+It worked: the post-buzz clientele was mega-repeaters — Middle Eastern
+family groups, neighbors, TikTok parties filming the shawarma — and as
+the only long-tenured recognizable face, Dan was the one regulars would
+"GUSH to tarik" about. The cost was equally real: as an introvert,
+fifteen-table freezing Saturday nights took "literally EVERYTHING i had
+in me" — and that drain is the stated origin of the "DAN CYCLE OF JOB
+ENTROPY," the invented "night classes... of some unspecified sort" that
+preserved his 9–10pm exit for over eighteen months
+([[wiki/mind/concepts/institutional-out]]).
+
+## The social world
+
+The job installed two peoples permanently in his esteem — "LEBANESE and
+SENEGALI." The Lebanese owners' humor ("incapable of not making fun of
+everyone and their flaws") matched his own register — "they liked me
+because i, too, am both an asshole and a sonofabitch" — and he was the
+only white person on staff, which by his own account the "pretty racist"
+owners favored. The Senegalese half is [[wiki/people/ismaila-barry|DJ]],
+brought in by Dimitri, who became one of his best friends. Alliance with
+the kitchen was engineered directly: cocaine bumps offered to the cooks
+and stolen Takis brought in for everyone, buying friendships he reports
+keeping "today" (2026). The period also logged a candid prejudice datum:
+he dropped his self-described "unjustifiably bigoted" view of Mexicans —
+and relocated rather than dissolved it ("it's the guatamalens that
+actually suck"). His mother [[wiki/people/suzanne-frank|Suz]] visited
+for his birthday (November 2021); the owners comped the whole menu. The
+[[wiki/people/valeria-iglesias-cid|Valeria]] affair ran inside this
+period under the alibi's cover, and its collapse taught him a social law
+he stated as doctrine: the norteño *server* poached her, but "my mexi
+cook buddies... would NEVER have done that shit to me" — floor staff
+betray, kitchen allies don't.
+
+## Data profile
+
+| Measure | Value |
+|---------|-------|
+| Estimated shifts (location history) | ~690 |
+| Au Za'atar place visits | 445 |
+| LIFE calendar events, 2021 | 5 (vs 254 in 2018, 259 in 2025) |
+| Tenure (full) | Mar 2021 – Aug 2024 (41 months) |
+| Time slot | 2pm–~9/10pm, opener, never closed |
+| Alibi duration ("night class") | 18+ months |
+
+## Transition out
+
+The block ends past this page's boundary: the city-mandated shed
+tear-down of August 2024 erased the "Outside Guy" territory and Dan
+exited with his cash tips and no notice — the mechanics and the
+forensic post-mortem (Sergio, the Tunisian tip-siphon episode, the
+"universe rewards the sonofabitch" verdict) are on
+[[wiki/work/au-zaatar]], which has absorbed both STORYTIME volumes. The 2024
+wind-down feeds directly into the [[wiki/timeline/periods/2025-collapse|2025 collapse]].
+
+**Gaps:** what, if anything, filled the intake-obsession slot these
+years (the era-marker series' one unidentified marker); DJ's and
+Dimitri's exits; whether any 2021 marker obsession is recoverable from
+the thin 2021 message record (the iMessage dump holds only 1,465 rows
+for 2021 and none in the November birthday window).
+
+

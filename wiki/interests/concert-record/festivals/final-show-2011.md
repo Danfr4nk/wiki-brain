@@ -1,0 +1,30 @@
+
+---
+domain: interests
+page_type: event
+status: stable
+date_created: 2026-08-01
+date_modified: 2026-08-01
+sources:
+  - "raw/self/concerts/table.csv"
+related: []
+tags: [music-production, digital-footprint]
+---
+
+# Final Show (2011)
+
+Final Show (2011) is a festival / tour Dan Frank attended. This page records the edition(s) he is documented at, with full lineups and notes, preserved from the concert log.
+
+## Editions
+
+| Date | Venue | City | Note |
+|------|-------|------|------|
+| Apr 2, 2011 | Madison Square Garden | New York, NY | Billed as last show ever; reunited 2016. (Artist/show identity unrecorded in source.). |
+
+## Lineups (per edition)
+
+### Apr 2, 2011 — Madison Square Garden, New York, NY
+_(lineup not itemized in source beyond the festival name)_
+
+
+
