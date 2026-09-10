@@ -39,7 +39,14 @@ formatting and frontmatter are not guaranteed.
    Dan's explicit direction ("everything goes in, it's all left public, no
    questions, no exceptions," 2026-09-10), in two parts: part 1 (this commit)
    carries the main tree; part 2 adds the 882 bulk-corpora and message-thread
-   records that an earlier restoration pass had wrongly withheld. This matches
+   records that an earlier restoration pass had wrongly withheld. Three records
+   could not be committed: two files containing live OpenAI API keys
+   (`raw/self/dox-md/_Openclaw Agent Setup and Data .md`,
+   `raw/self/message-csv/imessage_export_flat_20260813.csv.bak`) were refused
+   by GitHub's own push protection and cannot enter the public tree as-is;
+   one 11.9 MB native Google Sheet
+   (`raw/self/message-csv/imessage_export_deep_20260813`) exceeds Drive's
+   export size limit and is unretrievable via the API. This matches
    the repo's own design: `bin/wiki-secrets` documents the repo as deliberately
    public (operator's decision of 2026-08-30, made twice) and describes `raw/`
    as holding message dumps and 130,000 received messages as committed archive
