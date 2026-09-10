@@ -1,0 +1,79 @@
+name: Build and deploy to Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Allow one deploy at a time; let an in-flight run finish rather than
+# cancelling it, so a half-published site is never left behind.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  # Validation is a separate job on purpose: it runs for pull requests too,
+  # where deployment does not. A layer violation should fail review, not
+  # first become visible once it is already on the public site.
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'   # tomllib is stdlib from 3.11
+
+      - name: Enforce the layer invariant
+        run: python3 bin/wb-validate
+
+      - name: Invariant regression tests
+        run: python3 tests/test-invariant
+
+      - name: Build the site
+        run: python3 bin/wb-build
+
+      # Defence in depth: wb-build already excludes sensitive nodes, so this
+      # asserts the exclusion actually happened rather than trusting it did.
+      # The costs are not symmetric — a builder bug is a bug, but publishing
+      # 498 people's private material to a public site is not recoverable.
+      - name: Refuse to publish sensitive material
+        run: python3 bin/wb-check-publish
+
+      - name: Upload artifact
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: validate
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      # Pages must be enabled once, by hand:
+      #   Settings -> Pages -> Source: GitHub Actions
+      #
+      # This step cannot do it. configure-pages has an `enablement` input, but
+      # its own documentation says it "requires a token other than
+      # GITHUB_TOKEN" — a PAT with `repo` scope, or a GitHub App with
+      # `administration:write`. Wiring up a secret is strictly more work than
+      # clicking the setting once, so the switch stays manual.
+      #
+      # The step earns its place anyway: when Pages is off it fails here with
+      # a message naming the cause, instead of letting deploy-pages fail with
+      # a bare "HttpError: Not Found" that reads like a broken workflow.
+      - uses: actions/configure-pages@v5
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,224 @@
+#!/usr/bin/env python3
+"""Create a correctly-shaped node, or refuse to create one at all.
+
+Hand-writing frontmatter is where a knowledge base rots: the required field
+gets skipped because it was inconvenient at the time, and six months later the
+datum has no source and nobody can tell whether it ever had one. So this refuses
+up front rather than letting wb-validate complain afterwards — a node that
+cannot be made correctly should not reach the disk.
+
+It also enforces the two rules that are easy to get wrong by hand:
+
+  * a datum must cite a source, and the citation must resolve to a real L0 node
+  * every citation must point at a strictly lower layer, checked before writing
+
+Examples:
+  bin/wb-new source --title "Journal 2019-2021" --source-type journal \\
+      --provenance "Three notebooks, photographed 2026-09" --reliability primary
+
+  bin/wb-new datum --title "Moved to Pittsburgh in 2016" \\
+      --claim "Moved to Pittsburgh in March 2016" \\
+      --cites src:journal-2019-2021 --date 2016-03
+
+  bin/wb-new interpretation --title "Moves track job loss, not restlessness" \\
+      --perspective external --cites evt:moved-pittsburgh --confidence moderate
+
+Standard library only. Prints the path it wrote; does not open an editor.
+"""
+
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import pathlib
+import re
+import sys
+from importlib.machinery import SourceFileLoader
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+KB = ROOT / "kb"
+
+_validate = SourceFileLoader("wb_validate", str(ROOT / "bin" / "wb-validate")).load_module()
+load_nodes = _validate.load_nodes
+
+# type -> (id prefix, layer, directory, fields this type cannot do without)
+TYPES = {
+    "source":         ("src", 0, "sources",         ["source_type", "provenance", "reliability"]),
+    "datum":          ("dat", 1, "data",            ["claim", "cites"]),
+    "entity":         ("ent", 2, "entities",        ["entity_kind"]),
+    "event":          ("evt", 2, "events",          ["when"]),
+    "relationship":   ("rel", 2, "relationships",   []),
+    "interpretation": ("int", 3, "interpretations", ["perspective"]),
+    "contradiction":  ("con", 3, "interpretations", ["cites"]),
+    "pattern":        ("pat", 4, "patterns",        ["evidence_count"]),
+    "synthesis":      ("syn", 5, "syntheses",       []),
+}
+
+
+def slugify(text: str) -> str:
+    slug = re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+    return re.sub(r"-{2,}", "-", slug)[:60].strip("-")
+
+
+def toml_str(value: str) -> str:
+    return '"' + value.replace("\\", "\\\\").replace('"', '\\"') + '"'
+
+
+def toml_list(values: list[str]) -> str:
+    return "[" + ", ".join(toml_str(v) for v in values) + "]"
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("type", choices=sorted(TYPES))
+    ap.add_argument("--title", required=True)
+    ap.add_argument("--id", help="override the generated id (slug part only)")
+    ap.add_argument("--cites", nargs="*", default=[], metavar="ID")
+    ap.add_argument("--claim", help="datum: the single claim being made")
+    ap.add_argument("--confidence", default="moderate",
+                    choices=["high", "moderate", "low", "speculative", "unknown"])
+    ap.add_argument("--importance", type=int, choices=range(1, 6))
+    ap.add_argument("--tags", nargs="*", default=[])
+    ap.add_argument("--sensitive", action="store_true",
+                    help="withhold from every published artifact")
+    ap.add_argument("--date", help="YYYY, YYYY-MM or YYYY-MM-DD")
+    ap.add_argument("--start")
+    ap.add_argument("--end")
+    ap.add_argument("--period")
+    ap.add_argument("--source-type")
+    ap.add_argument("--provenance", help="source: where the material actually came from")
+    ap.add_argument("--reliability",
+                    choices=["primary", "contemporaneous", "corroborated",
+                             "retrospective", "third-party", "uncertain"])
+    ap.add_argument("--extraction", help="how this was pulled out of the source")
+    ap.add_argument("--entity-kind")
+    ap.add_argument("--perspective", choices=["self", "external", "llm", "other"],
+                    help="interpretation: whose reading this is")
+    ap.add_argument("--persistence", choices=["state", "trait", "adaptation", "unknown"])
+    ap.add_argument("--evidence-count", type=int)
+    ap.add_argument("--body", default="", help="markdown body")
+    ap.add_argument("--kb", type=pathlib.Path, default=KB)
+    args = ap.parse_args()
+
+    prefix, layer, folder, required = TYPES[args.type]
+    nodes, load_errors = load_nodes(args.kb)
+    if load_errors:
+        print("knowledge base does not load cleanly; fix that first:", file=sys.stderr)
+        for error in load_errors:
+            print(f"  {error}", file=sys.stderr)
+        return 1
+
+    values = {
+        "claim": args.claim, "cites": args.cites or None,
+        "source_type": args.source_type, "provenance": args.provenance,
+        "reliability": args.reliability, "entity_kind": args.entity_kind,
+        "perspective": args.perspective, "evidence_count": args.evidence_count,
+        "when": args.date or args.start or args.end or args.period,
+    }
+    missing = [f for f in required if not values.get(f)]
+    if missing:
+        flags = ", ".join("--" + f.replace("_", "-") for f in missing)
+        article = "an" if args.type[0] in "aeiou" else "a"
+        print(f"{article} {args.type} cannot be created without: {flags}", file=sys.stderr)
+        if "cites" in missing and args.type == "datum":
+            print("\nA datum without a source is not a datum, it is a belief — "
+                  "and a belief belongs at L3 as an interpretation.", file=sys.stderr)
+        if "perspective" in missing:
+            print("\nAn interpretation must say whose reading it is: self, external, "
+                  "llm or other. These are not interchangeable.", file=sys.stderr)
+        return 1
+
+    # citations must resolve, and must point strictly downward
+    problems = []
+    for target in args.cites:
+        other = nodes.get(target)
+        if not other:
+            problems.append(f"  {target} does not exist")
+        elif not isinstance(other.get("layer"), int):
+            problems.append(f"  {target} has no usable layer")
+        elif other["layer"] >= layer:
+            problems.append(f"  {target} is L{other['layer']}, which is not below L{layer}")
+    if args.type == "datum":
+        for target in args.cites:
+            if nodes.get(target, {}).get("type") not in (None, "source"):
+                problems.append(f"  {target} is not a source; a datum cites the material "
+                                f"it was extracted from")
+    if problems:
+        print(f"cannot create this {args.type}:", file=sys.stderr)
+        print("\n".join(problems), file=sys.stderr)
+        print("\nEvidence must sit strictly below the claim it supports.", file=sys.stderr)
+        return 1
+
+    slug = args.id or slugify(args.title)
+    if args.type == "datum" and not args.id:
+        used = [int(m.group(1)) for i in nodes
+                if (m := re.match(r"^dat:(\d{4})-", i))]
+        slug = f"{max(used, default=0) + 1:04d}-{slug}"
+    node_id = f"{prefix}:{slug}"
+    if node_id in nodes:
+        print(f"{node_id} already exists at {nodes[node_id]['_path']}", file=sys.stderr)
+        return 1
+
+    today = dt.date.today().isoformat()
+    lines = [
+        "+++",
+        f"id         = {toml_str(node_id)}",
+        f"layer      = {layer}",
+        f"type       = {toml_str(args.type)}",
+        f"title      = {toml_str(args.title)}",
+    ]
+    if args.claim:
+        lines.append(f"claim      = {toml_str(args.claim)}")
+    if args.cites:
+        lines.append(f"cites      = {toml_list(args.cites)}")
+    lines.append(f"confidence = {toml_str(args.confidence)}")
+    for flag, key in (("source_type", "source_type"), ("provenance", "provenance"),
+                      ("reliability", "reliability"), ("extraction", "extraction"),
+                      ("entity_kind", "entity_kind"), ("perspective", "perspective"),
+                      ("persistence", "persistence")):
+        value = getattr(args, flag if flag != "entity_kind" else "entity_kind", None)
+        if value:
+            lines.append(f"{key:<10} = {toml_str(value)}")
+    if args.evidence_count is not None:
+        lines.append(f"evidence_count = {args.evidence_count}")
+    if args.importance:
+        lines.append(f"importance = {args.importance}")
+    if args.tags:
+        lines.append(f"tags       = {toml_list(args.tags)}")
+    if args.sensitive:
+        lines.append("sensitive  = true")
+    lines.append(f"created    = {toml_str(today)}")
+
+    if any((args.date, args.start, args.end, args.period)):
+        lines.append("")
+        lines.append("[when]")
+        for flag, key in (("date", "date"), ("start", "start"),
+                          ("end", "end"), ("period", "period")):
+            value = getattr(args, flag)
+            if value:
+                lines.append(f"{key:<6} = {toml_str(value)}")
+
+    lines += ["+++", "", args.body.strip() or "<!-- prose for humans; the frontmatter is for machines -->", ""]
+
+    path = args.kb / folder / f"{slug}.md"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if path.exists():
+        print(f"{path} already exists", file=sys.stderr)
+        return 1
+    path.write_text("\n".join(lines), encoding="utf-8")
+
+    try:
+        rel = path.relative_to(ROOT)
+    except ValueError:
+        rel = path
+    print(f"created {node_id}")
+    print(f"  {rel}")
+    if args.sensitive:
+        print("  marked sensitive — withheld from every published artifact")
+    print("\nRun bin/wb-validate before committing.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

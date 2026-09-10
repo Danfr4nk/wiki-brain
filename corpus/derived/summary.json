@@ -1,0 +1,32 @@
+{
+  "generated": "2026-09-08T18:08:27+00:00",
+  "messages": 192140,
+  "sent_by_me": 99360,
+  "received": 92780,
+  "carrying_text": 185338,
+  "attachment_only_or_with_attachment": 8120,
+  "undated_rows": 0,
+  "unattributable_to_a_thread": 3086,
+  "threads": 577,
+  "threads_group": 52,
+  "threads_individual": 525,
+  "distinct_counterparty_handles": 498,
+  "counterparty_handles_resolved_to_a_name": 156,
+  "columns": 45,
+  "first_message": "2011-03-19",
+  "last_message": "2026-09-07",
+  "messages_per_year": {
+    "2011": 1,
+    "2015": 13745,
+    "2016": 20279,
+    "2017": 17550,
+    "2018": 40500,
+    "2019": 20166,
+    "2020": 6327,
+    "2021": 282,
+    "2023": 960,
+    "2024": 4369,
+    "2025": 41203,
+    "2026": 26758
+  }
+}
