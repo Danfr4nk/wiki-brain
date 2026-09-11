@@ -54,6 +54,9 @@ connections:
   - page: wiki/health/chemical-architecture
     type: evidenced-by
     claim: "Supplies the first dated measurement behind the two rows of the stack table marked Daily — cocaine and cannabis — which were otherwise description taken from Dan's own account of his system."
+  - page: wiki/mind/synthesis/the-register-never-closes
+    type: instantiates
+    claim: "The ledger, begun 2026-08-30, is the first dated measurement layer the rule's predictions will be tested against: it is what turns the next announced 'quit' from testimony into a checkable event, and where a genuine taper-to-zero would have to appear to falsify the rule."
 ---
 
 # The Intake Ledger

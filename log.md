@@ -4718,3 +4718,5 @@ Operator review of PR #271 caught a real defect in the trait filter's documentat
 **Three states, three names, and none is interchangeable:** `silent` — an instrument ran and the corpus carried nothing (a finding about Dan). `unreviewed` — no trustworthy instrument ran (a finding about the tool). `no instrument` — every proxy built for the trait was read and found to measure something else (a stronger finding about the tool). Only the first says anything about the subject.
 
 Swept `bin/wiki-traits` (verdict docstring, PROXY_REVIEW comment, page renderer, review header), `CLAUDE.md`, `SYNTHESIS_SPEC.md`, `LLM_HANDOFF.md` and `skills/corpus/lexical-proxy-load.md`. Two new regressions in `tests/test_wiki_traits.py`: `test_capped_result_is_never_reported_as_silence` and `test_the_three_states_are_three_values`, the latter asserting the three bands occupy three distinct cells at every reach level. 480 tests.
+
+## [2026-09-10] climb | mind | the-name-is-the-instrument, the-register-never-closes, high-provision-low-condolence (12 synthesized, 0 rejected)

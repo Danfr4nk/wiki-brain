@@ -43,6 +43,9 @@ connections:
   - page: wiki/mind/synthesis/the-cato-seat
     type: component-of
     claim: "The CATO origin line specifies more than a side: 'self-deleted at Utica post-Thapsus' names the manner of the loss, which makes the persona a choice about the seat — accurate, early, powerless — and not only about where Dan stands on concentrated power."
+  - page: wiki/mind/synthesis/the-name-is-the-instrument
+    type: instantiates
+    claim: "The CATO persona, built on Cato the Younger — Caesar's specific historical opponent — is the naming rule in the ideological register: the name declares the power-analysis lens before a word is said, though Dan's own stated reasoning for the choice is a recorded gap."
 ---
 
 # The Power Axiom: What Resolves the Leftist/Authoritarian "Paradox"
@@ -127,6 +130,8 @@ the single clearest piece of primary evidence in the corpus for how Dan
 himself frames his relationship to concentrated power, and it directly
 contradicts the dossier's own "authoritarian power fascination" framing
 of the same material.
+
+The CATO case now instantiates [[wiki/mind/synthesis/the-name-is-the-instrument]]: a persona named after Caesar's specific historical opponent is the naming rule in the ideological register — the name declaring the power-analysis lens before a single word is said, though Dan's own stated reasoning for the choice is a recorded gap on the synthesis page.
 
 ## The axiom, stated plainly
 

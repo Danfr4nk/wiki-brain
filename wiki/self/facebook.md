@@ -23,12 +23,17 @@ connections:
   - page: wiki/self/twitter
     type: parallels
     claim: "Two public valves for one person under different platform rules: Facebook registered 2007 and Twitter in September 2008, both running continuously, which is what makes a disagreement between them — as over the Brooklyn move date — checkable rather than a matter of which memory to trust."
+  - page: wiki/mind/synthesis/the-name-is-the-instrument
+    type: instantiates
+    claim: "The ihatedanfrank handle, registered January 9, 2007 and carried across Facebook and Instagram for the entire documented life, is the naming rule pointed inward — proof the loaded name is a permanent instrument rather than a phase."
 ---
 
 
 # Facebook Archive (ihatedanfrank)
 
 Full Facebook data export (79 MB, generated Sep 5 2022) for the account **ihatedanfrank** — registered January 9, 2007. This hub holds the identity record and the persona synthesis; the corpus detail lives in four sub-pages:
+
+The handle is now a member of [[wiki/mind/synthesis/the-name-is-the-instrument]]: ihatedanfrank is the loaded-name instrument pointed inward — proof the pattern is a permanent operating feature rather than a phase.
 
 | Sub-page | Covers |
 |----------|--------|

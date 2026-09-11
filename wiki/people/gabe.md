@@ -27,6 +27,9 @@ connections:
   - page: wiki/people/milo
     type: parallels
     claim: "Gabe and Milo are both deliberately provocative namings Dan uses as a social tripwire, reading how a stranger reacts to the name rather than to the animal."
+  - page: wiki/mind/synthesis/the-name-is-the-instrument
+    type: instantiates
+    claim: "Gabe is the inward-facing case of the naming rule: a cat named for the 'douchebag' pivot of Gabe Saporta — for the pivot itself, not either version alone — making the loaded name a taste-diagnostic rather than an admiration."
 ---
 
 # Gabe
@@ -66,6 +69,8 @@ explicit that the point isn't admiration; it's closer to using the name
 as a diagnostic — how someone reacts to hearing a pet is named "Gabe" or
 "Milo" tells him something about whether they're actually parsing what he
 said or just pattern-matching on a flagged name.
+
+Gabe now stands as the inward-facing case of [[wiki/mind/synthesis/the-name-is-the-instrument]]: named for the pivot itself rather than either version of Saporta, the name works as a taste-diagnostic — the tripwire turned into a test of who gets the joke.
 
 Gabe also shows up in Dan's own framing of what stays real when
 everything else is being over-analyzed: MAX_PRIME.md instructs any AI

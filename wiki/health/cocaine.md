@@ -86,6 +86,9 @@ connections:
   - page: wiki/mind/synthesis/estate-money-spine
     type: evidences
     claim: "The 2017-2020 dosage escalation this page attributes to the inheritance removing the capital constraint runs opposite Dan's first-person happiness-claim rate over the identical window (0.87/0.34/0.41 per 1,000 messages against 7.86 in late 2015) — the period of maximum unconstrained supply is also the period of least reported wellbeing, which the spine's own outcome-measure gap had not yet noted."
+  - page: wiki/mind/synthesis/the-register-never-closes
+    type: instantiates
+    claim: "The cocaine dose arc instantiates the rule's other move: paused 2007–08, resumed 2012 — a suspension, never a closure — with the quantity moving on inheritance money while the register itself never once tapered to zero."
 changelog:
   - date: 2026-08-19
     note: "Initial creation — synthesis of cocaine-specific findings drawn from chemical-architecture, supply-network, legal/2015-possession-arrest, and all documented cocaine dealer pages."
@@ -197,6 +200,8 @@ desire to moderate:
 | ~2006–2016 (baseline) | ~1g/day | Pre-inheritance constraint |
 | 2017–2020 (peak) | **3.5–7g/day** | Fran's inheritance removed the capital constraint |
 | 2020–present (contraction) | **~0.5–1g/day** | Inheritance exhausted |
+
+The arc now instantiates [[wiki/mind/synthesis/the-register-never-closes]]: a 2007–08 pause and 2012 resumption is a suspension, never a closure — the quantity moved on inheritance money while the register itself never tapered.
 
 The retrospective's own reading is blunt: the escalation shows the
 "desired state" is **maximum intensity limited only by supply and money,

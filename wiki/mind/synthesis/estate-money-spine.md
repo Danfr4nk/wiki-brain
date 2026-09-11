@@ -80,6 +80,9 @@ connections:
   - page: wiki/mind/profile/big-five-psychometrics
     type: evidenced-by
     claim: "The $14,000 transferred to Suz within weeks of an undistributed bridging advance is a corpus-confirmed instrument-inversion, not an anomaly: this page's own 2026-08-16 audit found the Altruism-1 score inverted specifically on its instrumental half — offering help or resources unprompted runs at 1.79-2.49x baseline — while the affective half (sympathy, condolence) runs at 0.45x, so a 'first-percentile' altruism score predicting no unearned generosity is exactly the wrong prediction for a lump-sum family transfer, and the corpus-confirmed reading is the one that fits what actually happened."
+  - page: wiki/mind/synthesis/high-provision-low-condolence
+    type: instantiates
+    claim: "The spine's money trail is the provision rule at ledger scale: $14,000 to Suz within weeks of an undistributed bridging advance with nothing in writing, and the $119K–$123K net outflow to Annie — roughly the size of the entire $144,069.31 estate distribution — care arriving as something countable."
 ---
 
 # The Estate / Money Spine
@@ -253,6 +256,8 @@ attend, and it moved first.
 | 2025-02 | Return to PA: "escaping systemic metropolitan financial drains" | — |
 | 2026 | Broke (primary-source status); BFS job gained and lost | ~$0 |
 | ~2026-06 | 337 Saratoga sale ($465k, Suz's transaction); land at 463 Morgantown | bystander |
+
+One row of the table above now carries the synthesis finding: the ~$14,000 moved to Suz in 2018-08 → 2018-10, drawn against an estate that had not yet distributed and with nothing in writing, is the ledger-scale case of [[wiki/mind/synthesis/high-provision-low-condolence]] — care arriving as something countable.
 
 The most striking single measurement in the chain is the **burn rate of
 the estate**: $134,069.31 lands September 1, 2020, and by early 2021 —

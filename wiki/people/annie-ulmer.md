@@ -305,6 +305,9 @@ connections:
   - page: wiki/people/trinity-st-clair
     type: co-occurs
     claim: "The booking was for the couple, not for Dan — Trinity was hired days after the March 2019 move back to New York to 'come hang out with my girlfriend and i,' which places Annie inside the arrangement as a participant rather than a party being managed around."
+  - page: wiki/mind/synthesis/high-provision-low-condolence
+    type: instantiates
+    claim: "The ~$139K sent against ~$16–20K received back — a six-to-one asymmetry across Cash App and Venmo — is the rule's largest documented case: provision was this bond's operating register, and the 120-day severance horizon to December 19, 2026 is the live test of whether the pattern holds under rupture."
 ---
 
 # Annie (Anne Louise Ulmer)
@@ -879,6 +882,8 @@ page: financially, not just emotionally, this relationship ran roughly
 six-to-one in Annie's favor. (These remain point-in-time totals rather
 than a month-by-month reconciliation, and the exact split between drugs,
 household costs, and gifts isn't recoverable from the totals alone.)
+
+The money record now instantiates [[wiki/mind/synthesis/high-provision-low-condolence]]: ~$139K sent against ~$16–20K received back, a six-to-one asymmetry — provision was the bond's operating register, and the synthesis names the 120-day severance horizon to December 19, 2026 as the live test of whether the pattern holds under rupture.
 
 ## The Train Plan, 2020
 

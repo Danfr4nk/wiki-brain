@@ -81,6 +81,9 @@ connections:
   - page: wiki/self/twitter/2011
     type: evidenced-by
     claim: "The one relapse the archive preserves without ever mentioning it: '1 week smoke free!' on 10 January 2011 restarts a counter that began on 13 December 2010, so the e-cigarette quit broke inside three weeks and is visible only in the arithmetic."
+  - page: wiki/mind/synthesis/the-register-never-closes
+    type: instantiates
+    claim: "The nicotine table is the rule's documentary core: the October 16, 2008 quit failed by December 22 — sixty-seven days — and every later 'quit' was a delivery-system swap, while the one closed register, alcohol, closed by categorical exclusion coded to betrayal rather than by taper."
 ---
 
 # Chemical Architecture
@@ -229,6 +232,8 @@ because he knows it is not true. 2019 states the two reasons outright and
 neither of them is nicotine: the animals, and the flavour. The hardware
 rotates through five forms in fifteen years; nothing in the record shows an
 interval without it.
+
+That verdict is now the documentary core of [[wiki/mind/synthesis/the-register-never-closes]]: the substitution chain promoted to a cross-register rule, with the one closed register — alcohol — closing by verdict rather than taper.
 
 **The 2011 counter is the load-bearing detail.** Day one was 13 December 2010.
 One week from day one is 20 December. On **10 January 2011** he posts *"1 week

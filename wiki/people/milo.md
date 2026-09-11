@@ -47,6 +47,9 @@ connections:
   - page: wiki/work/tech/max-framework/overview
     type: component-of
     claim: "MAX_PRIME carves Milo out of analysis explicitly — 'don't psychologize them, just receive them' — making him the single documented exemption in Dan's own instructions to his AI personas."
+  - page: wiki/mind/synthesis/the-name-is-the-instrument
+    type: instantiates
+    claim: "Milo is the namesake case anchoring the naming rule: a Chihuahua named after Milo Yiannopoulos, used as a social tripwire that sorts strangers by their reaction to the name — a sorting function the name has kept while accumulating oath-object and duress-code uses."
 infobox:
   name: "Milo"
   relationship_to_dan: unknown
@@ -140,6 +143,8 @@ deliberately loaded names Dan describes using as a kind of social
 tripwire: how a new person reacts to hearing a Chihuahua is named "Milo"
 tells him something about whether they process names/labels or just react
 to them.
+
+This naming operation is now a synthesis in its own right: [[wiki/mind/synthesis/the-name-is-the-instrument]] reads Milo as the namesake case of a cross-domain rule — the loaded name as a social tripwire — and records that the name has since accumulated oath-object and duress-code functions without shedding the sorting one.
 
 A second dated vet visit confirms Milo was with Dan through the fall-2025
 Annie collapse: on 2025-10-15 Dan texted [[wiki/people/kristin|Kristin]],

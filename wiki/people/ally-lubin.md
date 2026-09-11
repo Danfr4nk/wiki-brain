@@ -88,6 +88,9 @@ connections:
   - page: wiki/mind/synthesis/no-platonic-channel
     type: component-of
     claim: "The $25 paid introduction followed within a year by paid photographs is the corpus's cleanest engineered case of a friendship built specifically to be converted — proof this is a documented default rather than a pattern that happens to a friendship after the fact."
+  - page: wiki/mind/synthesis/high-provision-low-condolence
+    type: instantiates
+    claim: "The contested $2,100 claimed across the August–October 2019 crisis window — denied by Ally in 2019 and 2026, with no 2019 Cash App export in raw/ to settle it — is the rule's edge case: provision documented as an offer, the figure disputed, the provision-first pattern under stress."
 ---
 
 # Ally Lubin (Alexandra Lubin)
@@ -444,6 +447,8 @@ around girls for a little bit, and you're special so it would be even more
 pronounced"* — and then, October 22: *"i have NEVER felt so hypnotized by
 someone i've never seen or met in my life."* The inaccessibility is not an
 obstacle to the attachment. It is the attachment's operating condition.
+
+That $2,100 dispute now sits on [[wiki/mind/synthesis/high-provision-low-condolence]] as the rule's edge case: provision documented as an offer, the figure disputed by Ally in 2019 and 2026, no 2019 Cash App export in raw/ to settle it.
 
 The other half of the ledger is hers, and it should not be softened. Across
 the same three months she reports: no income since July, no health insurance,

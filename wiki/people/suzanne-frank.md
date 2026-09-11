@@ -154,6 +154,9 @@ connections:
   - page: wiki/people/suzanne-frank-personality-assessment
     type: instance-of
     claim: "The forensic assessment of Suz's MBTI and Enneagram types is based on behavioral evidence from her 33,698-message corpus."
+  - page: wiki/mind/synthesis/high-provision-low-condolence
+    type: instantiates
+    claim: "The give-and-invoice pattern — permanently available, and the availability gets itemized — is the rule running in the maternal register: provision extended, then entered into the ledger, the same architecture the synthesis finds across every major bond."
 ---
 
 
@@ -734,6 +737,8 @@ larger scale, and it is why
 switch as brokered rather than private. What the record does not contain is her
 account of what she thought she was doing, and the single line is the whole of
 the evidence for the conditional.
+
+The pattern is now the maternal register of [[wiki/mind/synthesis/high-provision-low-condolence]]: permanent availability that gets itemized — provision extended, then entered into the ledger.
 
 The rest of the month is warmer and equally documented. She calls Annie his
 girlfriend for two weeks before he uses the word himself — Annie's reaction,

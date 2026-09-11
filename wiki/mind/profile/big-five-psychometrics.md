@@ -81,6 +81,9 @@ connections:
   - page: wiki/interests/favorites/eclecticism
     type: evidences
     claim: "Artistic Interests 81 (corpus-audited 3.82×) is the confirmed aesthetic register behind the CSV, not an Openness score the table never reported; Inquisitive is Architecture A's abandonment-at-the-edge cycle, which is why the 2026-06-23 'high openness' reading of the favorites list does not survive this page."
+  - page: wiki/mind/synthesis/high-provision-low-condolence
+    type: instantiates
+    claim: "The 1.79–2.49x instrumental-generosity against 0.45x sympathy-token split is the measured mechanism under the rule: 'Let me know if you need anything' at double rate while 'I'm so sorry to hear that' runs at less than half — provision, not condolence, as a finding rather than a framing."
 ---
 
 
@@ -267,6 +270,8 @@ to *do* something, asking if you are okay — runs at 1.8–2.5× baseline, whil
 less than half. He is not low-warmth. He is high-provision and low-condolence.
 "Let me know if you need anything" at double rate; "I'm so sorry to hear that"
 at less than half.
+
+That split is now the measured mechanism under [[wiki/mind/synthesis/high-provision-low-condolence]]: the numbers that make provision-not-condolence a finding rather than a framing.
 
 That reframes the standing instruction on this page — *read the low-sociability
 / low-trust / low-altruism scores as architecture, not deficit to fix* — because
