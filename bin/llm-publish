@@ -34,7 +34,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 WIKI = ROOT / "wiki"
 OUT = ROOT / "llm"
-DEFAULT_BASE = "https://caakehorn.github.io/wiki-brain"
+DEFAULT_BASE = "https://danfr4nk.github.io/wiki-brain"
 
 SKIP_DIRS = {".obsidian"}
 
