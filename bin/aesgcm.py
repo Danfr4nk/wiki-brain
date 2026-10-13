@@ -3,7 +3,7 @@
 
 WHY THIS FILE EXISTS AT ALL
 
-`caakehorn/wiki-brain` is public, and the intake ledger is the one thing in it
+`Danfr4nk/wiki-brain` is public, and the intake ledger is the one thing in it
 that must never be readable by whoever wanders past. But the ledger also has to
 reach a phone: ボスの部屋 on the leviathan site writes to this repository through
 GitHub's contents API, from a browser, with no daemon anywhere in the loop.

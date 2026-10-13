@@ -66,11 +66,9 @@ Produces a single Markdown file with a table of contents and a token count, read
 
 The compiled wiki is published for agents on every push to `main`:
 
-- **Discovery:** [https://caakehorn.github.io/wiki-brain/llms.txt](https://caakehorn.github.io/wiki-brain/llms.txt)
+- **Discovery:** [https://danfr4nk.github.io/wiki-brain/llms.txt](https://danfr4nk.github.io/wiki-brain/llms.txt)
 
-- **Manifest:** [https://caakehorn.github.io/wiki-brain/agent/manifest.json](https://caakehorn.github.io/wiki-brain/agent/manifest.json)
-
-- **Public mirror** (resynced hourly, useful when Pages is mid-deploy): [https://caakehorn.github.io/leviathan/data/wiki-data.json](https://caakehorn.github.io/leviathan/data/wiki-data.json) — full page text under `wikiText`, metadata and typed edges under `wikiPages.pages`.
+- **Manifest:** [https://danfr4nk.github.io/wiki-brain/agent/manifest.json](https://danfr4nk.github.io/wiki-brain/agent/manifest.json)
 
 - **Critical spine / full corpus / per-domain bundles / individual pages**
 

@@ -13,7 +13,7 @@ setup entirely; the deployed site uses .nojekyll.
 Usage:
   bin/build-site                 # -> site/  (relative to repo root)
   bin/build-site --out /tmp/x
-  bin/build-site --base-url https://caakehorn.github.io/wiki-brain
+  bin/build-site --base-url https://danfr4nk.github.io/wiki-brain
 """
 from __future__ import annotations
 
@@ -30,7 +30,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_OUT = ROOT / "site"
-DEFAULT_BASE = "https://caakehorn.github.io/wiki-brain"
+DEFAULT_BASE = "https://danfr4nk.github.io/wiki-brain"
 
 DOMAINS = [
     "self", "timeline", "people", "mind", "work",
@@ -511,7 +511,7 @@ JS = """\
   if(!box)return;
   var data=null;
   var src=box.getAttribute('data-search')||'search.json';
-  var root=(box.getAttribute('data-root')||'index.html').replace(/index\.html$/,'');
+  var root=(box.getAttribute('data-root')||'index.html').replace(/index\\.html$/,'');
   fetch(src).then(function(r){return r.json()}).then(function(j){data=j}).catch(function(){});
   box.addEventListener('input',function(){
     var q=box.value.toLowerCase().trim();
@@ -744,7 +744,7 @@ def extract_toc(md: str) -> list[tuple[int, str, str]]:
 def write_corpus(files: list[Path], out: Path, title: str, note: str = "") -> dict:
     today = datetime.date.today().isoformat()
     parts = [f"# {title}", "", f"Exported: {today}",
-             f"Source: https://github.com/caakehorn/wiki-brain", f"Git SHA: {git_sha()}", "",
+             f"Source: https://github.com/Danfr4nk/wiki-brain", f"Git SHA: {git_sha()}", "",
              "Compiled wiki pages only (not raw/ sources). Each section is one page.", ""]
     if note:
         parts += [note, ""]
@@ -782,7 +782,7 @@ def build_agent_feed(pages: list[Path], out: Path, base_url: str) -> dict:
         rec = {
             "path": rel,
             "url": f"{base_url}/{rel}",
-            "github_raw": f"https://raw.githubusercontent.com/caakehorn/wiki-brain/main/{rel}",
+            "github_raw": f"https://raw.githubusercontent.com/Danfr4nk/wiki-brain/main/{rel}",
             "domain": domain, "title": title,
             "page_type": meta.get("page_type", ""), "status": meta.get("status", ""),
             "importance": meta.get("importance", ""), "knowledge": meta.get("knowledge", ""),
@@ -817,12 +817,12 @@ def build_agent_feed(pages: list[Path], out: Path, base_url: str) -> dict:
     generated = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     manifest = {
         "name": "wiki-brain", "generated_at": generated, "git_sha": sha,
-        "github": "https://github.com/caakehorn/wiki-brain", "base_url": base_url,
+        "github": "https://github.com/Danfr4nk/wiki-brain", "base_url": base_url,
         "entrypoints": {
             "llms_txt": f"{base_url}/llms.txt", "manifest": f"{base_url}/agent/manifest.json",
             "full_corpus": f"{base_url}/agent/corpus.md", "critical": f"{base_url}/agent/critical.md",
             "wiki_tree": f"{base_url}/wiki/",
-            "github_raw_base": "https://raw.githubusercontent.com/caakehorn/wiki-brain/main/wiki/",
+            "github_raw_base": "https://raw.githubusercontent.com/Danfr4nk/wiki-brain/main/wiki/",
         },
         "stats": {"pages": len(pages), "full_corpus_approx_tokens": full["approx_tokens"],
                   "full_corpus_chars": full["chars"]},
@@ -846,7 +846,7 @@ def build_agent_feed(pages: list[Path], out: Path, base_url: str) -> dict:
         llms.append(f"- [{d}]({base_url}/agent/domains/{d}.md): {st['pages']} pages, ~{st['approx_tokens']:,} tokens")
     llms += ["", "## Selective page fetch", "",
              f"- Pages base: `{base_url}/wiki/{{path}}.md`",
-             f"- GitHub raw: `https://raw.githubusercontent.com/caakehorn/wiki-brain/main/wiki/{{path}}.md`", "",
+             f"- GitHub raw: `https://raw.githubusercontent.com/Danfr4nk/wiki-brain/main/wiki/{{path}}.md`", "",
              "## Notes for agents", "",
              "- This feed is the **compiled** wiki (`wiki/`), not the immutable source archive (`raw/`).",
              "- Reason from these pages first. Treat `CONTRADICTION` / `REVISED` blocks as first-class.",

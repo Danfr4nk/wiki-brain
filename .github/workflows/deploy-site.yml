@@ -30,7 +30,7 @@ jobs:
 
       - name: Build site
         env:
-          AGENT_BASE_URL: https://caakehorn.github.io/wiki-brain
+          AGENT_BASE_URL: https://danfr4nk.github.io/wiki-brain
         run: |
           chmod +x bin/build-site
           python3 bin/build-site --out site
