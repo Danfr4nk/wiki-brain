@@ -15,7 +15,6 @@ import csv
 import os
 import re
 import shutil
-import sys
 
 WIKI_ROOT = "/Users/Suzanne/Documents/WIKI v2"
 CONTACTS_DIR = os.path.join(WIKI_ROOT, "wiki/people/contacts")

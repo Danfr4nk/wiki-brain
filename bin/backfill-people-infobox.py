@@ -5,7 +5,7 @@ Sets a field ONLY when the page body / frontmatter gives a strong signal.
 Never fabricates. relationship_to_dan defaults to 'unknown' when no cue.
 Skips wiki/people/contacts/ (quarantine) and index.md.
 """
-import re, os, glob, sys
+import re, os, glob
 
 WIKI = "wiki/people"
 ROOT = os.getcwd()
