@@ -47,7 +47,7 @@ import re
 import sqlite3
 import sys
 import unicodedata
-from collections import Counter, defaultdict
+from collections import Counter
 
 csv.field_size_limit(10 ** 9)
 

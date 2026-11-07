@@ -72,7 +72,7 @@ The compiled wiki is published for agents on every push to `main`:
 
 - **Critical spine / full corpus / per-domain bundles / individual pages**
 
-See [AGENT_ACCESS.md](http://AGENT_ACCESS.md) for the full URL table, a pasteable agent prompt, freshness rules, and privacy notes. Local preview:
+See [AGENT_ACCESS.md](AGENT_ACCESS.md) for the full URL table, a pasteable agent prompt, freshness rules, and privacy notes. Local preview:
 
 bin/build-site                   # builds the static site/ (HTML wiki + agent feed), no deps
 

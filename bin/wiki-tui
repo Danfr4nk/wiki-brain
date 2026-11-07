@@ -18,7 +18,7 @@ Keys
   Arrows       move cursor; Home/End jump to line ends
 """
 import curses
-import os
+import queue
 import re
 import shutil
 import subprocess
@@ -234,7 +234,7 @@ def main(stdscr):
     except curses.error:
         pass
 
-    job_q = __import__("queue").Queue()
+    job_q = queue.Queue()
     t = threading.Thread(target=worker, daemon=True)
     t.start()
 
